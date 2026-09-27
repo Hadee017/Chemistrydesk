@@ -6,17 +6,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   title="Serial Dilution Calculator & Multi-Step Tube Ladder Generator | ChemistryDesk"
   description="High-precision stock dilution and serial ladder generator. Computes aliquot volumes, multi-well series, dilution factors, and exports CSV protocols."
 >
-  <main style="max-width: 1060px; margin: 2rem auto; padding: 0 1.5rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1e293b;">
+  <main style="max-width: 1060px; margin: 1.5rem auto 3rem auto; padding: 0 1.5rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1e293b;">
     
     <!-- Navigation Breadcrumbs -->
-    <nav style="font-size: 0.8rem; color: #64748b; margin-bottom: 1rem;">
+    <nav style="font-size: 0.8rem; color: #64748b; margin-bottom: 1.25rem;">
       <a href="/" style="color: #0284c7; text-decoration: none;">Home</a> &rsaquo; 
       <span style="color: #94a3b8;"> Solution Preparation</span> &rsaquo; 
       <span style="color: #0f172a; font-weight: 600;">Dilution Studio</span>
     </nav>
 
     <!-- Header Section -->
-    <div style="border-bottom: 1px solid #e2e8f0; padding-bottom: 1.5rem; margin-bottom: 2rem;">
+    <div style="border-bottom: 1px solid #e2e8f0; padding-bottom: 1.75rem; margin-bottom: 2rem;">
       <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
         <span style="font-size: 2.5rem;">💧</span>
         <div>
@@ -29,7 +29,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
       </div>
 
-      <!-- High-Visibility Segmented Mode Switcher -->
+      <!-- Segmented Mode Switcher -->
       <div style="margin-top: 1.5rem; display: flex; align-items: center; justify-content: flex-start;">
         <div style="background: #e2e8f0; padding: 4px; border-radius: 10px; display: inline-flex; gap: 4px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.06);">
           <button 
@@ -222,18 +222,24 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
     </div>
 
-    <!-- SCIENTIFIC REFERENCE GUIDE (FOR ADSENSE QUALITY COMPLIANCE) -->
-    <article style="border-top: 1px solid #e2e8f0; padding-top: 3rem; line-height: 1.8; color: #334155;">
+    <!-- ========================================== -->
+    <!-- HIGH-AUTHORITY AD-SENSE EDITORIAL CONTENT  -->
+    <!-- ========================================== -->
+    <article style="border-top: 1px solid #e2e8f0; padding-top: 3.5rem; line-height: 1.8; color: #334155;">
+      
       <h2 style="font-size: 1.75rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem;">
         Mathematical Foundations of Serial Dilutions &amp; Mass Conservation
       </h2>
       <p>
-        Volumetric chemical dilutions rest on the thermodynamic principle of the conservation of mass. In a non-reactive solution, adding solvent does not alter the absolute quantity of solute (expressed in moles or mass units). The relationship between initial stock parameters and final diluted conditions is formalized:
+        Volumetric chemical dilutions rest on the thermodynamic principle of the conservation of mass. In a non-reactive solution, adding solvent does not alter the absolute quantity of solute ($n$ in moles or $m$ in mass units). Hence, the relationship between initial stock parameters and final diluted conditions is formalized:
       </p>
       
-      <p style="background: #f8fafc; border-left: 4px solid #0284c7; padding: 1rem 1.25rem; font-family: monospace; font-size: 1rem; color: #0f172a; border-radius: 0 8px 8px 0;">
-        n_initial = n_final &rArr; C₁ &times; V₁ = C₂ &times; V₂
-      </p>
+      <!-- Academic Centered Display Formula -->
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.25rem 2rem; margin: 1.5rem 0; text-align: center; box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);">
+        <div style="font-size: 1.35rem; font-weight: 700; color: #0f172a; letter-spacing: 0.05em; font-family: 'Times New Roman', Times, serif;">
+          <i>n</i><sub>initial</sub> = <i>n</i><sub>final</sub> &nbsp;&implies;&nbsp; <b>C₁ &times; V₁ = C₂ &times; V₂</b>
+        </div>
+      </div>
 
       <h3 style="font-size: 1.35rem; font-weight: 700; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
         Multi-Step Serial Dilution Mechanics
@@ -245,24 +251,30 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         Serial dilution circumvents this limitation by performing sequential, equal-ratio transfers across an array of vessels. The individual step dilution factor (DF_step) is defined:
       </p>
 
-      <p style="background: #f8fafc; border-left: 4px solid #0284c7; padding: 1rem 1.25rem; font-family: monospace; font-size: 1rem; color: #0f172a; border-radius: 0 8px 8px 0;">
-        DF_step = (V_transfer + V_diluent) / V_transfer
-      </p>
+      <!-- Step Dilution Factor Formula -->
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.25rem 2rem; margin: 1.5rem 0; text-align: center; box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);">
+        <div style="font-size: 1.25rem; font-weight: 700; color: #0f172a; font-family: 'Times New Roman', Times, serif;">
+          DF<sub>step</sub> = <span style="display: inline-block; vertical-align: middle; text-align: center; margin: 0 4px;"><span style="display: block; border-bottom: 1.5px solid #0f172a; padding: 0 4px;">V<sub>transfer</sub> + V<sub>diluent</sub></span><span style="display: block; padding-top: 2px;">V<sub>transfer</sub></span></span>
+        </div>
+      </div>
 
       <p>
-        The final concentration in the n-th tube (C_n) is governed by exponential decay:
+        The final concentration in the <i>n</i>-th tube (C<sub>n</sub>) is governed by exponential decay:
       </p>
 
-      <p style="background: #f8fafc; border-left: 4px solid #0284c7; padding: 1rem 1.25rem; font-family: monospace; font-size: 1rem; color: #0f172a; border-radius: 0 8px 8px 0;">
-        C_n = C_0 &times; (1 / DF_step)^n
-      </p>
+      <!-- Exponential Decay Formula -->
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.25rem 2rem; margin: 1.5rem 0; text-align: center; box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);">
+        <div style="font-size: 1.25rem; font-weight: 700; color: #0f172a; font-family: 'Times New Roman', Times, serif;">
+          C<sub><i>n</i></sub> = C<sub>0</sub> &times; <span style="font-size: 1.4rem;">(</span> <sup>1</sup>&frasl;<sub>DF<sub>step</sub></sub> <span style="font-size: 1.4rem;">)</span><sup><i>n</i></sup>
+        </div>
+      </div>
 
-      <h3 style="font-size: 1.35rem; font-weight: 700; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
+      <h3 style="font-size: 1.35rem; font-weight: 700; color: #0f172a; margin-top: 2.5rem; margin-bottom: 0.75rem;">
         Worked Laboratory Walkthrough: 5-Point Calibration Ladder
       </h3>
-      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem;">
-        <p style="margin-top: 0;"><strong>Experimental Setup:</strong> A biochemist needs a 5-point standard curve starting from a 50 mM stock of Paraquat, performing a 5-fold serial dilution ladder using 15 mL conical centrifuge tubes.</p>
-        <ol style="margin-left: 1.5rem; margin-bottom: 0;">
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.75rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+        <p style="margin-top: 0; font-weight: 600; color: #0f172a;">Experimental Scenario: Preparing a 5-point standard calibration curve starting from a 50 mM stock of Paraquat herbicide, using 15 mL conical centrifuge tubes.</p>
+        <ol style="margin-left: 1.5rem; margin-bottom: 0; space-y: 0.5rem;">
           <li><strong>Step Factor (DF):</strong> For a 5-fold series, total volume per tube must be 5 times the transfer volume. Choosing V_trans = 2.0 mL means V_total = 10.0 mL, requiring V_dil = 8.0 mL per tube.</li>
           <li><strong>Tube 1:</strong> Dispense 8.0 mL diluent + 2.0 mL of 50 mM stock &rarr; <strong>10.0 mM</strong> (DF = 5&times;).</li>
           <li><strong>Tube 2:</strong> Transfer 2.0 mL from Tube 1 into 8.0 mL diluent &rarr; <strong>2.0 mM</strong> (DF = 25&times;).</li>
@@ -275,7 +287,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <h3 style="font-size: 1.35rem; font-weight: 700; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
         Systematic Benchtop Pitfalls &amp; Quality Control
       </h3>
-      <ul style="margin-left: 1.5rem;">
+      <ul style="margin-left: 1.5rem; space-y: 0.5rem;">
         <li><strong>Pipette Tip Wetting &amp; Carryover:</strong> Always pre-wet the pipette tip three times with the liquid being transferred. For serial transfers, failure to change tips between steps leads to forward carryover contamination, artificially elevating downstream concentrations.</li>
         <li><strong>Vortexing Homogeneity:</strong> In viscous solutions, solute gradients develop rapidly. Each tube must undergo thorough vortex mixing before drawing the subsequent aliquot.</li>
         <li><strong>Temperature Stabilization:</strong> Organic solvents and concentrated electrolytes exhibit significant thermal expansion. Conduct all volumetric transfers at ambient room temperature (20&deg;C to 25&deg;C).</li>
@@ -294,12 +306,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       singleSection.style.display = 'block';
       serialSection.style.display = 'none';
 
-      // Active state styling
       modeSingleBtn.style.background = '#0284c7';
       modeSingleBtn.style.color = '#ffffff';
       modeSingleBtn.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
 
-      // Inactive state styling
       modeSerialBtn.style.background = 'transparent';
       modeSerialBtn.style.color = '#475569';
       modeSerialBtn.style.boxShadow = 'none';
@@ -309,12 +319,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       singleSection.style.display = 'none';
       serialSection.style.display = 'block';
 
-      // Active state styling
       modeSerialBtn.style.background = '#0284c7';
       modeSerialBtn.style.color = '#ffffff';
       modeSerialBtn.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
 
-      // Inactive state styling
       modeSingleBtn.style.background = 'transparent';
       modeSingleBtn.style.color = '#475569';
       modeSingleBtn.style.boxShadow = 'none';
