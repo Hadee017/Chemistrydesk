@@ -17,26 +17,38 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <!-- Direct Tailwind CDN injection -->
-    <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body class="bg-slate-50 text-slate-900 min-h-screen antialiased">
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
-      <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-        <a href="/" class="flex items-center gap-2 font-bold text-lg text-slate-900 tracking-tight">
-          <span class="text-xl">⚗️</span> ChemistryDesk
+  <body style="margin: 0; padding: 0; background-color: #f8fafc; color: #0f172a; min-height: 100vh; display: flex; flex-direction: column; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+    
+    <!-- Top Header -->
+    <header style="background: #ffffff; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 50;">
+      <div style="max-width: 1000px; margin: 0 auto; padding: 0 1rem; height: 60px; display: flex; align-items: center; justify-content: space-between;">
+        <a href="/" style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none; font-weight: 800; font-size: 1.15rem; color: #0f172a;">
+          <span>⚗️</span> ChemistryDesk
         </a>
-        <nav class="flex items-center gap-6 text-sm font-medium text-slate-600">
-          <a href="/" class="hover:text-sky-600 transition">Home</a>
-          <a href="/molarity" class="hover:text-sky-600 transition">Molarity Studio</a>
+        <nav style="display: flex; gap: 1.25rem; font-size: 0.875rem; font-weight: 500;">
+          <a href="/" style="text-decoration: none; color: #475569;">Home</a>
+          <a href="/molarity" style="text-decoration: none; color: #475569;">Molarity</a>
+          <a href="/about" style="text-decoration: none; color: #475569;">About</a>
+          <a href="/contact" style="text-decoration: none; color: #475569;">Contact</a>
         </nav>
       </div>
     </header>
 
-    <slot />
+    <!-- Page Content Slot -->
+    <div style="flex: 1;">
+      <slot />
+    </div>
 
-    <footer class="mt-20 border-t border-slate-200 bg-white py-8 text-center text-xs text-slate-500">
-      © 2026 ChemistryDesk. Precision benchtop calculations.
+    <!-- Mandatory AdSense Policy Footer -->
+    <footer style="margin-top: 5rem; border-top: 1px solid #e2e8f0; background: #ffffff; padding: 2.5rem 1rem; text-align: center; font-size: 0.875rem; color: #64748b;">
+      <div style="display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1rem; font-weight: 500;">
+        <a href="/about" style="color: #475569; text-decoration: none;">About Us</a>
+        <a href="/contact" style="color: #475569; text-decoration: none;">Contact Us</a>
+        <a href="/privacy-policy" style="color: #475569; text-decoration: none;">Privacy Policy</a>
+        <a href="/terms" style="color: #475569; text-decoration: none;">Terms of Service</a>
+      </div>
+      <div>&copy; 2026 ChemistryDesk. Designed for benchtop precision and educational reference.</div>
     </footer>
   </body>
 </html>
