@@ -3,12 +3,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout 
-  title="Serial Dilution Calculator & Multi-Step Tube Ladder Generator | ChemistryDesk"
-  description="High-precision stock dilution and serial ladder generator. Computes aliquot volumes, multi-well series, dilution factors, and exports CSV protocols."
+  title="Serial Dilution Calculator, Multi-Step Tube Ladder & Label Studio | ChemistryDesk"
+  description="High-precision stock solution dilution engine. Solve for any variable (C1V1 = C2V2), generate multi-tube serial ladders, render dynamic semi-log decay curves, account for solvent volumetric contraction, and print benchtop bottle labels."
 >
   <main style="max-width: 1060px; margin: 1.5rem auto 3rem auto; padding: 0 1.5rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1e293b;">
     
-    <!-- Navigation Breadcrumbs -->
+    <!-- Breadcrumb Navigation -->
     <nav style="font-size: 0.8rem; color: #64748b; margin-bottom: 1.25rem;">
       <a href="/" style="color: #0284c7; text-decoration: none;">Home</a> &rsaquo; 
       <span style="color: #94a3b8;"> Solution Preparation</span> &rsaquo; 
@@ -24,7 +24,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             Stock Dilution &amp; Serial Ladder Studio
           </h1>
           <p style="color: #64748b; font-size: 0.95rem; margin-top: 0.25rem; margin-bottom: 0;">
-            Precision benchtop calculations for single aliquots (C₁V₁ = C₂V₂) and sequential multi-tube calibration series.
+            Two-way mass conservation engine, multi-tube serial ladders, dynamic semi-log graphs, non-ideal solvent warnings, and benchtop label printing.
           </p>
         </div>
       </div>
@@ -36,43 +36,60 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             id="modeSingleBtn" 
             style="background: #0284c7; color: #ffffff; border: none; padding: 0.65rem 1.4rem; border-radius: 8px; font-size: 0.875rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: all 0.2s ease;"
           >
-            <span>🎯</span> Single Transfer (C₁V₁ = C₂V₂)
+            <span>🎯</span> Two-Way Aliquot Solver (C₁V₁ = C₂V₂)
           </button>
           <button 
             id="modeSerialBtn" 
             style="background: transparent; color: #475569; border: none; padding: 0.65rem 1.4rem; border-radius: 8px; font-size: 0.875rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s ease;"
           >
-            <span>🧪</span> Multi-Step Serial Ladder
+            <span>🧪</span> Multi-Step Serial Ladder &amp; Semi-Log Plot
           </button>
         </div>
       </div>
     </div>
 
-    <!-- Pipetting Sanity Alert Bar -->
-    <div id="pipetteAlert" style="display: none; background: #fffbeb; border-left: 4px solid #f59e0b; padding: 0.85rem 1.25rem; margin-bottom: 1.5rem; border-radius: 0 8px 8px 0; font-size: 0.85rem; color: #92400e;"></div>
+    <!-- Solvent Matrix & Volumetric Contraction Advisory -->
+    <div id="solventWarningBox" style="display: none; background: #fffbeb; border-left: 4px solid #f59e0b; padding: 0.85rem 1.25rem; margin-bottom: 1.5rem; border-radius: 0 8px 8px 0; font-size: 0.85rem; color: #92400e;"></div>
 
-    <!-- ========================================== -->
-    <!-- MODE 1: SINGLE ALIQUOT SOLVER             -->
-    <!-- ========================================== -->
+    <!-- Pipetting Sanity Alert Bar -->
+    <div id="pipetteAlert" style="display: none; background: #fef2f2; border-left: 4px solid #ef4444; padding: 0.85rem 1.25rem; margin-bottom: 1.5rem; border-radius: 0 8px 8px 0; font-size: 0.85rem; color: #991b1b;"></div>
+
+    <!-- MODE 1: TWO-WAY SINGLE ALIQUOT SOLVER -->
     <div id="singleModeSection">
-      <!-- Quick Presets -->
-      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 2rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; font-size: 0.85rem;">
-        <span style="font-weight: 700; color: #475569; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Quick Presets:</span>
-        <button class="preset-single" data-c1="1.0" data-c2="0.1" data-v2="100" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; cursor: pointer; color: #334155; font-size: 0.8rem; font-weight: 600;">1 M &rarr; 0.1 M (100 mL)</button>
-        <button class="preset-single" data-c1="10.0" data-c2="0.25" data-v2="250" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; cursor: pointer; color: #334155; font-size: 0.8rem; font-weight: 600;">10 M Stock &rarr; 0.25 M (250 mL)</button>
-        <button class="preset-single" data-c1="50" data-c2="1" data-v2="500" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; cursor: pointer; color: #334155; font-size: 0.8rem; font-weight: 600;">50&times; Buffer &rarr; 1&times; (500 mL)</button>
-        <button id="shareBtn" style="margin-left: auto; background: #e0f2fe; border: 1px solid #bae6fd; color: #0284c7; padding: 0.35rem 0.75rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 700;">🔗 Share Setup</button>
+      
+      <!-- Toolbar -->
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 2rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; font-size: 0.85rem;">
+        <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+          <span style="font-weight: 700; color: #475569; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Solve For:</span>
+          <select id="targetVariable" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.65rem; border-radius: 6px; font-weight: 700; color: #0284c7; cursor: pointer;">
+            <option value="v1">Aliquot Volume (V₁) [Standard]</option>
+            <option value="c2">Target Concentration (C₂)</option>
+            <option value="v2">Final Total Volume (V₂)</option>
+            <option value="c1">Required Stock Conc (C₁)</option>
+          </select>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+          <span style="font-weight: 700; color: #475569; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Solvent Matrix:</span>
+          <select id="solventMatrix" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 0.35rem 0.65rem; border-radius: 6px; font-weight: 600; color: #334155; cursor: pointer;">
+            <option value="aqueous">Ideal Aqueous (Water / PBS)</option>
+            <option value="ethanol">Ethanol / Water (Volumetric Contraction)</option>
+            <option value="acid">Concentrated Mineral Acid (Exothermic Dissolution)</option>
+          </select>
+        </div>
+
+        <button id="shareBtn" style="background: #e0f2fe; border: 1px solid #bae6fd; color: #0284c7; padding: 0.35rem 0.75rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 700;">🔗 Share Setup</button>
       </div>
 
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
         
-        <!-- Inputs -->
+        <!-- Inputs Form -->
         <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
           <h2 style="font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; margin-top: 0; margin-bottom: 1.25rem;">
-            Dilution Variables
+            Parameter Inputs
           </h2>
 
-          <div style="margin-bottom: 1.25rem;">
+          <div style="margin-bottom: 1.25rem;" id="fieldC1">
             <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
               STOCK CONCENTRATION (C₁)
             </label>
@@ -88,9 +105,23 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             </div>
           </div>
 
-          <div style="margin-bottom: 1.25rem;">
+          <div style="margin-bottom: 1.25rem;" id="fieldV1">
             <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
-              TARGET CONCENTRATION (C₂)
+              ALIQUOT VOLUME (V₁)
+            </label>
+            <div style="display: flex;">
+              <input type="number" id="v1Input" step="any" value="2.5" disabled style="flex: 1; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-right: none; border-radius: 6px 0 0 6px; font-size: 0.95rem; font-weight: 600; background: #f8fafc; color: #64748b; outline: none;" />
+              <select id="unitV1" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 0 0.75rem; border-radius: 0 6px 6px 0; font-size: 0.85rem; font-weight: 600; color: #475569;">
+                <option value="mL">mL</option>
+                <option value="uL">&micro;L</option>
+                <option value="L">L</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 1.25rem;" id="fieldC2">
+            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
+              TARGET WORKING CONCENTRATION (C₂)
             </label>
             <div style="display: flex;">
               <input type="number" id="c2" step="any" value="0.25" style="flex: 1; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-right: none; border-radius: 6px 0 0 6px; font-size: 0.95rem; font-weight: 600; outline: none;" />
@@ -104,9 +135,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             </div>
           </div>
 
-          <div style="margin-bottom: 1.25rem;">
+          <div style="margin-bottom: 1.25rem;" id="fieldV2">
             <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
-              TARGET VOLUME (V₂)
+              FINAL TARGET VOLUME (V₂)
             </label>
             <div style="display: flex;">
               <input type="number" id="v2" step="any" value="100.0" style="flex: 1; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-right: none; border-radius: 6px 0 0 6px; font-size: 0.95rem; font-weight: 600; outline: none;" />
@@ -121,13 +152,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <div id="singleWarn" style="display: none; background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 0.75rem; border-radius: 6px; font-size: 0.8rem; margin-top: 1rem;"></div>
         </div>
 
-        <!-- Single Readout Panel -->
+        <!-- Readout & Actions Panel -->
         <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+          
+          <!-- Live Result Readout -->
           <div style="background: #0f172a; border-radius: 12px; padding: 1.75rem; color: #ffffff; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
-            <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #38bdf8;">
-              Aliquot to Pipette (V₁)
+            <span id="readoutLabel" style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #38bdf8;">
+              Calculated Aliquot (V₁)
             </span>
-            <div id="displayV1" style="font-size: 2.5rem; font-weight: 800; color: #38bdf8; margin: 0.25rem 0 0.75rem 0;">--</div>
+            <div id="primaryResult" style="font-size: 2.5rem; font-weight: 800; color: #38bdf8; margin: 0.25rem 0 0.75rem 0;">--</div>
 
             <div style="border-top: 1px solid #334155; padding-top: 1rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.85rem;">
               <div>
@@ -141,7 +174,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             </div>
           </div>
 
-          <!-- Ratio Visualizer -->
+          <!-- Volumetric Scale Visualizer -->
           <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.25rem;">
             <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 700; color: #64748b; margin-bottom: 0.5rem; text-transform: uppercase;">
               <span>Volumetric Ratio</span>
@@ -153,13 +186,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             </div>
           </div>
 
-          <!-- Protocol -->
+          <!-- Benchtop SOP Protocol -->
           <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
               <h3 style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #475569; margin: 0;">Execution Protocol</h3>
               <div style="display: flex; gap: 0.5rem;">
                 <button id="copyProtocolBtn" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #334155;">Copy Steps</button>
-                <button id="copyLatexBtn" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #334155;">Copy LaTeX</button>
+                <button id="printLabelBtn" style="background: #0284c7; border: none; padding: 0.25rem 0.65rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: white;">🖨️ Print Label</button>
               </div>
             </div>
             <ol id="protocolSteps" style="margin: 0; padding-left: 1.25rem; font-size: 0.85rem; line-height: 1.6; color: #334155;"></ol>
@@ -169,13 +202,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- MODE 2: MULTI-STEP SERIAL TUBE LADDER      -->
-    <!-- ========================================== -->
+    <!-- MODE 2: MULTI-STEP SERIAL TUBE LADDER & DYNAMIC LOG PLOT -->
     <div id="serialModeSection" style="display: none; margin-bottom: 3rem;">
       <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.75rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
         <h2 style="font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; margin-top: 0; margin-bottom: 1.25rem;">
-          Serial Ladder Parameters
+          Serial Ladder Configuration
         </h2>
 
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem;">
@@ -214,27 +245,35 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
 
       <!-- Live Tube Rack Visualizer -->
-      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; overflow-x: auto;">
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; overflow-x: auto;">
         <h3 style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #475569; margin: 0 0 1.25rem 0;">
-          Interactive Tube Rack Layout &amp; Concentrations
+          Interactive Tube Rack Layout &amp; Remaining Volumes
         </h3>
         <div id="tubeRackContainer" style="display: flex; gap: 1rem; min-width: 650px; align-items: stretch;"></div>
       </div>
+
+      <!-- Live Dynamic Semi-Log Plot -->
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem;">
+        <h3 style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #475569; margin: 0 0 0.5rem 0;">
+          Dynamic Semi-Log Dilution Decay Curve
+        </h3>
+        <p style="font-size: 0.8rem; color: #64748b; margin-top: 0; margin-bottom: 1rem;">Log₁₀(Concentration) vs. Tube Step Number verifying linear geometric calibration spacing.</p>
+        <div style="width: 100%; height: 260px;">
+          <svg id="semiLogSvg" viewBox="0 0 600 240" style="width: 100%; height: 100%; overflow: visible; font-family: monospace; font-size: 11px;"></svg>
+        </div>
+      </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- HIGH-AUTHORITY AD-SENSE EDITORIAL CONTENT  -->
-    <!-- ========================================== -->
+    <!-- EDITORIAL & SCIENTIFIC DERIVATION ARTICLE -->
     <article style="border-top: 1px solid #e2e8f0; padding-top: 3.5rem; line-height: 1.8; color: #334155;">
       
       <h2 style="font-size: 1.75rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem;">
         Mathematical Foundations of Serial Dilutions &amp; Mass Conservation
       </h2>
       <p>
-        Volumetric chemical dilutions rest on the thermodynamic principle of the conservation of mass. In a non-reactive solution, adding solvent does not alter the absolute quantity of solute ($n$ in moles or $m$ in mass units). Hence, the relationship between initial stock parameters and final diluted conditions is formalized:
+        Volumetric chemical dilutions rest on the thermodynamic principle of the conservation of mass. In a non-reactive solution, adding solvent does not alter the absolute quantity of solute (moles or mass units). Hence, the relationship between initial stock parameters and final diluted conditions is formalized:
       </p>
       
-      <!-- Academic Centered Display Formula -->
       <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.25rem 2rem; margin: 1.5rem 0; text-align: center; box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);">
         <div style="font-size: 1.35rem; font-weight: 700; color: #0f172a; letter-spacing: 0.05em; font-family: 'Times New Roman', Times, serif;">
           <i>n</i><sub>initial</sub> = <i>n</i><sub>final</sub> &nbsp;&implies;&nbsp; <b>C₁ &times; V₁ = C₂ &times; V₂</b>
@@ -242,16 +281,22 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
 
       <h3 style="font-size: 1.35rem; font-weight: 700; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
+        Non-Ideal Thermodynamic Excess Volume in Mixtures
+      </h3>
+      <p>
+        Standard laboratory manuals assume volumetric additivity: V_final = V₁ + V_solvent. In practice, intermolecular interactions like hydrogen bonding alter packing density. When mixing ethanol and water, contraction reduces total volume by up to 3.5%. Measuring diluent separately and adding it to the aliquot results in systematic concentration errors. The solution must always be brought to the final calibration mark in a Class-A volumetric flask.
+      </p>
+
+      <h3 style="font-size: 1.35rem; font-weight: 700; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
         Multi-Step Serial Dilution Mechanics
       </h3>
       <p>
-        In spectrophotometry (UV-Vis), cell biology, and microplate assays (such as minimum inhibitory concentration or ELISA testing), target working ranges often span four to six orders of magnitude (10⁻¹ M to 10⁻⁶ M). Preparing a 1.0 &mu;M solution directly from a 1.0 M stock would necessitate dispensing 0.1 &mu;L into 100 mL of water. Such transfers incur extreme pipetting errors (&gt;15%) using standard volumetric equipment.
+        In spectrophotometry, cell culture, and enzyme kinetics, working ranges often span multiple orders of magnitude (10⁻¹ M to 10⁻⁶ M). Directly preparing a 1.0 &mu;M solution from a 1.0 M stock requires dispensing 0.1 &mu;L into 100 mL, introducing substantial micropipette error.
       </p>
       <p>
-        Serial dilution circumvents this limitation by performing sequential, equal-ratio transfers across an array of vessels. The individual step dilution factor (DF_step) is defined:
+        Serial dilution avoids this by performing sequential, equal-ratio transfers. The step dilution factor is defined:
       </p>
 
-      <!-- Step Dilution Factor Formula -->
       <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.25rem 2rem; margin: 1.5rem 0; text-align: center; box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);">
         <div style="font-size: 1.25rem; font-weight: 700; color: #0f172a; font-family: 'Times New Roman', Times, serif;">
           DF<sub>step</sub> = <span style="display: inline-block; vertical-align: middle; text-align: center; margin: 0 4px;"><span style="display: block; border-bottom: 1.5px solid #0f172a; padding: 0 4px;">V<sub>transfer</sub> + V<sub>diluent</sub></span><span style="display: block; padding-top: 2px;">V<sub>transfer</sub></span></span>
@@ -259,44 +304,67 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
 
       <p>
-        The final concentration in the <i>n</i>-th tube (C<sub>n</sub>) is governed by exponential decay:
+        The final concentration in tube <i>n</i> (C<sub><i>n</i></sub>) follows geometric decay:
       </p>
 
-      <!-- Exponential Decay Formula -->
       <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.25rem 2rem; margin: 1.5rem 0; text-align: center; box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);">
         <div style="font-size: 1.25rem; font-weight: 700; color: #0f172a; font-family: 'Times New Roman', Times, serif;">
           C<sub><i>n</i></sub> = C<sub>0</sub> &times; <span style="font-size: 1.4rem;">(</span> <sup>1</sup>&frasl;<sub>DF<sub>step</sub></sub> <span style="font-size: 1.4rem;">)</span><sup><i>n</i></sup>
         </div>
       </div>
-
-      <h3 style="font-size: 1.35rem; font-weight: 700; color: #0f172a; margin-top: 2.5rem; margin-bottom: 0.75rem;">
-        Worked Laboratory Walkthrough: 5-Point Calibration Ladder
-      </h3>
-      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.75rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
-        <p style="margin-top: 0; font-weight: 600; color: #0f172a;">Experimental Scenario: Preparing a 5-point standard calibration curve starting from a 50 mM stock of Paraquat herbicide, using 15 mL conical centrifuge tubes.</p>
-        <ol style="margin-left: 1.5rem; margin-bottom: 0; space-y: 0.5rem;">
-          <li><strong>Step Factor (DF):</strong> For a 5-fold series, total volume per tube must be 5 times the transfer volume. Choosing V_trans = 2.0 mL means V_total = 10.0 mL, requiring V_dil = 8.0 mL per tube.</li>
-          <li><strong>Tube 1:</strong> Dispense 8.0 mL diluent + 2.0 mL of 50 mM stock &rarr; <strong>10.0 mM</strong> (DF = 5&times;).</li>
-          <li><strong>Tube 2:</strong> Transfer 2.0 mL from Tube 1 into 8.0 mL diluent &rarr; <strong>2.0 mM</strong> (DF = 25&times;).</li>
-          <li><strong>Tube 3:</strong> Transfer 2.0 mL from Tube 2 into 8.0 mL diluent &rarr; <strong>0.40 mM (400 &mu;M)</strong> (DF = 125&times;).</li>
-          <li><strong>Tube 4:</strong> Transfer 2.0 mL from Tube 3 into 8.0 mL diluent &rarr; <strong>0.080 mM (80 &mu;M)</strong> (DF = 625&times;).</li>
-          <li><strong>Tube 5:</strong> Transfer 2.0 mL from Tube 4 into 8.0 mL diluent &rarr; <strong>0.016 mM (16 &mu;M)</strong> (DF = 3125&times;).</li>
-        </ol>
-      </div>
-
-      <h3 style="font-size: 1.35rem; font-weight: 700; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
-        Systematic Benchtop Pitfalls &amp; Quality Control
-      </h3>
-      <ul style="margin-left: 1.5rem; space-y: 0.5rem;">
-        <li><strong>Pipette Tip Wetting &amp; Carryover:</strong> Always pre-wet the pipette tip three times with the liquid being transferred. For serial transfers, failure to change tips between steps leads to forward carryover contamination, artificially elevating downstream concentrations.</li>
-        <li><strong>Vortexing Homogeneity:</strong> In viscous solutions, solute gradients develop rapidly. Each tube must undergo thorough vortex mixing before drawing the subsequent aliquot.</li>
-        <li><strong>Temperature Stabilization:</strong> Organic solvents and concentrated electrolytes exhibit significant thermal expansion. Conduct all volumetric transfers at ambient room temperature (20&deg;C to 25&deg;C).</li>
-      </ul>
     </article>
   </main>
 
+  <!-- PRINT-ONLY BENCHTOP LABEL MODAL -->
+  <div id="printLabelModal" style="display: none;">
+    <div id="labelBox" style="width: 3.75in; height: 2.0in; border: 2px solid #000; padding: 0.2in; box-sizing: border-box; font-family: sans-serif; background: #fff; color: #000; position: relative;">
+      <div style="border-bottom: 2px solid #000; padding-bottom: 4px; display: flex; justify-content: space-between; align-items: baseline;">
+        <span style="font-size: 12pt; font-weight: 900; letter-spacing: -0.02em;">ChemistryDesk LAB STANDARD</span>
+        <span id="labelDate" style="font-size: 8pt; font-weight: bold;"></span>
+      </div>
+      <div style="margin-top: 8px;">
+        <div style="font-size: 8pt; text-transform: uppercase; font-weight: bold; color: #555;">Solution / Reagent</div>
+        <div id="labelSolutionName" style="font-size: 14pt; font-weight: 900; line-height: 1.1;">WORKING SOLUTION</div>
+      </div>
+      <div style="margin-top: 6px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 9pt;">
+        <div>Conc: <strong id="labelConc">--</strong></div>
+        <div>Total Vol: <strong id="labelVol">--</strong></div>
+      </div>
+      <div style="margin-top: 6px; font-size: 8pt; border-top: 1px dashed #666; padding-top: 4px;">
+        Solvent: <span id="labelSolvent">Aqueous</span> | Factor: <span id="labelDF">--</span>
+      </div>
+      <div style="margin-top: 6px; display: flex; justify-content: space-between; font-size: 7.5pt;">
+        <span>Prep By: ________________</span>
+        <span>Store: [ ]RT [ ]4 C [ ]-20 C</span>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    @media print {
+      body * {
+        visibility: hidden !important;
+      }
+      #printLabelModal, #printLabelModal * {
+        visibility: visible !important;
+      }
+      #printLabelModal {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        display: block !important;
+      }
+      #labelBox {
+        position: absolute;
+        left: 0.25in;
+        top: 0.25in;
+      }
+    }
+  </style>
+
   <script>
-    // --- MODE SWITCHING WITH HIGH-CONTRAST FEEDBACK ---
+    // MODE SWITCHING
     const singleSection = document.getElementById('singleModeSection')!;
     const serialSection = document.getElementById('serialModeSection')!;
     const modeSingleBtn = document.getElementById('modeSingleBtn')!;
@@ -305,11 +373,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     modeSingleBtn.addEventListener('click', () => {
       singleSection.style.display = 'block';
       serialSection.style.display = 'none';
-
       modeSingleBtn.style.background = '#0284c7';
       modeSingleBtn.style.color = '#ffffff';
       modeSingleBtn.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
-
       modeSerialBtn.style.background = 'transparent';
       modeSerialBtn.style.color = '#475569';
       modeSerialBtn.style.boxShadow = 'none';
@@ -318,38 +384,99 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     modeSerialBtn.addEventListener('click', () => {
       singleSection.style.display = 'none';
       serialSection.style.display = 'block';
-
       modeSerialBtn.style.background = '#0284c7';
       modeSerialBtn.style.color = '#ffffff';
       modeSerialBtn.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
-
       modeSingleBtn.style.background = 'transparent';
       modeSingleBtn.style.color = '#475569';
       modeSingleBtn.style.boxShadow = 'none';
-
       runSerialEngine();
     });
 
-    // --- PIPETTING SANITY CHECK HELPER ---
+    // PIPETTING & SOLVENT CHECKS
     function checkPipettingSanity(vol_mL: number) {
       const alertEl = document.getElementById('pipetteAlert')!;
       const vol_uL = vol_mL * 1000;
       if (vol_uL > 0 && vol_uL < 1.0) {
         alertEl.style.display = 'block';
-        alertEl.innerHTML = '<strong>Pipetting Warning:</strong> Calculated aliquot (' + vol_uL.toFixed(2) + ' µL) is below 1.0 µL. Standard micropipettes have high CV (>10%) at this volume. Prepare an intermediate stock first.';
+        alertEl.innerHTML = '<strong>Pipetting Precision Alert:</strong> Calculated transfer (' + vol_uL.toFixed(2) + ' µL) is sub-microliter (<1 µL). Standard micropipettes have high CV (>10%). Perform a two-step intermediate dilution to preserve quantitative accuracy.';
       } else if (vol_mL > 50) {
         alertEl.style.display = 'block';
-        alertEl.innerHTML = '<strong>Volume Advisory:</strong> Calculated transfer (' + vol_mL.toFixed(1) + ' mL) exceeds typical pipette stroke capacity. Utilize Class-A volumetric pipettes.';
+        alertEl.innerHTML = '<strong>Volume Advisory:</strong> Calculated transfer (' + vol_mL.toFixed(1) + ' mL) exceeds single-stroke micropipette capacities. Utilize Class-A volumetric pipettes or graduated cylinders.';
       } else {
         alertEl.style.display = 'none';
       }
     }
 
-    // --- ENGINE 1: SINGLE ALIQUOT ---
+    function updateSolventAdvisory() {
+      const mat = (document.getElementById('solventMatrix') as HTMLSelectElement).value;
+      const box = document.getElementById('solventWarningBox')!;
+      if (mat === 'ethanol') {
+        box.style.display = 'block';
+        box.innerHTML = '<strong>Non-Ideal Solvent Alert (Ethanol-Water):</strong> Mixing ethanol and water causes significant thermodynamic volume contraction (up to ~3.5% contraction). Do NOT add solvent volume independently. Add the aliquot to partial water and dilute to the final volumetric mark.';
+      } else if (mat === 'acid') {
+        box.style.display = 'block';
+        box.innerHTML = '<strong>Exothermic Dissolution Alert:</strong> Diluting concentrated mineral acids generates strong heats of hydration. ALWAYS add acid to water (never water to acid). Allow thermal equilibrium to 20°C before final meniscus alignment.';
+      } else {
+        box.style.display = 'none';
+      }
+    }
+
+    document.getElementById('solventMatrix')?.addEventListener('change', updateSolventAdvisory);
+
+    // TWO-WAY SOLVER LOGIC
+    const targetVarSelect = document.getElementById('targetVariable') as HTMLSelectElement;
+    const inpC1 = document.getElementById('c1') as HTMLInputElement;
+    const inpV1 = document.getElementById('v1Input') as HTMLInputElement;
+    const inpC2 = document.getElementById('c2') as HTMLInputElement;
+    const inpV2 = document.getElementById('v2') as HTMLInputElement;
+
+    function adjustInputStates() {
+      const target = targetVarSelect.value;
+      [inpC1, inpV1, inpC2, inpV2].forEach(i => {
+        i.disabled = false;
+        i.style.background = '#ffffff';
+        i.style.color = '#0f172a';
+      });
+
+      if (target === 'v1') {
+        inpV1.disabled = true;
+        inpV1.style.background = '#f8fafc';
+        inpV1.style.color = '#64748b';
+        document.getElementById('readoutLabel')!.textContent = 'Calculated Aliquot (V₁)';
+      } else if (target === 'c2') {
+        inpC2.disabled = true;
+        inpC2.style.background = '#f8fafc';
+        inpC2.style.color = '#64748b';
+        document.getElementById('readoutLabel')!.textContent = 'Target Concentration (C₂)';
+      } else if (target === 'v2') {
+        inpV2.disabled = true;
+        inpV2.style.background = '#f8fafc';
+        inpV2.style.color = '#64748b';
+        document.getElementById('readoutLabel')!.textContent = 'Final Total Volume (V₂)';
+      } else if (target === 'c1') {
+        inpC1.disabled = true;
+        inpC1.style.background = '#f8fafc';
+        inpC1.style.color = '#64748b';
+        document.getElementById('readoutLabel')!.textContent = 'Required Stock Conc (C₁)';
+      }
+      runSingleEngine();
+    }
+
+    targetVarSelect.addEventListener('change', adjustInputStates);
+
     function toStandardConc(val: number, unit: string): number {
       switch (unit) {
         case 'mM': return val / 1000;
         case 'uM': return val / 1000000;
+        default: return val;
+      }
+    }
+
+    function fromStandardConc(val: number, unit: string): number {
+      switch (unit) {
+        case 'mM': return val * 1000;
+        case 'uM': return val * 1000000;
         default: return val;
       }
     }
@@ -362,17 +489,33 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       }
     }
 
-    function runSingleEngine() {
-      const c1Raw = parseFloat((document.getElementById('c1') as HTMLInputElement).value) || 0;
-      const c2Raw = parseFloat((document.getElementById('c2') as HTMLInputElement).value) || 0;
-      const v2Raw = parseFloat((document.getElementById('v2') as HTMLInputElement).value) || 0;
+    function fromStandardVol(val: number, unit: string): number {
+      switch (unit) {
+        case 'uL': return val * 1000;
+        case 'L': return val / 1000;
+        default: return val;
+      }
+    }
 
+    function runSingleEngine() {
+      const target = targetVarSelect.value;
       const uC1 = (document.getElementById('unitC1') as HTMLSelectElement).value;
       const uC2 = (document.getElementById('unitC2') as HTMLSelectElement).value;
+      const uV1 = (document.getElementById('unitV1') as HTMLSelectElement).value;
       const uV2 = (document.getElementById('unitV2') as HTMLSelectElement).value;
 
+      let c1Raw = parseFloat(inpC1.value) || 0;
+      let v1Raw = parseFloat(inpV1.value) || 0;
+      let c2Raw = parseFloat(inpC2.value) || 0;
+      let v2Raw = parseFloat(inpV2.value) || 0;
+
+      let c1_std = toStandardConc(c1Raw, uC1);
+      let c2_std = toStandardConc(c2Raw, uC2);
+      let v1_std = toStandardVol(v1Raw, uV1);
+      let v2_std = toStandardVol(v2Raw, uV2);
+
       const warnEl = document.getElementById('singleWarn')!;
-      const displayV1 = document.getElementById('displayV1')!;
+      const displayPrimary = document.getElementById('primaryResult')!;
       const displayDiluent = document.getElementById('displayDiluent')!;
       const displayFactor = document.getElementById('displayFactor')!;
       const aliquotBar = document.getElementById('aliquotBar')!;
@@ -380,73 +523,132 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       const percentText = document.getElementById('percentText')!;
       const protocolEl = document.getElementById('protocolSteps')!;
 
-      let normC1 = c1Raw;
-      let normC2 = c2Raw;
+      warnEl.style.display = 'none';
 
-      if (['M', 'mM', 'uM'].includes(uC1) && ['M', 'mM', 'uM'].includes(uC2)) {
-        normC1 = toStandardConc(c1Raw, uC1);
-        normC2 = toStandardConc(c2Raw, uC2);
-      } else if (uC1 !== uC2) {
-        warnEl.style.display = 'block';
-        warnEl.textContent = 'Unit mismatch: Ensure C₁ and C₂ use compatible unit metrics.';
-      } else {
-        warnEl.style.display = 'none';
+      if (target === 'v1') {
+        if (c1_std > 0 && c2_std > 0 && v2_std > 0) {
+          if (c2_std >= c1_std) {
+            warnEl.style.display = 'block';
+            warnEl.textContent = 'Target concentration (C₂) cannot equal or exceed stock concentration (C₁).';
+            return;
+          }
+          v1_std = (c2_std * v2_std) / c1_std;
+          v1Raw = fromStandardVol(v1_std, uV1);
+          inpV1.value = v1Raw.toFixed(3);
+          displayPrimary.textContent = v1Raw.toFixed(3) + ' ' + uV1;
+        }
+      } else if (target === 'c2') {
+        if (c1_std > 0 && v1_std > 0 && v2_std > 0) {
+          c2_std = (c1_std * v1_std) / v2_std;
+          c2Raw = fromStandardConc(c2_std, uC2);
+          inpC2.value = c2Raw.toFixed(4);
+          displayPrimary.textContent = c2Raw.toFixed(4) + ' ' + uC2;
+        }
+      } else if (target === 'v2') {
+        if (c1_std > 0 && v1_std > 0 && c2_std > 0) {
+          v2_std = (c1_std * v1_std) / c2_std;
+          v2Raw = fromStandardVol(v2_std, uV2);
+          inpV2.value = v2Raw.toFixed(2);
+          displayPrimary.textContent = v2Raw.toFixed(2) + ' ' + uV2;
+        }
+      } else if (target === 'c1') {
+        if (c2_std > 0 && v1_std > 0 && v2_std > 0) {
+          c1_std = (c2_std * v2_std) / v1_std;
+          c1Raw = fromStandardConc(c1_std, uC1);
+          inpC1.value = c1Raw.toFixed(3);
+          displayPrimary.textContent = c1Raw.toFixed(3) + ' ' + uC1;
+        }
       }
 
-      const normV2_mL = toStandardVol(v2Raw, uV2);
+      if (v1_std > 0 && v2_std > 0 && c1_std > 0 && c2_std > 0) {
+        checkPipettingSanity(v1_std);
 
-      if (normC1 > 0 && normC2 > 0 && normV2_mL > 0) {
-        if (normC2 >= normC1) {
-          warnEl.style.display = 'block';
-          warnEl.textContent = 'Target concentration (C₂) must be lower than stock concentration (C₁).';
-          displayV1.textContent = '--';
-          displayDiluent.textContent = '--';
-          displayFactor.textContent = '--';
-          return;
-        }
+        const vDil_std = Math.max(0, v2_std - v1_std);
+        const df = c1_std / c2_std;
 
-        warnEl.style.display = 'none';
-        const v1_mL = (normC2 * normV2_mL) / normC1;
-        const vSolvent_mL = normV2_mL - v1_mL;
-        const df = normC1 / normC2;
-
-        checkPipettingSanity(v1_mL);
-
-        let v1Formatted = v1_mL.toFixed(3) + ' mL';
-        let vSolventFormatted = vSolvent_mL.toFixed(3) + ' mL';
-
-        if (uV2 === 'uL' || (v1_mL < 0.1 && uV2 !== 'L')) {
-          v1Formatted = (v1_mL * 1000).toFixed(2) + ' µL';
-        }
-
-        displayV1.textContent = v1Formatted;
-        displayDiluent.textContent = vSolventFormatted;
+        displayDiluent.textContent = vDil_std.toFixed(3) + ' mL';
         displayFactor.textContent = df.toFixed(2) + '×';
 
-        const aliquotPct = Math.min(Math.max((v1_mL / normV2_mL) * 100, 0.5), 99.5);
+        const aliquotPct = Math.min(Math.max((v1_std / v2_std) * 100, 0.5), 99.5);
         aliquotBar.style.width = aliquotPct + '%';
         diluentBar.style.width = (100 - aliquotPct) + '%';
         percentText.textContent = aliquotPct.toFixed(1) + '% Aliquot / ' + (100 - aliquotPct).toFixed(1) + '% Diluent';
 
         protocolEl.innerHTML = `
-          <li>Prepare a calibrated <strong>${normV2_mL} mL</strong> container or flask.</li>
-          <li>Add approximately <strong>${(vSolvent_mL * 0.6).toFixed(1)} mL</strong> of diluent/solvent into the container.</li>
-          <li>Pipette exactly <strong>${v1Formatted}</strong> of stock solution into the diluent.</li>
-          <li>Bring total volume to the <strong>${v2Raw} ${uV2}</strong> mark using solvent and invert 10 times to homogenize.</li>
+          <li>Prepare a calibrated <strong>${v2_std.toFixed(1)} mL</strong> volumetric flask or container.</li>
+          <li>Dispense approximately <strong>${(vDil_std * 0.6).toFixed(1)} mL</strong> of solvent into the flask first.</li>
+          <li>Transfer exactly <strong>${v1_std.toFixed(3)} mL</strong> of stock solution (C₁ = ${c1Raw} ${uC1}) using a calibrated pipette.</li>
+          <li>Swirl gently, then dilute to the <strong>${v2_std.toFixed(1)} mL</strong> meniscus graduation line with solvent.</li>
+          <li>Invert 10 times to ensure complete solution homogeneity.</li>
         `;
-      } else {
-        displayV1.textContent = '--';
-        displayDiluent.textContent = '--';
-        displayFactor.textContent = '--';
       }
     }
 
-    // --- ENGINE 2: MULTI-STEP SERIAL TUBE LADDER ---
+    // PRINT LABEL HANDLER
+    document.getElementById('printLabelBtn')?.addEventListener('click', () => {
+      const c2 = inpC2.value + ' ' + (document.getElementById('unitC2') as HTMLSelectElement).value;
+      const v2 = inpV2.value + ' ' + (document.getElementById('unitV2') as HTMLSelectElement).value;
+      const df = document.getElementById('displayFactor')!.textContent || '--';
+      const solvent = (document.getElementById('solventMatrix') as HTMLSelectElement).options[(document.getElementById('solventMatrix') as HTMLSelectElement).selectedIndex].text;
+
+      document.getElementById('labelDate')!.textContent = new Date().toLocaleDateString();
+      document.getElementById('labelConc')!.textContent = c2;
+      document.getElementById('labelVol')!.textContent = v2;
+      document.getElementById('labelDF')!.textContent = df;
+      document.getElementById('labelSolvent')!.textContent = solvent.split(' ')[0];
+
+      window.print();
+    });
+
+    // ENGINE 2: SERIAL LADDER & DYNAMIC LOG PLOT
     let lastSerialData: Array<{ tube: number; conc: number; df: number; volLeft: number }> = [];
 
     function formatSci(val: number): string {
       if (val >= 0.01 && val <= 1000) return parseFloat(val.toPrecision(3)).toString();
       return val.toExponential(2);
+    }
+
+    function renderSemiLogCurve(data: Array<{ tube: number; conc: number }>) {
+      const svg = document.getElementById('semiLogSvg')!;
+      if (data.length < 2) return;
+
+      const logVals = data.map(d => Math.log10(d.conc));
+      const minLog = Math.min(...logVals);
+      const maxLog = Math.max(...logVals);
+      const logRange = maxLog - minLog || 1;
+
+      const padLeft = 60;
+      const padRight = 30;
+      const padTop = 20;
+      const padBottom = 35;
+      const width = 600 - padLeft - padRight;
+      const height = 240 - padTop - padBottom;
+
+      let points = '';
+      let svgHtml = `
+        <line x1="${padLeft}" y1="${padTop}" x2="${padLeft}" y2="${padTop + height}" stroke="#94a3b8" stroke-width="1.5" />
+        <line x1="${padLeft}" y1="${padTop + height}" x2="${padLeft + width}" y2="${padTop + height}" stroke="#94a3b8" stroke-width="1.5" />
+        <text x="10" y="${padTop + height / 2}" transform="rotate(-90 15,${padTop + height / 2})" fill="#64748b" font-weight="bold">Log₁₀(Conc)</text>
+        <text x="${padLeft + width / 2}" y="${padTop + height + 30}" fill="#64748b" font-weight="bold">Tube Step Number</text>
+      `;
+
+      data.forEach((d, i) => {
+        const x = padLeft + (i / (data.length - 1)) * width;
+        const currentLog = Math.log10(d.conc);
+        const y = padTop + height - ((currentLog - minLog) / logRange) * height;
+
+        points += `${x},${y} `;
+
+        svgHtml += `
+          <line x1="${x}" y1="${padTop + height}" x2="${x}" y2="${padTop + height + 5}" stroke="#94a3b8" />
+          <text x="${x}" y="${padTop + height + 18}" text-anchor="middle" fill="#475569">T${d.tube}</text>
+          <circle cx="${x}" cy="${y}" r="5" fill="#0284c7" stroke="#ffffff" stroke-width="1.5" />
+          <text x="${x}" y="${y - 8}" text-anchor="middle" fill="#0f172a" font-weight="bold">${formatSci(d.conc)}</text>
+        `;
+      });
+
+      svgHtml += `<polyline fill="none" stroke="#0284c7" stroke-width="2.5" stroke-dasharray="4" points="${points}" />`;
+      svg.innerHTML = svgHtml;
     }
 
     function runSerialEngine() {
@@ -465,7 +667,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       const stepDF = stepTotalVol / vTrans;
 
       document.getElementById('stepDFText')!.textContent = stepDF.toFixed(1) + '×';
-      document.getElementById('seriesTypeText')!.textContent = '1:' + stepDF.toFixed(0) + ' Series';
+      document.getElementById('seriesTypeText')!.textContent = '1:' + stepDF.toFixed(0) + ' Geometric Ladder';
       checkPipettingSanity(vTrans);
 
       let currentConc = c0;
@@ -498,9 +700,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         `;
         container.appendChild(tubeCard);
       }
+
+      renderSemiLogCurve(lastSerialData);
     }
 
-    // CSV EXPORT HANDLER
+    // CSV EXPORT
     document.getElementById('downloadCsvBtn')?.addEventListener('click', () => {
       if (lastSerialData.length === 0) return;
       let csv = 'Tube_Number,Concentration,Cumulative_DF,Remaining_Volume_mL\n';
@@ -515,9 +719,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       a.click();
     });
 
-    // EVENT LISTENERS
-    ['c1', 'c2', 'v2', 'unitC1', 'unitC2', 'unitV2'].forEach(id => {
-      document.getElementById(id)?.addEventListener('input', runSingleEngine);
+    // EVENT BINDINGS
+    [inpC1, inpV1, inpC2, inpV2].forEach(inp => {
+      inp.addEventListener('input', runSingleEngine);
+    });
+
+    ['unitC1', 'unitC2', 'unitV1', 'unitV2'].forEach(id => {
       document.getElementById(id)?.addEventListener('change', runSingleEngine);
     });
 
@@ -526,30 +733,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       document.getElementById(id)?.addEventListener('change', runSerialEngine);
     });
 
-    document.querySelectorAll('.preset-single').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const t = e.currentTarget as HTMLElement;
-        (document.getElementById('c1') as HTMLInputElement).value = t.dataset.c1!;
-        (document.getElementById('c2') as HTMLInputElement).value = t.dataset.c2!;
-        (document.getElementById('v2') as HTMLInputElement).value = t.dataset.v2!;
-        runSingleEngine();
-      });
-    });
-
     document.getElementById('copyProtocolBtn')?.addEventListener('click', () => {
       const text = document.getElementById('protocolSteps')?.innerText || '';
       navigator.clipboard.writeText(text);
       alert('Benchtop protocol copied.');
-    });
-
-    document.getElementById('copyLatexBtn')?.addEventListener('click', () => {
-      const c1 = (document.getElementById('c1') as HTMLInputElement).value;
-      const c2 = (document.getElementById('c2') as HTMLInputElement).value;
-      const v2 = (document.getElementById('v2') as HTMLInputElement).value;
-      const v1 = document.getElementById('displayV1')?.textContent || '';
-      const latex = 'V_1 = \\frac{C_2 \\times V_2}{C_1} = \\frac{' + c2 + ' M \\times ' + v2 + ' mL}{' + c1 + ' M} = ' + v1;
-      navigator.clipboard.writeText(latex);
-      alert('LaTeX equation copied.');
     });
 
     document.getElementById('shareBtn')?.addEventListener('click', () => {
@@ -557,6 +744,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       alert('Experiment URL copied.');
     });
 
+    adjustInputStates();
     runSingleEngine();
   </script>
 </BaseLayout>
