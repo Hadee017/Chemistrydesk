@@ -6,67 +6,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   title="Serial Dilution Calculator & Multi-Step Tube Ladder Generator | ChemistryDesk"
   description="High-precision stock dilution and serial ladder generator. Computes aliquot volumes, multi-well series, dilution factors, and exports CSV protocols."
 >
-  <!-- Schema: WebApplication + HowTo + FAQPage for Rich Google Snippets -->
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebApplication",
-        "name": "ChemistryDesk Serial Dilution & Tube Ladder Studio",
-        "applicationCategory": "EducationalApplication",
-        "operatingSystem": "All",
-        "browserRequirements": "Requires JavaScript",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        }
-      },
-      {
-        "@type": "HowTo",
-        "name": "How to Prepare a Multi-Step Serial Dilution Ladder",
-        "step": [
-          {
-            "@type": "HowToStep",
-            "name": "Fill Diluent Tubes",
-            "text": "Dispense a uniform volume of diluent (solvent) into each tube in the series."
-          },
-          {
-            "@type": "HowToStep",
-            "name": "Initial Aliquot Transfer",
-            "text": "Pipette the specified transfer volume from the concentrated stock into Tube 1 and vortex to mix."
-          },
-          {
-            "@type": "HowToStep",
-            "name": "Sequential Propagation",
-            "text": "Transfer the identical volume from Tube 1 into Tube 2, mix thoroughly, and repeat sequentially down the rack."
-          }
-        ]
-      },
-      {
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "What is the difference between a 1:10 and a 10-fold dilution?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "In chemical nomenclature, a 10-fold (1:10) dilution means 1 part aliquot mixed with 9 parts diluent, making the total volume 10 parts. The final concentration is 1/10th of the initial."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Why use serial dilution instead of a single direct dilution?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Direct dilutions spanning multiple orders of magnitude require dispensing sub-microliter volumes, where micropipette errors often exceed 10%. Serial dilution maintains volumetric accuracy using standard Class-A pipettes or calibrated micropipettes."
-            }
-          }
-        ]
-      }
-    ]
-  })} />
-
   <main style="max-width: 1060px; margin: 2rem auto; padding: 0 1.5rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1e293b;">
     
     <!-- Navigation Breadcrumbs -->
@@ -106,9 +45,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <!-- PIPETTING SANITY ALERT BAR -->
     <div id="pipetteAlert" style="display: none; background: #fffbeb; border-left: 4px solid #f59e0b; padding: 0.85rem 1.25rem; margin-bottom: 1.5rem; border-radius: 0 8px 8px 0; font-size: 0.85rem; color: #92400e;"></div>
 
-    <!-- ========================================== -->
-    <!-- MODE 1: SINGLE ALIQUOT SOLVER             -->
-    <!-- ========================================== -->
+    <!-- MODE 1: SINGLE ALIQUOT SOLVER -->
     <div id="singleModeSection">
       <!-- Quick Presets -->
       <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 2rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; font-size: 0.85rem;">
@@ -224,9 +161,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- MODE 2: MULTI-STEP SERIAL TUBE LADDER      -->
-    <!-- ========================================== -->
+    <!-- MODE 2: MULTI-STEP SERIAL TUBE LADDER -->
     <div id="serialModeSection" style="display: none; margin-bottom: 3rem;">
       <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.75rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
         <h2 style="font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; margin-top: 0; margin-bottom: 1.25rem;">
@@ -277,15 +212,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- COMPREHENSIVE ADSENSE SCIENTIFIC GUIDE     -->
-    <!-- ========================================== -->
+    <!-- SCIENTIFIC REFERENCE GUIDE (FOR ADSENSE QUALITY COMPLIANCE) -->
     <article style="border-top: 1px solid #e2e8f0; padding-top: 3rem; line-height: 1.8; color: #334155;">
       <h2 style="font-size: 1.75rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem;">
         Mathematical Foundations of Serial Dilutions &amp; Mass Conservation
       </h2>
       <p>
-        Volumetric chemical dilutions rest on the thermodynamic principle of the conservation of mass. In a non-reactive solution, adding solvent does not alter the absolute quantity of solute ($n$ in moles or $m$ in mass units). Hence, the relationship between initial stock parameters and final diluted conditions is formalized:
+        Volumetric chemical dilutions rest on the thermodynamic principle of the conservation of mass. In a non-reactive solution, adding solvent does not alter the absolute quantity of solute (expressed in moles or mass units). The relationship between initial stock parameters and final diluted conditions is formalized:
       </p>
       
       <p style="background: #f8fafc; border-left: 4px solid #0284c7; padding: 1rem 1.25rem; font-family: monospace; font-size: 1rem; color: #0f172a; border-radius: 0 8px 8px 0;">
@@ -296,10 +229,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         Multi-Step Serial Dilution Mechanics
       </h3>
       <p>
-        In spectrophotometry (UV-Vis), cell biology, and microplate assays (such as minimum inhibitory concentration or ELISA testing), target working ranges often span four to six orders of magnitude ($10^{-1}\text{ M}$ to $10^{-6}\text{ M}$). Preparing a $1.0\ \mu\text{M}$ solution directly from a $1.0\text{ M}$ stock would necessitate dispensing $0.1\ \mu\text{L}$ into $100\text{ mL}$ of water. Such transfers incur extreme pipetting errors (&gt;15%) using standard volumetric equipment.
+        In spectrophotometry (UV-Vis), cell biology, and microplate assays (such as minimum inhibitory concentration or ELISA testing), target working ranges often span four to six orders of magnitude (10⁻¹ M to 10⁻⁶ M). Preparing a 1.0 &mu;M solution directly from a 1.0 M stock would necessitate dispensing 0.1 &mu;L into 100 mL of water. Such transfers incur extreme pipetting errors (&gt;15%) using standard volumetric equipment.
       </p>
       <p>
-        Serial dilution circumvents this limitation by performing sequential, equal-ratio transfers across an array of vessels. The individual step dilution factor ($DF_{\text{step}}$) is defined:
+        Serial dilution circumvents this limitation by performing sequential, equal-ratio transfers across an array of vessels. The individual step dilution factor (DF_step) is defined:
       </p>
 
       <p style="background: #f8fafc; border-left: 4px solid #0284c7; padding: 1rem 1.25rem; font-family: monospace; font-size: 1rem; color: #0f172a; border-radius: 0 8px 8px 0;">
@@ -307,7 +240,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </p>
 
       <p>
-        The final concentration in the $n$-th tube ($C_n$) is governed by exponential decay:
+        The final concentration in the n-th tube (C_n) is governed by exponential decay:
       </p>
 
       <p style="background: #f8fafc; border-left: 4px solid #0284c7; padding: 1rem 1.25rem; font-family: monospace; font-size: 1rem; color: #0f172a; border-radius: 0 8px 8px 0;">
@@ -320,12 +253,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem;">
         <p style="margin-top: 0;"><strong>Experimental Setup:</strong> A biochemist needs a 5-point standard curve starting from a 50 mM stock of Paraquat, performing a 5-fold serial dilution ladder using 15 mL conical centrifuge tubes.</p>
         <ol style="margin-left: 1.5rem; margin-bottom: 0;">
-          <li><strong>Step Factor ($DF$):</strong> For a 5-fold series, the total volume per tube must be 5 times the transfer volume. Choosing $V_{\text{trans}} = 2.0\text{ mL}$ means $V_{\text{total}} = 10.0\text{ mL}$, requiring $V_{\text{dil}} = 8.0\text{ mL}$ per tube.</li>
-          <li><strong>Tube 1:</strong> Dispense 8.0 mL diluent + 2.0 mL of 50 mM stock &rarr; <strong>10.0 mM</strong> ($DF = 5\times$).</li>
-          <li><strong>Tube 2:</strong> Transfer 2.0 mL from Tube 1 into 8.0 mL diluent &rarr; <strong>2.0 mM</strong> ($DF = 25\times$).</li>
-          <li><strong>Tube 3:</strong> Transfer 2.0 mL from Tube 2 into 8.0 mL diluent &rarr; <strong>0.40 mM (400 &micro;M)</strong> ($DF = 125\times$).</li>
-          <li><strong>Tube 4:</strong> Transfer 2.0 mL from Tube 3 into 8.0 mL diluent &rarr; <strong>0.080 mM (80 &micro;M)</strong> ($DF = 625\times$).</li>
-          <li><strong>Tube 5:</strong> Transfer 2.0 mL from Tube 4 into 8.0 mL diluent &rarr; <strong>0.016 mM (16 &micro;M)</strong> ($DF = 3125\times$).</li>
+          <li><strong>Step Factor (DF):</strong> For a 5-fold series, total volume per tube must be 5 times the transfer volume. Choosing V_trans = 2.0 mL means V_total = 10.0 mL, requiring V_dil = 8.0 mL per tube.</li>
+          <li><strong>Tube 1:</strong> Dispense 8.0 mL diluent + 2.0 mL of 50 mM stock &rarr; <strong>10.0 mM</strong> (DF = 5&times;).</li>
+          <li><strong>Tube 2:</strong> Transfer 2.0 mL from Tube 1 into 8.0 mL diluent &rarr; <strong>2.0 mM</strong> (DF = 25&times;).</li>
+          <li><strong>Tube 3:</strong> Transfer 2.0 mL from Tube 2 into 8.0 mL diluent &rarr; <strong>0.40 mM (400 &mu;M)</strong> (DF = 125&times;).</li>
+          <li><strong>Tube 4:</strong> Transfer 2.0 mL from Tube 3 into 8.0 mL diluent &rarr; <strong>0.080 mM (80 &mu;M)</strong> (DF = 625&times;).</li>
+          <li><strong>Tube 5:</strong> Transfer 2.0 mL from Tube 4 into 8.0 mL diluent &rarr; <strong>0.016 mM (16 &mu;M)</strong> (DF = 3125&times;).</li>
         </ol>
       </div>
 
@@ -333,7 +266,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         Systematic Benchtop Pitfalls &amp; Quality Control
       </h3>
       <ul style="margin-left: 1.5rem;">
-        <li><strong>Pipette Tip Wetting &amp; Carryover:</strong> Always pre-wet the pipette tip three times with the liquid being transferred to establish vapor equilibrium. For serial transfers, failure to change tips between steps leads to forward carryover contamination, artificially elevating downstream concentrations.</li>
+        <li><strong>Pipette Tip Wetting &amp; Carryover:</strong> Always pre-wet the pipette tip three times with the liquid being transferred. For serial transfers, failure to change tips between steps leads to forward carryover contamination, artificially elevating downstream concentrations.</li>
         <li><strong>Vortexing Homogeneity:</strong> In viscous solutions, solute gradients develop rapidly. Each tube must undergo thorough vortex mixing before drawing the subsequent aliquot.</li>
         <li><strong>Temperature Stabilization:</strong> Organic solvents and concentrated electrolytes exhibit significant thermal expansion. Conduct all volumetric transfers at ambient room temperature (20&deg;C to 25&deg;C).</li>
       </ul>
@@ -376,10 +309,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       const vol_uL = vol_mL * 1000;
       if (vol_uL > 0 && vol_uL < 1.0) {
         alertEl.style.display = 'block';
-        alertEl.innerHTML = `<strong>Pipetting Warning:</strong> Calculated aliquot (${vol_uL.toFixed(2)} &micro;L) is below 1.0 &micro;L. Standard micropipettes have unacceptable CV (&gt;10%) at this volume. Prepare a 10&times; or 100&times; intermediate stock first.`;
+        alertEl.innerHTML = '<strong>Pipetting Warning:</strong> Calculated aliquot (' + vol_uL.toFixed(2) + ' µL) is below 1.0 µL. Standard micropipettes have high CV (>10%) at this volume. Prepare an intermediate stock first.';
       } else if (vol_mL > 50) {
         alertEl.style.display = 'block';
-        alertEl.innerHTML = `<strong>Volume Advisory:</strong> Calculated transfer (${vol_mL.toFixed(1)} mL) exceeds typical pipette stroke capacity. Utilize Class-A volumetric pipettes or graduated cylinders.`;
+        alertEl.innerHTML = '<strong>Volume Advisory:</strong> Calculated transfer (' + vol_mL.toFixed(1) + ' mL) exceeds typical pipette stroke capacity. Utilize Class-A volumetric pipettes.';
       } else {
         alertEl.style.display = 'none';
       }
@@ -504,8 +437,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       const stepTotalVol = vTrans + vDil;
       const stepDF = stepTotalVol / vTrans;
 
-      document.getElementById('stepDFText')!.textContent = `${stepDF.toFixed(1)}×`;
-      document.getElementById('seriesTypeText')!.textContent = `1:${stepDF.toFixed(0)} Series`;
+      document.getElementById('stepDFText')!.textContent = stepDF.toFixed(1) + '×';
+      document.getElementById('seriesTypeText')!.textContent = '1:' + stepDF.toFixed(0) + ' Series';
       checkPipettingSanity(vTrans);
 
       let currentConc = c0;
@@ -545,7 +478,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       if (lastSerialData.length === 0) return;
       let csv = 'Tube_Number,Concentration,Cumulative_DF,Remaining_Volume_mL\n';
       lastSerialData.forEach(d => {
-        csv += `${d.tube},${d.conc},${d.df},${d.volLeft}\n`;
+        csv += d.tube + ',' + d.conc + ',' + d.df + ',' + d.volLeft + '\n';
       });
       const blob = new Blob([csv], { type: 'text/csv' });
       const url = window.URL.createObjectURL(blob);
@@ -582,12 +515,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       alert('Benchtop protocol copied.');
     });
 
+    // Cleaned LaTeX string construction without illegal escapes
     document.getElementById('copyLatexBtn')?.addEventListener('click', () => {
       const c1 = (document.getElementById('c1') as HTMLInputElement).value;
       const c2 = (document.getElementById('c2') as HTMLInputElement).value;
       const v2 = (document.getElementById('v2') as HTMLInputElement).value;
       const v1 = document.getElementById('displayV1')?.textContent || '';
-      const latex = `V_1 = \\frac{C_2 \\times V_2}{C_1} = \\frac{${c2}\\,\\text{M} \\times ${v2}\\,\\text{mL}}{${c1}\\,\\text{M}} = ${v1}`;
+      const latex = 'V_1 = \\frac{C_2 \\times V_2}{C_1} = \\frac{' + c2 + ' M \\times ' + v2 + ' mL}{' + c1 + ' M} = ' + v1;
       navigator.clipboard.writeText(latex);
       alert('LaTeX equation copied.');
     });
