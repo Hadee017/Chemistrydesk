@@ -1,0 +1,460 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout 
+  title="Serial Dilution Calculator (C1V1 = C2V2) & Pipetting Protocol Generator"
+  description="High-precision stock solution dilution calculator. Calculates aliquot volume (V1), diluent addition, dilution factors, and generates copyable benchtop protocols and LaTeX equations."
+>
+  <!-- Structured Data: WebApplication + HowTo for Search Engines -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "ChemistryDesk Stock Dilution & Aliquot Engine",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      },
+      {
+        "@type": "HowTo",
+        "name": "How to Calculate and Perform a Solution Dilution (C1V1 = C2V2)",
+        "step": [
+          {
+            "@type": "HowToStep",
+            "name": "Identify Parameters",
+            "text": "Determine your stock concentration (C1), target working concentration (C2), and target final volume (V2)."
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Calculate Aliquot Volume",
+            "text": "Divide the product of C2 and V2 by C1 to isolate the required stock aliquot volume V1."
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Calculate Diluent Volume",
+            "text": "Subtract the aliquot volume V1 from the total target volume V2 to determine diluent addition."
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Benchtop Execution",
+            "text": "Pipette the aliquot volume into a volumetric flask pre-filled with partial solvent, invert to mix, and dilute to the final meniscus calibration line."
+          }
+        ]
+      }
+    ]
+  })} />
+
+  <main style="max-width: 1000px; margin: 2rem auto; padding: 0 1.5rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1e293b;">
+    
+    <!-- Breadcrumb & Header -->
+    <nav style="font-size: 0.8rem; color: #64748b; margin-bottom: 1rem;">
+      <a href="/" style="color: #0284c7; text-decoration: none;">Home</a> &rsaquo; 
+      <span style="color: #94a3b8;"> Solution Preparation</span> &rsaquo; 
+      <span style="color: #0f172a; font-weight: 600;">Dilution Studio</span>
+    </nav>
+
+    <div style="border-b: 1px solid #e2e8f0; padding-bottom: 1.5rem; margin-bottom: 2rem;">
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+        <span style="font-size: 2rem;">💧</span>
+        <h1 style="font-size: 2.25rem; font-weight: 800; color: #0f172a; letter-spacing: -0.025em; margin: 0;">
+          Stock Dilution & Aliquot Studio
+        </h1>
+      </div>
+      <p style="color: #64748b; font-size: 1rem; line-height: 1.6; margin: 0; max-width: 780px;">
+        Universal $C_1 V_1 = C_2 V_2$ mass conservation engine. Calculates stock aliquot volumes, diluent requirements, and dilution factors with automatic pipetting protocols, LaTeX academic export, and shareable experiment URLs.
+      </p>
+    </div>
+
+    <!-- Quick Presets Toolbar -->
+    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 2rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; font-size: 0.85rem;">
+      <span style="font-weight: 700; color: #475569; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Quick Presets:</span>
+      <button class="preset-btn" data-c1="1.0" data-c2="0.1" data-v2="100" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; cursor: pointer; color: #334155; font-size: 0.8rem; font-weight: 600;">1 M &rarr; 0.1 M (100 mL)</button>
+      <button class="preset-btn" data-c1="10.0" data-c2="0.25" data-v2="250" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; cursor: pointer; color: #334155; font-size: 0.8rem; font-weight: 600;">10 M Stock &rarr; 0.25 M (250 mL)</button>
+      <button class="preset-btn" data-c1="50" data-c2="1" data-v2="500" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; cursor: pointer; color: #334155; font-size: 0.8rem; font-weight: 600;">50&times; Buffer &rarr; 1&times; Working (500 mL)</button>
+      <button id="shareBtn" style="margin-left: auto; background: #e0f2fe; border: 1px solid #bae6fd; color: #0284c7; padding: 0.35rem 0.75rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 700;">🔗 Copy Shareable Link</button>
+    </div>
+
+    <!-- Main Calculation Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+      
+      <!-- Parameters Input Panel -->
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+        <h2 style="font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; margin-top: 0; margin-bottom: 1.25rem;">
+          Input Parameters
+        </h2>
+
+        <div style="margin-bottom: 1.25rem;">
+          <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
+            STOCK CONCENTRATION (C₁)
+          </label>
+          <div style="display: flex;">
+            <input type="number" id="c1" step="any" value="10.0" style="flex: 1; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-right: none; border-radius: 6px 0 0 6px; font-size: 0.95rem; font-weight: 600; color: #0f172a; outline: none;" />
+            <select id="unitC1" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 0 0.75rem; border-radius: 0 6px 6px 0; font-size: 0.85rem; font-weight: 600; color: #475569;">
+              <option value="M">M</option>
+              <option value="mM">mM</option>
+              <option value="uM">&mu;M</option>
+              <option value="X">&times; (Stock)</option>
+              <option value="mg/mL">mg/mL</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 1.25rem;">
+          <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
+            DESIRED TARGET CONCENTRATION (C₂)
+          </label>
+          <div style="display: flex;">
+            <input type="number" id="c2" step="any" value="0.25" style="flex: 1; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-right: none; border-radius: 6px 0 0 6px; font-size: 0.95rem; font-weight: 600; color: #0f172a; outline: none;" />
+            <select id="unitC2" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 0 0.75rem; border-radius: 0 6px 6px 0; font-size: 0.85rem; font-weight: 600; color: #475569;">
+              <option value="M">M</option>
+              <option value="mM">mM</option>
+              <option value="uM">&mu;M</option>
+              <option value="X">&times; (Stock)</option>
+              <option value="mg/mL">mg/mL</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 1.25rem;">
+          <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
+            FINAL SOLUTION VOLUME (V₂)
+          </label>
+          <div style="display: flex;">
+            <input type="number" id="v2" step="any" value="100.0" style="flex: 1; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-right: none; border-radius: 6px 0 0 6px; font-size: 0.95rem; font-weight: 600; color: #0f172a; outline: none;" />
+            <select id="unitV2" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 0 0.75rem; border-radius: 0 6px 6px 0; font-size: 0.85rem; font-weight: 600; color: #475569;">
+              <option value="mL">mL</option>
+              <option value="uL">&mu;L</option>
+              <option value="L">L</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="validationWarning" style="display: none; background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 0.75rem; border-radius: 6px; font-size: 0.8rem; margin-top: 1rem;"></div>
+      </div>
+
+      <!-- Output & Protocol Display Panel -->
+      <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        
+        <!-- Live Readout Box -->
+        <div style="background: #0f172a; border-radius: 12px; padding: 1.75rem; color: #ffffff; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+          <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #38bdf8;">
+            Calculated Stock Aliquot (V₁)
+          </span>
+          <div id="displayV1" style="font-size: 2.5rem; font-weight: 800; color: #38bdf8; margin: 0.25rem 0 0.75rem 0;">
+            --
+          </div>
+
+          <div style="border-top: 1px solid #334155; padding-top: 1rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.85rem;">
+            <div>
+              <span style="color: #94a3b8; display: block; font-size: 0.75rem; text-transform: uppercase;">Diluent / Solvent Volume</span>
+              <strong id="displayDiluent" style="color: #34d399; font-size: 1.15rem;">--</strong>
+            </div>
+            <div>
+              <span style="color: #94a3b8; display: block; font-size: 0.75rem; text-transform: uppercase;">Dilution Factor</span>
+              <strong id="displayFactor" style="color: #e2e8f0; font-size: 1.15rem;">--</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scale Visualizer Check -->
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 700; color: #64748b; margin-bottom: 0.5rem; text-transform: uppercase;">
+            <span>Aliquot Ratio</span>
+            <span id="percentText">--</span>
+          </div>
+          <div style="height: 12px; width: 100%; background: #e2e8f0; border-radius: 9999px; overflow: hidden; display: flex;">
+            <div id="aliquotBar" style="width: 0%; background: #0284c7; transition: width 0.3s ease;"></div>
+            <div id="diluentBar" style="width: 100%; background: #10b981; transition: width 0.3s ease;"></div>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: #94a3b8; margin-top: 0.35rem;">
+            <span>Stock Aliquot (V₁)</span>
+            <span>Diluent Solvent (V₂ - V₁)</span>
+          </div>
+        </div>
+
+        <!-- Practical Protocol SOP -->
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+            <h3 style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #475569; margin: 0;">
+              Benchtop Execution SOP
+            </h3>
+            <div style="display: flex; gap: 0.5rem;">
+              <button id="copyProtocolBtn" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #334155;">Copy Steps</button>
+              <button id="copyLatexBtn" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #334155;">Copy LaTeX</button>
+            </div>
+          </div>
+          <ol id="protocolSteps" style="margin: 0; padding-left: 1.25rem; font-size: 0.85rem; line-height: 1.6; color: #334155;"></ol>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- AdSense High-Value Content & Theoretical Foundation (800+ Words) -->
+    <article style="border-top: 1px solid #e2e8f0; padding-top: 3rem; line-height: 1.8; color: #334155;">
+      
+      <h2 style="font-size: 1.75rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem;">
+        Mathematical Principles of Solution Dilution
+      </h2>
+      <p>
+        Solution dilution is governed by the universal conservation law of chemical mass. In any standard volumetric dilution where pure solvent is added to an existing solution, the absolute amount of solute remains unchanged between the initial stock state and the final working state.
+      </p>
+      
+      <p style="background: #f8fafc; border-left: 4px solid #0284c7; padding: 1rem 1.25rem; font-family: monospace; font-size: 1rem; color: #0f172a; border-radius: 0 8px 8px 0;">
+        n_initial = n_final &rArr; C₁ &times; V₁ = C₂ &times; V₂
+      </p>
+
+      <p>
+        Where:
+      </p>
+      <ul style="margin-left: 1.5rem; margin-bottom: 1.5rem;">
+        <li><strong>C₁:</strong> Initial concentration of the concentrated stock solution (expressed in M, mM, &mu;M, or mass/volume).</li>
+        <li><strong>V₁:</strong> The volume of stock solution (the aliquot) required to be transferred.</li>
+        <li><strong>C₂:</strong> Desired final concentration of the diluted working solution.</li>
+        <li><strong>V₂:</strong> Total final volume of the working solution after diluent addition.</li>
+      </ul>
+
+      <p>
+        Rearranging the equality to isolate the unknown stock aliquot volume:
+      </p>
+
+      <p style="background: #f8fafc; border-left: 4px solid #0284c7; padding: 1rem 1.25rem; font-family: monospace; font-size: 1rem; color: #0f172a; border-radius: 0 8px 8px 0;">
+        V₁ = (C₂ &times; V₂) / C₁
+      </p>
+
+      <h3 style="font-size: 1.35rem; font-weight: 700; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
+        Dilution Factor (DF) Mechanics
+      </h3>
+      <p>
+        The dilution factor represents the ratio of the stock concentration to the final concentration, or equivalently, the ratio of the final volume to the aliquot volume:
+      </p>
+
+      <p style="background: #f8fafc; border-left: 4px solid #0284c7; padding: 1rem 1.25rem; font-family: monospace; font-size: 1rem; color: #0f172a; border-radius: 0 8px 8px 0;">
+        DF = C₁ / C₂ = V₂ / V₁
+      </p>
+      <p>
+        For instance, diluting a 10.0 M stock down to a 0.25 M target constitutes a <strong>40-fold dilution (40&times;)</strong>. Consequently, the aliquot constitutes exactly 1/40th of the final solution volume.
+      </p>
+
+      <h3 style="font-size: 1.35rem; font-weight: 700; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
+        Step-by-Step Worked Analytical Example
+      </h3>
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem;">
+        <p style="margin-top: 0;"><strong>Laboratory Problem:</strong> A researcher needs to prepare 500 mL of a 0.020 M potassium permanganate (KMnO₄) working standard for spectrophotometric calibration. The stock bottle in the chemical storage cabinet is labeled 0.500 M KMnO₄.</p>
+        <ol style="margin-left: 1.5rem; margin-bottom: 0;">
+          <li><strong>Identify parameters:</strong> C₁ = 0.500 M, C₂ = 0.020 M, V₂ = 500 mL.</li>
+          <li><strong>Check unit consistency:</strong> Both C₁ and C₂ share identical molar units (M), so direct calculation applies.</li>
+          <li><strong>Compute V₁:</strong> V₁ = (0.020 M &times; 500 mL) / 0.500 M = <strong>20.00 mL</strong>.</li>
+          <li><strong>Calculate diluent requirement:</strong> V_solvent = 500 mL - 20.00 mL = <strong>480.00 mL</strong>.</li>
+          <li><strong>Execution:</strong> Using a calibrated 20 mL volumetric pipette, dispense the 20.00 mL stock aliquot into a 500 mL volumetric flask pre-filled with ~350 mL of deionized water. Swirl gently, then dilute to the calibration mark with deionized water.</li>
+        </ol>
+      </div>
+
+      <h3 style="font-size: 1.35rem; font-weight: 700; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
+        Critical Systematic Errors in Benchtop Dilutions
+      </h3>
+      <p>
+        While mathematically linear, practical solution preparation frequently encounters physical phenomena that cause concentration errors:
+      </p>
+      <ul style="margin-left: 1.5rem;">
+        <li>
+          <strong>Non-Ideal Mixing & Volumetric Contraction:</strong> Mixing two different miscible liquids (such as concentrated ethanol and water, or concentrated sulfuric acid and water) causes molecular rearrangement and hydrogen bonding contraction. In these mixtures, $V_1 + V_{\text{solvent}} \neq V_2$. Always add the aliquot to partial solvent, allow temperature stabilization to 20&deg;C, and dilute to the volumetric mark rather than measuring solvent volume independently.
+        </li>
+        <li>
+          <strong>Exothermic Heats of Dilution:</strong> Diluting strong mineral acids (e.g., $18\text{ M } \text{H}_2\text{SO}_4$) releases significant exothermic energy. Thermal expansion will cause volumetric glassware to read incorrectly. Always allow the flask to reach room temperature before final meniscus adjustment.
+        </li>
+        <li>
+          <strong>Meniscus Calibration:</strong> For transparent solutions, align the bottom of the curved meniscus with the horizontal calibration line at eye level. For intensely colored solutions (e.g., concentrated $\text{KMnO}_4$), align the top surface ring according to standard NIST protocols.
+        </li>
+      </ul>
+
+      <h3 style="font-size: 1.35rem; font-weight: 700; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
+        Frequently Asked Questions (FAQ)
+      </h3>
+      <div style="border-top: 1px solid #e2e8f0; padding-top: 1rem;">
+        <p><strong>Can I use this equation for serial dilutions across multi-well plates?</strong><br />
+        Yes. For a 2-fold (1:2) serial dilution series, each step transfers 1 part aliquot into 1 part diluent. For a 10-fold (1:10) serial dilution ladder, transfer 1 part aliquot into 9 parts diluent.</p>
+        <p><strong>What if my stock concentration is in percentage (%) and target is in mg/mL?</strong><br />
+        Convert to matching base units prior to calculating: $1\% = 1\text{ g}/100\text{ mL} = 10\text{ mg/mL}$. Once units match, the $C_1V_1 = C_2V_2$ equality holds rigorously.</p>
+      </div>
+
+    </article>
+  </main>
+
+  <script>
+    // Pure calculation logic
+    function toStandardConc(val: number, unit: string): number {
+      switch (unit) {
+        case 'mM': return val / 1000;
+        case 'uM': return val / 1000000;
+        default: return val;
+      }
+    }
+
+    function toStandardVol(val: number, unit: string): number {
+      switch (unit) {
+        case 'uL': return val / 1000;
+        case 'L': return val * 1000;
+        default: return val; // Base is mL
+      }
+    }
+
+    function runDilutionEngine() {
+      const c1Raw = parseFloat((document.getElementById('c1') as HTMLInputElement).value) || 0;
+      const c2Raw = parseFloat((document.getElementById('c2') as HTMLInputElement).value) || 0;
+      const v2Raw = parseFloat((document.getElementById('v2') as HTMLInputElement).value) || 0;
+
+      const uC1 = (document.getElementById('unitC1') as HTMLSelectElement).value;
+      const uC2 = (document.getElementById('unitC2') as HTMLSelectElement).value;
+      const uV2 = (document.getElementById('unitV2') as HTMLSelectElement).value;
+
+      const warnEl = document.getElementById('validationWarning')!;
+      const displayV1 = document.getElementById('displayV1')!;
+      const displayDiluent = document.getElementById('displayDiluent')!;
+      const displayFactor = document.getElementById('displayFactor')!;
+      const aliquotBar = document.getElementById('aliquotBar')!;
+      const diluentBar = document.getElementById('diluentBar')!;
+      const percentText = document.getElementById('percentText')!;
+      const protocolEl = document.getElementById('protocolSteps')!;
+
+      // Normalize concentrations to same base if standard molarity
+      let normC1 = c1Raw;
+      let normC2 = c2Raw;
+
+      if (['M', 'mM', 'uM'].includes(uC1) && ['M', 'mM', 'uM'].includes(uC2)) {
+        normC1 = toStandardConc(c1Raw, uC1);
+        normC2 = toStandardConc(c2Raw, uC2);
+      } else if (uC1 !== uC2) {
+        warnEl.style.display = 'block';
+        warnEl.textContent = 'Custom unit mismatch: Ensure C₁ and C₂ use compatible unit metrics.';
+      } else {
+        warnEl.style.display = 'none';
+      }
+
+      const normV2_mL = toStandardVol(v2Raw, uV2);
+
+      if (normC1 > 0 && normC2 > 0 && normV2_mL > 0) {
+        if (normC2 >= normC1) {
+          warnEl.style.display = 'block';
+          warnEl.textContent = 'Target concentration (C₂) must be lower than stock concentration (C₁). Dilution cannot increase concentration.';
+          displayV1.textContent = '--';
+          displayDiluent.textContent = '--';
+          displayFactor.textContent = '--';
+          return;
+        }
+
+        warnEl.style.display = 'none';
+
+        // V1 = (C2 * V2) / C1
+        const v1_mL = (normC2 * normV2_mL) / normC1;
+        const vSolvent_mL = normV2_mL - v1_mL;
+        const df = normC1 / normC2;
+
+        // Visual format
+        let v1Formatted = `${v1_mL.toFixed(3)} mL`;
+        let vSolventFormatted = `${vSolvent_mL.toFixed(3)} mL`;
+
+        if (uV2 === 'uL' || (v1_mL < 0.1 && uV2 !== 'L')) {
+          v1Formatted = `${(v1_mL * 1000).toFixed(2)} \u00B5L`;
+        }
+
+        displayV1.textContent = v1Formatted;
+        displayDiluent.textContent = vSolventFormatted;
+        displayFactor.textContent = `${df.toFixed(2)}\u00D7`;
+
+        // Scale Visualizer
+        const aliquotPct = Math.min(Math.max((v1_mL / normV2_mL) * 100, 0.5), 99.5);
+        aliquotBar.style.width = `${aliquotPct}%`;
+        diluentBar.style.width = `${100 - aliquotPct}%`;
+        percentText.textContent = `${aliquotPct.toFixed(1)}% Aliquot / ${(100 - aliquotPct).toFixed(1)}% Diluent`;
+
+        // Benchtop SOP
+        protocolEl.innerHTML = `
+          <li>Select a clean, calibrated <strong>${normV2_mL} mL</strong> volumetric flask or container.</li>
+          <li>Add approximately <strong>${(vSolvent_mL * 0.6).toFixed(1)} mL</strong> of diluent/solvent into the container first.</li>
+          <li>Using an analytical pipette, transfer exactly <strong>${v1Formatted}</strong> of the <strong>${c1Raw} ${uC1}</strong> stock solution.</li>
+          <li>Gently swirl the flask to ensure complete homogenization.</li>
+          <li>Dilute with additional solvent until the bottom of the meniscus touches the <strong>${v2Raw} ${uV2}</strong> graduation line.</li>
+          <li>Invert the stoppered flask 10 times to achieve a uniform <strong>${c2Raw} ${uC2}</strong> working solution.</li>
+        `;
+
+        // Update URL state for seamless sharing
+        const params = new URLSearchParams({
+          c1: c1Raw.toString(),
+          u1: uC1,
+          c2: c2Raw.toString(),
+          u2: uC2,
+          v2: v2Raw.toString(),
+          uv: uV2
+        });
+        window.history.replaceState({}, '', `${window.location.pathname}?${params}`);
+      } else {
+        displayV1.textContent = '--';
+        displayDiluent.textContent = '--';
+        displayFactor.textContent = '--';
+      }
+    }
+
+    // Load URL params on initial load
+    function loadUrlParams() {
+      const p = new URLSearchParams(window.location.search);
+      if (p.has('c1')) (document.getElementById('c1') as HTMLInputElement).value = p.get('c1')!;
+      if (p.has('u1')) (document.getElementById('unitC1') as HTMLSelectElement).value = p.get('u1')!;
+      if (p.has('c2')) (document.getElementById('c2') as HTMLInputElement).value = p.get('c2')!;
+      if (p.has('u2')) (document.getElementById('unitC2') as HTMLSelectElement).value = p.get('u2')!;
+      if (p.has('v2')) (document.getElementById('v2') as HTMLInputElement).value = p.get('v2')!;
+      if (p.has('uv')) (document.getElementById('unitV2') as HTMLSelectElement).value = p.get('uv')!;
+    }
+
+    // Bind event listeners
+    ['c1', 'c2', 'v2', 'unitC1', 'unitC2', 'unitV2'].forEach(id => {
+      document.getElementById(id)?.addEventListener('input', runDilutionEngine);
+      document.getElementById(id)?.addEventListener('change', runDilutionEngine);
+    });
+
+    // Presets handler
+    document.querySelectorAll('.preset-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const t = e.currentTarget as HTMLElement;
+        (document.getElementById('c1') as HTMLInputElement).value = t.dataset.c1!;
+        (document.getElementById('c2') as HTMLInputElement).value = t.dataset.c2!;
+        (document.getElementById('v2') as HTMLInputElement).value = t.dataset.v2!;
+        (document.getElementById('unitC1') as HTMLSelectElement).value = 'M';
+        (document.getElementById('unitC2') as HTMLSelectElement).value = 'M';
+        (document.getElementById('unitV2') as HTMLSelectElement).value = 'mL';
+        runDilutionEngine();
+      });
+    });
+
+    // Copy Handlers
+    document.getElementById('copyProtocolBtn')?.addEventListener('click', () => {
+      const text = document.getElementById('protocolSteps')?.innerText || '';
+      navigator.clipboard.writeText(text);
+      alert('Benchtop protocol steps copied to clipboard.');
+    });
+
+    document.getElementById('copyLatexBtn')?.addEventListener('click', () => {
+      const c1 = (document.getElementById('c1') as HTMLInputElement).value;
+      const c2 = (document.getElementById('c2') as HTMLInputElement).value;
+      const v2 = (document.getElementById('v2') as HTMLInputElement).value;
+      const v1 = document.getElementById('displayV1')?.textContent || '';
+      const latex = `V_1 = \\frac{C_2 \\times V_2}{C_1} = \\frac{${c2}\\,\\text{M} \\times ${v2}\\,\\text{mL}}{${c1}\\,\\text{M}} = ${v1}`;
+      navigator.clipboard.writeText(latex);
+      alert('LaTeX equation copied to clipboard.');
+    });
+
+    document.getElementById('shareBtn')?.addEventListener('click', () => {
+      navigator.clipboard.writeText(window.location.href);
+      alert('Shareable experiment URL copied to clipboard.');
+    });
+
+    loadUrlParams();
+    runDilutionEngine();
+  </script>
+</BaseLayout>
