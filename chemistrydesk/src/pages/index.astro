@@ -1,0 +1,32 @@
+---
+// index.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Scientific Calculators & Laboratory Workspace">
+  <div class="py-12 text-center max-w-3xl mx-auto">
+    <div class="inline-block px-3 py-1 rounded-full bg-cyan-50 border border-cyan-200 text-xs font-bold text-cyan-800 mb-4">
+      Laboratory Standard
+    </div>
+    <h1 class="text-4xl sm:text-5xl font-black text-slate-900 tracking-tight">
+      Computational Chemistry Tools for the <span class="text-cyan-600">Modern Benchtop</span>
+    </h1>
+    <p class="mt-4 text-base text-slate-600 leading-relaxed">
+      Accurate solution formulation, materials characterization, and analytical kinematics. Zero lag, zero data-tracking, built specifically for active laboratory workflows.
+    </p>
+
+    <!-- First Tool Link Card -->
+    <div class="mt-10 max-w-md mx-auto text-left">
+      <a href="/tools/molarity-calculator" class="block p-6 bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-cyan-500 transition-all group">
+        <span class="text-xs font-bold uppercase tracking-wider text-cyan-700 bg-cyan-50 px-2.5 py-1 rounded">
+          Solution Preparation
+        </span>
+        <h3 class="text-lg font-black text-slate-900 group-hover:text-cyan-600 mt-3">
+          Molarity & Solution Preparation &rarr;
+        </h3>
+        <p class="text-sm text-slate-500 mt-1">
+          Calculate mass, compensate for chemical hydration and assay purity, and print Schott bottle labels.
+        </p>
+      </a>
+    </div>
+  </div>
+</BaseLayout>

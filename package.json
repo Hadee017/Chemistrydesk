@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@astrojs/react": "^7.0.0",
+    "@astrojs/tailwind": "^6.0.2",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "tailwindcss": "^4.3.3"
+  }
+}
