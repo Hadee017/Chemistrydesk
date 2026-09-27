@@ -1,31 +1,26 @@
 ---
-// src/layouts/BaseLayout.astro
-import Navbar from '../components/Navbar.astro';
-import { SITE_CONFIG } from '../site.config.js';
 import '../styles/global.css';
 
 interface Props {
-  title: string;
+  title?: string;
   description?: string;
 }
 
-const { title, description = SITE_CONFIG.defaultDescription } = Astro.props;
+const { 
+  title = "ChemistryDesk | Computational Chemistry Tools", 
+  description = "Modern lab calculation suites." 
+} = Astro.props;
 ---
-<!DOCTYPE html>
+
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title} | {SITE_CONFIG.name}</title>
+    <title>{title}</title>
     <meta name="description" content={description} />
   </head>
-  <body>
-    <Navbar />
-    <main class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
-      <slot />
-    </main>
-    <footer class="bg-white border-t border-slate-200 mt-auto py-8 text-center text-xs text-slate-500">
-      &copy; {new Date().getFullYear()} {SITE_CONFIG.name}. Built for precision benchtop calculation.
-    </footer>
+  <body class="bg-slate-50 text-slate-900 min-h-screen">
+    <slot />
   </body>
 </html>
