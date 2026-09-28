@@ -1,28 +1,48 @@
 ---
 interface Props {
-  title?: string;
-  description?: string;
+  title: string;
+  description: string;
+  canonicalPath?: string;
+  isTool?: boolean;
 }
 
 const { 
-  title = "ChemistryDesk | Computational Chemistry Tools", 
-  description = "Modern lab calculation suites." 
+  title, 
+  description, 
+  canonicalPath = Astro.url.pathname,
+  isTool = false 
 } = Astro.props;
----
 
+// Ensure search engines always index the root URL without query string pollution
+const siteOrigin = "https://chemistrydesk.vercel.app";
+const cleanPath = canonicalPath.split('?')[0];
+const fullCanonicalUrl = new URL(cleanPath, siteOrigin).href;
+---
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="google-site-verification" content="VttazQbX1eF_0VGYeFWW3ZeG-A_Y_9CV7ZIDJRxJ0FE" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title}</title>
-    <meta name="description" content={description} />
-  </head>
-  <body style="margin: 0; padding: 0; background-color: #f8fafc; color: #0f172a; min-height: 100vh; display: flex; flex-direction: column; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-    
-    <!-- Top Header with clean elevation and non-intrusive height -->
-    <header style="background: #ffffff; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 50; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Google Search Console Verification & Crawl Directives -->
+  <meta name="google-site-verification" content="VttazQbX1ef_0VGYeFWW3ZeG-A_Y_9CV7ZIDJRxJ0FE" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={fullCanonicalUrl} />
+
+  <!-- OpenGraph / Social Media Cards -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="ChemistryDesk" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={fullCanonicalUrl} />
+
+  <!-- Twitter / X Summary Cards -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
       <div style="max-width: 1060px; margin: 0 auto; padding: 0 1.5rem; height: 64px; display: flex; align-items: center; justify-content: space-between;">
         <a href="/" style="display: flex; align-items: center; gap: 0.6rem; text-decoration: none; font-weight: 800; font-size: 1.2rem; color: #0f172a;">
           <span style="font-size: 1.4rem;">⚗️</span> ChemistryDesk
