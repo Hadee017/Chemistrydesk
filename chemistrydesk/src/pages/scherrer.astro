@@ -6,109 +6,110 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   title="PXRD Scherrer Crystallite Size & Strain Calculator | ChemistryDesk"
   description="Research-grade powder X-ray diffraction (PXRD) Scherrer equation calculator. Features live dynamic peak profiles, custom specimen mode, instrumental line broadening deconvolution, 16 benchmark materials, printable sample vial labels, and LaTeX thesis export."
 >
-  <!-- Schema: WebApplication + HowTo + FAQPage for High-E-E-A-T AdSense Compliance -->
+<!-- 1. WebApplication Schema -->
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
-    "@graph": [
+    "@type": "WebApplication",
+    "name": "ChemistryDesk PXRD Scherrer Crystallite & Domain Studio",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "All",
+    "browserRequirements": "Requires JavaScript",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  })} />
+
+  <!-- 2. HowTo Step-by-Step Schema -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Accurately Determine Mean Crystallite Size from PXRD Line Broadening",
+    "step": [
       {
-        "@type": "WebApplication",
-        "name": "ChemistryDesk PXRD Scherrer Crystallite & Domain Studio",
-        "applicationCategory": "EducationalApplication",
-        "operatingSystem": "All",
-        "browserRequirements": "Requires JavaScript",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        }
+        "@type": "HowToStep",
+        "name": "Select Isolated Bragg Reflection",
+        "text": "Identify an intense, non-overlapping diffraction reflection centroid (2-theta) from your powder pattern."
       },
       {
-        "@type": "HowTo",
-        "name": "How to Accurately Determine Mean Crystallite Size from PXRD Line Broadening",
-        "step": [
-          {
-            "@type": "HowToStep",
-            "name": "Select Isolated Bragg Reflection",
-            "text": "Identify an intense, non-overlapping diffraction reflection centroid (2-theta) from your powder pattern."
-          },
-          {
-            "@type": "HowToStep",
-            "name": "Extract Observed Peak FWHM",
-            "text": "Measure the full width at half-maximum (FWHM) in degrees using profile fitting software."
-          },
-          {
-            "@type": "HowToStep",
-            "name": "Deconvolute Diffractometer Instrumental Broadening",
-            "text": "Subtract instrumental broadening measured with a certified strain-free standard (NIST SRM 660c LaB6 or annealed silicon) using Gaussian or Cauchy deconvolution."
-          },
-          {
-            "@type": "HowToStep",
-            "name": "Convert Peak Width to Dimensional Radians",
-            "text": "Convert the corrected FWHM from degrees into natural radians by multiplying by pi / 180."
-          },
-          {
-            "@type": "HowToStep",
-            "name": "Solve the Scherrer Formula",
-            "text": "Evaluate D = (K * lambda) / (beta * cos(theta)) with the appropriate shape factor K and X-ray tube wavelength."
-          }
-        ]
+        "@type": "HowToStep",
+        "name": "Extract Observed Peak FWHM",
+        "text": "Measure the full width at half-maximum (FWHM) in degrees using profile fitting software."
       },
       {
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "What is the physical difference between crystallite size, grain size, and particle size?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Crystallite size represents the coherence length of uninterrupted, defect-free single crystalline domains. A grain may contain multiple crystallites, and a particle (observed in SEM or dynamic light scattering) is an agglomeration of multiple crystalline grains."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Why is the Scherrer equation limited to domains between 1 nm and 100 nm?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "For crystallites larger than 100 nm, physical line broadening becomes negligible compared to the diffractometer internal instrumental broadening. When beta_obs approaches beta_inst, subtraction causes extreme mathematical errors."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Why must FWHM be converted from degrees to radians?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "The Scherrer equation derives from Fourier wave mechanics where angular broadening beta is a natural dimensionless ratio requiring pure radians. Entering raw degrees will underestimate crystallite size by a factor of 57.3 (180 / pi)."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How does lattice microstrain distort Scherrer crystallite results?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Lattice microstrain broadens peaks proportional to tan(theta), whereas crystallite size broadens peaks inversely proportional to cos(theta). Applying Scherrer alone on strained materials artificially underestimates crystallite size; a Williamson-Hall plot must be used to decouple size and strain."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "What shape factor (K) value should be used?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "K is a dimensionless shape factor that depends on crystallite morphology. K = 0.94 is standard for spherical crystallites using FWHM, K = 0.89 is widely used for spherical crystallites of unknown packing, and K = 1.00 is designated for regular cubic crystallites."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Can the Scherrer equation be applied to amorphous materials?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "No. The Scherrer formula requires periodic Bragg diffraction from ordered atomic lattice stacks. Amorphous materials yield diffuse scattering halos from short-range radial distributions, which cannot be quantified using the Scherrer formula."
-            }
-          }
-        ]
+        "@type": "HowToStep",
+        "name": "Deconvolute Diffractometer Instrumental Broadening",
+        "text": "Subtract instrumental broadening measured with a certified strain-free standard (NIST SRM 660c LaB6 or annealed silicon) using Gaussian or Cauchy deconvolution."
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Convert Peak Width to Dimensional Radians",
+        "text": "Convert the corrected FWHM from degrees into natural radians by multiplying by pi / 180."
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Solve the Scherrer Formula",
+        "text": "Evaluate D = (K * lambda) / (beta * cos(theta)) with the appropriate shape factor K and X-ray tube wavelength."
       }
     ]
   })} />
 
+  <!-- 3. FAQPage Accordion Schema -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the physical difference between crystallite size, grain size, and particle size?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Crystallite size represents the coherence length of uninterrupted, defect-free single crystalline domains. A grain may contain multiple crystallites, and a particle (observed in SEM or dynamic light scattering) is an agglomeration of multiple crystalline grains."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why is the Scherrer equation limited to domains between 1 nm and 100 nm?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "For crystallites larger than 100 nm, physical line broadening becomes negligible compared to the diffractometer internal instrumental broadening. When beta_obs approaches beta_inst, subtraction causes extreme mathematical errors."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why must FWHM be converted from degrees to radians?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The Scherrer equation derives from Fourier wave mechanics where angular broadening beta is a natural dimensionless ratio requiring pure radians. Entering raw degrees will underestimate crystallite size by a factor of 57.3 (180 / pi)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does lattice microstrain distort Scherrer crystallite results?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Lattice microstrain broadens peaks proportional to tan(theta), whereas crystallite size broadens peaks inversely proportional to cos(theta). Applying Scherrer alone on strained materials artificially underestimates crystallite size; a Williamson-Hall plot must be used to decouple size and strain."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What shape factor (K) value should be used?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "K is a dimensionless shape factor that depends on crystallite morphology. K = 0.94 is standard for spherical crystallites using FWHM, K = 0.89 is widely used for spherical crystallites of unknown packing, and K = 1.00 is designated for regular cubic crystallites."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can the Scherrer equation be applied to amorphous materials?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. The Scherrer formula requires periodic Bragg diffraction from ordered atomic lattice stacks. Amorphous materials yield diffuse scattering halos from short-range radial distributions, which cannot be quantified using the Scherrer formula."
+        }
+      }
+    ]
+  })} />
   <main style="max-width: 1140px; margin: 1.5rem auto 4rem auto; padding: 0 1.5rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #0f172a;">
     
     <!-- Navigation Breadcrumbs -->
