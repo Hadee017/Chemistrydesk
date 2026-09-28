@@ -3,16 +3,105 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout 
-  title="Serial Dilution Calculator, Multi-Step Tube Ladder & Label Studio | ChemistryDesk"
+  title="Serial Dilution Calculator, Multi-Step Tube Ladder & C1V1 Solver | ChemistryDesk"
   description="High-precision stock solution dilution engine. Solve for any variable (C1V1 = C2V2), generate multi-tube serial ladders, render dynamic semi-log decay curves, account for solvent volumetric contraction, and print benchtop bottle labels."
 >
+  <!-- Schema: WebApplication -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "ChemistryDesk Serial Dilution & C1V1 Solver Studio",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "All",
+    "browserRequirements": "Requires JavaScript",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  })} />
+
+  <!-- Schema: HowTo -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Calculate and Perform a Stock Solution Dilution (C1V1 = C2V2)",
+    "step": [
+      {
+        "@type": "HowToStep",
+        "name": "Determine Stock and Target Concentrations",
+        "text": "Identify the initial concentration of your stock solution (C1) and choose the desired target working concentration (C2)."
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Define Target Working Volume",
+        "text": "Select the final volume of diluted solution required for your assay or experiment (V2)."
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Calculate Required Aliquot Volume (V1)",
+        "text": "Apply the conservation of mass equation V1 = (C2 * V2) / C1 to determine the volume of stock solution to transfer."
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Calculate Diluent Volume",
+        "text": "Subtract the aliquot volume from the target volume (V_diluent = V2 - V1) for ideal aqueous mixtures."
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Transfer and Dilute to Meniscus",
+        "text": "Add partial diluent to a Class-A volumetric flask, dispense the stock aliquot, and dilute to the final meniscus graduation mark."
+      }
+    ]
+  })} />
+
+  <!-- Schema: FAQPage -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the formula for calculating solution dilutions?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The fundamental formula is C1 * V1 = C2 * V2, where C1 is stock concentration, V1 is aliquot volume, C2 is target concentration, and V2 is final total volume. It is based on the conservation of solute mass."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why is serial dilution preferred over single-step dilution for low concentrations?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Direct single-step dilution of high-concentration stocks to micromolar or nanomolar levels requires pipetting sub-microliter volumes (<1 µL), which introduces high error and coefficient of variation. Serial dilution reduces concentration geometrically across sequential steps with manageable pipetting volumes."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the dilution factor (DF) and how is it calculated?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The dilution factor (DF) represents the ratio of stock concentration to diluted concentration (DF = C1 / C2), or equivalently the ratio of final volume to aliquot volume (DF = V2 / V1)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why does mixing ethanol and water result in less total volume than expected?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Ethanol and water exhibit non-ideal thermodynamic excess molar volume. Strong intermolecular hydrogen bonding causes the water molecules to pack tightly into interstitial spaces between ethanol molecules, contracting total solution volume by up to 3.5%."
+        }
+      }
+    ]
+  })} />
+
   <main style="max-width: 1060px; margin: 1.5rem auto 3rem auto; padding: 0 1.5rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1e293b;">
     
     <!-- Breadcrumb Navigation -->
     <nav style="font-size: 0.8rem; color: #64748b; margin-bottom: 1.25rem;">
-      <a href="/" style="color: #0284c7; text-decoration: none;">Home</a> &rsaquo; 
+      <a href="/" style="color: #0284c7; text-decoration: none; font-weight: 600;">Home</a> &rsaquo; 
       <span style="color: #94a3b8;"> Solution Preparation</span> &rsaquo; 
-      <span style="color: #0f172a; font-weight: 600;">Dilution Studio</span>
+      <span style="color: #0f172a; font-weight: 700;">Dilution Studio</span>
     </nav>
 
     <!-- Header Section -->
@@ -45,6 +134,21 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             <span>🧪</span> Multi-Step Serial Ladder &amp; Semi-Log Plot
           </button>
         </div>
+      </div>
+    </div>
+
+    <!-- QUICK BENCH PRESETS (NEW FEATURE TO BEAT COMPETITION) -->
+    <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 12px; padding: 1.25rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+      <div style="font-weight: 800; font-size: 0.85rem; color: #0f172a; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+        <span>Common Laboratory Stock Dilutions:</span>
+        <span style="font-size: 0.75rem; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 9999px; font-weight: 700;">1-Click Setup</span>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+        <button class="dilution-preset-btn" data-c1="10" data-uc1="X" data-c2="1" data-uc2="X" data-v2="1000" data-uv2="mL" data-solvent="aqueous">10× PBS &rarr; 1× Working (1 L)</button>
+        <button class="dilution-preset-btn" data-c1="50" data-uc1="X" data-c2="1" data-uc2="X" data-v2="500" data-uv2="mL" data-solvent="aqueous">50× TAE Buffer &rarr; 1× (500 mL)</button>
+        <button class="dilution-preset-btn" data-c1="95" data-uc1="%" data-c2="70" data-uc2="%" data-v2="500" data-uv2="mL" data-solvent="ethanol">95% Ethanol &rarr; 70% Disinfectant</button>
+        <button class="dilution-preset-btn" data-c1="12" data-uc1="M" data-c2="1" data-uc2="M" data-v2="250" data-uv2="mL" data-solvent="acid">Conc. HCl (12 M) &rarr; 1.0 M (250 mL)</button>
+        <button class="dilution-preset-btn" data-c1="100" data-uc1="mM" data-c2="10" data-uc2="uM" data-v2="10" data-uv2="mL" data-solvent="aqueous">100 mM Stock &rarr; 10 µM (10 mL)</button>
       </div>
     </div>
 
@@ -100,6 +204,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                 <option value="mM">mM</option>
                 <option value="uM">&micro;M</option>
                 <option value="X">&times;</option>
+                <option value="%">%</option>
                 <option value="mg/mL">mg/mL</option>
               </select>
             </div>
@@ -130,6 +235,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                 <option value="mM">mM</option>
                 <option value="uM">&micro;M</option>
                 <option value="X">&times;</option>
+                <option value="%">%</option>
                 <option value="mg/mL">mg/mL</option>
               </select>
             </div>
@@ -265,9 +371,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </div>
 
     <!-- EDITORIAL & SCIENTIFIC DERIVATION ARTICLE -->
-    <article style="border-top: 1px solid #e2e8f0; padding-top: 3.5rem; line-height: 1.8; color: #334155;">
+    <article style="border-top: 1px solid #e2e8f0; padding-top: 3.5rem; line-height: 1.85; color: #334155;">
       
-      <h2 style="font-size: 1.75rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem;">
+      <h2 style="font-size: 1.85rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem; letter-spacing: -0.02em;">
         Mathematical Foundations of Serial Dilutions &amp; Mass Conservation
       </h2>
       <p>
@@ -275,19 +381,19 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </p>
       
       <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.25rem 2rem; margin: 1.5rem 0; text-align: center; box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);">
-        <div style="font-size: 1.35rem; font-weight: 700; color: #0f172a; letter-spacing: 0.05em; font-family: 'Times New Roman', Times, serif;">
+        <div style="font-size: 1.45rem; font-weight: 800; color: #0f172a; letter-spacing: 0.05em; font-family: 'Times New Roman', Times, serif;">
           <i>n</i><sub>initial</sub> = <i>n</i><sub>final</sub> &nbsp;&implies;&nbsp; <b>C₁ &times; V₁ = C₂ &times; V₂</b>
         </div>
       </div>
 
-      <h3 style="font-size: 1.35rem; font-weight: 700; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
         Non-Ideal Thermodynamic Excess Volume in Mixtures
       </h3>
       <p>
-        Standard laboratory manuals assume volumetric additivity: V_final = V₁ + V_solvent. In practice, intermolecular interactions like hydrogen bonding alter packing density. When mixing ethanol and water, contraction reduces total volume by up to 3.5%. Measuring diluent separately and adding it to the aliquot results in systematic concentration errors. The solution must always be brought to the final calibration mark in a Class-A volumetric flask.
+        Standard laboratory manuals assume volumetric additivity: <em>V</em><sub>final</sub> = <em>V</em><sub>1</sub> + <em>V</em><sub>solvent</sub>. In practice, intermolecular interactions like hydrogen bonding alter packing density. When mixing ethanol and water, contraction reduces total volume by up to 3.5%. Measuring diluent separately and adding it to the aliquot results in systematic concentration errors. The solution must always be brought to the final calibration mark in a Class-A volumetric flask.
       </p>
 
-      <h3 style="font-size: 1.35rem; font-weight: 700; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
         Multi-Step Serial Dilution Mechanics
       </h3>
       <p>
@@ -298,7 +404,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </p>
 
       <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.25rem 2rem; margin: 1.5rem 0; text-align: center; box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);">
-        <div style="font-size: 1.25rem; font-weight: 700; color: #0f172a; font-family: 'Times New Roman', Times, serif;">
+        <div style="font-size: 1.35rem; font-weight: 700; color: #0f172a; font-family: 'Times New Roman', Times, serif;">
           DF<sub>step</sub> = <span style="display: inline-block; vertical-align: middle; text-align: center; margin: 0 4px;"><span style="display: block; border-bottom: 1.5px solid #0f172a; padding: 0 4px;">V<sub>transfer</sub> + V<sub>diluent</sub></span><span style="display: block; padding-top: 2px;">V<sub>transfer</sub></span></span>
         </div>
       </div>
@@ -308,10 +414,39 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </p>
 
       <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.25rem 2rem; margin: 1.5rem 0; text-align: center; box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);">
-        <div style="font-size: 1.25rem; font-weight: 700; color: #0f172a; font-family: 'Times New Roman', Times, serif;">
+        <div style="font-size: 1.35rem; font-weight: 700; color: #0f172a; font-family: 'Times New Roman', Times, serif;">
           C<sub><i>n</i></sub> = C<sub>0</sub> &times; <span style="font-size: 1.4rem;">(</span> <sup>1</sup>&frasl;<sub>DF<sub>step</sub></sub> <span style="font-size: 1.4rem;">)</span><sup><i>n</i></sup>
         </div>
       </div>
+
+      <!-- FAQ ACCORDION SECTION -->
+      <h3 style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-top: 3rem; margin-bottom: 1.25rem;">
+        Frequently Asked Questions: Volumetric Dilutions &amp; Serial Titrations
+      </h3>
+
+      <div style="display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 2rem;">
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What is the mathematical formula for solution dilutions?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            The fundamental relationship is <strong>C₁ &times; V₁ = C₂ &times; V₂</strong>, where C₁ is the initial stock concentration, V₁ is the aliquot volume taken, C₂ is the target final concentration, and V₂ is the total prepared volume.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Why is serial dilution preferred over single-step direct dilution?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Preparing highly dilute standards (e.g., 10 nM from 1 M) directly in a single step requires measuring sub-microliter volumes (&lt;1 µL) into huge volumes of solvent, which leads to pipette dispensing errors exceeding 10–20%. Serial dilution distributes the step-down across equal logarithmic intervals with high volumetric accuracy.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Why should solvent never be added by fixed pre-measured volume?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Many solute-solvent and solvent-solvent mixtures experience excess Gibbs energy and volume contraction upon mixing (e.g. ethanol-water, acid-water). Dispensing exactly (V₂ &minus; V₁) can lead to a smaller total volume than expected. Always dilute up to the calibration line of a Class-A volumetric flask.
+          </p>
+        </details>
+      </div>
+
     </article>
   </main>
 
@@ -341,6 +476,23 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   </div>
 
   <style>
+    .dilution-preset-btn {
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      padding: 0.35rem 0.65rem;
+      border-radius: 6px;
+      cursor: pointer;
+      color: #1e293b;
+      font-size: 0.75rem;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+    .dilution-preset-btn:hover {
+      background: #0284c7;
+      color: #ffffff;
+      border-color: #0284c7;
+      transform: translateY(-1px);
+    }
     @media print {
       body * {
         visibility: hidden !important;
@@ -583,6 +735,23 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         `;
       }
     }
+
+    // PRESET BUTTONS LISTENER
+    document.querySelectorAll('.dilution-preset-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const t = e.currentTarget as HTMLElement;
+        inpC1.value = t.dataset.c1!;
+        (document.getElementById('unitC1') as HTMLSelectElement).value = t.dataset.uc1!;
+        inpC2.value = t.dataset.c2!;
+        (document.getElementById('unitC2') as HTMLSelectElement).value = t.dataset.uc2!;
+        inpV2.value = t.dataset.v2!;
+        (document.getElementById('unitV2') as HTMLSelectElement).value = t.dataset.uv2!;
+        (document.getElementById('solventMatrix') as HTMLSelectElement).value = t.dataset.solvent!;
+        targetVarSelect.value = 'v1';
+        adjustInputStates();
+        updateSolventAdvisory();
+      });
+    });
 
     // PRINT LABEL HANDLER
     document.getElementById('printLabelBtn')?.addEventListener('click', () => {
