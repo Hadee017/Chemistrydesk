@@ -1,0 +1,570 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout 
+  title="PXRD Scherrer Crystallite Size Calculator (FWHM & Broadening) | ChemistryDesk"
+  description="High-precision Scherrer equation solver for powder X-ray diffraction (PXRD). Features instrumental line broadening correction, multi-wavelength targets, shape factors, and LaTeX export."
+>
+  <!-- Schema: WebApplication + HowTo + FAQPage for Search Engine Indexing -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "ChemistryDesk PXRD Scherrer Crystallite Size Studio",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      },
+      {
+        "@type": "HowTo",
+        "name": "How to Calculate Crystallite Size from PXRD Peaks",
+        "step": [
+          {
+            "@type": "HowToStep",
+            "name": "Identify Peak Position",
+            "text": "Locate the 2-theta peak centroid from your diffractometer scan."
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Extract FWHM",
+            "text": "Fit the diffraction reflection to extract the full width at half maximum (FWHM) in degrees."
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Subtract Instrumental Broadening",
+            "text": "Correct the observed FWHM using a standard reference material via deconvolution."
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Apply Scherrer Formula",
+            "text": "Convert Bragg angle theta and corrected broadening beta into radians, then solve D = (K * lambda) / (beta * cos(theta))."
+          }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is the difference between crystallite size and particle size?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Crystallite size represents the coherence length of single-crystal domains within a grain. A physical particle typically consists of an agglomeration of multiple crystalline sub-domains."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is the valid limit of the Scherrer equation?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The Scherrer equation is generally reliable for crystallite domains between 1 nm and 100 nm. Beyond 100-200 nm, instrumental line broadening dominates sample peak width."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why must FWHM be converted to radians in the Scherrer equation?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The Scherrer equation derives from Fourier transform principles where peak broadening beta represents an angular measure in dimensional radians."
+            }
+          }
+        ]
+      }
+    ]
+  })} />
+
+  <main style="max-width: 1060px; margin: 1.5rem auto 3rem auto; padding: 0 1.5rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1e293b;">
+    
+    <!-- Navigation Breadcrumbs -->
+    <nav style="font-size: 0.8rem; color: #64748b; margin-bottom: 1.25rem;">
+      <a href="/" style="color: #0284c7; text-decoration: none;">Home</a> &rsaquo; 
+      <span style="color: #94a3b8;"> Materials Characterization</span> &rsaquo; 
+      <span style="color: #0f172a; font-weight: 600;">PXRD Scherrer Studio</span>
+    </nav>
+
+    <!-- Header Section -->
+    <div style="border-bottom: 1px solid #e2e8f0; padding-bottom: 1.75rem; margin-bottom: 2rem;">
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <span style="font-size: 2.5rem;">📐</span>
+        <div>
+          <h1 style="font-size: 2.25rem; font-weight: 800; color: #0f172a; letter-spacing: -0.025em; margin: 0;">
+            PXRD Scherrer Crystallite Size Studio
+          </h1>
+          <p style="color: #64748b; font-size: 0.95rem; margin-top: 0.25rem; margin-bottom: 0;">
+            Rigorous crystallite domain calculator with instrumental broadening deconvolution and multi-source target selection.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Presets -->
+    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 2rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem; font-size: 0.85rem;">
+      <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+        <span style="font-weight: 700; color: #475569; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Quick Bench Presets:</span>
+        <button class="preset-btn" data-2theta="36.25" data-fwhm="0.28" data-inst="0.08" data-lambda="1.54056" data-k="0.94" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; cursor: pointer; color: #334155; font-size: 0.8rem; font-weight: 600;">ZnO (101) Nanorods</button>
+        <button class="preset-btn" data-2theta="25.28" data-fwhm="0.42" data-inst="0.08" data-lambda="1.54056" data-k="0.89" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; cursor: pointer; color: #334155; font-size: 0.8rem; font-weight: 600;">Anatase TiO2 (101)</button>
+        <button class="preset-btn" data-2theta="11.58" data-fwhm="0.22" data-inst="0.06" data-lambda="1.54056" data-k="0.90" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; cursor: pointer; color: #334155; font-size: 0.8rem; font-weight: 600;">HKUST-1 MOF (220)</button>
+      </div>
+      <button id="shareSetupBtn" style="background: #e0f2fe; border: 1px solid #bae6fd; color: #0284c7; padding: 0.35rem 0.75rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 700;">🔗 Share Setup</button>
+    </div>
+
+    <!-- MAIN COMPUTATION WORKBENCH -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+      
+      <!-- Input Configuration Panel -->
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+        <h2 style="font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; margin-top: 0; margin-bottom: 1.25rem;">
+          Diffraction Reflection Parameters
+        </h2>
+
+        <!-- Peak Position (2-theta) -->
+        <div style="margin-bottom: 1.25rem;">
+          <label style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
+            <span>PEAK POSITION (2&theta;)</span>
+            <span style="color: #64748b; font-weight: 500;">Bragg Angle: &theta; = <span id="thetaVal">18.13</span>&deg;</span>
+          </label>
+          <div style="display: flex;">
+            <input type="number" id="twoTheta" step="any" value="36.25" style="flex: 1; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-right: none; border-radius: 6px 0 0 6px; font-size: 0.95rem; font-weight: 600; outline: none;" />
+            <span style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 0 0.75rem; border-radius: 0 6px 6px 0; font-size: 0.85rem; font-weight: 600; color: #475569; display: flex; align-items: center;">degrees (&deg;)</span>
+          </div>
+        </div>
+
+        <!-- Observed FWHM (beta_obs) -->
+        <div style="margin-bottom: 1.25rem;">
+          <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
+            OBSERVED FWHM (&beta;<sub>obs</sub>)
+          </label>
+          <div style="display: flex;">
+            <input type="number" id="fwhmObs" step="any" value="0.280" style="flex: 1; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-right: none; border-radius: 6px 0 0 6px; font-size: 0.95rem; font-weight: 600; outline: none;" />
+            <select id="fwhmUnit" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 0 0.75rem; border-radius: 0 6px 6px 0; font-size: 0.85rem; font-weight: 600; color: #475569;">
+              <option value="deg">degrees 2&theta;</option>
+              <option value="rad">radians</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Instrumental Broadening (beta_inst) -->
+        <div style="margin-bottom: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+            <label style="font-size: 0.8rem; font-weight: 700; color: #334155;">
+              INSTRUMENTAL BROADENING (&beta;<sub>inst</sub>)
+            </label>
+            <label style="font-size: 0.75rem; color: #64748b; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+              <input type="checkbox" id="enableInst" checked /> Enable Correction
+            </label>
+          </div>
+          <div style="display: flex;">
+            <input type="number" id="fwhmInst" step="any" value="0.080" style="flex: 1; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-right: none; border-radius: 6px 0 0 6px; font-size: 0.95rem; font-weight: 600; outline: none;" />
+            <span style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 0 0.75rem; border-radius: 0 6px 6px 0; font-size: 0.85rem; font-weight: 600; color: #475569; display: flex; align-items: center;">degrees (&deg;)</span>
+          </div>
+          <span style="display: block; font-size: 0.75rem; color: #64748b; margin-top: 0.25rem;">Typical lab standard: 0.05&deg; - 0.10&deg; (LaB6 / NIST SRM).</span>
+        </div>
+
+        <!-- Deconvolution Model -->
+        <div style="margin-bottom: 1.25rem;">
+          <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
+            BROADENING PROFILE MODEL
+          </label>
+          <select id="profileModel" style="width: 100%; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem; font-weight: 600; background: white; color: #334155;">
+            <option value="gaussian" selected>Gaussian Deconvolution: &radic;(&beta;<sub>obs</sub>&sup2; - &beta;<sub>inst</sub>&sup2;)</option>
+            <option value="lorentzian">Lorentzian / Cauchy Deconvolution: &beta;<sub>obs</sub> - &beta;<sub>inst</sub></option>
+          </select>
+        </div>
+
+        <!-- X-Ray Radiation Source & Wavelength -->
+        <div style="margin-bottom: 1.25rem;">
+          <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
+            X-RAY TUBE SOURCE &amp; WAVELENGTH (&lambda;)
+          </label>
+          <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 0.5rem;">
+            <select id="sourceTarget" style="padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem; font-weight: 600; background: white; color: #334155;">
+              <option value="1.54056" selected>Cu-K&alpha;1 (1.54056 &#197;)</option>
+              <option value="1.54184">Cu-K&alpha; (avg: 1.54184 &#197;)</option>
+              <option value="0.71073">Mo-K&alpha; (0.71073 &#197;)</option>
+              <option value="1.78897">Co-K&alpha; (1.78897 &#197;)</option>
+              <option value="custom">Custom Wavelength</option>
+            </select>
+            <div style="display: flex;">
+              <input type="number" id="lambdaInput" step="any" value="1.54056" style="width: 100%; padding: 0.65rem 0.5rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; font-weight: 600;" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Shape Factor (K) -->
+        <div style="margin-bottom: 0.5rem;">
+          <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
+            CRYSTALLITE SHAPE FACTOR (K)
+          </label>
+          <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 0.5rem;">
+            <select id="shapeFactorSelect" style="padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem; font-weight: 600; background: white; color: #334155;">
+              <option value="0.94" selected>Spherical (K = 0.94)</option>
+              <option value="0.89">Spherical avg (K = 0.89)</option>
+              <option value="1.00">Cubic crystallites (K = 1.00)</option>
+              <option value="custom">Custom K</option>
+            </select>
+            <input type="number" id="kInput" step="any" value="0.94" style="width: 100%; padding: 0.65rem 0.5rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; font-weight: 600;" />
+          </div>
+        </div>
+
+        <div id="scherrerWarn" style="display: none; background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 0.75rem; border-radius: 6px; font-size: 0.8rem; margin-top: 1rem;"></div>
+      </div>
+
+      <!-- Real-Time Output & Physical Domain Readout -->
+      <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        
+        <!-- Primary Output Display Card -->
+        <div style="background: #0f172a; border-radius: 12px; padding: 1.75rem; color: #ffffff; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+          <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #38bdf8;">
+            Mean Crystallite Domain Size (D)
+          </span>
+          <div id="primarySizeNm" style="font-size: 2.75rem; font-weight: 800; color: #38bdf8; margin: 0.25rem 0 0.5rem 0;">--</div>
+
+          <div style="border-top: 1px solid #334155; padding-top: 1rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.85rem;">
+            <div>
+              <span style="color: #94a3b8; display: block; font-size: 0.75rem; text-transform: uppercase;">Domain in Angstroms</span>
+              <strong id="displayAngstrom" style="color: #34d399; font-size: 1.2rem;">--</strong>
+            </div>
+            <div>
+              <span style="color: #94a3b8; display: block; font-size: 0.75rem; text-transform: uppercase;">Corrected &beta; (rad)</span>
+              <strong id="displayBetaRad" style="color: #e2e8f0; font-size: 1.15rem;">--</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Nanomaterial Domain Scale Visualizer -->
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 700; color: #64748b; margin-bottom: 0.5rem; text-transform: uppercase;">
+            <span>Nanoscale Regime (0 - 100 nm)</span>
+            <span id="regimeBadge" style="color: #0284c7;">--</span>
+          </div>
+          <div style="height: 12px; width: 100%; background: #e2e8f0; border-radius: 9999px; overflow: hidden; position: relative;">
+            <div id="scaleProgress" style="width: 0%; height: 100%; background: linear-gradient(90deg, #0284c7, #10b981); transition: width 0.3s ease;"></div>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: #94a3b8; margin-top: 0.35rem;">
+            <span>1 nm (Quantum)</span>
+            <span>50 nm</span>
+            <span>100 nm (Scherrer Limit)</span>
+          </div>
+        </div>
+
+        <!-- Export & Report Tools -->
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+            <h3 style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #475569; margin: 0;">Academic Reporting</h3>
+            <div style="display: flex; gap: 0.5rem;">
+              <button id="copyLatexBtn" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #334155;">Copy LaTeX</button>
+              <button id="exportCsvBtn" style="background: #0284c7; border: none; padding: 0.25rem 0.65rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: white;">📥 Export CSV</button>
+            </div>
+          </div>
+          
+          <div id="summaryReport" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.75rem; font-family: monospace; font-size: 0.8rem; line-height: 1.5; color: #334155;">
+            Fill in valid parameters to generate calculation steps.
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- SCIENTIFIC THEORY -->
+    <article style="border-top: 1px solid #e2e8f0; padding-top: 3.5rem; line-height: 1.8; color: #334155;">
+      
+      <h2 style="font-size: 1.75rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem;">
+        Theoretical Foundation: The Scherrer Equation in Powder XRD
+      </h2>
+      <p>
+        In ideal infinite crystal lattices, destructive interference cancels out X-ray scattering at any incident angle not satisfying Bragg's condition. In real nanomaterials and polycrystalline thin films, finite crystallite volume truncates lattice planes. This lack of complete destructive cancellation around the exact Bragg angle gives rise to characteristic diffraction peak broadening.
+      </p>
+      
+      <p>
+        In 1918, Swiss physicist Paul Scherrer formalized the relationship between the finite thickness of a crystalline stack (D) and the full width at half-maximum (FWHM, denoted as &beta;) of the resulting reflection:
+      </p>
+
+      <!-- Formula Display -->
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.5rem 2rem; margin: 1.75rem 0; text-align: center; box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);">
+        <div style="font-size: 1.45rem; font-weight: 700; color: #0f172a; font-family: 'Times New Roman', Times, serif;">
+          <i>D</i> = <span style="display: inline-block; vertical-align: middle; text-align: center; margin: 0 4px;"><span style="display: block; border-bottom: 1.5px solid #0f172a; padding: 0 4px;"><i>K</i> &middot; &lambda;</span><span style="display: block; padding-top: 2px;">&beta; &middot; cos(&theta;)</span></span>
+        </div>
+      </div>
+
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.25rem; margin-bottom: 2rem; font-size: 0.9rem;">
+        <ul style="margin: 0; padding-left: 1.25rem;">
+          <li><strong>D:</strong> Mean dimension of ordered crystalline domains along the direction normal to reflecting lattice planes.</li>
+          <li><strong>K:</strong> Dimensionless crystallite shape factor (typically 0.89 to 0.94 for spherical domains, and up to 1.0 for cubic boundaries).</li>
+          <li><strong>&lambda;:</strong> Characteristic wavelength of the incident X-ray beam (Cu-K&alpha;1 = 1.54056 &#197;).</li>
+          <li><strong>&beta;:</strong> Structurally induced peak breadth in dimensional <strong>radians</strong> at half maximum intensity (corrected for instrumental broadening).</li>
+          <li><strong>&theta;:</strong> Bragg diffraction angle (one-half of the recorded 2&theta; detector position).</li>
+        </ul>
+      </div>
+
+      <h3 style="font-size: 1.35rem; font-weight: 700; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
+        Crucial Instrumental Broadening Correction (&beta;<sub>inst</sub>)
+      </h3>
+      <p>
+        A widespread flaw in undergraduate and uncalibrated industrial reporting is utilizing raw observed peak width (&beta;<sub>obs</sub>) directly in the Scherrer formula. Every commercial laboratory diffractometer imparts physical broadening arising from X-ray focal tube spot size, axial divergence slits, Soller slit geometry, sample surface displacement, and detector resolution.
+      </p>
+      <p>
+        To determine true sample peak broadening (&beta;<sub>sample</sub>), the instrument's intrinsic broadening (&beta;<sub>inst</sub>) must be deconvoluted using a highly crystalline, strain-free calibration standard (e.g., NIST SRM 660c LaB6 or annealed silicon):
+      </p>
+
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.25rem 2rem; margin: 1.5rem 0; text-align: center;">
+        <div style="font-size: 1.15rem; font-weight: 700; color: #0f172a; font-family: 'Times New Roman', Times, serif;">
+          Gaussian: &beta; = &radic;(&beta;<sub>obs</sub>&sup2; - &beta;<sub>inst</sub>&sup2;) &nbsp;&nbsp;|&nbsp;&nbsp; Lorentzian: &beta; = &beta;<sub>obs</sub> - &beta;<sub>inst</sub>
+        </div>
+      </div>
+
+      <h3 style="font-size: 1.35rem; font-weight: 700; color: #0f172a; margin-top: 2.5rem; margin-bottom: 0.75rem;">
+        Worked Laboratory Walkthrough: Zinc Oxide (101) Reflection
+      </h3>
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.75rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+        <p style="margin-top: 0; font-weight: 600; color: #0f172a;">Sample: Hydrothermally synthesized ZnO wurtzite nanoparticles recorded on a Cu-K&alpha; diffractometer.</p>
+        <ol style="margin-left: 1.5rem; margin-bottom: 0; line-height: 1.7;">
+          <li><strong>Experimental Scan Data:</strong> Peak centroid 2&theta; = 36.25&deg;, observed FWHM = 0.280&deg;. Instrumental resolution at this angle: &beta;<sub>inst</sub> = 0.080&deg;.</li>
+          <li><strong>Instrumental Deconvolution (Gaussian):</strong>
+            <br />
+            &beta; = &radic;((0.280&deg;)&sup2; - (0.080&deg;)&sup2;) = &radic;(0.0784 - 0.0064) = 0.2683&deg;
+          </li>
+          <li><strong>Convert Degrees to Radians:</strong>
+            <br />
+            &beta;<sub>rad</sub> = 0.2683&deg; &times; (&pi; / 180&deg;) = 0.004683 radians
+          </li>
+          <li><strong>Determine Bragg Angle (&theta;):</strong>
+            <br />
+            &theta; = 36.25&deg; / 2 = 18.125&deg; &rarr; cos(18.125&deg;) = 0.95036
+          </li>
+          <li><strong>Evaluate Scherrer Equation (K = 0.94, &lambda; = 1.54056 &#197; = 0.154056 nm):</strong>
+            <br />
+            D = (0.94 &times; 0.154056 nm) / (0.004683 rad &times; 0.95036) = <strong>32.54 nm</strong>
+          </li>
+        </ol>
+      </div>
+
+      <h3 style="font-size: 1.35rem; font-weight: 700; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
+        Analytical Caveats &amp; Validity Thresholds
+      </h3>
+      <ul style="margin-left: 1.5rem; line-height: 1.7;">
+        <li><strong>Scherrer Validity Limit (1 - 100 nm):</strong> As crystallites exceed 100 nm, diffraction peak broadening converges toward instrumental resolution. When peak broadening is comparable to instrumental breadth, subtraction yields high propagation errors.</li>
+        <li><strong>Microstrain Confounding:</strong> Lattice strain also produces peak broadening. To decouple microstrain from domain size, perform Williamson-Hall analysis across multiple reflections.</li>
+        <li><strong>Crystallite vs. Physical Particle Size:</strong> Scherrer calculations quantify coherent crystal domains, not physical agglomerate dimensions. SEM or dynamic light scattering (DLS) invariably measure larger dimensions than PXRD domain sizes.</li>
+      </ul>
+    </article>
+  </main>
+
+  <script>
+    // --- DOM ELEMENT REFERENCES ---
+    const inpTwoTheta = document.getElementById('twoTheta') as HTMLInputElement;
+    const inpFwhmObs = document.getElementById('fwhmObs') as HTMLInputElement;
+    const selectFwhmUnit = document.getElementById('fwhmUnit') as HTMLSelectElement;
+    const checkEnableInst = document.getElementById('enableInst') as HTMLInputElement;
+    const inpFwhmInst = document.getElementById('fwhmInst') as HTMLInputElement;
+    const selectProfile = document.getElementById('profileModel') as HTMLSelectElement;
+    const selectSource = document.getElementById('sourceTarget') as HTMLSelectElement;
+    const inpLambda = document.getElementById('lambdaInput') as HTMLInputElement;
+    const selectShape = document.getElementById('shapeFactorSelect') as HTMLSelectElement;
+    const inpK = document.getElementById('kInput') as HTMLInputElement;
+
+    const thetaValEl = document.getElementById('thetaVal')!;
+    const primarySizeNm = document.getElementById('primarySizeNm')!;
+    const displayAngstrom = document.getElementById('displayAngstrom')!;
+    const displayBetaRad = document.getElementById('displayBetaRad')!;
+    const scaleProgress = document.getElementById('scaleProgress')!;
+    const regimeBadge = document.getElementById('regimeBadge')!;
+    const warnBox = document.getElementById('scherrerWarn')!;
+    const summaryReport = document.getElementById('summaryReport')!;
+
+    // --- SYNCHRONIZE DROPDOWNS & CUSTOM INPUTS ---
+    selectSource.addEventListener('change', () => {
+      if (selectSource.value !== 'custom') {
+        inpLambda.value = selectSource.value;
+      }
+      runScherrerEngine();
+    });
+
+    inpLambda.addEventListener('input', () => {
+      selectSource.value = 'custom';
+      runScherrerEngine();
+    });
+
+    selectShape.addEventListener('change', () => {
+      if (selectShape.value !== 'custom') {
+        inpK.value = selectShape.value;
+      }
+      runScherrerEngine();
+    });
+
+    inpK.addEventListener('input', () => {
+      selectShape.value = 'custom';
+      runScherrerEngine();
+    });
+
+    checkEnableInst.addEventListener('change', () => {
+      inpFwhmInst.disabled = !checkEnableInst.checked;
+      inpFwhmInst.style.background = checkEnableInst.checked ? '#ffffff' : '#f8fafc';
+      runScherrerEngine();
+    });
+
+    // --- CORE ENGINE COMPUTATION ---
+    function runScherrerEngine() {
+      const twoThetaDeg = parseFloat(inpTwoTheta.value) || 0;
+      let fwhmObsRaw = parseFloat(inpFwhmObs.value) || 0;
+      const fwhmUnit = selectFwhmUnit.value;
+      const useInst = checkEnableInst.checked;
+      const fwhmInstDeg = useInst ? (parseFloat(inpFwhmInst.value) || 0) : 0;
+      const profile = selectProfile.value;
+      const lambdaAngstrom = parseFloat(inpLambda.value) || 0;
+      const kFactor = parseFloat(inpK.value) || 0;
+
+      // Reset Warnings & Displays
+      warnBox.style.display = 'none';
+
+      if (twoThetaDeg <= 0 || twoThetaDeg >= 180) {
+        warnBox.style.display = 'block';
+        warnBox.textContent = 'Invalid 2-theta range: Diffraction angle must be between 0 deg and 180 deg.';
+        return;
+      }
+
+      const thetaDeg = twoThetaDeg / 2;
+      thetaValEl.textContent = thetaDeg.toFixed(2);
+      const thetaRad = thetaDeg * (Math.PI / 180);
+      const cosTheta = Math.cos(thetaRad);
+
+      // Convert Observed FWHM to degrees if entered in radians
+      let fwhmObsDeg = (fwhmUnit === 'rad') ? fwhmObsRaw * (180 / Math.PI) : fwhmObsRaw;
+
+      if (fwhmObsDeg <= 0) {
+        primarySizeNm.textContent = '--';
+        displayAngstrom.textContent = '--';
+        displayBetaRad.textContent = '--';
+        return;
+      }
+
+      // Deconvolution of Instrumental Broadening
+      let betaCorrectedDeg = fwhmObsDeg;
+
+      if (useInst && fwhmInstDeg > 0) {
+        if (fwhmObsDeg <= fwhmInstDeg) {
+          warnBox.style.display = 'block';
+          warnBox.textContent = 'Error: Observed FWHM cannot be smaller than or equal to instrumental broadening.';
+          primarySizeNm.textContent = 'Limit Exceeded';
+          displayAngstrom.textContent = '--';
+          displayBetaRad.textContent = '--';
+          return;
+        }
+
+        if (profile === 'gaussian') {
+          betaCorrectedDeg = Math.sqrt(Math.pow(fwhmObsDeg, 2) - Math.pow(fwhmInstDeg, 2));
+        } else {
+          betaCorrectedDeg = Math.max(0, fwhmObsDeg - fwhmInstDeg);
+        }
+      }
+
+      // Convert Corrected Broadening to Radians for the Scherrer Formula
+      const betaRad = betaCorrectedDeg * (Math.PI / 180);
+
+      if (betaRad <= 0 || lambdaAngstrom <= 0 || kFactor <= 0 || cosTheta <= 0) {
+        return;
+      }
+
+      // Scherrer Equation: D = (K * lambda) / (beta * cos(theta))
+      const dAngstrom = (kFactor * lambdaAngstrom) / (betaRad * cosTheta);
+      const dNanometer = dAngstrom / 10;
+
+      // Render Primary Outputs
+      primarySizeNm.textContent = dNanometer.toFixed(2) + ' nm';
+      displayAngstrom.textContent = dAngstrom.toFixed(1) + ' \u00C5';
+      displayBetaRad.textContent = betaRad.toFixed(5) + ' rad';
+
+      // Update Visual Scale Bar
+      const pct = Math.min(Math.max((dNanometer / 100) * 100, 2), 100);
+      scaleProgress.style.width = pct + '%';
+
+      if (dNanometer < 5) {
+        regimeBadge.textContent = 'Ultrafine / Quantum Dots (<5 nm)';
+        regimeBadge.style.color = '#0284c7';
+      } else if (dNanometer <= 50) {
+        regimeBadge.textContent = 'Nanocrystalline Domain (5 - 50 nm)';
+        regimeBadge.style.color = '#10b981';
+      } else if (dNanometer <= 100) {
+        regimeBadge.textContent = 'Upper Nanoscale (50 - 100 nm)';
+        regimeBadge.style.color = '#f59e0b';
+      } else {
+        regimeBadge.textContent = 'Approaching Scherrer Accuracy Limit (>100 nm)';
+        regimeBadge.style.color = '#ef4444';
+      }
+
+      // Update Academic Report Block
+      summaryReport.innerHTML = `
+        Reflection: 2&theta; = ${twoThetaDeg.toFixed(2)}&deg; (&theta; = ${thetaDeg.toFixed(2)}&deg;) | cos(&theta;) = ${cosTheta.toFixed(4)}<br />
+        Observed FWHM: ${fwhmObsDeg.toFixed(4)}&deg; | Inst Broadening: ${useInst ? fwhmInstDeg.toFixed(4) + '&deg;' : 'Disabled'}<br />
+        Corrected &beta;: ${betaCorrectedDeg.toFixed(4)}&deg; &rarr; <strong>${betaRad.toFixed(6)} radians</strong><br />
+        Source: &lambda; = ${lambdaAngstrom} \u00C5 | Shape Factor: K = ${kFactor}<br />
+        <strong>Calculated Mean Domain Size (D): ${dNanometer.toFixed(2)} nm (${dAngstrom.toFixed(1)} \u00C5)</strong>
+      `;
+    }
+
+    // --- PRESET CLICK HANDLERS ---
+    document.querySelectorAll('.preset-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const t = e.currentTarget as HTMLElement;
+        inpTwoTheta.value = t.dataset['2theta']!;
+        inpFwhmObs.value = t.dataset.fwhm!;
+        inpFwhmInst.value = t.dataset.inst!;
+        inpLambda.value = t.dataset.lambda!;
+        inpK.value = t.dataset.k!;
+        selectSource.value = t.dataset.lambda!;
+        selectShape.value = t.dataset.k!;
+        selectFwhmUnit.value = 'deg';
+        checkEnableInst.checked = true;
+        inpFwhmInst.disabled = false;
+        runScherrerEngine();
+      });
+    });
+
+    // --- EXPORT TOOLS ---
+    document.getElementById('copyLatexBtn')?.addEventListener('click', () => {
+      const twoTheta = inpTwoTheta.value;
+      const k = inpK.value;
+      const lambda = inpLambda.value;
+      const beta = displayBetaRad.textContent;
+      const sizeNm = primarySizeNm.textContent;
+      
+      const latex = 'D = \\frac{K \\cdot \\lambda}{\\beta \\cdot \\cos(\\theta)} = \\frac{' + k + ' \\cdot ' + lambda + '\\,\\text{\\AA}}{' + beta + '\\,\\text{rad} \\cdot \\cos(' + (parseFloat(twoTheta)/2) + '^\\circ)} = ' + sizeNm;
+      navigator.clipboard.writeText(latex);
+      alert('LaTeX derivation equation copied to clipboard.');
+    });
+
+    document.getElementById('exportCsvBtn')?.addEventListener('click', () => {
+      const csv = `Parameter,Value,Unit\n2-Theta,${inpTwoTheta.value},degrees\nObserved_FWHM,${inpFwhmObs.value},${selectFwhmUnit.value}\nInst_Broadening,${inpFwhmInst.value},degrees\nCorrected_Beta_Rad,${displayBetaRad.textContent},radians\nWavelength,${inpLambda.value},Angstrom\nShape_Factor_K,${inpK.value},dimensionless\nCrystallite_Size_nm,${primarySizeNm.textContent.replace(' nm','')},nm\nCrystallite_Size_Angstrom,${displayAngstrom.textContent.replace(' \u00C5','')},Angstrom\n`;
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.setAttribute('href', url);
+      a.setAttribute('download', 'scherrer_crystallite_calculation.csv');
+      a.click();
+    });
+
+    document.getElementById('shareSetupBtn')?.addEventListener('click', () => {
+      navigator.clipboard.writeText(window.location.href);
+      alert('Experiment URL copied.');
+    });
+
+    // --- EVENT LISTENERS ---
+    [inpTwoTheta, inpFwhmObs, inpFwhmInst, inpLambda, inpK].forEach(input => {
+      input.addEventListener('input', runScherrerEngine);
+    });
+
+    [selectFwhmUnit, selectProfile].forEach(select => {
+      select.addEventListener('change', runScherrerEngine);
+    });
+
+    // Initialize
+    runScherrerEngine();
+  </script>
+</BaseLayout>
