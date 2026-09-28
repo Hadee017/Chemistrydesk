@@ -133,7 +133,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </p>
         </div>
         <button id="shareSetupBtn" style="background: #0284c7; border: none; color: white; padding: 0.65rem 1.25rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
-          <span>🔗</span> Share Setup URL
+          <span>Share Setup URL</span>
         </button>
       </div>
     </div>
@@ -142,7 +142,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1.5rem; margin-bottom: 2.25rem; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.75rem;">
         <div style="font-weight: 800; font-size: 0.9rem; color: #0f172a; text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 0.5rem;">
-          <span>🧪 Reference Benchmark Presets:</span>
+          <span>Benchmark Presets:</span>
           <span style="font-size: 0.75rem; background: #e0f2fe; color: #0369a1; padding: 3px 10px; border-radius: 9999px; font-weight: 800;">16 Real Samples</span>
         </div>
         <div>
@@ -165,7 +165,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <button class="preset-btn" data-category="semiconductor" data-compound="CdSe Quantum Dots (111)" data-2theta="25.35" data-fwhm="2.150" data-inst="0.080" data-lambda="1.54056" data-k="0.94">CdSe QDs (111) [3.8 nm]</button>
         
         <button class="preset-btn" data-category="oxide" data-compound="Tenorite CuO (-111)" data-2theta="35.54" data-fwhm="0.380" data-inst="0.080" data-lambda="1.54056" data-k="0.94">CuO (-111) Monoclinic</button>
-        <button class="preset-btn" data-category="oxide" data-compound="Hematite alpha-Fe2O3 (104)" data-2theta="33.15" data-fwhm="0.260" data-inst="0.080" data-lambda="1.54056" data-k="0.90">a-Fe2O3 (104) Hematite</button>
+        <button class="preset-btn" data-category="oxide" data-compound="Hematite alpha-Fe2O3 (104)" data-2theta="33.15" data-fwhm="0.260" data-inst="0.080" data-lambda="1.54056" data-k="0.90">alpha-Fe2O3 (104) Hematite</button>
         <button class="preset-btn" data-category="oxide" data-compound="Magnetite Fe3O4 (311)" data-2theta="35.42" data-fwhm="0.450" data-inst="0.080" data-lambda="1.54056" data-k="0.94">Fe3O4 (311) Ferrofluid</button>
         <button class="preset-btn" data-category="oxide" data-compound="Spinel LiMn2O4 (400)" data-2theta="44.30" data-fwhm="0.340" data-inst="0.080" data-lambda="1.54056" data-k="0.94">LiMn2O4 Cathode (400)</button>
 
@@ -177,7 +177,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <button class="preset-btn" data-category="mof" data-compound="HKUST-1 Cu3(BTC)2 (220)" data-2theta="11.58" data-fwhm="0.220" data-inst="0.060" data-lambda="1.54056" data-k="0.90">HKUST-1 MOF (220)</button>
         <button class="preset-btn" data-category="mof" data-compound="ZIF-8 Zeolitic Framework (011)" data-2theta="7.34" data-fwhm="0.180" data-inst="0.060" data-lambda="1.54056" data-k="0.90">ZIF-8 MOF (011)</button>
         <button class="preset-btn" data-category="mof" data-compound="UiO-66 Zr-MOF (111)" data-2theta="7.36" data-fwhm="0.190" data-inst="0.060" data-lambda="1.54056" data-k="0.90">UiO-66 Zr-MOF (111)</button>
-        <button class="preset-btn" data-category="2d" data-compound="alpha-Zirconium Phosphate (002)" data-2theta="11.64" data-fwhm="0.320" data-inst="0.060" data-lambda="1.54056" data-k="0.89">a-ZrP Nanosheets (002)</button>
+        <button class="preset-btn" data-category="2d" data-compound="alpha-Zirconium Phosphate (002)" data-2theta="11.64" data-fwhm="0.320" data-inst="0.060" data-lambda="1.54056" data-k="0.89">alpha-ZrP Nanosheets (002)</button>
         <button class="preset-btn" data-category="2d" data-compound="Graphitic Carbon Nitride (002)" data-2theta="27.40" data-fwhm="1.120" data-inst="0.080" data-lambda="1.54056" data-k="0.89">g-C3N4 Nanosheets (002)</button>
       </div>
     </div>
@@ -245,7 +245,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <span style="display: block; font-size: 0.75rem; color: #64748b; margin-top: 0.35rem;">Standard calibration: 0.05&deg; - 0.10&deg; (LaB6 / NIST SRM 660c).</span>
         </div>
 
-        <!-- Deconvolution Model Dropdown (Explicitly closed) -->
+        <!-- Deconvolution Model Dropdown -->
         <div style="margin-bottom: 1.5rem;">
           <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #1e293b; margin-bottom: 0.4rem;">
             BROADENING DECONVOLUTION PROFILE
@@ -256,7 +256,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </select>
         </div>
 
-        <!-- X-Ray Source & Wavelength Dropdown (Explicitly closed) -->
+        <!-- X-Ray Source & Wavelength Dropdown -->
         <div style="margin-bottom: 1.5rem;">
           <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #1e293b; margin-bottom: 0.4rem;">
             X-RAY TUBE SOURCE &amp; WAVELENGTH (&lambda;)
@@ -273,7 +273,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </div>
         </div>
 
-        <!-- Shape Factor (K) Dropdown (Explicitly closed) -->
+        <!-- Shape Factor (K) Dropdown -->
         <div style="margin-bottom: 0.5rem;">
           <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #1e293b; margin-bottom: 0.4rem;">
             CRYSTALLITE SHAPE FACTOR (K)
@@ -425,7 +425,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         Theoretical Foundation: The Scherrer Equation in Powder XRD
       </h2>
       <p style="font-size: 1rem; margin-bottom: 1.25rem;">
-        In an idealized, infinite three-dimensional crystal lattice, constructive interference between coherently scattered X-ray photons satisfies Bragg's law ($n\lambda = 2d_{hkl}\sin\theta$) with mathematical perfection. In such hypothetical systems, scattering at any angle differing infinitesimally from the exact Bragg condition undergoes complete destructive interference due to the infinite sum of identical phase-shifted lattice planes.
+        In an idealized, infinite three-dimensional crystal lattice, constructive interference between coherently scattered X-ray photons satisfies Bragg's law with mathematical perfection. In such hypothetical systems, scattering at any angle differing infinitesimally from the exact Bragg condition undergoes complete destructive interference due to the infinite sum of identical phase-shifted lattice planes.
       </p>
       
       <p style="font-size: 1rem; margin-bottom: 1.5rem;">
@@ -441,7 +441,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.5rem; margin-bottom: 2rem; font-size: 0.95rem;">
         <ul style="margin: 0; padding-left: 1.5rem; line-height: 1.8;">
-          <li><strong>D:</strong> Mean volume-weighted crystallite dimension along the crystallographic normal to reflecting lattice planes.</li>
+          <li><strong>D:</strong> Mean volume-weighted crystallite dimension along the crystallographic normal to reflecting lattice planes (h, k, l).</li>
           <li><strong>K:</strong> Dimensionless shape factor reflecting domain morphology (0.94 for spheres; 1.00 for regular cubes).</li>
           <li><strong>&lambda;:</strong> Characteristic wavelength of the incident primary monochromatic X-ray beam.</li>
           <li><strong>&beta;<sub>sample</sub>:</strong> Corrected structural line broadening at half-maximum intensity, strictly expressed in dimensional <strong>radians</strong>.</li>
