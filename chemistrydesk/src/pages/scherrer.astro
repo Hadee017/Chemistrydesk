@@ -61,7 +61,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             "name": "What is the physical difference between crystallite size and particle size?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Crystallite size represents the coherence length of uninterrupted, defect-free single crystalline domains. A particle (observed via SEM or DLS) typically consists of an agglomerate of multiple crystalline sub-domains or grains separated by grain boundaries."
+              "text": "Crystallite size represents the coherence length of uninterrupted, defect-free single crystalline domains. A particle typically consists of an agglomerate of multiple crystalline sub-domains or grains separated by grain boundaries."
             }
           },
           {
@@ -69,7 +69,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             "name": "Why is the Scherrer equation limited to domains between 1 nm and 100 nm?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "For crystallites larger than 100 nm, structural peak broadening becomes negligible relative to the diffractometer's internal instrumental broadening. When beta_obs approaches beta_inst, subtraction causes extreme propagation of error."
+              "text": "For crystallites larger than 100 nm, structural peak broadening becomes negligible relative to the diffractometer instrumental broadening. When observed FWHM approaches instrumental width, subtraction causes extreme propagation of error."
             }
           },
           {
@@ -77,7 +77,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             "name": "Why must FWHM be converted to radians?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "The Scherrer equation is derived from Fourier wavepacket transformations where angular broadening beta is a dimensionless natural ratio (arc length over radius), requiring pure radians. Entering degrees will introduce a 57.3x error."
+              "text": "The Scherrer equation is derived from Fourier wavepacket transformations where angular broadening beta is a dimensionless natural ratio requiring pure radians. Entering degrees will introduce a 57.3x error."
             }
           },
           {
@@ -101,7 +101,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             "name": "Can the Scherrer equation be applied to amorphous materials?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "No. The Scherrer formula requires periodic Bragg diffraction from ordered atomic planes. Amorphous materials yield diffuse scattering halos arising from short-range radial distributions, which cannot be quantified using the Scherrer formula."
+              "text": "No. The Scherrer formula requires periodic Bragg diffraction from ordered atomic planes. Amorphous materials yield diffuse scattering halos which cannot be quantified using the Scherrer formula."
             }
           }
         ]
@@ -136,7 +136,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </button>
     </div>
 
-    <!-- PRESET SELECTION SUITE (16 Material Benchmarks Across 5 Classes) -->
+    <!-- PRESET SELECTION SUITE -->
     <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.25rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem; flex-wrap: wrap; gap: 0.5rem;">
         <div style="font-weight: 800; font-size: 0.85rem; color: #334155; text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 0.5rem;">
@@ -157,30 +157,26 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       <!-- Preset Pills Grid -->
       <div id="presetGrid" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-        <!-- Semiconductors -->
         <button class="preset-btn" data-category="semiconductor" data-compound="ZnO Wurtzite (101)" data-2theta="36.25" data-fwhm="0.280" data-inst="0.080" data-lambda="1.54056" data-k="0.94">ZnO (101) Nanorods</button>
-        <button class="preset-btn" data-category="semiconductor" data-compound="Anatase TiO2 (101)" data-2theta="25.28" data-fwhm="0.420" data-inst="0.080" data-lambda="1.54056" data-k="0.89">Anatase TiO₂ (101)</button>
-        <button class="preset-btn" data-category="semiconductor" data-compound="Rutile TiO2 (110)" data-2theta="27.44" data-fwhm="0.310" data-inst="0.080" data-lambda="1.54056" data-k="0.94">Rutile TiO₂ (110)</button>
+        <button class="preset-btn" data-category="semiconductor" data-compound="Anatase TiO2 (101)" data-2theta="25.28" data-fwhm="0.420" data-inst="0.080" data-lambda="1.54056" data-k="0.89">Anatase TiO2 (101)</button>
+        <button class="preset-btn" data-category="semiconductor" data-compound="Rutile TiO2 (110)" data-2theta="27.44" data-fwhm="0.310" data-inst="0.080" data-lambda="1.54056" data-k="0.94">Rutile TiO2 (110)</button>
         <button class="preset-btn" data-category="semiconductor" data-compound="CdSe Quantum Dots (111)" data-2theta="25.35" data-fwhm="2.150" data-inst="0.080" data-lambda="1.54056" data-k="0.94">CdSe QDs (111) [3.8 nm]</button>
         
-        <!-- Oxides & Battery -->
         <button class="preset-btn" data-category="oxide" data-compound="Tenorite CuO (-111)" data-2theta="35.54" data-fwhm="0.380" data-inst="0.080" data-lambda="1.54056" data-k="0.94">CuO (-111) Monoclinic</button>
-        <button class="preset-btn" data-category="oxide" data-compound="Hematite alpha-Fe2O3 (104)" data-2theta="33.15" data-fwhm="0.260" data-inst="0.080" data-lambda="1.54056" data-k="0.90">&alpha;-Fe₂O₃ (104) Hematite</button>
-        <button class="preset-btn" data-category="oxide" data-compound="Magnetite Fe3O4 (311)" data-2theta="35.42" data-fwhm="0.450" data-inst="0.080" data-lambda="1.54056" data-k="0.94">Fe₃O₄ (311) Ferrofluid</button>
-        <button class="preset-btn" data-category="oxide" data-compound="Spinel LiMn2O4 (400)" data-2theta="44.30" data-fwhm="0.340" data-inst="0.080" data-lambda="1.54056" data-k="0.94">LiMn₂O₄ Cathode (400)</button>
+        <button class="preset-btn" data-category="oxide" data-compound="Hematite alpha-Fe2O3 (104)" data-2theta="33.15" data-fwhm="0.260" data-inst="0.080" data-lambda="1.54056" data-k="0.90">a-Fe2O3 (104) Hematite</button>
+        <button class="preset-btn" data-category="oxide" data-compound="Magnetite Fe3O4 (311)" data-2theta="35.42" data-fwhm="0.450" data-inst="0.080" data-lambda="1.54056" data-k="0.94">Fe3O4 (311) Ferrofluid</button>
+        <button class="preset-btn" data-category="oxide" data-compound="Spinel LiMn2O4 (400)" data-2theta="44.30" data-fwhm="0.340" data-inst="0.080" data-lambda="1.54056" data-k="0.94">LiMn2O4 Cathode (400)</button>
 
-        <!-- FCC Catalysts -->
         <button class="preset-btn" data-category="fcc" data-compound="Gold Nanoparticles (111)" data-2theta="38.18" data-fwhm="0.550" data-inst="0.080" data-lambda="1.54056" data-k="0.94">FCC Au (111) Colloid</button>
         <button class="preset-btn" data-category="fcc" data-compound="Platinum Catalyst (111)" data-2theta="39.76" data-fwhm="0.820" data-inst="0.080" data-lambda="1.54056" data-k="0.94">FCC Pt (111) Fuel Cell</button>
         <button class="preset-btn" data-category="fcc" data-compound="Palladium Nanocubes (111)" data-2theta="40.12" data-fwhm="0.490" data-inst="0.080" data-lambda="1.54056" data-k="1.00">FCC Pd (111) Nanocubes</button>
         <button class="preset-btn" data-category="fcc" data-compound="Silver Nanoparticles (111)" data-2theta="38.12" data-fwhm="0.360" data-inst="0.080" data-lambda="1.54056" data-k="0.94">FCC Ag (111) Antimicrobial</button>
 
-        <!-- MOFs & 2D Materials -->
         <button class="preset-btn" data-category="mof" data-compound="HKUST-1 Cu3(BTC)2 (220)" data-2theta="11.58" data-fwhm="0.220" data-inst="0.060" data-lambda="1.54056" data-k="0.90">HKUST-1 MOF (220)</button>
         <button class="preset-btn" data-category="mof" data-compound="ZIF-8 Zeolitic Framework (011)" data-2theta="7.34" data-fwhm="0.180" data-inst="0.060" data-lambda="1.54056" data-k="0.90">ZIF-8 MOF (011)</button>
         <button class="preset-btn" data-category="mof" data-compound="UiO-66 Zr-MOF (111)" data-2theta="7.36" data-fwhm="0.190" data-inst="0.060" data-lambda="1.54056" data-k="0.90">UiO-66 Zr-MOF (111)</button>
-        <button class="preset-btn" data-category="2d" data-compound="alpha-Zirconium Phosphate (002)" data-2theta="11.64" data-fwhm="0.320" data-inst="0.060" data-lambda="1.54056" data-k="0.89">&alpha;-ZrP Nanosheets (002)</button>
-        <button class="preset-btn" data-category="2d" data-compound="Graphitic Carbon Nitride (002)" data-2theta="27.40" data-fwhm="1.120" data-inst="0.080" data-lambda="1.54056" data-k="0.89">g-C₃N₄ Nanosheets (002)</button>
+        <button class="preset-btn" data-category="2d" data-compound="alpha-Zirconium Phosphate (002)" data-2theta="11.64" data-fwhm="0.320" data-inst="0.060" data-lambda="1.54056" data-k="0.89">a-ZrP Nanosheets (002)</button>
+        <button class="preset-btn" data-category="2d" data-compound="Graphitic Carbon Nitride (002)" data-2theta="27.40" data-fwhm="1.120" data-inst="0.080" data-lambda="1.54056" data-k="0.89">g-C3N4 Nanosheets (002)</button>
       </div>
     </div>
 
@@ -236,7 +232,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             <input type="text" inputmode="decimal" id="fwhmInst" value="0.080" style="flex: 1; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-right: none; border-radius: 6px 0 0 6px; font-size: 0.95rem; font-weight: 600; outline: none;" />
             <span style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 0 0.75rem; border-radius: 0 6px 6px 0; font-size: 0.85rem; font-weight: 600; color: #475569; display: flex; align-items: center;">degrees (&deg;)</span>
           </div>
-          <span style="display: block; font-size: 0.75rem; color: #64748b; margin-top: 0.25rem;">Typical calibration standard: 0.05&deg; - 0.10&deg; (LaB₆ / NIST SRM 660c).</span>
+          <span style="display: block; font-size: 0.75rem; color: #64748b; margin-top: 0.25rem;">Typical calibration standard: 0.05&deg; - 0.10&deg; (LaB6 / NIST SRM 660c).</span>
         </div>
 
         <!-- Deconvolution Model -->
@@ -257,10 +253,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </label>
           <div style="display: grid; grid-template-columns: 1.25fr 1fr; gap: 0.5rem;">
             <select id="sourceTarget" style="padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem; font-weight: 600; background: white; color: #334155;">
-              <option value="1.54056" selected>Cu-K&alpha;₁ (1.54056 &#197;)</option>
-              <option value="1.54184">Cu-K&alpha; (avg: 1.54184 &#197;)</option>
-              <option value="0.71073">Mo-K&alpha; (0.71073 &#197;)</option>
-              <option value="1.78897">Co-K&alpha; (1.78897 &#197;)</option>
+              <option value="1.54056" selected>Cu-Ka1 (1.54056 A)</option>
+              <option value="1.54184">Cu-Ka (avg: 1.54184 A)</option>
+              <option value="0.71073">Mo-Ka (0.71073 A)</option>
+              <option value="1.78897">Co-Ka (1.78897 A)</option>
               <option value="custom">Custom Wavelength</option>
             </select>
             <input type="text" inputmode="decimal" id="lambdaInput" value="1.54056" style="width: 100%; padding: 0.65rem 0.5rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; font-weight: 600;" />
@@ -308,7 +304,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </div>
         </div>
 
-        <!-- Crystallographic Domain Properties (Dislocation Density & Interplanar d-Spacing) -->
+        <!-- Crystallographic Domain Properties -->
         <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.25rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
           <div>
             <span style="color: #64748b; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; display: block;">Bragg d-Spacing (d)</span>
@@ -322,7 +318,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </div>
         </div>
 
-        <!-- DYNAMIC SVG DIFFRACTION PEAK SIMULATOR (Dwell Time & Visual Engagement) -->
+        <!-- DYNAMIC SVG DIFFRACTION PEAK SIMULATOR -->
         <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.25rem;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
             <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #475569;">
@@ -331,12 +327,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             <span style="font-size: 0.75rem; font-family: monospace; color: #0284c7;" id="fwhmPeakTag">FWHM: 0.268&deg;</span>
           </div>
           
-          <!-- Native SVG Peak Canvas -->
           <div style="width: 100%; height: 130px; background: #0f172a; border-radius: 8px; position: relative; overflow: hidden;">
             <svg id="peakSvg" viewBox="0 0 400 130" style="width: 100%; height: 100%;">
               <line x1="20" y1="115" x2="380" y2="115" stroke="#334155" stroke-width="1.5" />
               <path id="peakCurve" d="M 20 115 Q 200 10 380 115" fill="rgba(56, 189, 248, 0.15)" stroke="#38bdf8" stroke-width="2.5" />
-              <!-- FWHM Indicator Line -->
               <line id="fwhmIndicator" x1="160" y1="62" x2="240" y2="62" stroke="#f43f5e" stroke-width="2" stroke-dasharray="3,3" />
               <text x="200" y="58" id="fwhmText" font-size="10" fill="#f43f5e" text-anchor="middle" font-family="monospace">FWHM (&beta;)</text>
               <circle cx="200" cy="15" r="3.5" fill="#38bdf8" />
@@ -386,9 +380,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     </div>
 
-    <!-- ========================================== -->
-    <!-- 2" x 4" PRINTABLE LAB VIAL LABEL SECTION   -->
-    <!-- ========================================== -->
+    <!-- PRINTABLE VIAL LABEL -->
     <div id="printableLabelWrapper" style="display: none; margin-bottom: 3rem;">
       <div style="border: 2px dashed #0284c7; border-radius: 8px; padding: 1.5rem; background: #ffffff; max-width: 480px; margin: 0 auto; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
         <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #0f172a; padding-bottom: 0.5rem; margin-bottom: 0.75rem;">
@@ -414,23 +406,20 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- EXTENSIVE ADSENSE SCIENTIFIC REFERENCE     -->
-    <!-- ========================================== -->
+    <!-- SCIENTIFIC REFERENCE ARTICLE -->
     <article style="border-top: 1px solid #e2e8f0; padding-top: 3.5rem; line-height: 1.8; color: #334155;">
       
       <h2 style="font-size: 1.75rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem;">
         Theoretical Foundation: The Scherrer Equation in Powder XRD
       </h2>
       <p>
-        In an idealized, infinite three-dimensional crystal lattice, constructive interference between coherently scattered X-ray photons satisfies Bragg's law ($n\lambda = 2d_{hkl}\sin\theta$) with mathematical perfection. In such hypothetical systems, scattering at any angle differing infinitesimally from the exact Bragg condition $\theta_B$ undergoes complete destructive interference due to the infinite sum of identical phase-shifted lattice planes.
+        In an idealized, infinite three-dimensional crystal lattice, constructive interference between coherently scattered X-ray photons satisfies Bragg's law with mathematical perfection. In such hypothetical systems, scattering at any angle differing infinitesimally from the exact Bragg condition undergoes complete destructive interference due to the infinite sum of identical phase-shifted lattice planes.
       </p>
       
       <p>
-        In real nanomaterials, thin-film architectures, metal-organic frameworks (MOFs), and catalyst nanoparticles, the finite physical boundary of the crystal domain limits the total number of parallel reflecting planes ($N$). As $N$ decreases, cancellation of scattered waves adjacent to the Bragg angle becomes incomplete, yielding finite diffraction line breadth.
+        In real nanomaterials, thin-film architectures, metal-organic frameworks (MOFs), and catalyst nanoparticles, the finite physical boundary of the crystal domain limits the total number of parallel reflecting planes. As this boundary decreases, cancellation of scattered waves adjacent to the Bragg angle becomes incomplete, yielding finite diffraction line breadth.
       </p>
 
-      <!-- Centered Formula Box -->
       <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.5rem 2rem; margin: 1.75rem 0; text-align: center; box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);">
         <div style="font-size: 1.5rem; font-weight: 700; color: #0f172a; font-family: 'Times New Roman', Times, serif;">
           <i>D</i> = <span style="display: inline-block; vertical-align: middle; text-align: center; margin: 0 4px;"><span style="display: block; border-bottom: 1.5px solid #0f172a; padding: 0 4px;"><i>K</i> &middot; &lambda;</span><span style="display: block; padding-top: 2px;">&beta;<sub>sample</sub> &middot; cos(&theta;)</span></span>
@@ -439,11 +428,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.25rem; margin-bottom: 2rem; font-size: 0.9rem;">
         <ul style="margin: 0; padding-left: 1.25rem;">
-          <li><strong>D:</strong> Mean volume-weighted crystallite dimension along the crystallographic normal to the reflecting $(hkl)$ lattice planes.</li>
-          <li><strong>K:</strong> Dimensionless shape factor reflecting domain morphology ($K = 0.94$ for spherical domains; $K = 1.00$ for regular cubes).</li>
-          <li><strong>&lambda;:</strong> Characteristic wavelength of the incident primary monochromatic X-ray beam ($\text{Cu-K}\alpha_1 = 1.54056\text{ \AA}$).</li>
+          <li><strong>D:</strong> Mean volume-weighted crystallite dimension along the crystallographic normal to reflecting lattice planes.</li>
+          <li><strong>K:</strong> Dimensionless shape factor reflecting domain morphology (0.94 for spheres; 1.00 for regular cubes).</li>
+          <li><strong>&lambda;:</strong> Characteristic wavelength of the incident primary monochromatic X-ray beam.</li>
           <li><strong>&beta;<sub>sample</sub>:</strong> Corrected structural line broadening at half-maximum intensity, strictly expressed in dimensional <strong>radians</strong>.</li>
-          <li><strong>&theta;:</strong> Exact Bragg diffraction angle in radians or degrees (corresponding to half the recorded detector angle $2\theta$).</li>
+          <li><strong>&theta;:</strong> Exact Bragg diffraction angle in radians or degrees (corresponding to half the recorded detector angle 2&theta;).</li>
         </ul>
       </div>
 
@@ -451,10 +440,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         Mathematical Derivation from Finite Lattice Sums
       </h3>
       <p>
-        Consider a crystal slab consisting of $m$ parallel lattice planes separated by interplanar spacing $d$. The total thickness normal to the planes is $D = m \cdot d$. Let the exact Bragg condition be satisfied at $\theta_B$ where path difference $2d\sin\theta_B = \lambda$.
+        Consider a crystal slab consisting of <em>m</em> parallel lattice planes separated by interplanar spacing <em>d</em>. The total thickness normal to the planes is <em>D = m &middot; d</em>. Let the exact Bragg condition be satisfied at &theta;<sub>B</sub> where path difference 2<em>d</em> &middot; sin(&theta;<sub>B</sub>) = &lambda;.
       </p>
       <p>
-        As the incident angle shifts away from $\theta_B$ to an angle $\theta_1 = \theta_B + \Delta\theta$, the phase difference between scattering from the top surface plane and the bottom plane of the stack reaches $2\pi$ radians, causing the total scattered intensity to plunge to zero:
+        As the incident angle shifts away from &theta;<sub>B</sub> to an angle &theta;<sub>1</sub> = &theta;<sub>B</sub> + &Delta;&theta;, the phase difference between scattering from the top surface plane and the bottom plane of the stack reaches 2&pi; radians, causing the total scattered intensity to plunge to zero:
       </p>
       <div style="background: #f8fafc; border-left: 4px solid #0284c7; padding: 0.75rem 1.25rem; margin: 1rem 0; font-family: monospace; font-size: 0.85rem;">
         2m &middot; d &middot; sin(&theta;₁) = (m + 1) &lambda;<br />
@@ -464,20 +453,20 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         Subtracting these two boundary conditions yields:
       </p>
       <div style="background: #f8fafc; border-left: 4px solid #0284c7; padding: 0.75rem 1.25rem; margin: 1rem 0; font-family: monospace; font-size: 0.85rem;">
-        2m &middot; d [sin(&theta;₁) - sin(&theta;₂)] = 2&lambda; &rArr; 2D &middot; cos(&theta;_B) &middot; &Delta;&theta; = &lambda;
+        2m &middot; d [sin(&theta;₁) - sin(&theta;₂)] = 2&lambda; &rArr; 2D &middot; cos(&theta;<sub>B</sub>) &middot; &Delta;&theta; = &lambda;
       </div>
       <p>
-        Because the total full width at half-maximum $\beta$ is approximately equal to half the total peak zero-to-zero envelope ($\beta \approx \Delta\theta = \theta_1 - \theta_2$), introducing the geometric factor $K$ establishes Paul Scherrer's classic relation: $D = \frac{K\lambda}{\beta\cos\theta}$.
+        Because the total full width at half-maximum &beta; is approximately equal to half the total peak envelope (&beta; &approx; &Delta;&theta; = &theta;<sub>1</sub> - &theta;<sub>2</sub>), introducing the geometric factor <em>K</em> establishes Paul Scherrer's classic relation: <em>D = (K &middot; &lambda;) / (&beta; &middot; cos(&theta;))</em>.
       </p>
 
       <h3 style="font-size: 1.35rem; font-weight: 700; color: #0f172a; margin-top: 2.5rem; margin-bottom: 0.75rem;">
         Crucial Instrumental Broadening Deconvolution (&beta;<sub>inst</sub>)
       </h3>
       <p>
-        A pervasive laboratory reporting error is substituting raw experimental full width at half maximum directly into the Scherrer formula. Diffractometers contribute physical instrumental broadening ($\beta_{\text{inst}}$) stemming from finite X-ray tube target focal spot size, Soller slit axial divergence, beam footprint displacement, and detector channel resolution.
+        A pervasive laboratory reporting error is substituting raw experimental full width at half maximum directly into the Scherrer formula. Diffractometers contribute physical instrumental broadening (&beta;<sub>inst</sub>) stemming from finite X-ray tube target focal spot size, Soller slit axial divergence, beam footprint displacement, and detector channel resolution.
       </p>
       <p>
-        To isolate true specimen broadening ($\beta_{\text{sample}}$), an unbroadened, macrocrystalline, defect-free reference standard (such as NIST SRM 660c $\text{LaB}_6$ or annealed silicon wafer) must be analyzed across identical optic configurations:
+        To isolate true specimen broadening (&beta;<sub>sample</sub>), an unbroadened, macrocrystalline, defect-free reference standard (such as NIST SRM 660c LaB6 or annealed silicon wafer) must be analyzed across identical optic configurations:
       </p>
       
       <table style="width: 100%; border-collapse: collapse; margin: 1.25rem 0; font-size: 0.85rem; background: white;">
@@ -506,28 +495,28 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         Worked Laboratory Walkthrough: Zinc Oxide (101) Reflection
       </h3>
       <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.75rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
-        <p style="margin-top: 0; font-weight: 600; color: #0f172a;">Sample: Hydrothermally synthesized ZnO wurtzite nanoparticles recorded on a Cu-K&alpha; diffractometer.</p>
+        <p style="margin-top: 0; font-weight: 600; color: #0f172a;">Sample: Hydrothermally synthesized ZnO wurtzite nanoparticles recorded on a Cu-Ka diffractometer.</p>
         <ol style="margin-left: 1.5rem; margin-bottom: 0; line-height: 1.75;">
-          <li><strong>Diffractometer Parameters:</strong> Reflection centroid $2\theta = 36.25^\circ$, recorded raw $\text{FWHM} = 0.280^\circ$. Instrumental resolution at this angular coordinate: $\beta_{\text{inst}} = 0.080^\circ$. Radiation: $\text{Cu-K}\alpha_1$ ($\lambda = 1.54056\text{ \AA} = 0.154056\text{ nm}$). Shape factor: $K = 0.94$.</li>
+          <li><strong>Diffractometer Parameters:</strong> Reflection centroid 2&theta; = 36.25&deg;, recorded raw FWHM = 0.280&deg;. Instrumental resolution at this angular coordinate: &beta;<sub>inst</sub> = 0.080&deg;. Radiation: Cu-Ka1 (&lambda; = 1.54056 A = 0.154056 nm). Shape factor: K = 0.94.</li>
           <li><strong>Instrumental Deconvolution (Gaussian Model):</strong>
             <br />
-            $$\beta_{\text{deg}} = \sqrt{(0.280^\circ)^2 - (0.080^\circ)^2} = \sqrt{0.0784 - 0.0064} = \sqrt{0.0720} = 0.2683^\circ$$
+            &beta;<sub>deg</sub> = &radic;((0.280&deg;)&sup2; - (0.080&deg;)&sup2;) = &radic;(0.0784 - 0.0064) = &radic;0.0720 = 0.2683&deg;
           </li>
           <li><strong>Unit Conversion to Natural Radians:</strong>
             <br />
-            $$\beta_{\text{rad}} = 0.2683^\circ \times \frac{\pi}{180^\circ} = 0.0046835\text{ rad}$$
+            &beta;<sub>rad</sub> = 0.2683&deg; &times; (&pi; / 180&deg;) = 0.0046835 radians
           </li>
           <li><strong>Bragg Angle Determination:</strong>
             <br />
-            $$\theta = \frac{36.25^\circ}{2} = 18.125^\circ \implies \cos(18.125^\circ) = 0.95036$$
+            &theta; = 36.25&deg; / 2 = 18.125&deg; &rarr; cos(18.125&deg;) = 0.95036
           </li>
           <li><strong>Scherrer Equation Computation:</strong>
             <br />
-            $$D = \frac{0.94 \times 0.154056\text{ nm}}{0.0046835\text{ rad} \times 0.95036} = \frac{0.144813}{0.0044510} = \mathbf{32.53\text{ nm}}\; (325.3\text{ \AA})$$
+            D = (0.94 &times; 0.154056 nm) / (0.0046835 rad &times; 0.95036) = <strong>32.53 nm</strong> (325.3 A)
           </li>
           <li><strong>Dislocation Density (&delta;):</strong>
             <br />
-            $$\delta = \frac{1}{D^2} = \frac{1}{(32.53 \times 10^{-9}\text{ m})^2} = \mathbf{9.45 \times 10^{14}\text{ lines/m}^2}$$
+            &delta; = 1 / D&sup2; = 1 / (32.53 &times; 10^-9 m)&sup2; = <strong>9.45 &times; 10^14 lines/m&sup2;</strong>
           </li>
         </ol>
       </div>
@@ -536,22 +525,20 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         Williamson-Hall Analysis: Decoupling Size from Microstrain
       </h3>
       <p>
-        In many synthesized materials (such as ball-milled metals, core-shell architectures, or doped metal-organic frameworks), observed peak broadening is a combined convolution of **size broadening** ($\beta_{\text{size}} \propto \frac{1}{\cos\theta}$) and **lattice microstrain broadening** ($\beta_{\text{strain}} \propto \tan\theta$ caused by non-uniform dislocations):
+        In many synthesized materials (such as ball-milled metals, core-shell architectures, or doped metal-organic frameworks), observed peak broadening is a combined convolution of **size broadening** and **lattice microstrain broadening**:
       </p>
       <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.5rem; margin: 1rem 0; text-align: center; font-family: monospace; font-size: 1rem; font-weight: 700;">
         &beta;<sub>total</sub> &middot; cos(&theta;) = <span style="color: #0284c7;">[K &middot; &lambda; / D]</span> + <span style="color: #10b981;">[4 &middot; &epsilon; &middot; sin(&theta;)]</span>
       </div>
       <p>
-        When plotting $\beta\cos\theta$ on the y-axis against $4\sin\theta$ on the x-axis for multiple reflections:
+        When plotting &beta;cos(&theta;) on the y-axis against 4sin(&theta;) on the x-axis for multiple reflections:
       </p>
       <ul style="margin-left: 1.5rem;">
-        <li>The <strong>slope</strong> yields intrinsic microstrain ($\varepsilon$).</li>
-        <li>The <strong>y-intercept</strong> ($\frac{K\lambda}{D}$) yields true strain-free crystallite size ($D$).</li>
+        <li>The <strong>slope</strong> yields intrinsic microstrain (&epsilon;).</li>
+        <li>The <strong>y-intercept</strong> yields true strain-free crystallite size (D).</li>
       </ul>
 
-      <!-- ========================================== -->
-      <!-- FREQUENTLY ASKED QUESTIONS (FAQ ACCORDION) -->
-      <!-- ========================================== -->
+      <!-- FAQ ACCORDION -->
       <h3 style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-top: 3rem; margin-bottom: 1.25rem;">
         Frequently Asked Questions (PXRD Crystallographic Sizing)
       </h3>
@@ -560,7 +547,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <details style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem;">
           <summary style="font-weight: 700; color: #0f172a; cursor: pointer;">What is the physical difference between crystallite size, grain size, and particle size?</summary>
           <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: #475569;">
-            Crystallite size denotes coherent, defect-free single crystalline sub-domains. A single grain may consist of multiple crystallites separated by small-angle boundaries, whereas a physical particle (imaged in SEM or measured via dynamic light scattering) represents an agglomerate of multiple crystalline grains.
+            Crystallite size denotes coherent, defect-free single crystalline sub-domains. A single grain may consist of multiple crystallites separated by small-angle boundaries, whereas a physical particle represents an agglomerate of multiple crystalline grains.
           </p>
         </details>
 
@@ -588,14 +575,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <details style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem;">
           <summary style="font-weight: 700; color: #0f172a; cursor: pointer;">How should I determine the instrumental broadening &beta;<sub>inst</sub> value?</summary>
           <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: #475569;">
-            Acquire a diffraction scan of a certified line standard (such as NIST SRM 660c LaB₆ or high-purity strain-free silicon powder) under identical optical conditions, slit geometries, and step sizes. Fit the peak closest to your sample reflection to determine &beta;<sub>inst</sub>.
+            Acquire a diffraction scan of a certified line standard (such as NIST SRM 660c LaB6 or high-purity strain-free silicon powder) under identical optical conditions. Fit the peak closest to your sample reflection to determine &beta;<sub>inst</sub>.
           </p>
         </details>
 
         <details style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem;">
           <summary style="font-weight: 700; color: #0f172a; cursor: pointer;">What shape factor (K) should be selected for MOF and zeolitic crystals?</summary>
           <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: #475569;">
-            For cubic or octahedral MOFs (e.g., HKUST-1, UiO-66), K values between 0.89 and 0.94 are standard. If crystals exhibit pronounced anisotropic growth (such as platelet or needle morphologies), shape factors along individual reflection planes must be adjusted.
+            For cubic or octahedral MOFs (e.g., HKUST-1, UiO-66), K values between 0.89 and 0.94 are standard. If crystals exhibit pronounced anisotropic growth, shape factors along individual reflection planes must be adjusted.
           </p>
         </details>
       </div>
@@ -622,174 +609,156 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     }
   </style>
 
-  <script>
-    // --- SANITIZE NUMERICAL INPUT (COMMA TO PERIOD) ---
-    function sanitizeNumber(input: string): number {
+  <script is:inline>
+    function sanitizeNumber(input) {
       if (typeof input === 'string') {
         input = input.replace(',', '.').trim();
       }
-      const val = parseFloat(input);
+      var val = parseFloat(input);
       return isNaN(val) ? 0 : val;
     }
 
-    // --- DOM ELEMENT REFERENCES ---
-    const inpTwoTheta = document.getElementById('twoTheta') as HTMLInputElement;
-    const inpFwhmObs = document.getElementById('fwhmObs') as HTMLInputElement;
-    const selectFwhmUnit = document.getElementById('fwhmUnit') as HTMLSelectElement;
-    const checkEnableInst = document.getElementById('enableInst') as HTMLInputElement;
-    const inpFwhmInst = document.getElementById('fwhmInst') as HTMLInputElement;
-    const selectProfile = document.getElementById('profileModel') as HTMLSelectElement;
-    const selectSource = document.getElementById('sourceTarget') as HTMLSelectElement;
-    const inpLambda = document.getElementById('lambdaInput') as HTMLInputElement;
-    const selectShape = document.getElementById('shapeFactorSelect') as HTMLSelectElement;
-    const inpK = document.getElementById('kInput') as HTMLInputElement;
+    var inpTwoTheta = document.getElementById('twoTheta');
+    var inpFwhmObs = document.getElementById('fwhmObs');
+    var selectFwhmUnit = document.getElementById('fwhmUnit');
+    var checkEnableInst = document.getElementById('enableInst');
+    var inpFwhmInst = document.getElementById('fwhmInst');
+    var selectProfile = document.getElementById('profileModel');
+    var selectSource = document.getElementById('sourceTarget');
+    var inpLambda = document.getElementById('lambdaInput');
+    var selectShape = document.getElementById('shapeFactorSelect');
+    var inpK = document.getElementById('kInput');
 
-    const thetaValEl = document.getElementById('thetaVal')!;
-    const primarySizeNm = document.getElementById('primarySizeNm')!;
-    const displayAngstrom = document.getElementById('displayAngstrom')!;
-    const displayBetaRad = document.getElementById('displayBetaRad')!;
-    const displayDSpacing = document.getElementById('displayDSpacing')!;
-    const displayDislocation = document.getElementById('displayDislocation')!;
-    const scaleProgress = document.getElementById('scaleProgress')!;
-    const regimeBadge = document.getElementById('regimeBadge')!;
-    const warnBox = document.getElementById('scherrerWarn')!;
-    const summaryReport = document.getElementById('summaryReport')!;
-    const activePresetTag = document.getElementById('activePresetTag')!;
-    const categoryFilter = document.getElementById('presetCategoryFilter') as HTMLSelectElement;
+    var thetaValEl = document.getElementById('thetaVal');
+    var primarySizeNm = document.getElementById('primarySizeNm');
+    var displayAngstrom = document.getElementById('displayAngstrom');
+    var displayBetaRad = document.getElementById('displayBetaRad');
+    var displayDSpacing = document.getElementById('displayDSpacing');
+    var displayDislocation = document.getElementById('displayDislocation');
+    var scaleProgress = document.getElementById('scaleProgress');
+    var regimeBadge = document.getElementById('regimeBadge');
+    var warnBox = document.getElementById('scherrerWarn');
+    var summaryReport = document.getElementById('summaryReport');
+    var activePresetTag = document.getElementById('activePresetTag');
+    var categoryFilter = document.getElementById('presetCategoryFilter');
 
-    // SVG elements
-    const peakCurve = document.getElementById('peakCurve') as SVGPathElement;
-    const fwhmIndicator = document.getElementById('fwhmIndicator') as SVGLineElement;
-    const fwhmText = document.getElementById('fwhmText') as SVGTextElement;
-    const fwhmPeakTag = document.getElementById('fwhmPeakTag')!;
-    const centerThetaLabel = document.getElementById('centerThetaLabel')!;
+    var peakCurve = document.getElementById('peakCurve');
+    var fwhmIndicator = document.getElementById('fwhmIndicator');
+    var fwhmText = document.getElementById('fwhmText');
+    var fwhmPeakTag = document.getElementById('fwhmPeakTag');
+    var centerThetaLabel = document.getElementById('centerThetaLabel');
 
-    // Label elements
-    const printableLabelWrapper = document.getElementById('printableLabelWrapper')!;
-    const labelCompoundName = document.getElementById('labelCompoundName')!;
-    const labelSize = document.getElementById('labelSize')!;
-    const label2Theta = document.getElementById('label2Theta')!;
-    const labelDislocation = document.getElementById('labelDislocation')!;
-    const labelTarget = document.getElementById('labelTarget')!;
+    var printableLabelWrapper = document.getElementById('printableLabelWrapper');
+    var labelCompoundName = document.getElementById('labelCompoundName');
+    var labelSize = document.getElementById('labelSize');
+    var label2Theta = document.getElementById('label2Theta');
+    var labelDislocation = document.getElementById('labelDislocation');
+    var labelTarget = document.getElementById('labelTarget');
 
-    // --- URL STATE ENCODING (Bookmarkable & Sharable Setup) ---
     function syncUrlParams() {
-      const params = new URLSearchParams();
+      var params = new URLSearchParams();
       params.set('twoTheta', inpTwoTheta.value);
       params.set('fwhm', inpFwhmObs.value);
       params.set('inst', inpFwhmInst.value);
       params.set('lambda', inpLambda.value);
       params.set('k', inpK.value);
-      window.history.replaceState({}, '', `${window.location.pathname}?${params.toString()}`);
+      window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
     }
 
     function loadUrlParams() {
-      const params = new URLSearchParams(window.location.search);
-      if (params.has('twoTheta')) inpTwoTheta.value = params.get('twoTheta')!;
-      if (params.has('fwhm')) inpFwhmObs.value = params.get('fwhm')!;
-      if (params.has('inst')) inpFwhmInst.value = params.get('inst')!;
+      var params = new URLSearchParams(window.location.search);
+      if (params.has('twoTheta')) inpTwoTheta.value = params.get('twoTheta');
+      if (params.has('fwhm')) inpFwhmObs.value = params.get('fwhm');
+      if (params.has('inst')) inpFwhmInst.value = params.get('inst');
       if (params.has('lambda')) {
-        inpLambda.value = params.get('lambda')!;
+        inpLambda.value = params.get('lambda');
         selectSource.value = 'custom';
       }
       if (params.has('k')) {
-        inpK.value = params.get('k')!;
+        inpK.value = params.get('k');
         selectShape.value = 'custom';
       }
     }
 
-    // --- CATEGORY FILTERING ---
-    categoryFilter.addEventListener('change', () => {
-      const selected = categoryFilter.value;
-      document.querySelectorAll('.preset-btn').forEach(btn => {
-        const cat = (btn as HTMLElement).dataset.category;
+    categoryFilter.addEventListener('change', function() {
+      var selected = categoryFilter.value;
+      document.querySelectorAll('.preset-btn').forEach(function(btn) {
+        var cat = btn.dataset.category;
         if (selected === 'all' || cat === selected) {
-          (btn as HTMLElement).style.display = 'inline-block';
+          btn.style.display = 'inline-block';
         } else {
-          (btn as HTMLElement).style.display = 'none';
+          btn.style.display = 'none';
         }
       });
     });
 
-    // --- SYNCHRONIZE DROPDOWNS & CUSTOM INPUTS ---
-    selectSource.addEventListener('change', () => {
+    selectSource.addEventListener('change', function() {
       if (selectSource.value !== 'custom') {
         inpLambda.value = selectSource.value;
       }
       runScherrerEngine();
     });
 
-    inpLambda.addEventListener('input', () => {
+    inpLambda.addEventListener('input', function() {
       selectSource.value = 'custom';
       runScherrerEngine();
     });
 
-    selectShape.addEventListener('change', () => {
+    selectShape.addEventListener('change', function() {
       if (selectShape.value !== 'custom') {
         inpK.value = selectShape.value;
       }
       runScherrerEngine();
     });
 
-    inpK.addEventListener('input', () => {
+    inpK.addEventListener('input', function() {
       selectShape.value = 'custom';
       runScherrerEngine();
     });
 
-    checkEnableInst.addEventListener('change', () => {
+    checkEnableInst.addEventListener('change', function() {
       inpFwhmInst.disabled = !checkEnableInst.checked;
       inpFwhmInst.style.background = checkEnableInst.checked ? '#ffffff' : '#f8fafc';
       runScherrerEngine();
     });
 
-    // --- SVG PEAK PROFILE RENDERER ---
-    function renderPeakSvg(betaDeg: number) {
-      // Base centroid at x = 200, y_baseline = 115, peak_height = 100
-      const center = 200;
-      const baseline = 115;
-      const peakY = 15;
+    function renderPeakSvg(betaDeg) {
+      var center = 200;
+      var baseline = 115;
+      var visualHalfWidth = Math.min(Math.max(betaDeg * 120, 15), 140);
       
-      // Calculate visual spread based on FWHM
-      // A width of 0.2 deg corresponds to visual half-width of ~30px
-      const visualHalfWidth = Math.min(Math.max(betaDeg * 120, 15), 140);
-      
-      // Render smooth Gaussian curve path
-      let d = `M 20 ${baseline}`;
-      for (let x = 20; x <= 380; x += 5) {
-        const diff = x - center;
-        // Standard Gaussian bell: y = baseline - height * exp(-4*ln(2)*(diff/fwhm)^2)
-        const intensity = 100 * Math.exp(-4 * Math.log(2) * Math.pow(diff / (visualHalfWidth * 2), 2));
-        const y = baseline - intensity;
-        d += ` L ${x} ${y.toFixed(1)}`;
+      var d = 'M 20 ' + baseline;
+      for (var x = 20; x <= 380; x += 5) {
+        var diff = x - center;
+        var intensity = 100 * Math.exp(-4 * Math.log(2) * Math.pow(diff / (visualHalfWidth * 2), 2));
+        var y = baseline - intensity;
+        d += ' L ' + x + ' ' + y.toFixed(1);
       }
-      d += ` L 380 ${baseline} Z`;
+      d += ' L 380 ' + baseline + ' Z';
       peakCurve.setAttribute('d', d);
 
-      // Position the FWHM bar exactly at half maximum (y = 115 - 50 = 65)
-      const halfMaxY = 65;
-      const x1 = center - visualHalfWidth;
-      const x2 = center + visualHalfWidth;
+      var halfMaxY = 65;
+      var x1 = center - visualHalfWidth;
+      var x2 = center + visualHalfWidth;
       fwhmIndicator.setAttribute('x1', x1.toFixed(1));
       fwhmIndicator.setAttribute('x2', x2.toFixed(1));
       fwhmIndicator.setAttribute('y1', halfMaxY.toString());
       fwhmIndicator.setAttribute('y2', halfMaxY.toString());
 
       fwhmText.setAttribute('y', (halfMaxY - 6).toString());
-      fwhmPeakTag.textContent = `FWHM (β): ${betaDeg.toFixed(3)}°`;
+      fwhmPeakTag.textContent = 'FWHM (b): ' + betaDeg.toFixed(3) + ' deg';
     }
 
-    // --- CORE ENGINE COMPUTATION ---
     function runScherrerEngine() {
-      const twoThetaDeg = sanitizeNumber(inpTwoTheta.value);
-      let fwhmObsRaw = sanitizeNumber(inpFwhmObs.value);
-      const fwhmUnit = selectFwhmUnit.value;
-      const useInst = checkEnableInst.checked;
-      const fwhmInstDeg = useInst ? sanitizeNumber(inpFwhmInst.value) : 0;
-      const profile = selectProfile.value;
-      const lambdaAngstrom = sanitizeNumber(inpLambda.value);
-      const kFactor = sanitizeNumber(inpK.value);
+      var twoThetaDeg = sanitizeNumber(inpTwoTheta.value);
+      var fwhmObsRaw = sanitizeNumber(inpFwhmObs.value);
+      var fwhmUnit = selectFwhmUnit.value;
+      var useInst = checkEnableInst.checked;
+      var fwhmInstDeg = useInst ? sanitizeNumber(inpFwhmInst.value) : 0;
+      var profile = selectProfile.value;
+      var lambdaAngstrom = sanitizeNumber(inpLambda.value);
+      var kFactor = sanitizeNumber(inpK.value);
 
-      // Reset Warnings & Displays
       warnBox.style.display = 'none';
 
       if (twoThetaDeg <= 0 || twoThetaDeg >= 180) {
@@ -798,23 +767,21 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         return;
       }
 
-      const thetaDeg = twoThetaDeg / 2;
+      var thetaDeg = twoThetaDeg / 2;
       thetaValEl.textContent = thetaDeg.toFixed(2);
-      centerThetaLabel.textContent = `Peak Centroid (${twoThetaDeg.toFixed(2)}°)`;
-      const thetaRad = thetaDeg * (Math.PI / 180);
-      const sinTheta = Math.sin(thetaRad);
-      const cosTheta = Math.cos(thetaRad);
+      centerThetaLabel.textContent = 'Peak Centroid (' + twoThetaDeg.toFixed(2) + ' deg)';
+      var thetaRad = thetaDeg * (Math.PI / 180);
+      var sinTheta = Math.sin(thetaRad);
+      var cosTheta = Math.cos(thetaRad);
 
-      // Bragg Interplanar d-Spacing Calculation: d = lambda / (2 * sin(theta))
       if (sinTheta > 0 && lambdaAngstrom > 0) {
-        const dSpacingAngstrom = lambdaAngstrom / (2 * sinTheta);
+        var dSpacingAngstrom = lambdaAngstrom / (2 * sinTheta);
         displayDSpacing.textContent = dSpacingAngstrom.toFixed(4) + ' \u00C5';
       } else {
         displayDSpacing.textContent = '--';
       }
 
-      // Convert Observed FWHM to degrees if entered in radians
-      let fwhmObsDeg = (fwhmUnit === 'rad') ? fwhmObsRaw * (180 / Math.PI) : fwhmObsRaw;
+      var fwhmObsDeg = (fwhmUnit === 'rad') ? fwhmObsRaw * (180 / Math.PI) : fwhmObsRaw;
 
       if (fwhmObsDeg <= 0) {
         primarySizeNm.textContent = '--';
@@ -824,13 +791,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         return;
       }
 
-      // Deconvolution of Instrumental Broadening
-      let betaCorrectedDeg = fwhmObsDeg;
+      var betaCorrectedDeg = fwhmObsDeg;
 
       if (useInst && fwhmInstDeg > 0) {
         if (fwhmObsDeg <= fwhmInstDeg) {
           warnBox.style.display = 'block';
-          warnBox.textContent = 'Instrumental Limit: Observed FWHM cannot be smaller than or equal to instrumental broadening. The peak width is completely optical-resolution limited.';
+          warnBox.textContent = 'Instrumental Limit: Observed FWHM cannot be smaller than or equal to instrumental broadening.';
           primarySizeNm.textContent = 'Limit Exceeded';
           displayAngstrom.textContent = '--';
           displayBetaRad.textContent = '--';
@@ -845,32 +811,25 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         }
       }
 
-      // Convert Corrected Broadening to Radians for the Scherrer Formula
-      const betaRad = betaCorrectedDeg * (Math.PI / 180);
+      var betaRad = betaCorrectedDeg * (Math.PI / 180);
 
       if (betaRad <= 0 || lambdaAngstrom <= 0 || kFactor <= 0 || cosTheta <= 0) {
         return;
       }
 
-      // Scherrer Equation: D = (K * lambda) / (beta * cos(theta))
-      const dAngstrom = (kFactor * lambdaAngstrom) / (betaRad * cosTheta);
-      const dNanometer = dAngstrom / 10;
+      var dAngstrom = (kFactor * lambdaAngstrom) / (betaRad * cosTheta);
+      var dNanometer = dAngstrom / 10;
+      var dMeters = dNanometer * 1e-9;
+      var dislocationDensity = 1 / (dMeters * dMeters);
 
-      // Dislocation Density (delta = 1 / D^2 in lines/m^2)
-      const dMeters = dNanometer * 1e-9;
-      const dislocationDensity = 1 / (dMeters * dMeters);
-
-      // Render Primary Outputs
       primarySizeNm.textContent = dNanometer.toFixed(2) + ' nm';
       displayAngstrom.textContent = dAngstrom.toFixed(1) + ' \u00C5';
       displayBetaRad.textContent = betaRad.toFixed(5) + ' rad';
       displayDislocation.textContent = dislocationDensity.toExponential(2) + ' lines/m\u00B2';
 
-      // Update Live SVG Peak Simulation
       renderPeakSvg(betaCorrectedDeg);
 
-      // Update Visual Scale Bar
-      const pct = Math.min(Math.max((dNanometer / 100) * 100, 2), 100);
+      var pct = Math.min(Math.max((dNanometer / 100) * 100, 2), 100);
       scaleProgress.style.width = pct + '%';
 
       if (dNanometer < 5) {
@@ -887,38 +846,33 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         regimeBadge.style.color = '#ef4444';
       }
 
-      // Update Academic Report Block
-      summaryReport.innerHTML = `
-        Sample: <strong>${activePresetTag.textContent}</strong><br />
-        Bragg Angle: 2&theta; = ${twoThetaDeg.toFixed(2)}&deg; (&theta; = ${thetaDeg.toFixed(2)}&deg;) | cos(&theta;) = ${cosTheta.toFixed(4)}<br />
-        Observed FWHM: ${fwhmObsDeg.toFixed(4)}&deg; | Inst Broadening: ${useInst ? fwhmInstDeg.toFixed(4) + '&deg;' : 'Disabled'}<br />
-        Corrected Broadening &beta;: ${betaCorrectedDeg.toFixed(4)}&deg; &rarr; <strong>${betaRad.toFixed(6)} radians</strong><br />
-        Source: &lambda; = ${lambdaAngstrom} \u00C5 | Shape Factor: K = ${kFactor}<br />
-        <strong>Mean Domain Size (D): ${dNanometer.toFixed(2)} nm (${dAngstrom.toFixed(1)} \u00C5) | Dislocation Density: ${dislocationDensity.toExponential(2)} lines/m&sup2;</strong>
-      `;
+      summaryReport.innerHTML = 
+        'Sample: <strong>' + activePresetTag.textContent + '</strong><br />' +
+        'Bragg Angle: 2&theta; = ' + twoThetaDeg.toFixed(2) + '&deg; (&theta; = ' + thetaDeg.toFixed(2) + '&deg;) | cos(&theta;) = ' + cosTheta.toFixed(4) + '<br />' +
+        'Observed FWHM: ' + fwhmObsDeg.toFixed(4) + '&deg; | Inst Broadening: ' + (useInst ? fwhmInstDeg.toFixed(4) + '&deg;' : 'Disabled') + '<br />' +
+        'Corrected Broadening &beta;: ' + betaCorrectedDeg.toFixed(4) + '&deg; &rarr; <strong>' + betaRad.toFixed(6) + ' radians</strong><br />' +
+        'Source: &lambda; = ' + lambdaAngstrom + ' \u00C5 | Shape Factor: K = ' + kFactor + '<br />' +
+        '<strong>Mean Domain Size (D): ' + dNanometer.toFixed(2) + ' nm (' + dAngstrom.toFixed(1) + ' \u00C5) | Dislocation Density: ' + dislocationDensity.toExponential(2) + ' lines/m&sup2;</strong>';
 
-      // Update Vial Label Data
       labelCompoundName.textContent = activePresetTag.textContent;
       labelSize.textContent = dNanometer.toFixed(2) + ' nm';
-      label2Theta.textContent = twoThetaDeg.toFixed(2) + '°';
-      labelDislocation.textContent = dislocationDensity.toExponential(2) + ' lines/m²';
+      label2Theta.textContent = twoThetaDeg.toFixed(2) + ' deg';
+      labelDislocation.textContent = dislocationDensity.toExponential(2) + ' lines/m2';
       labelTarget.textContent = selectSource.options[selectSource.selectedIndex].text.split(' ')[0];
 
-      // Sync state to URL params
       syncUrlParams();
     }
 
-    // --- PRESET CLICK HANDLERS ---
-    document.querySelectorAll('.preset-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const t = e.currentTarget as HTMLElement;
-        inpTwoTheta.value = t.dataset['2theta']!;
-        inpFwhmObs.value = t.dataset.fwhm!;
-        inpFwhmInst.value = t.dataset.inst!;
-        inpLambda.value = t.dataset.lambda!;
-        inpK.value = t.dataset.k!;
-        selectSource.value = t.dataset.lambda!;
-        selectShape.value = t.dataset.k!;
+    document.querySelectorAll('.preset-btn').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        var t = e.currentTarget;
+        inpTwoTheta.value = t.dataset['2theta'];
+        inpFwhmObs.value = t.dataset.fwhm;
+        inpFwhmInst.value = t.dataset.inst;
+        inpLambda.value = t.dataset.lambda;
+        inpK.value = t.dataset.k;
+        selectSource.value = t.dataset.lambda;
+        selectShape.value = t.dataset.k;
         selectFwhmUnit.value = 'deg';
         checkEnableInst.checked = true;
         inpFwhmInst.disabled = false;
@@ -927,64 +881,74 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       });
     });
 
-    // --- EXPORT TOOLS (LaTeX, BibTeX, CSV, Label) ---
-    document.getElementById('copyLatexBtn')?.addEventListener('click', () => {
-      const twoTheta = inpTwoTheta.value;
-      const k = inpK.value;
-      const lambda = inpLambda.value;
-      const beta = displayBetaRad.textContent;
-      const sizeNm = primarySizeNm.textContent;
+    document.getElementById('copyLatexBtn').addEventListener('click', function() {
+      var twoTheta = inpTwoTheta.value;
+      var k = inpK.value;
+      var lambda = inpLambda.value;
+      var beta = displayBetaRad.textContent;
+      var sizeNm = primarySizeNm.textContent;
       
-      const latex = 'D = \\frac{K \\cdot \\lambda}{\\beta \\cdot \\cos(\\theta)} = \\frac{' + k + ' \\cdot ' + lambda + '\\,\\text{\\AA}}{' + beta + '\\,\\text{rad} \\cdot \\cos(' + (parseFloat(twoTheta)/2) + '^\\circ)} = ' + sizeNm;
-      navigator.clipboard.writeText(latex);
+      var thetaHalved = (parseFloat(twoTheta) / 2).toFixed(2);
+      var bslash = String.fromCharCode(92);
+      var latexStr = 'D = ' + bslash + 'frac{K ' + bslash + 'cdot ' + bslash + 'lambda}{' + bslash + 'beta ' + bslash + 'cdot ' + bslash + 'cos(' + bslash + 'theta)} = ' + bslash + 'frac{' + k + ' ' + bslash + 'cdot ' + lambda + ' ' + bslash + 'mathrm{\\AA}}{' + beta + ' ' + bslash + 'mathrm{rad} ' + bslash + 'cdot ' + bslash + 'cos(' + thetaHalved + '^' + bslash + 'circ)} = ' + sizeNm;
+      navigator.clipboard.writeText(latexStr);
       alert('Complete LaTeX derivation equation copied to clipboard.');
     });
 
-    document.getElementById('copyBibtexBtn')?.addEventListener('click', () => {
-      const bibtex = `@article{scherrer1918bestimmung,\n  title={Bestimmung der Gr{\\"o}{\\ss}e und der inneren Struktur von Kolloidteilchen mittels R{\\"o}ntgenstrahlen},\n  author={Scherrer, Paul},\n  journal={Nachrichten von der Gesellschaft der Wissenschaften zu G{\\"o}ttingen, Mathematisch-Physikalische Klasse},\n  volume={1918},\n  pages={98--100},\n  year={1918}\n}`;
+    document.getElementById('copyBibtexBtn').addEventListener('click', function() {
+      var bibtex = '@article{scherrer1918bestimmung,\n  title={Bestimmung der Gr{\\"o}{\\ss}e und der inneren Struktur von Kolloidteilchen mittels R{\\"o}ntgenstrahlen},\n  author={Scherrer, Paul},\n  journal={Nachrichten von der Gesellschaft der Wissenschaften zu G{\\"o}ttingen, Mathematisch-Physikalische Klasse},\n  volume={1918},\n  pages={98--100},\n  year={1918}\n}';
       navigator.clipboard.writeText(bibtex);
       alert('Scherrer BibTeX citation copied to clipboard.');
     });
 
-    document.getElementById('exportCsvBtn')?.addEventListener('click', () => {
-      const csv = `Parameter,Value,Unit\nSample_Name,${activePresetTag.textContent},text\n2-Theta,${inpTwoTheta.value},degrees\nBragg_d_Spacing,${displayDSpacing.textContent.replace(' \u00C5','')},Angstrom\nObserved_FWHM,${inpFwhmObs.value},${selectFwhmUnit.value}\nInst_Broadening,${inpFwhmInst.value},degrees\nCorrected_Beta_Rad,${displayBetaRad.textContent},radians\nWavelength,${inpLambda.value},Angstrom\nShape_Factor_K,${inpK.value},dimensionless\nCrystallite_Size_nm,${primarySizeNm.textContent.replace(' nm','')},nm\nCrystallite_Size_Angstrom,${displayAngstrom.textContent.replace(' \u00C5','')},Angstrom\nDislocation_Density,${displayDislocation.textContent.replace(' lines/m\u00B2','')},lines/m^2\n`;
-      const blob = new Blob([csv], { type: 'text/csv' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
+    document.getElementById('exportCsvBtn').addEventListener('click', function() {
+      var csv = 'Parameter,Value,Unit\n' +
+        'Sample_Name,' + activePresetTag.textContent + ',text\n' +
+        '2-Theta,' + inpTwoTheta.value + ',degrees\n' +
+        'Bragg_d_Spacing,' + displayDSpacing.textContent.replace(' \u00C5','') + ',Angstrom\n' +
+        'Observed_FWHM,' + inpFwhmObs.value + ',' + selectFwhmUnit.value + '\n' +
+        'Inst_Broadening,' + inpFwhmInst.value + ',degrees\n' +
+        'Corrected_Beta_Rad,' + displayBetaRad.textContent + ',radians\n' +
+        'Wavelength,' + inpLambda.value + ',Angstrom\n' +
+        'Shape_Factor_K,' + inpK.value + ',dimensionless\n' +
+        'Crystallite_Size_nm,' + primarySizeNm.textContent.replace(' nm','') + ',nm\n' +
+        'Crystallite_Size_Angstrom,' + displayAngstrom.textContent.replace(' \u00C5','') + ',Angstrom\n' +
+        'Dislocation_Density,' + displayDislocation.textContent.replace(' lines/m\u00B2','') + ',lines/m^2\n';
+      var blob = new Blob([csv], { type: 'text/csv' });
+      var url = window.URL.createObjectURL(blob);
+      var a = document.createElement('a');
       a.setAttribute('href', url);
       a.setAttribute('download', 'pxrd_scherrer_crystallite_size.csv');
       a.click();
     });
 
-    document.getElementById('shareSetupBtn')?.addEventListener('click', () => {
+    document.getElementById('shareSetupBtn').addEventListener('click', function() {
       navigator.clipboard.writeText(window.location.href);
       alert('Experiment URL copied to clipboard! Anyone opening this link will see your exact calculations.');
     });
 
-    document.getElementById('printLabelBtn')?.addEventListener('click', () => {
+    document.getElementById('printLabelBtn').addEventListener('click', function() {
       printableLabelWrapper.style.display = printableLabelWrapper.style.display === 'none' ? 'block' : 'none';
       if (printableLabelWrapper.style.display === 'block') {
         printableLabelWrapper.scrollIntoView({ behavior: 'smooth' });
       }
     });
 
-    document.getElementById('triggerPrintBtn')?.addEventListener('click', () => {
+    document.getElementById('triggerPrintBtn').addEventListener('click', function() {
       window.print();
     });
 
-    // --- EVENT LISTENERS ---
-    [inpTwoTheta, inpFwhmObs, inpFwhmInst, inpLambda, inpK].forEach(input => {
-      input.addEventListener('input', () => {
+    [inpTwoTheta, inpFwhmObs, inpFwhmInst, inpLambda, inpK].forEach(function(input) {
+      input.addEventListener('input', function() {
         activePresetTag.textContent = 'Custom Sample';
         runScherrerEngine();
       });
     });
 
-    [selectFwhmUnit, selectProfile].forEach(select => {
+    [selectFwhmUnit, selectProfile].forEach(function(select) {
       select.addEventListener('change', runScherrerEngine);
     });
 
-    // Initialize from URL or default
     loadUrlParams();
     runScherrerEngine();
   </script>
