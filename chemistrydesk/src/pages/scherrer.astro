@@ -4,7 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 <BaseLayout 
   title="PXRD Scherrer Crystallite Size & Strain Calculator | ChemistryDesk"
-  description="Research-grade powder X-ray diffraction (PXRD) Scherrer equation calculator. Features live dynamic peak profiles, instrumental line broadening deconvolution, 16 benchmark materials, printable sample vial labels, and LaTeX thesis export."
+  description="Research-grade powder X-ray diffraction (PXRD) Scherrer equation calculator. Features live dynamic peak profiles, custom specimen mode, instrumental line broadening deconvolution, 16 benchmark materials, printable sample vial labels, and LaTeX thesis export."
 >
   <!-- Schema: WebApplication + HowTo + FAQPage for High-E-E-A-T AdSense Compliance -->
   <script type="application/ld+json" set:html={JSON.stringify({
@@ -118,7 +118,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <span style="color: #0f172a; font-weight: 700;">PXRD Scherrer Studio</span>
     </nav>
 
-    <!-- Header Section -->
+    <!-- Header Hero Card -->
     <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 16px; padding: 2rem; margin-bottom: 2rem; color: #ffffff; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.15);">
       <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.5rem;">
         <div style="max-width: 760px;">
@@ -129,24 +129,24 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             PXRD Scherrer Crystallite Size &amp; Strain Studio
           </h1>
           <p style="color: #cbd5e1; font-size: 1rem; margin-top: 0.65rem; margin-bottom: 0; line-height: 1.6;">
-            High-precision coherent domain sizing, instrumental broadening deconvolution, dynamic peak profile simulation, and printable sample vial labeling.
+            High-precision coherent domain sizing, custom specimen inputs, instrumental broadening deconvolution, dynamic peak simulation, and printable sample vial labeling.
           </p>
         </div>
         <button id="shareSetupBtn" style="background: #0284c7; border: none; color: white; padding: 0.65rem 1.25rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
-          <span>Share Setup URL</span>
+          <span>🔗</span> Share Setup URL
         </button>
       </div>
     </div>
 
-    <!-- PRESET SELECTION SUITE (16 Benchmarks Across 5 Classes) -->
-    <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 12px; padding: 1.5rem; margin-bottom: 2.25rem; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+    <!-- PRESET SELECTION SUITE -->
+    <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1.5rem; margin-bottom: 2.25rem; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.75rem;">
         <div style="font-weight: 800; font-size: 0.9rem; color: #0f172a; text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 0.5rem;">
-          <span>Benchmark Materials:</span>
+          <span>🧪 Reference Benchmark Presets:</span>
           <span style="font-size: 0.75rem; background: #e0f2fe; color: #0369a1; padding: 3px 10px; border-radius: 9999px; font-weight: 800;">16 Real Samples</span>
         </div>
         <div>
-          <select id="presetCategoryFilter" style="font-size: 0.85rem; padding: 0.45rem 0.85rem; border: 1px solid #94a3b8; border-radius: 8px; background: #f8fafc; font-weight: 700; color: #1e293b; cursor: pointer;">
+          <select id="presetCategoryFilter" style="font-size: 0.85rem; padding: 0.45rem 0.85rem; border: 1.5px solid #94a3b8; border-radius: 8px; background: #f8fafc; font-weight: 700; color: #1e293b; cursor: pointer;">
             <option value="all">Show All Material Classes</option>
             <option value="semiconductor">Semiconductors &amp; Quantum Dots</option>
             <option value="oxide">Oxides &amp; Battery Materials</option>
@@ -165,7 +165,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <button class="preset-btn" data-category="semiconductor" data-compound="CdSe Quantum Dots (111)" data-2theta="25.35" data-fwhm="2.150" data-inst="0.080" data-lambda="1.54056" data-k="0.94">CdSe QDs (111) [3.8 nm]</button>
         
         <button class="preset-btn" data-category="oxide" data-compound="Tenorite CuO (-111)" data-2theta="35.54" data-fwhm="0.380" data-inst="0.080" data-lambda="1.54056" data-k="0.94">CuO (-111) Monoclinic</button>
-        <button class="preset-btn" data-category="oxide" data-compound="Hematite alpha-Fe2O3 (104)" data-2theta="33.15" data-fwhm="0.260" data-inst="0.080" data-lambda="1.54056" data-k="0.90">alpha-Fe2O3 (104) Hematite</button>
+        <button class="preset-btn" data-category="oxide" data-compound="Hematite alpha-Fe2O3 (104)" data-2theta="33.15" data-fwhm="0.260" data-inst="0.080" data-lambda="1.54056" data-k="0.90">a-Fe2O3 (104) Hematite</button>
         <button class="preset-btn" data-category="oxide" data-compound="Magnetite Fe3O4 (311)" data-2theta="35.42" data-fwhm="0.450" data-inst="0.080" data-lambda="1.54056" data-k="0.94">Fe3O4 (311) Ferrofluid</button>
         <button class="preset-btn" data-category="oxide" data-compound="Spinel LiMn2O4 (400)" data-2theta="44.30" data-fwhm="0.340" data-inst="0.080" data-lambda="1.54056" data-k="0.94">LiMn2O4 Cathode (400)</button>
 
@@ -177,21 +177,29 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <button class="preset-btn" data-category="mof" data-compound="HKUST-1 Cu3(BTC)2 (220)" data-2theta="11.58" data-fwhm="0.220" data-inst="0.060" data-lambda="1.54056" data-k="0.90">HKUST-1 MOF (220)</button>
         <button class="preset-btn" data-category="mof" data-compound="ZIF-8 Zeolitic Framework (011)" data-2theta="7.34" data-fwhm="0.180" data-inst="0.060" data-lambda="1.54056" data-k="0.90">ZIF-8 MOF (011)</button>
         <button class="preset-btn" data-category="mof" data-compound="UiO-66 Zr-MOF (111)" data-2theta="7.36" data-fwhm="0.190" data-inst="0.060" data-lambda="1.54056" data-k="0.90">UiO-66 Zr-MOF (111)</button>
-        <button class="preset-btn" data-category="2d" data-compound="alpha-Zirconium Phosphate (002)" data-2theta="11.64" data-fwhm="0.320" data-inst="0.060" data-lambda="1.54056" data-k="0.89">alpha-ZrP Nanosheets (002)</button>
+        <button class="preset-btn" data-category="2d" data-compound="alpha-Zirconium Phosphate (002)" data-2theta="11.64" data-fwhm="0.320" data-inst="0.060" data-lambda="1.54056" data-k="0.89">a-ZrP Nanosheets (002)</button>
         <button class="preset-btn" data-category="2d" data-compound="Graphitic Carbon Nitride (002)" data-2theta="27.40" data-fwhm="1.120" data-inst="0.080" data-lambda="1.54056" data-k="0.89">g-C3N4 Nanosheets (002)</button>
       </div>
     </div>
 
-    <!-- MAIN COMPUTATION WORKBENCH -->
+    <!-- MAIN COMPUTATION WORKBENCH (Two-Column Layout) -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
       
       <!-- LEFT COLUMN: Parameter Controls -->
-      <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 14px; padding: 1.75rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);">
+      <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 1.75rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 0.75rem;">
           <h2 style="font-size: 0.95rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #0f172a; margin: 0;">
             1. Diffraction Parameters
           </h2>
           <span id="activePresetTag" style="font-size: 0.75rem; font-weight: 800; color: #0284c7; background: #f0f9ff; padding: 3px 10px; border-radius: 6px; border: 1px solid #bae6fd;">Custom Sample</span>
+        </div>
+
+        <!-- Custom Compound / Composite Specimen Identity -->
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1.5rem;">
+          <label style="display: block; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: #475569; margin-bottom: 0.35rem;">
+            Custom Material / Composite Name (Optional)
+          </label>
+          <input type="text" id="customSampleName" placeholder="e.g. HKUST-1@ZrP/f-silica or Custom Polymer" style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem; font-weight: 600; color: #0f172a; box-sizing: border-box;" />
         </div>
 
         <!-- Peak Position (2-theta) -->
@@ -237,35 +245,35 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <span style="display: block; font-size: 0.75rem; color: #64748b; margin-top: 0.35rem;">Standard calibration: 0.05&deg; - 0.10&deg; (LaB6 / NIST SRM 660c).</span>
         </div>
 
-        <!-- Deconvolution Model -->
+        <!-- Deconvolution Model Dropdown (Explicitly closed) -->
         <div style="margin-bottom: 1.5rem;">
           <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #1e293b; margin-bottom: 0.4rem;">
             BROADENING DECONVOLUTION PROFILE
           </label>
           <select id="profileModel" style="width: 100%; padding: 0.75rem 1rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; font-weight: 700; background: white; color: #1e293b; cursor: pointer;">
-            <option value="gaussian" selected>Gaussian Deconvolution: &radic;(&beta;<sub>obs</sub>&sup2; - &beta;<sub>inst</sub>&sup2;)</option>
-            <option value="lorentzian">Lorentzian / Cauchy Deconvolution: &beta;<sub>obs</sub> - &beta;<sub>inst</sub></option>
+            <option value="gaussian" selected>Gaussian Deconvolution: &radic;(&beta;obs&sup2; - &beta;inst&sup2;)</option>
+            <option value="lorentzian">Lorentzian / Cauchy Deconvolution: &beta;obs - &beta;inst</option>
           </select>
         </div>
 
-        <!-- X-Ray Source & Wavelength -->
+        <!-- X-Ray Source & Wavelength Dropdown (Explicitly closed) -->
         <div style="margin-bottom: 1.5rem;">
           <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #1e293b; margin-bottom: 0.4rem;">
             X-RAY TUBE SOURCE &amp; WAVELENGTH (&lambda;)
           </label>
           <div style="display: grid; grid-template-columns: 1.35fr 1fr; gap: 0.5rem;">
             <select id="sourceTarget" style="padding: 0.75rem 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; font-weight: 700; background: white; color: #1e293b; cursor: pointer;">
-              <option value="1.54056" selected>Cu-Ka1 (1.54056 &#197;)</option>
-              <option value="1.54184">Cu-Ka (avg: 1.54184 &#197;)</option>
-              <option value="0.71073">Mo-Ka (0.71073 &#197;)</option>
-              <option value="1.78897">Co-Ka (1.78897 &#197;)</option>
+              <option value="1.54056" selected>Cu-Ka1 (1.54056 A)</option>
+              <option value="1.54184">Cu-Ka (avg: 1.54184 A)</option>
+              <option value="0.71073">Mo-Ka (0.71073 A)</option>
+              <option value="1.78897">Co-Ka (1.78897 A)</option>
               <option value="custom">Custom Wavelength</option>
             </select>
-            <input type="text" inputmode="decimal" id="lambdaInput" value="1.54056" style="width: 100%; padding: 0.75rem 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; font-weight: 700; color: #0f172a;" />
+            <input type="text" inputmode="decimal" id="lambdaInput" value="1.54056" style="width: 100%; padding: 0.75rem 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; font-weight: 700; color: #0f172a; box-sizing: border-box;" />
           </div>
         </div>
 
-        <!-- Shape Factor (K) -->
+        <!-- Shape Factor (K) Dropdown (Explicitly closed) -->
         <div style="margin-bottom: 0.5rem;">
           <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #1e293b; margin-bottom: 0.4rem;">
             CRYSTALLITE SHAPE FACTOR (K)
@@ -277,7 +285,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
               <option value="1.00">Cubic crystallites (K = 1.00)</option>
               <option value="custom">Custom Shape</option>
             </select>
-            <input type="text" inputmode="decimal" id="kInput" value="0.94" style="width: 100%; padding: 0.75rem 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; font-weight: 700; color: #0f172a;" />
+            <input type="text" inputmode="decimal" id="kInput" value="0.94" style="width: 100%; padding: 0.75rem 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; font-weight: 700; color: #0f172a; box-sizing: border-box;" />
           </div>
         </div>
 
@@ -408,14 +416,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
     </div>
 
-    <!-- SCIENTIFIC REFERENCE ARTICLE -->
+    <!-- ================================================================= -->
+    <!-- EXTENSIVE ADSENSE SCIENTIFIC REFERENCE (Theory, Derivation & FAQ) -->
+    <!-- ================================================================= -->
     <article style="border-top: 2px solid #e2e8f0; padding-top: 3.5rem; line-height: 1.85; color: #1e293b;">
       
       <h2 style="font-size: 2rem; font-weight: 800; color: #0f172a; margin-bottom: 1.25rem; letter-spacing: -0.02em;">
         Theoretical Foundation: The Scherrer Equation in Powder XRD
       </h2>
       <p style="font-size: 1rem; margin-bottom: 1.25rem;">
-        In an idealized, infinite three-dimensional crystal lattice, constructive interference between coherently scattered X-ray photons satisfies Bragg's law with mathematical perfection. In such hypothetical systems, scattering at any angle differing infinitesimally from the exact Bragg condition undergoes complete destructive interference due to the infinite sum of identical phase-shifted lattice planes.
+        In an idealized, infinite three-dimensional crystal lattice, constructive interference between coherently scattered X-ray photons satisfies Bragg's law ($n\lambda = 2d_{hkl}\sin\theta$) with mathematical perfection. In such hypothetical systems, scattering at any angle differing infinitesimally from the exact Bragg condition undergoes complete destructive interference due to the infinite sum of identical phase-shifted lattice planes.
       </p>
       
       <p style="font-size: 1rem; margin-bottom: 1.5rem;">
@@ -483,12 +493,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <tbody>
           <tr style="border-bottom: 1px solid #e2e8f0;">
             <td style="padding: 0.75rem 1rem; font-weight: 700;">Gaussian</td>
-            <td style="padding: 0.75rem 1rem; font-family: monospace; font-weight: 700; color: #0284c7;">&beta; = &radic;(&beta;<sub>obs</sub>&sup2; - &beta;<sub>inst</sub>&sup2;)</td>
+            <td style="padding: 0.75rem 1rem; font-family: monospace; font-weight: 700; color: #0284c7;">&beta; = &radic;(&beta;obs&sup2; - &beta;inst&sup2;)</td>
             <td style="padding: 0.75rem 1rem;">Standard optical slit geometries, strain-dominated lattices, low background noise.</td>
           </tr>
           <tr style="border-bottom: 1px solid #e2e8f0;">
             <td style="padding: 0.75rem 1rem; font-weight: 700;">Lorentzian / Cauchy</td>
-            <td style="padding: 0.75rem 1rem; font-family: monospace; font-weight: 700; color: #0284c7;">&beta; = &beta;<sub>obs</sub> - &beta;<sub>inst</sub></td>
+            <td style="padding: 0.75rem 1rem; font-family: monospace; font-weight: 700; color: #0284c7;">&beta; = &beta;obs - &beta;inst</td>
             <td style="padding: 0.75rem 1rem;">Ultra-small crystallites (&lt;10 nm), prominent extended exponential peak skirts.</td>
           </tr>
         </tbody>
@@ -634,6 +644,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     var inpLambda = document.getElementById('lambdaInput');
     var selectShape = document.getElementById('shapeFactorSelect');
     var inpK = document.getElementById('kInput');
+    var customSampleName = document.getElementById('customSampleName');
 
     var thetaValEl = document.getElementById('thetaVal');
     var primarySizeNm = document.getElementById('primarySizeNm');
@@ -668,6 +679,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       params.set('inst', inpFwhmInst.value);
       params.set('lambda', inpLambda.value);
       params.set('k', inpK.value);
+      if (customSampleName.value) params.set('sample', customSampleName.value);
       window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
     }
 
@@ -676,6 +688,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       if (params.has('twoTheta')) inpTwoTheta.value = params.get('twoTheta');
       if (params.has('fwhm')) inpFwhmObs.value = params.get('fwhm');
       if (params.has('inst')) inpFwhmInst.value = params.get('inst');
+      if (params.has('sample')) {
+        customSampleName.value = params.get('sample');
+        activePresetTag.textContent = params.get('sample');
+      }
       if (params.has('lambda')) {
         inpLambda.value = params.get('lambda');
         selectSource.value = 'custom';
@@ -696,6 +712,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           btn.style.display = 'none';
         }
       });
+    });
+
+    customSampleName.addEventListener('input', function() {
+      activePresetTag.textContent = customSampleName.value.trim() || 'Custom Sample';
+      runScherrerEngine();
     });
 
     selectSource.addEventListener('change', function() {
@@ -883,6 +904,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         checkEnableInst.checked = true;
         inpFwhmInst.disabled = false;
         activePresetTag.textContent = t.dataset.compound || 'Benchmark Material';
+        customSampleName.value = t.dataset.compound || '';
         runScherrerEngine();
       });
     });
@@ -945,7 +967,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     [inpTwoTheta, inpFwhmObs, inpFwhmInst, inpLambda, inpK].forEach(function(input) {
       input.addEventListener('input', function() {
-        activePresetTag.textContent = 'Custom Sample';
+        if (!customSampleName.value) {
+          activePresetTag.textContent = 'Custom Sample';
+        }
         runScherrerEngine();
       });
     });
