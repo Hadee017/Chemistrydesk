@@ -4,9 +4,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 <BaseLayout 
   title="PXRD Scherrer Crystallite Size & Strain Calculator | ChemistryDesk"
-  description="Research-grade powder X-ray diffraction (PXRD) Scherrer calculator. Features live dynamic peak profiles, instrumental broadening subtraction, 16 benchmark materials, printable sample vial labels, and LaTeX thesis generator."
+  description="Research-grade powder X-ray diffraction (PXRD) Scherrer equation calculator. Features live dynamic peak profiles, instrumental line broadening deconvolution, 16 benchmark materials, printable sample vial labels, and LaTeX thesis export."
 >
-  <!-- Schema Markup: WebApplication + HowTo + FAQPage for High E-E-A-T AdSense Compliance -->
+  <!-- Schema: WebApplication + HowTo + FAQPage for High-E-E-A-T AdSense Compliance -->
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@graph": [
@@ -34,7 +34,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           {
             "@type": "HowToStep",
             "name": "Extract Observed Peak FWHM",
-            "text": "Measure the full width at half-maximum (FWHM) in degrees using pseudo-Voigt or profile fitting software."
+            "text": "Measure the full width at half-maximum (FWHM) in degrees using profile fitting software."
           },
           {
             "@type": "HowToStep",
@@ -58,10 +58,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         "mainEntity": [
           {
             "@type": "Question",
-            "name": "What is the physical difference between crystallite size and particle size?",
+            "name": "What is the physical difference between crystallite size, grain size, and particle size?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Crystallite size represents the coherence length of uninterrupted, defect-free single crystalline domains. A particle typically consists of an agglomerate of multiple crystalline sub-domains or grains separated by grain boundaries."
+              "text": "Crystallite size represents the coherence length of uninterrupted, defect-free single crystalline domains. A grain may contain multiple crystallites, and a particle (observed in SEM or dynamic light scattering) is an agglomeration of multiple crystalline grains."
             }
           },
           {
@@ -69,20 +69,20 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             "name": "Why is the Scherrer equation limited to domains between 1 nm and 100 nm?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "For crystallites larger than 100 nm, structural peak broadening becomes negligible relative to the diffractometer instrumental broadening. When observed FWHM approaches instrumental width, subtraction causes extreme propagation of error."
+              "text": "For crystallites larger than 100 nm, physical line broadening becomes negligible compared to the diffractometer internal instrumental broadening. When beta_obs approaches beta_inst, subtraction causes extreme mathematical errors."
             }
           },
           {
             "@type": "Question",
-            "name": "Why must FWHM be converted to radians?",
+            "name": "Why must FWHM be converted from degrees to radians?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "The Scherrer equation is derived from Fourier wavepacket transformations where angular broadening beta is a dimensionless natural ratio requiring pure radians. Entering degrees will introduce a 57.3x error."
+              "text": "The Scherrer equation derives from Fourier wave mechanics where angular broadening beta is a natural dimensionless ratio requiring pure radians. Entering raw degrees will underestimate crystallite size by a factor of 57.3 (180 / pi)."
             }
           },
           {
             "@type": "Question",
-            "name": "How does lattice microstrain distort Scherrer calculations?",
+            "name": "How does lattice microstrain distort Scherrer crystallite results?",
             "acceptedAnswer": {
               "@type": "Answer",
               "text": "Lattice microstrain broadens peaks proportional to tan(theta), whereas crystallite size broadens peaks inversely proportional to cos(theta). Applying Scherrer alone on strained materials artificially underestimates crystallite size; a Williamson-Hall plot must be used to decouple size and strain."
@@ -101,7 +101,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             "name": "Can the Scherrer equation be applied to amorphous materials?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "No. The Scherrer formula requires periodic Bragg diffraction from ordered atomic planes. Amorphous materials yield diffuse scattering halos which cannot be quantified using the Scherrer formula."
+              "text": "No. The Scherrer formula requires periodic Bragg diffraction from ordered atomic lattice stacks. Amorphous materials yield diffuse scattering halos from short-range radial distributions, which cannot be quantified using the Scherrer formula."
             }
           }
         ]
@@ -109,46 +109,48 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     ]
   })} />
 
-  <main style="max-width: 1120px; margin: 1.5rem auto 3.5rem auto; padding: 0 1.5rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1e293b;">
+  <main style="max-width: 1140px; margin: 1.5rem auto 4rem auto; padding: 0 1.5rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #0f172a;">
     
     <!-- Navigation Breadcrumbs -->
-    <nav style="font-size: 0.8rem; color: #64748b; margin-bottom: 1.25rem;">
-      <a href="/" style="color: #0284c7; text-decoration: none;">Home</a> &rsaquo; 
-      <span style="color: #94a3b8;"> Materials Characterization</span> &rsaquo; 
-      <span style="color: #0f172a; font-weight: 600;">PXRD Scherrer Studio</span>
+    <nav style="font-size: 0.85rem; color: #475569; margin-bottom: 1.25rem;">
+      <a href="/" style="color: #0284c7; text-decoration: none; font-weight: 600;">Home</a> &rsaquo; 
+      <span style="color: #64748b;"> Materials Characterization</span> &rsaquo; 
+      <span style="color: #0f172a; font-weight: 700;">PXRD Scherrer Studio</span>
     </nav>
 
     <!-- Header Section -->
-    <div style="border-bottom: 1px solid #e2e8f0; padding-bottom: 1.5rem; margin-bottom: 1.75rem; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
-      <div style="display: flex; align-items: center; gap: 0.85rem;">
-        <span style="font-size: 2.75rem;">📐</span>
-        <div>
-          <h1 style="font-size: 2.15rem; font-weight: 800; color: #0f172a; letter-spacing: -0.025em; margin: 0;">
+    <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 16px; padding: 2rem; margin-bottom: 2rem; color: #ffffff; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.15);">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.5rem;">
+        <div style="max-width: 760px;">
+          <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); padding: 0.3rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem;">
+            <span>Materials Crystallography Engine</span>
+          </div>
+          <h1 style="font-size: 2.35rem; font-weight: 800; color: #ffffff; letter-spacing: -0.025em; margin: 0; line-height: 1.2;">
             PXRD Scherrer Crystallite Size &amp; Strain Studio
           </h1>
-          <p style="color: #64748b; font-size: 0.95rem; margin-top: 0.35rem; margin-bottom: 0;">
-            High-precision coherent domain sizing, instrumental deconvolution, dynamic peak simulation, and printable sample vial labeling.
+          <p style="color: #cbd5e1; font-size: 1rem; margin-top: 0.65rem; margin-bottom: 0; line-height: 1.6;">
+            High-precision coherent domain sizing, instrumental broadening deconvolution, dynamic peak profile simulation, and printable sample vial labeling.
           </p>
         </div>
+        <button id="shareSetupBtn" style="background: #0284c7; border: none; color: white; padding: 0.65rem 1.25rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+          <span>Share Setup URL</span>
+        </button>
       </div>
-      <button id="shareSetupBtn" style="background: #e0f2fe; border: 1px solid #bae6fd; color: #0284c7; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 0.4rem;">
-        <span>🔗</span> Share Setup URL
-      </button>
     </div>
 
-    <!-- PRESET SELECTION SUITE -->
-    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.25rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem; flex-wrap: wrap; gap: 0.5rem;">
-        <div style="font-weight: 800; font-size: 0.85rem; color: #334155; text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 0.5rem;">
-          <span>🧪 Benchmark Material Library:</span>
-          <span style="font-size: 0.75rem; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 9999px; font-weight: 700;">16 Benchmarks</span>
+    <!-- PRESET SELECTION SUITE (16 Benchmarks Across 5 Classes) -->
+    <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 12px; padding: 1.5rem; margin-bottom: 2.25rem; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.75rem;">
+        <div style="font-weight: 800; font-size: 0.9rem; color: #0f172a; text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 0.5rem;">
+          <span>Benchmark Materials:</span>
+          <span style="font-size: 0.75rem; background: #e0f2fe; color: #0369a1; padding: 3px 10px; border-radius: 9999px; font-weight: 800;">16 Real Samples</span>
         </div>
         <div>
-          <select id="presetCategoryFilter" style="font-size: 0.8rem; padding: 0.35rem 0.65rem; border: 1px solid #cbd5e1; border-radius: 6px; background: #f8fafc; font-weight: 600; color: #334155;">
+          <select id="presetCategoryFilter" style="font-size: 0.85rem; padding: 0.45rem 0.85rem; border: 1px solid #94a3b8; border-radius: 8px; background: #f8fafc; font-weight: 700; color: #1e293b; cursor: pointer;">
             <option value="all">Show All Material Classes</option>
             <option value="semiconductor">Semiconductors &amp; Quantum Dots</option>
             <option value="oxide">Oxides &amp; Battery Materials</option>
-            <option value="fcc">FCC Precious Metals</option>
+            <option value="fcc">FCC Precious Metal Catalysts</option>
             <option value="mof">MOF Architectures</option>
             <option value="2d">2D Materials &amp; Phosphates</option>
           </select>
@@ -156,14 +158,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
 
       <!-- Preset Pills Grid -->
-      <div id="presetGrid" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+      <div id="presetGrid" style="display: flex; flex-wrap: wrap; gap: 0.6rem;">
         <button class="preset-btn" data-category="semiconductor" data-compound="ZnO Wurtzite (101)" data-2theta="36.25" data-fwhm="0.280" data-inst="0.080" data-lambda="1.54056" data-k="0.94">ZnO (101) Nanorods</button>
         <button class="preset-btn" data-category="semiconductor" data-compound="Anatase TiO2 (101)" data-2theta="25.28" data-fwhm="0.420" data-inst="0.080" data-lambda="1.54056" data-k="0.89">Anatase TiO2 (101)</button>
         <button class="preset-btn" data-category="semiconductor" data-compound="Rutile TiO2 (110)" data-2theta="27.44" data-fwhm="0.310" data-inst="0.080" data-lambda="1.54056" data-k="0.94">Rutile TiO2 (110)</button>
         <button class="preset-btn" data-category="semiconductor" data-compound="CdSe Quantum Dots (111)" data-2theta="25.35" data-fwhm="2.150" data-inst="0.080" data-lambda="1.54056" data-k="0.94">CdSe QDs (111) [3.8 nm]</button>
         
         <button class="preset-btn" data-category="oxide" data-compound="Tenorite CuO (-111)" data-2theta="35.54" data-fwhm="0.380" data-inst="0.080" data-lambda="1.54056" data-k="0.94">CuO (-111) Monoclinic</button>
-        <button class="preset-btn" data-category="oxide" data-compound="Hematite alpha-Fe2O3 (104)" data-2theta="33.15" data-fwhm="0.260" data-inst="0.080" data-lambda="1.54056" data-k="0.90">a-Fe2O3 (104) Hematite</button>
+        <button class="preset-btn" data-category="oxide" data-compound="Hematite alpha-Fe2O3 (104)" data-2theta="33.15" data-fwhm="0.260" data-inst="0.080" data-lambda="1.54056" data-k="0.90">alpha-Fe2O3 (104) Hematite</button>
         <button class="preset-btn" data-category="oxide" data-compound="Magnetite Fe3O4 (311)" data-2theta="35.42" data-fwhm="0.450" data-inst="0.080" data-lambda="1.54056" data-k="0.94">Fe3O4 (311) Ferrofluid</button>
         <button class="preset-btn" data-category="oxide" data-compound="Spinel LiMn2O4 (400)" data-2theta="44.30" data-fwhm="0.340" data-inst="0.080" data-lambda="1.54056" data-k="0.94">LiMn2O4 Cathode (400)</button>
 
@@ -175,43 +177,43 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <button class="preset-btn" data-category="mof" data-compound="HKUST-1 Cu3(BTC)2 (220)" data-2theta="11.58" data-fwhm="0.220" data-inst="0.060" data-lambda="1.54056" data-k="0.90">HKUST-1 MOF (220)</button>
         <button class="preset-btn" data-category="mof" data-compound="ZIF-8 Zeolitic Framework (011)" data-2theta="7.34" data-fwhm="0.180" data-inst="0.060" data-lambda="1.54056" data-k="0.90">ZIF-8 MOF (011)</button>
         <button class="preset-btn" data-category="mof" data-compound="UiO-66 Zr-MOF (111)" data-2theta="7.36" data-fwhm="0.190" data-inst="0.060" data-lambda="1.54056" data-k="0.90">UiO-66 Zr-MOF (111)</button>
-        <button class="preset-btn" data-category="2d" data-compound="alpha-Zirconium Phosphate (002)" data-2theta="11.64" data-fwhm="0.320" data-inst="0.060" data-lambda="1.54056" data-k="0.89">a-ZrP Nanosheets (002)</button>
+        <button class="preset-btn" data-category="2d" data-compound="alpha-Zirconium Phosphate (002)" data-2theta="11.64" data-fwhm="0.320" data-inst="0.060" data-lambda="1.54056" data-k="0.89">alpha-ZrP Nanosheets (002)</button>
         <button class="preset-btn" data-category="2d" data-compound="Graphitic Carbon Nitride (002)" data-2theta="27.40" data-fwhm="1.120" data-inst="0.080" data-lambda="1.54056" data-k="0.89">g-C3N4 Nanosheets (002)</button>
       </div>
     </div>
 
     <!-- MAIN COMPUTATION WORKBENCH -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 2rem; margin-bottom: 2.5rem;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
       
-      <!-- Input Configuration Panel -->
-      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
-          <h2 style="font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; margin: 0;">
-            Diffraction Input Parameters
+      <!-- LEFT COLUMN: Parameter Controls -->
+      <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 14px; padding: 1.75rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 0.75rem;">
+          <h2 style="font-size: 0.95rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #0f172a; margin: 0;">
+            1. Diffraction Parameters
           </h2>
-          <span id="activePresetTag" style="font-size: 0.75rem; font-weight: 700; color: #0284c7; background: #f0f9ff; padding: 2px 8px; border-radius: 4px; border: 1px solid #bae6fd;">Custom Sample</span>
+          <span id="activePresetTag" style="font-size: 0.75rem; font-weight: 800; color: #0284c7; background: #f0f9ff; padding: 3px 10px; border-radius: 6px; border: 1px solid #bae6fd;">Custom Sample</span>
         </div>
 
         <!-- Peak Position (2-theta) -->
-        <div style="margin-bottom: 1.25rem;">
-          <label style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
+        <div style="margin-bottom: 1.5rem;">
+          <label style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; color: #1e293b; margin-bottom: 0.4rem;">
             <span>PEAK POSITION (2&theta;)</span>
-            <span style="color: #64748b; font-weight: 500;">Bragg Angle: &theta; = <span id="thetaVal">18.13</span>&deg;</span>
+            <span style="color: #0284c7; font-weight: 700;">Bragg Angle: &theta; = <span id="thetaVal">18.13</span>&deg;</span>
           </label>
           <div style="display: flex;">
-            <input type="text" inputmode="decimal" id="twoTheta" value="36.25" style="flex: 1; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-right: none; border-radius: 6px 0 0 6px; font-size: 0.95rem; font-weight: 600; outline: none;" />
-            <span style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 0 0.75rem; border-radius: 0 6px 6px 0; font-size: 0.85rem; font-weight: 600; color: #475569; display: flex; align-items: center;">degrees (&deg;)</span>
+            <input type="text" inputmode="decimal" id="twoTheta" value="36.25" style="flex: 1; padding: 0.75rem 1rem; border: 1.5px solid #cbd5e1; border-right: none; border-radius: 8px 0 0 8px; font-size: 1rem; font-weight: 700; color: #0f172a; outline: none;" />
+            <span style="background: #f1f5f9; border: 1.5px solid #cbd5e1; padding: 0 1rem; border-radius: 0 8px 8px 0; font-size: 0.85rem; font-weight: 700; color: #475569; display: flex; align-items: center;">degrees (&deg;)</span>
           </div>
         </div>
 
         <!-- Observed FWHM (beta_obs) -->
-        <div style="margin-bottom: 1.25rem;">
-          <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
+        <div style="margin-bottom: 1.5rem;">
+          <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #1e293b; margin-bottom: 0.4rem;">
             OBSERVED FWHM (&beta;<sub>obs</sub>)
           </label>
           <div style="display: flex;">
-            <input type="text" inputmode="decimal" id="fwhmObs" value="0.280" style="flex: 1; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-right: none; border-radius: 6px 0 0 6px; font-size: 0.95rem; font-weight: 600; outline: none;" />
-            <select id="fwhmUnit" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 0 0.75rem; border-radius: 0 6px 6px 0; font-size: 0.85rem; font-weight: 600; color: #475569;">
+            <input type="text" inputmode="decimal" id="fwhmObs" value="0.280" style="flex: 1; padding: 0.75rem 1rem; border: 1.5px solid #cbd5e1; border-right: none; border-radius: 8px 0 0 8px; font-size: 1rem; font-weight: 700; color: #0f172a; outline: none;" />
+            <select id="fwhmUnit" style="background: #f1f5f9; border: 1.5px solid #cbd5e1; padding: 0 0.85rem; border-radius: 0 8px 8px 0; font-size: 0.85rem; font-weight: 700; color: #334155; cursor: pointer;">
               <option value="deg">degrees 2&theta;</option>
               <option value="rad">radians</option>
             </select>
@@ -219,159 +221,159 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
 
         <!-- Instrumental Broadening (beta_inst) -->
-        <div style="margin-bottom: 1.25rem;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
-            <label style="font-size: 0.8rem; font-weight: 700; color: #334155;">
+        <div style="margin-bottom: 1.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+            <label style="font-size: 0.85rem; font-weight: 700; color: #1e293b;">
               INSTRUMENTAL BROADENING (&beta;<sub>inst</sub>)
             </label>
-            <label style="font-size: 0.75rem; color: #64748b; cursor: pointer; display: flex; align-items: center; gap: 4px;">
-              <input type="checkbox" id="enableInst" checked /> Enable Correction
+            <label style="font-size: 0.8rem; color: #0284c7; cursor: pointer; display: flex; align-items: center; gap: 6px; font-weight: 600;">
+              <input type="checkbox" id="enableInst" checked style="accent-color: #0284c7;" /> Enable Correction
             </label>
           </div>
           <div style="display: flex;">
-            <input type="text" inputmode="decimal" id="fwhmInst" value="0.080" style="flex: 1; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-right: none; border-radius: 6px 0 0 6px; font-size: 0.95rem; font-weight: 600; outline: none;" />
-            <span style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 0 0.75rem; border-radius: 0 6px 6px 0; font-size: 0.85rem; font-weight: 600; color: #475569; display: flex; align-items: center;">degrees (&deg;)</span>
+            <input type="text" inputmode="decimal" id="fwhmInst" value="0.080" style="flex: 1; padding: 0.75rem 1rem; border: 1.5px solid #cbd5e1; border-right: none; border-radius: 8px 0 0 8px; font-size: 1rem; font-weight: 700; color: #0f172a; outline: none;" />
+            <span style="background: #f1f5f9; border: 1.5px solid #cbd5e1; padding: 0 1rem; border-radius: 0 8px 8px 0; font-size: 0.85rem; font-weight: 700; color: #475569; display: flex; align-items: center;">degrees (&deg;)</span>
           </div>
-          <span style="display: block; font-size: 0.75rem; color: #64748b; margin-top: 0.25rem;">Typical calibration standard: 0.05&deg; - 0.10&deg; (LaB6 / NIST SRM 660c).</span>
+          <span style="display: block; font-size: 0.75rem; color: #64748b; margin-top: 0.35rem;">Standard calibration: 0.05&deg; - 0.10&deg; (LaB6 / NIST SRM 660c).</span>
         </div>
 
         <!-- Deconvolution Model -->
-        <div style="margin-bottom: 1.25rem;">
-          <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
+        <div style="margin-bottom: 1.5rem;">
+          <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #1e293b; margin-bottom: 0.4rem;">
             BROADENING DECONVOLUTION PROFILE
           </label>
-          <select id="profileModel" style="width: 100%; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem; font-weight: 600; background: white; color: #334155;">
+          <select id="profileModel" style="width: 100%; padding: 0.75rem 1rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; font-weight: 700; background: white; color: #1e293b; cursor: pointer;">
             <option value="gaussian" selected>Gaussian Deconvolution: &radic;(&beta;<sub>obs</sub>&sup2; - &beta;<sub>inst</sub>&sup2;)</option>
             <option value="lorentzian">Lorentzian / Cauchy Deconvolution: &beta;<sub>obs</sub> - &beta;<sub>inst</sub></option>
           </select>
         </div>
 
-        <!-- X-Ray Radiation Source & Wavelength -->
-        <div style="margin-bottom: 1.25rem;">
-          <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
+        <!-- X-Ray Source & Wavelength -->
+        <div style="margin-bottom: 1.5rem;">
+          <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #1e293b; margin-bottom: 0.4rem;">
             X-RAY TUBE SOURCE &amp; WAVELENGTH (&lambda;)
           </label>
-          <div style="display: grid; grid-template-columns: 1.25fr 1fr; gap: 0.5rem;">
-            <select id="sourceTarget" style="padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem; font-weight: 600; background: white; color: #334155;">
-              <option value="1.54056" selected>Cu-Ka1 (1.54056 A)</option>
-              <option value="1.54184">Cu-Ka (avg: 1.54184 A)</option>
-              <option value="0.71073">Mo-Ka (0.71073 A)</option>
-              <option value="1.78897">Co-Ka (1.78897 A)</option>
+          <div style="display: grid; grid-template-columns: 1.35fr 1fr; gap: 0.5rem;">
+            <select id="sourceTarget" style="padding: 0.75rem 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; font-weight: 700; background: white; color: #1e293b; cursor: pointer;">
+              <option value="1.54056" selected>Cu-Ka1 (1.54056 &#197;)</option>
+              <option value="1.54184">Cu-Ka (avg: 1.54184 &#197;)</option>
+              <option value="0.71073">Mo-Ka (0.71073 &#197;)</option>
+              <option value="1.78897">Co-Ka (1.78897 &#197;)</option>
               <option value="custom">Custom Wavelength</option>
             </select>
-            <input type="text" inputmode="decimal" id="lambdaInput" value="1.54056" style="width: 100%; padding: 0.65rem 0.5rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; font-weight: 600;" />
+            <input type="text" inputmode="decimal" id="lambdaInput" value="1.54056" style="width: 100%; padding: 0.75rem 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; font-weight: 700; color: #0f172a;" />
           </div>
         </div>
 
         <!-- Shape Factor (K) -->
         <div style="margin-bottom: 0.5rem;">
-          <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
+          <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #1e293b; margin-bottom: 0.4rem;">
             CRYSTALLITE SHAPE FACTOR (K)
           </label>
-          <div style="display: grid; grid-template-columns: 1.25fr 1fr; gap: 0.5rem;">
-            <select id="shapeFactorSelect" style="padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem; font-weight: 600; background: white; color: #334155;">
+          <div style="display: grid; grid-template-columns: 1.35fr 1fr; gap: 0.5rem;">
+            <select id="shapeFactorSelect" style="padding: 0.75rem 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; font-weight: 700; background: white; color: #1e293b; cursor: pointer;">
               <option value="0.94" selected>Spherical (K = 0.94)</option>
               <option value="0.89">Spherical avg (K = 0.89)</option>
               <option value="1.00">Cubic crystallites (K = 1.00)</option>
               <option value="custom">Custom Shape</option>
             </select>
-            <input type="text" inputmode="decimal" id="kInput" value="0.94" style="width: 100%; padding: 0.65rem 0.5rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; font-weight: 600;" />
+            <input type="text" inputmode="decimal" id="kInput" value="0.94" style="width: 100%; padding: 0.75rem 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; font-weight: 700; color: #0f172a;" />
           </div>
         </div>
 
-        <div id="scherrerWarn" style="display: none; background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 0.75rem; border-radius: 6px; font-size: 0.8rem; margin-top: 1rem;"></div>
+        <div id="scherrerWarn" style="display: none; background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 0.85rem; border-radius: 8px; font-size: 0.85rem; margin-top: 1rem; font-weight: 600;"></div>
       </div>
 
-      <!-- Real-Time Output & Physical Domain Readout -->
-      <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+      <!-- RIGHT COLUMN: Output HUD & Academic Visuals -->
+      <div style="display: flex; flex-direction: column; gap: 1.5rem;">
         
         <!-- Primary Output Display Card -->
-        <div style="background: #0f172a; border-radius: 12px; padding: 1.75rem; color: #ffffff; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
-          <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #38bdf8;">
+        <div style="background: #0f172a; border-radius: 14px; padding: 2rem; color: #ffffff; box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.3); border: 1px solid #334155;">
+          <span style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #38bdf8;">
             Mean Crystallite Domain Size (D)
           </span>
-          <div id="primarySizeNm" style="font-size: 3rem; font-weight: 800; color: #38bdf8; margin: 0.25rem 0 0.5rem 0; line-height: 1;">--</div>
+          <div id="primarySizeNm" style="font-size: 3.25rem; font-weight: 900; color: #38bdf8; margin: 0.4rem 0 0.75rem 0; line-height: 1;">--</div>
 
-          <div style="border-top: 1px solid #334155; padding-top: 1rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.85rem;">
+          <div style="border-top: 1px solid #334155; padding-top: 1.25rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; font-size: 0.9rem;">
             <div>
-              <span style="color: #94a3b8; display: block; font-size: 0.75rem; text-transform: uppercase;">Domain in Angstroms</span>
-              <strong id="displayAngstrom" style="color: #34d399; font-size: 1.25rem;">--</strong>
+              <span style="color: #94a3b8; display: block; font-size: 0.75rem; text-transform: uppercase; font-weight: 700;">Domain in &Aring;ngstr&ouml;ms</span>
+              <strong id="displayAngstrom" style="color: #34d399; font-size: 1.4rem;">--</strong>
             </div>
             <div>
-              <span style="color: #94a3b8; display: block; font-size: 0.75rem; text-transform: uppercase;">Corrected &beta; (rad)</span>
-              <strong id="displayBetaRad" style="color: #e2e8f0; font-size: 1.15rem;">--</strong>
+              <span style="color: #94a3b8; display: block; font-size: 0.75rem; text-transform: uppercase; font-weight: 700;">Corrected &beta; (rad)</span>
+              <strong id="displayBetaRad" style="color: #f8fafc; font-size: 1.25rem;">--</strong>
             </div>
           </div>
         </div>
 
         <!-- Crystallographic Domain Properties -->
-        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.25rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1.25rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
           <div>
-            <span style="color: #64748b; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; display: block;">Bragg d-Spacing (d)</span>
-            <strong id="displayDSpacing" style="color: #0f172a; font-size: 1.2rem;">--</strong>
-            <span style="display: block; font-size: 0.7rem; color: #94a3b8;">d = &lambda; / [2&middot;sin(&theta;)]</span>
+            <span style="color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; display: block;">Bragg d-Spacing (d)</span>
+            <strong id="displayDSpacing" style="color: #0f172a; font-size: 1.35rem; display: block; margin: 0.2rem 0;">--</strong>
+            <span style="display: block; font-size: 0.75rem; color: #64748b; font-family: monospace;">d = &lambda; / [2&middot;sin(&theta;)]</span>
           </div>
           <div>
-            <span style="color: #64748b; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; display: block;">Dislocation Density (&delta;)</span>
-            <strong id="displayDislocation" style="color: #0f172a; font-size: 1.2rem;">--</strong>
-            <span style="display: block; font-size: 0.7rem; color: #94a3b8;">&delta; = 1 / D&sup2; (lines/m&sup2;)</span>
+            <span style="color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; display: block;">Dislocation Density (&delta;)</span>
+            <strong id="displayDislocation" style="color: #0f172a; font-size: 1.35rem; display: block; margin: 0.2rem 0;">--</strong>
+            <span style="display: block; font-size: 0.75rem; color: #64748b; font-family: monospace;">&delta; = 1 / D&sup2; (lines/m&sup2;)</span>
           </div>
         </div>
 
         <!-- DYNAMIC SVG DIFFRACTION PEAK SIMULATOR -->
-        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.25rem;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-            <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #475569;">
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.65rem;">
+            <span style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; color: #1e293b;">
               Diffraction Peak Profile Simulator (Gaussian Fit)
             </span>
-            <span style="font-size: 0.75rem; font-family: monospace; color: #0284c7;" id="fwhmPeakTag">FWHM: 0.268&deg;</span>
+            <span style="font-size: 0.8rem; font-family: monospace; font-weight: 700; color: #0284c7;" id="fwhmPeakTag">FWHM: 0.268&deg;</span>
           </div>
           
-          <div style="width: 100%; height: 130px; background: #0f172a; border-radius: 8px; position: relative; overflow: hidden;">
-            <svg id="peakSvg" viewBox="0 0 400 130" style="width: 100%; height: 100%;">
-              <line x1="20" y1="115" x2="380" y2="115" stroke="#334155" stroke-width="1.5" />
-              <path id="peakCurve" d="M 20 115 Q 200 10 380 115" fill="rgba(56, 189, 248, 0.15)" stroke="#38bdf8" stroke-width="2.5" />
-              <line id="fwhmIndicator" x1="160" y1="62" x2="240" y2="62" stroke="#f43f5e" stroke-width="2" stroke-dasharray="3,3" />
-              <text x="200" y="58" id="fwhmText" font-size="10" fill="#f43f5e" text-anchor="middle" font-family="monospace">FWHM (&beta;)</text>
-              <circle cx="200" cy="15" r="3.5" fill="#38bdf8" />
+          <div style="width: 100%; height: 140px; background: #0f172a; border-radius: 10px; position: relative; overflow: hidden; border: 1px solid #1e293b;">
+            <svg id="peakSvg" viewBox="0 0 400 140" style="width: 100%; height: 100%;">
+              <line x1="20" y1="120" x2="380" y2="120" stroke="#334155" stroke-width="1.5" />
+              <path id="peakCurve" d="M 20 120 Q 200 15 380 120" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" stroke-width="2.5" />
+              <line id="fwhmIndicator" x1="160" y1="67" x2="240" y2="67" stroke="#f43f5e" stroke-width="2" stroke-dasharray="3,3" />
+              <text x="200" y="62" id="fwhmText" font-size="11" fill="#f43f5e" text-anchor="middle" font-family="monospace" font-weight="700">FWHM (&beta;)</text>
+              <circle cx="200" cy="20" r="3.5" fill="#38bdf8" />
             </svg>
           </div>
-          <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: #94a3b8; margin-top: 0.35rem;">
+          <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #64748b; font-weight: 600; margin-top: 0.4rem;">
             <span>2&theta; - &Delta;&theta;</span>
-            <span id="centerThetaLabel">Peak Centroid (36.25&deg;)</span>
+            <span id="centerThetaLabel" style="color: #0f172a; font-weight: 700;">Peak Centroid (36.25&deg;)</span>
             <span>2&theta; + &Delta;&theta;</span>
           </div>
         </div>
 
         <!-- Nanomaterial Domain Scale Visualizer -->
-        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.25rem;">
-          <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 700; color: #64748b; margin-bottom: 0.5rem; text-transform: uppercase;">
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 800; color: #334155; margin-bottom: 0.5rem; text-transform: uppercase;">
             <span>Nanoscale Regime (0 - 100 nm)</span>
-            <span id="regimeBadge" style="color: #0284c7;">--</span>
+            <span id="regimeBadge" style="color: #0284c7; font-weight: 800;">--</span>
           </div>
-          <div style="height: 12px; width: 100%; background: #e2e8f0; border-radius: 9999px; overflow: hidden; position: relative;">
+          <div style="height: 14px; width: 100%; background: #e2e8f0; border-radius: 9999px; overflow: hidden; position: relative;">
             <div id="scaleProgress" style="width: 0%; height: 100%; background: linear-gradient(90deg, #0284c7, #10b981); transition: width 0.3s ease;"></div>
           </div>
-          <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: #94a3b8; margin-top: 0.35rem;">
-            <span>1 nm (Quantum dots)</span>
+          <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #64748b; font-weight: 600; margin-top: 0.4rem;">
+            <span>1 nm (Quantum Dots)</span>
             <span>50 nm</span>
             <span>100 nm (Scherrer Limit)</span>
           </div>
         </div>
 
         <!-- Citation, LaTeX, and CSV Export Hub -->
-        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
-            <h3 style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #475569; margin: 0;">Academic Reporting Hub</h3>
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem; flex-wrap: wrap; gap: 0.5rem;">
+            <h3 style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #0f172a; margin: 0;">Academic Reporting Hub</h3>
             <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
-              <button id="copyLatexBtn" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #334155;">Copy LaTeX</button>
-              <button id="copyBibtexBtn" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #334155;">Copy BibTeX</button>
-              <button id="printLabelBtn" style="background: #059669; border: none; padding: 0.3rem 0.65rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: white;">🏷️ Print Vial Label</button>
-              <button id="exportCsvBtn" style="background: #0284c7; border: none; padding: 0.3rem 0.65rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: white;">📥 Export CSV</button>
+              <button id="copyLatexBtn" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.4rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Copy LaTeX</button>
+              <button id="copyBibtexBtn" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.4rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Copy BibTeX</button>
+              <button id="printLabelBtn" style="background: #059669; border: none; padding: 0.4rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: white;">Print Vial Label</button>
+              <button id="exportCsvBtn" style="background: #0284c7; border: none; padding: 0.4rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: white;">Export CSV</button>
             </div>
           </div>
           
-          <div id="summaryReport" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.75rem; font-family: monospace; font-size: 0.8rem; line-height: 1.6; color: #334155;">
+          <div id="summaryReport" style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 1rem; font-family: monospace; font-size: 0.85rem; line-height: 1.6; color: #1e293b;">
             Fill in valid parameters to generate calculation steps.
           </div>
         </div>
@@ -381,53 +383,54 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </div>
 
     <!-- PRINTABLE VIAL LABEL -->
-    <div id="printableLabelWrapper" style="display: none; margin-bottom: 3rem;">
-      <div style="border: 2px dashed #0284c7; border-radius: 8px; padding: 1.5rem; background: #ffffff; max-width: 480px; margin: 0 auto; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
-        <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #0f172a; padding-bottom: 0.5rem; margin-bottom: 0.75rem;">
+    <div id="printableLabelWrapper" style="display: none; margin-bottom: 3.5rem;">
+      <div style="border: 2px dashed #0284c7; border-radius: 12px; padding: 1.75rem; background: #ffffff; max-width: 500px; margin: 0 auto; box-shadow: 0 4px 10px rgba(0,0,0,0.06);">
+        <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #0f172a; padding-bottom: 0.65rem; margin-bottom: 1rem;">
           <div>
-            <span style="font-size: 0.7rem; font-weight: 800; color: #64748b; text-transform: uppercase;">CHEMISTRYDESK SPECIMEN SPECIFICATION</span>
-            <h4 id="labelCompoundName" style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;">Sample Specimen</h4>
+            <span style="font-size: 0.75rem; font-weight: 800; color: #64748b; text-transform: uppercase;">CHEMISTRYDESK SPECIMEN SPECIFICATION</span>
+            <h4 id="labelCompoundName" style="margin: 0; font-size: 1.25rem; font-weight: 800; color: #0f172a;">Sample Specimen</h4>
           </div>
-          <span style="font-size: 1.5rem;">🔬</span>
+          <span style="font-size: 2rem;">🔬</span>
         </div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; font-size: 0.8rem; margin-bottom: 0.75rem;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-size: 0.85rem; margin-bottom: 1rem; color: #1e293b;">
           <div><strong>Mean Size (D):</strong> <span id="labelSize">-- nm</span></div>
           <div><strong>Bragg 2&theta;:</strong> <span id="label2Theta">-- deg</span></div>
           <div><strong>Dislocation (&delta;):</strong> <span id="labelDislocation">--</span></div>
           <div><strong>Target:</strong> <span id="labelTarget">Cu-Ka1</span></div>
         </div>
-        <div style="border-top: 1px solid #e2e8f0; padding-top: 0.5rem; font-size: 0.75rem; color: #64748b; display: flex; justify-content: space-between;">
+        <div style="border-top: 1px solid #e2e8f0; padding-top: 0.75rem; font-size: 0.8rem; color: #64748b; display: flex; justify-content: space-between;">
           <span>Date: ____________________</span>
           <span>Analyst: __________________</span>
         </div>
       </div>
-      <div style="text-align: center; margin-top: 0.75rem;">
-        <button id="triggerPrintBtn" style="background: #0f172a; color: white; border: none; padding: 0.4rem 1.25rem; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">🖨️ Send to Printer</button>
+      <div style="text-align: center; margin-top: 1rem;">
+        <button id="triggerPrintBtn" style="background: #0f172a; color: white; border: none; padding: 0.5rem 1.5rem; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.9rem;">Send to Printer</button>
       </div>
     </div>
 
     <!-- SCIENTIFIC REFERENCE ARTICLE -->
-    <article style="border-top: 1px solid #e2e8f0; padding-top: 3.5rem; line-height: 1.8; color: #334155;">
+    <article style="border-top: 2px solid #e2e8f0; padding-top: 3.5rem; line-height: 1.85; color: #1e293b;">
       
-      <h2 style="font-size: 1.75rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem;">
+      <h2 style="font-size: 2rem; font-weight: 800; color: #0f172a; margin-bottom: 1.25rem; letter-spacing: -0.02em;">
         Theoretical Foundation: The Scherrer Equation in Powder XRD
       </h2>
-      <p>
+      <p style="font-size: 1rem; margin-bottom: 1.25rem;">
         In an idealized, infinite three-dimensional crystal lattice, constructive interference between coherently scattered X-ray photons satisfies Bragg's law with mathematical perfection. In such hypothetical systems, scattering at any angle differing infinitesimally from the exact Bragg condition undergoes complete destructive interference due to the infinite sum of identical phase-shifted lattice planes.
       </p>
       
-      <p>
-        In real nanomaterials, thin-film architectures, metal-organic frameworks (MOFs), and catalyst nanoparticles, the finite physical boundary of the crystal domain limits the total number of parallel reflecting planes. As this boundary decreases, cancellation of scattered waves adjacent to the Bragg angle becomes incomplete, yielding finite diffraction line breadth.
+      <p style="font-size: 1rem; margin-bottom: 1.5rem;">
+        In real nanomaterials, thin films, metal-organic frameworks (MOFs), and catalyst nanoparticles, the finite physical boundary of the crystal domain limits the total number of parallel reflecting planes. As this boundary decreases, cancellation of scattered waves adjacent to the Bragg angle becomes incomplete, yielding finite diffraction line breadth.
       </p>
 
-      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.5rem 2rem; margin: 1.75rem 0; text-align: center; box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);">
-        <div style="font-size: 1.5rem; font-weight: 700; color: #0f172a; font-family: 'Times New Roman', Times, serif;">
-          <i>D</i> = <span style="display: inline-block; vertical-align: middle; text-align: center; margin: 0 4px;"><span style="display: block; border-bottom: 1.5px solid #0f172a; padding: 0 4px;"><i>K</i> &middot; &lambda;</span><span style="display: block; padding-top: 2px;">&beta;<sub>sample</sub> &middot; cos(&theta;)</span></span>
+      <!-- Centered Formula Box -->
+      <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 1.75rem 2rem; margin: 2rem 0; text-align: center; box-shadow: inset 0 1px 3px rgba(0,0,0,0.03);">
+        <div style="font-size: 1.65rem; font-weight: 800; color: #0f172a; font-family: 'Times New Roman', Times, serif;">
+          <i>D</i> = <span style="display: inline-block; vertical-align: middle; text-align: center; margin: 0 6px;"><span style="display: block; border-bottom: 2px solid #0f172a; padding: 0 6px;"><i>K</i> &middot; &lambda;</span><span style="display: block; padding-top: 3px;">&beta;<sub>sample</sub> &middot; cos(&theta;)</span></span>
         </div>
       </div>
 
-      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.25rem; margin-bottom: 2rem; font-size: 0.9rem;">
-        <ul style="margin: 0; padding-left: 1.25rem;">
+      <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.5rem; margin-bottom: 2rem; font-size: 0.95rem;">
+        <ul style="margin: 0; padding-left: 1.5rem; line-height: 1.8;">
           <li><strong>D:</strong> Mean volume-weighted crystallite dimension along the crystallographic normal to reflecting lattice planes.</li>
           <li><strong>K:</strong> Dimensionless shape factor reflecting domain morphology (0.94 for spheres; 1.00 for regular cubes).</li>
           <li><strong>&lambda;:</strong> Characteristic wavelength of the incident primary monochromatic X-ray beam.</li>
@@ -436,68 +439,68 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </ul>
       </div>
 
-      <h3 style="font-size: 1.35rem; font-weight: 700; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
+      <h3 style="font-size: 1.45rem; font-weight: 800; color: #0f172a; margin-top: 2.5rem; margin-bottom: 0.85rem;">
         Mathematical Derivation from Finite Lattice Sums
       </h3>
-      <p>
+      <p style="font-size: 1rem;">
         Consider a crystal slab consisting of <em>m</em> parallel lattice planes separated by interplanar spacing <em>d</em>. The total thickness normal to the planes is <em>D = m &middot; d</em>. Let the exact Bragg condition be satisfied at &theta;<sub>B</sub> where path difference 2<em>d</em> &middot; sin(&theta;<sub>B</sub>) = &lambda;.
       </p>
-      <p>
+      <p style="font-size: 1rem;">
         As the incident angle shifts away from &theta;<sub>B</sub> to an angle &theta;<sub>1</sub> = &theta;<sub>B</sub> + &Delta;&theta;, the phase difference between scattering from the top surface plane and the bottom plane of the stack reaches 2&pi; radians, causing the total scattered intensity to plunge to zero:
       </p>
-      <div style="background: #f8fafc; border-left: 4px solid #0284c7; padding: 0.75rem 1.25rem; margin: 1rem 0; font-family: monospace; font-size: 0.85rem;">
+      <div style="background: #f1f5f9; border-left: 4px solid #0284c7; padding: 0.85rem 1.25rem; margin: 1.25rem 0; font-family: monospace; font-size: 0.9rem; color: #0f172a; font-weight: 600;">
         2m &middot; d &middot; sin(&theta;₁) = (m + 1) &lambda;<br />
         2m &middot; d &middot; sin(&theta;₂) = (m - 1) &lambda;
       </div>
-      <p>
+      <p style="font-size: 1rem;">
         Subtracting these two boundary conditions yields:
       </p>
-      <div style="background: #f8fafc; border-left: 4px solid #0284c7; padding: 0.75rem 1.25rem; margin: 1rem 0; font-family: monospace; font-size: 0.85rem;">
+      <div style="background: #f1f5f9; border-left: 4px solid #0284c7; padding: 0.85rem 1.25rem; margin: 1.25rem 0; font-family: monospace; font-size: 0.9rem; color: #0f172a; font-weight: 600;">
         2m &middot; d [sin(&theta;₁) - sin(&theta;₂)] = 2&lambda; &rArr; 2D &middot; cos(&theta;<sub>B</sub>) &middot; &Delta;&theta; = &lambda;
       </div>
-      <p>
-        Because the total full width at half-maximum &beta; is approximately equal to half the total peak envelope (&beta; &approx; &Delta;&theta; = &theta;<sub>1</sub> - &theta;<sub>2</sub>), introducing the geometric factor <em>K</em> establishes Paul Scherrer's classic relation: <em>D = (K &middot; &lambda;) / (&beta; &middot; cos(&theta;))</em>.
+      <p style="font-size: 1rem;">
+        Because the full width at half-maximum &beta; is approximately equal to half the total peak envelope (&beta; &approx; &Delta;&theta; = &theta;<sub>1</sub> - &theta;<sub>2</sub>), introducing the geometric factor <em>K</em> establishes Paul Scherrer's classic relation: <em>D = (K &middot; &lambda;) / (&beta; &middot; cos(&theta;))</em>.
       </p>
 
-      <h3 style="font-size: 1.35rem; font-weight: 700; color: #0f172a; margin-top: 2.5rem; margin-bottom: 0.75rem;">
+      <h3 style="font-size: 1.45rem; font-weight: 800; color: #0f172a; margin-top: 2.5rem; margin-bottom: 0.85rem;">
         Crucial Instrumental Broadening Deconvolution (&beta;<sub>inst</sub>)
       </h3>
-      <p>
+      <p style="font-size: 1rem;">
         A pervasive laboratory reporting error is substituting raw experimental full width at half maximum directly into the Scherrer formula. Diffractometers contribute physical instrumental broadening (&beta;<sub>inst</sub>) stemming from finite X-ray tube target focal spot size, Soller slit axial divergence, beam footprint displacement, and detector channel resolution.
       </p>
-      <p>
+      <p style="font-size: 1rem;">
         To isolate true specimen broadening (&beta;<sub>sample</sub>), an unbroadened, macrocrystalline, defect-free reference standard (such as NIST SRM 660c LaB6 or annealed silicon wafer) must be analyzed across identical optic configurations:
       </p>
       
-      <table style="width: 100%; border-collapse: collapse; margin: 1.25rem 0; font-size: 0.85rem; background: white;">
+      <table style="width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; background: white; border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden;">
         <thead>
-          <tr style="background: #f1f5f9; border-bottom: 2px solid #cbd5e1; text-align: left;">
-            <th style="padding: 0.65rem 0.75rem;">Line Profile Model</th>
-            <th style="padding: 0.65rem 0.75rem;">Deconvolution Formula</th>
-            <th style="padding: 0.65rem 0.75rem;">Optimal Experimental Condition</th>
+          <tr style="background: #f1f5f9; border-bottom: 2px solid #cbd5e1; text-align: left; color: #0f172a;">
+            <th style="padding: 0.75rem 1rem;">Line Profile Model</th>
+            <th style="padding: 0.75rem 1rem;">Deconvolution Formula</th>
+            <th style="padding: 0.75rem 1rem;">Optimal Experimental Condition</th>
           </tr>
         </thead>
         <tbody>
           <tr style="border-bottom: 1px solid #e2e8f0;">
-            <td style="padding: 0.65rem 0.75rem; font-weight: 600;">Gaussian</td>
-            <td style="padding: 0.65rem 0.75rem; font-family: monospace;">&beta; = &radic;(&beta;<sub>obs</sub>&sup2; - &beta;<sub>inst</sub>&sup2;)</td>
-            <td style="padding: 0.65rem 0.75rem;">Standard optical slit geometries, strain-dominated lattices, low background noise.</td>
+            <td style="padding: 0.75rem 1rem; font-weight: 700;">Gaussian</td>
+            <td style="padding: 0.75rem 1rem; font-family: monospace; font-weight: 700; color: #0284c7;">&beta; = &radic;(&beta;<sub>obs</sub>&sup2; - &beta;<sub>inst</sub>&sup2;)</td>
+            <td style="padding: 0.75rem 1rem;">Standard optical slit geometries, strain-dominated lattices, low background noise.</td>
           </tr>
           <tr style="border-bottom: 1px solid #e2e8f0;">
-            <td style="padding: 0.65rem 0.75rem; font-weight: 600;">Lorentzian / Cauchy</td>
-            <td style="padding: 0.65rem 0.75rem; font-family: monospace;">&beta; = &beta;<sub>obs</sub> - &beta;<sub>inst</sub></td>
-            <td style="padding: 0.65rem 0.75rem;">Ultra-small crystallites (&lt;10 nm), prominent extended exponential peak skirts.</td>
+            <td style="padding: 0.75rem 1rem; font-weight: 700;">Lorentzian / Cauchy</td>
+            <td style="padding: 0.75rem 1rem; font-family: monospace; font-weight: 700; color: #0284c7;">&beta; = &beta;<sub>obs</sub> - &beta;<sub>inst</sub></td>
+            <td style="padding: 0.75rem 1rem;">Ultra-small crystallites (&lt;10 nm), prominent extended exponential peak skirts.</td>
           </tr>
         </tbody>
       </table>
 
-      <h3 style="font-size: 1.35rem; font-weight: 700; color: #0f172a; margin-top: 2.5rem; margin-bottom: 0.75rem;">
+      <h3 style="font-size: 1.45rem; font-weight: 800; color: #0f172a; margin-top: 2.5rem; margin-bottom: 0.85rem;">
         Worked Laboratory Walkthrough: Zinc Oxide (101) Reflection
       </h3>
-      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.75rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
-        <p style="margin-top: 0; font-weight: 600; color: #0f172a;">Sample: Hydrothermally synthesized ZnO wurtzite nanoparticles recorded on a Cu-Ka diffractometer.</p>
-        <ol style="margin-left: 1.5rem; margin-bottom: 0; line-height: 1.75;">
-          <li><strong>Diffractometer Parameters:</strong> Reflection centroid 2&theta; = 36.25&deg;, recorded raw FWHM = 0.280&deg;. Instrumental resolution at this angular coordinate: &beta;<sub>inst</sub> = 0.080&deg;. Radiation: Cu-Ka1 (&lambda; = 1.54056 A = 0.154056 nm). Shape factor: K = 0.94.</li>
+      <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1.75rem; margin-bottom: 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+        <p style="margin-top: 0; font-weight: 700; color: #0f172a; font-size: 1.05rem;">Sample: Hydrothermally synthesized ZnO wurtzite nanoparticles recorded on a Cu-Ka diffractometer.</p>
+        <ol style="margin-left: 1.5rem; margin-bottom: 0; line-height: 1.8; font-size: 0.95rem;">
+          <li><strong>Diffractometer Parameters:</strong> Reflection centroid 2&theta; = 36.25&deg;, recorded raw FWHM = 0.280&deg;. Instrumental resolution at this angular coordinate: &beta;<sub>inst</sub> = 0.080&deg;. Radiation: Cu-Ka1 (&lambda; = 1.54056 &#197; = 0.154056 nm). Shape factor: K = 0.94.</li>
           <li><strong>Instrumental Deconvolution (Gaussian Model):</strong>
             <br />
             &beta;<sub>deg</sub> = &radic;((0.280&deg;)&sup2; - (0.080&deg;)&sup2;) = &radic;(0.0784 - 0.0064) = &radic;0.0720 = 0.2683&deg;
@@ -512,7 +515,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </li>
           <li><strong>Scherrer Equation Computation:</strong>
             <br />
-            D = (0.94 &times; 0.154056 nm) / (0.0046835 rad &times; 0.95036) = <strong>32.53 nm</strong> (325.3 A)
+            D = (0.94 &times; 0.154056 nm) / (0.0046835 rad &times; 0.95036) = <strong>32.53 nm</strong> (325.3 &#197;)
           </li>
           <li><strong>Dislocation Density (&delta;):</strong>
             <br />
@@ -521,67 +524,69 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </ol>
       </div>
 
-      <h3 style="font-size: 1.35rem; font-weight: 700; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
+      <h3 style="font-size: 1.45rem; font-weight: 800; color: #0f172a; margin-top: 2.5rem; margin-bottom: 0.85rem;">
         Williamson-Hall Analysis: Decoupling Size from Microstrain
       </h3>
-      <p>
+      <p style="font-size: 1rem;">
         In many synthesized materials (such as ball-milled metals, core-shell architectures, or doped metal-organic frameworks), observed peak broadening is a combined convolution of **size broadening** and **lattice microstrain broadening**:
       </p>
-      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.5rem; margin: 1rem 0; text-align: center; font-family: monospace; font-size: 1rem; font-weight: 700;">
-        &beta;<sub>total</sub> &middot; cos(&theta;) = <span style="color: #0284c7;">[K &middot; &lambda; / D]</span> + <span style="color: #10b981;">[4 &middot; &epsilon; &middot; sin(&theta;)]</span>
+      <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 10px; padding: 1.25rem 1.5rem; margin: 1.25rem 0; text-align: center; font-family: monospace; font-size: 1.1rem; font-weight: 800;">
+        &beta;<sub>total</sub> &middot; cos(&theta;) = <span style="color: #0284c7;">[K &middot; &lambda; / D]</span> + <span style="color: #059669;">[4 &middot; &epsilon; &middot; sin(&theta;)]</span>
       </div>
-      <p>
+      <p style="font-size: 1rem;">
         When plotting &beta;cos(&theta;) on the y-axis against 4sin(&theta;) on the x-axis for multiple reflections:
       </p>
-      <ul style="margin-left: 1.5rem;">
+      <ul style="margin-left: 1.5rem; font-size: 0.95rem; line-height: 1.8;">
         <li>The <strong>slope</strong> yields intrinsic microstrain (&epsilon;).</li>
         <li>The <strong>y-intercept</strong> yields true strain-free crystallite size (D).</li>
       </ul>
 
-      <!-- FAQ ACCORDION -->
-      <h3 style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-top: 3rem; margin-bottom: 1.25rem;">
+      <!-- ========================================== -->
+      <!-- FREQUENTLY ASKED QUESTIONS (FAQ ACCORDION) -->
+      <!-- ========================================== -->
+      <h3 style="font-size: 1.65rem; font-weight: 800; color: #0f172a; margin-top: 3.5rem; margin-bottom: 1.25rem;">
         Frequently Asked Questions (PXRD Crystallographic Sizing)
       </h3>
       
-      <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 2rem;">
-        <details style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem;">
-          <summary style="font-weight: 700; color: #0f172a; cursor: pointer;">What is the physical difference between crystallite size, grain size, and particle size?</summary>
-          <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: #475569;">
+      <div style="display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 2rem;">
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What is the physical difference between crystallite size, grain size, and particle size?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
             Crystallite size denotes coherent, defect-free single crystalline sub-domains. A single grain may consist of multiple crystallites separated by small-angle boundaries, whereas a physical particle represents an agglomerate of multiple crystalline grains.
           </p>
         </details>
 
-        <details style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem;">
-          <summary style="font-weight: 700; color: #0f172a; cursor: pointer;">Why does the Scherrer equation become unreliable above 100 nm?</summary>
-          <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: #475569;">
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Why does the Scherrer equation become unreliable above 100 nm?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
             As crystallites exceed 100 nm, physical diffraction peak broadening converges toward the diffractometer's internal instrumental resolution. When peak breadth is dominated by optics rather than crystal dimensions, deconvolution subtraction creates massive relative error.
           </p>
         </details>
 
-        <details style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem;">
-          <summary style="font-weight: 700; color: #0f172a; cursor: pointer;">Why must FWHM be converted from degrees to radians?</summary>
-          <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: #475569;">
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Why must FWHM be converted from degrees to radians?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
             The Scherrer equation is derived from Fourier wave mechanics where angular broadening &beta; is a natural radian measure (arc length / radius). Entering raw degrees 2&theta; will underestimate crystallite size by a factor of 57.3 (&pi; / 180).
           </p>
         </details>
 
-        <details style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem;">
-          <summary style="font-weight: 700; color: #0f172a; cursor: pointer;">How does lattice microstrain distort Scherrer crystallite results?</summary>
-          <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: #475569;">
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How does lattice microstrain distort Scherrer crystallite results?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
             Lattice strain broadens peaks proportional to tan(&theta;). Applying the basic Scherrer formula to strained materials artificially treats strain-induced broadening as size truncation, underestimating crystallite size. Williamson-Hall plotting is recommended.
           </p>
         </details>
 
-        <details style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem;">
-          <summary style="font-weight: 700; color: #0f172a; cursor: pointer;">How should I determine the instrumental broadening &beta;<sub>inst</sub> value?</summary>
-          <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: #475569;">
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How should I determine the instrumental broadening &beta;<sub>inst</sub> value?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
             Acquire a diffraction scan of a certified line standard (such as NIST SRM 660c LaB6 or high-purity strain-free silicon powder) under identical optical conditions. Fit the peak closest to your sample reflection to determine &beta;<sub>inst</sub>.
           </p>
         </details>
 
-        <details style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem;">
-          <summary style="font-weight: 700; color: #0f172a; cursor: pointer;">What shape factor (K) should be selected for MOF and zeolitic crystals?</summary>
-          <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: #475569;">
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What shape factor (K) should be selected for MOF and zeolitic crystals?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
             For cubic or octahedral MOFs (e.g., HKUST-1, UiO-66), K values between 0.89 and 0.94 are standard. If crystals exhibit pronounced anisotropic growth, shape factors along individual reflection planes must be adjusted.
           </p>
         </details>
@@ -593,19 +598,20 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <style>
     .preset-btn {
       background: #f8fafc;
-      border: 1px solid #cbd5e1;
-      padding: 0.35rem 0.65rem;
-      border-radius: 6px;
+      border: 1.5px solid #cbd5e1;
+      padding: 0.4rem 0.75rem;
+      border-radius: 8px;
       cursor: pointer;
-      color: #334155;
-      font-size: 0.78rem;
-      font-weight: 600;
-      transition: all 0.15s ease;
+      color: #1e293b;
+      font-size: 0.8rem;
+      font-weight: 700;
+      transition: all 0.2s ease;
     }
     .preset-btn:hover {
       background: #0284c7;
       color: #ffffff;
       border-color: #0284c7;
+      transform: translateY(-1px);
     }
   </style>
 
@@ -724,7 +730,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     function renderPeakSvg(betaDeg) {
       var center = 200;
-      var baseline = 115;
+      var baseline = 120;
       var visualHalfWidth = Math.min(Math.max(betaDeg * 120, 15), 140);
       
       var d = 'M 20 ' + baseline;
@@ -737,7 +743,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       d += ' L 380 ' + baseline + ' Z';
       peakCurve.setAttribute('d', d);
 
-      var halfMaxY = 65;
+      var halfMaxY = 70;
       var x1 = center - visualHalfWidth;
       var x2 = center + visualHalfWidth;
       fwhmIndicator.setAttribute('x1', x1.toFixed(1));
@@ -837,13 +843,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         regimeBadge.style.color = '#0284c7';
       } else if (dNanometer <= 50) {
         regimeBadge.textContent = 'Nanocrystalline Domain (5 - 50 nm)';
-        regimeBadge.style.color = '#10b981';
+        regimeBadge.style.color = '#059669';
       } else if (dNanometer <= 100) {
         regimeBadge.textContent = 'Upper Nanoscale (50 - 100 nm)';
-        regimeBadge.style.color = '#f59e0b';
+        regimeBadge.style.color = '#d97706';
       } else {
         regimeBadge.textContent = 'Approaching Scherrer Accuracy Limit (>100 nm)';
-        regimeBadge.style.color = '#ef4444';
+        regimeBadge.style.color = '#dc2626';
       }
 
       summaryReport.innerHTML = 
@@ -889,8 +895,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       var sizeNm = primarySizeNm.textContent;
       
       var thetaHalved = (parseFloat(twoTheta) / 2).toFixed(2);
-      var bslash = String.fromCharCode(92);
-      var latexStr = 'D = ' + bslash + 'frac{K ' + bslash + 'cdot ' + bslash + 'lambda}{' + bslash + 'beta ' + bslash + 'cdot ' + bslash + 'cos(' + bslash + 'theta)} = ' + bslash + 'frac{' + k + ' ' + bslash + 'cdot ' + lambda + ' ' + bslash + 'mathrm{\\AA}}{' + beta + ' ' + bslash + 'mathrm{rad} ' + bslash + 'cdot ' + bslash + 'cos(' + thetaHalved + '^' + bslash + 'circ)} = ' + sizeNm;
+      var latexStr = 'D = \\frac{K \\cdot \\lambda}{\\beta \\cdot \\cos(\\theta)} = \\frac{' + k + ' \\cdot ' + lambda + '\\,\\mathrm{\\u00C5}}{' + beta + '\\,\\mathrm{rad} \\cdot \\cos(' + thetaHalved + '^\\circ)} = ' + sizeNm;
       navigator.clipboard.writeText(latexStr);
       alert('Complete LaTeX derivation equation copied to clipboard.');
     });
