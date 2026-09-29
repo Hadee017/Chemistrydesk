@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 
+# Sitemap Index Declaration
 Sitemap: https://chemistrydesk.vercel.app/sitemap-index.xml
