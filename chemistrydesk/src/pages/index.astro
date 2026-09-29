@@ -67,7 +67,68 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
 
     </div>
+<!-- Programmatic Long-Tail Solution Formulation Shortcuts -->
+    <section style="max-width: 1000px; margin: 3rem auto 1.5rem; padding: 1.5rem; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);">
+      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.75rem;">
+        <div>
+          <h2 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+            <span>⚡</span> One-Click Analytical Benchtop Recipes
+          </h2>
+          <p style="font-size: 0.85rem; color: #64748b; margin: 0.25rem 0 0 0;">
+            Direct-to-bench formulations pre-calibrated for molecular weight, crystal hydration, and stock ratios:
+          </p>
+        </div>
+        <span style="font-size: 0.75rem; font-weight: 700; color: #0284c7; background: #e0f2fe; padding: 3px 8px; border-radius: 6px;">Pre-Filled Presets</span>
+      </div>
 
+      <!-- Category A: Common Molar Standards -->
+      <div style="margin-bottom: 1.25rem;">
+        <span style="display: block; font-size: 0.78rem; font-weight: 800; text-transform: uppercase; color: #475569; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
+          Molar Solutions (Hydrate &amp; Assay Compensated)
+        </span>
+        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+          <a href="/molarity?chem=Sodium+Chloride+(NaCl)&c=0.5&v=500&mw=58.44&h=0&p=99.5" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #0f172a; transition: all 0.2s ease;">
+            🧪 0.5 M NaCl (500 mL)
+          </a>
+          <a href="/molarity?chem=Sodium+Hydroxide+(NaOH)&c=1.0&v=1000&mw=40.00&h=0&p=97.0" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #0f172a; transition: all 0.2s ease;">
+            🧪 1.0 M NaOH (1 L)
+          </a>
+          <a href="/molarity?chem=Copper(II)+Sulfate+Pentahydrate&c=0.1&v=250&mw=159.60&h=5&p=98.0" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #0f172a; transition: all 0.2s ease;">
+            🧪 0.1 M CuSO₄·5H₂O (250 mL)
+          </a>
+          <a href="/molarity?chem=Potassium+Chloride+(KCl)&c=3.0&v=250&mw=74.55&h=0&p=99.0" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #0f172a; transition: all 0.2s ease;">
+            🧪 3.0 M KCl Electrode Storage (250 mL)
+          </a>
+          <a href="/molarity?chem=Tris+Base+(C4H11NO3)&c=1.0&v=500&mw=121.14&h=0&p=99.8" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #0f172a; transition: all 0.2s ease;">
+            🧪 1.0 M Tris Base Stock (500 mL)
+          </a>
+          <a href="/molarity?chem=EDTA+Disodium+Dihydrate&c=0.5&v=500&mw=336.21&h=2&p=99.0" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #0f172a; transition: all 0.2s ease;">
+            🧪 0.5 M EDTA (pH 8.0 Stock)
+          </a>
+        </div>
+      </div>
+
+      <!-- Category B: Common Dilution Protocols -->
+      <div>
+        <span style="display: block; font-size: 0.78rem; font-weight: 800; text-transform: uppercase; color: #475569; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
+          Stock Dilution &amp; Serial Workflows
+        </span>
+        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+          <a href="/dilution?c1=10&c2=1&v2=1000" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #166534; transition: all 0.2s ease;">
+            💧 10x Buffer to 1x Working (1 L)
+          </a>
+          <a href="/dilution?c1=50&c2=1&v2=500" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #166534; transition: all 0.2s ease;">
+            💧 50x TAE/TBE Gel Buffer to 1x (500 mL)
+          </a>
+          <a href="/dilution?c1=100&c2=1&v2=100" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #166534; transition: all 0.2s ease;">
+            💧 1:100 Micro-Dilution Aliquot
+          </a>
+          <a href="/scherrer?fwhm=0.35&theta=14.2&k=0.94&lambda=0.15406" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f5f3ff; border: 1px solid #ddd6fe; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #5b21b6; transition: all 0.2s ease;">
+            🔬 Standard Cu-Kα (1.5406 Å) Scherrer Size
+          </a>
+        </div>
+      </div>
+    </section>
     <!-- Educational & AdSense Quality Text Section -->
     <section style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 2rem; line-height: 1.8; color: #334155;">
       <h2 style="color: #0f172a; font-size: 1.35rem; font-weight: 700; margin-top: 0;">Precision Computational Standards</h2>
