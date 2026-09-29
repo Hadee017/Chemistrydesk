@@ -315,7 +315,21 @@ import CiteTool from '../components/CiteTool.astro';
               <button id="copyMolarityLatex" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.4rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Copy LaTeX</button>
               <button id="printMolarityLabelBtn" style="background: #0284c7; border: none; padding: 0.4rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: white;">Print Bench Label</button>
               <button id="exportMolarityCsv" style="background: #0f172a; border: none; padding: 0.4rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: white;">Export CSV</button>
+              <button id="toggleCiteBtn" type="button" style="background: #e0f2fe; border: 1px solid #7dd3fc; padding: 0.4rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #0369a1; display: inline-flex; align-items: center; gap: 0.35rem;"><span>📖</span> Cite</button>
             </div>
+            <!-- Expandable Benchtop Citation Drawer -->
+          <div id="citeDrawer" style="display: none; margin-bottom: 1rem; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 0.85rem; background: #f8fafc;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.4rem;">
+              <div style="display: flex; gap: 0.3rem;">
+                <button type="button" class="inline-cite-tab" data-format="bibtex" style="padding: 0.25rem 0.55rem; font-size: 0.75rem; font-weight: 700; border-radius: 5px; border: 1px solid #0f172a; background: #0f172a; color: #fff; cursor: pointer;">BibTeX</button>
+                <button type="button" class="inline-cite-tab" data-format="acs" style="padding: 0.25rem 0.55rem; font-size: 0.75rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">ACS</button>
+                <button type="button" class="inline-cite-tab" data-format="apa" style="padding: 0.25rem 0.55rem; font-size: 0.75rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">APA 7</button>
+                <button type="button" class="inline-cite-tab" data-format="ieee" style="padding: 0.25rem 0.55rem; font-size: 0.75rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">IEEE</button>
+              </div>
+              <button id="inlineCopyCiteBtn" type="button" style="padding: 0.25rem 0.6rem; font-size: 0.75rem; font-weight: 700; border-radius: 5px; background: #0284c7; color: #fff; border: none; cursor: pointer;">📋 Copy</button>
+            </div>
+            <pre id="inlineCiteOutput" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.75rem; font-size: 0.75rem; font-family: ui-monospace, monospace; color: #0f172a; white-space: pre-wrap; word-break: break-all; margin: 0; line-height: 1.4;"></pre>
+          </div>
           </div>
           
           <div id="molarityStepLog" style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 1rem; font-family: system-ui, sans-serif; font-size: 0.85rem; line-height: 1.7; color: #1e293b;">
@@ -761,6 +775,72 @@ import CiteTool from '../components/CiteTool.astro';
 
     loadUrlParams();
     calculateMolarity();
+    // --- In-Dashboard Academic Citation Logic ---
+  const citeDrawer = document.getElementById('citeDrawer');
+  const toggleCiteBtn = document.getElementById('toggleCiteBtn');
+  const inlineCiteOutput = document.getElementById('inlineCiteOutput');
+  const inlineTabs = document.querySelectorAll('.inline-cite-tab');
+  const inlineCopyBtn = document.getElementById('inlineCopyCiteBtn');
+
+  const molCitations = {
+    bibtex: `@software{chemistrydesk_molarity_2026,
+  author    = {ChemistryDesk Benchtop Contributors},
+  title     = {Solution Molarity Studio & Hydrate Compensation Engine},
+  year      = {2026},
+  publisher = {ChemistryDesk Precision Scientific Utilities},
+  url       = {https://chemistrydesk.vercel.app/molarity}
+}`,
+    acs: `ChemistryDesk Benchtop Contributors. Solution Molarity Studio & Hydrate Compensation Engine. ChemistryDesk, 2026. https://chemistrydesk.vercel.app/molarity (accessed ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}).`,
+    apa: `ChemistryDesk Benchtop Contributors. (2026). Solution Molarity Studio & Hydrate Compensation Engine [Web software]. ChemistryDesk. https://chemistrydesk.vercel.app/molarity`,
+    ieee: `ChemistryDesk Benchtop Contributors, "Solution Molarity Studio & Hydrate Compensation Engine," ChemistryDesk, 2026. [Online]. Available: https://chemistrydesk.vercel.app/molarity.`
+  };
+
+  let currentInlineFormat = 'bibtex';
+
+  function updateInlineCite() {
+    if (inlineCiteOutput) {
+      inlineCiteOutput.textContent = molCitations[currentInlineFormat];
+    }
+  }
+
+  if (toggleCiteBtn && citeDrawer) {
+    toggleCiteBtn.addEventListener('click', () => {
+      const isHidden = citeDrawer.style.display === 'none' || citeDrawer.style.display === '';
+      citeDrawer.style.display = isHidden ? 'block' : 'none';
+      toggleCiteBtn.style.background = isHidden ? '#0284c7' : '#e0f2fe';
+      toggleCiteBtn.style.color = isHidden ? '#ffffff' : '#0369a1';
+      if (isHidden) updateInlineCite();
+    });
+  }
+
+  inlineTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      inlineTabs.forEach(t => {
+        t.style.background = '#ffffff';
+        t.style.color = '#334155';
+        t.style.borderColor = '#cbd5e1';
+      });
+      tab.style.background = '#0f172a';
+      tab.style.color = '#ffffff';
+      tab.style.borderColor = '#0f172a';
+      currentInlineFormat = tab.getAttribute('data-format');
+      updateInlineCite();
+    });
+  });
+
+  if (inlineCopyBtn) {
+    inlineCopyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(molCitations[currentInlineFormat]);
+        inlineCopyBtn.textContent = '✅ Copied!';
+        setTimeout(() => {
+          inlineCopyBtn.textContent = '📋 Copy';
+        }, 2000);
+      } catch (err) {
+        console.error('Failed to copy citation:', err);
+      }
+    });
+  }
   </script>
 
   <!-- Related Analytical Workflows Hub -->
@@ -786,10 +866,4 @@ import CiteTool from '../components/CiteTool.astro';
       </a>
     </div>
   </section>
-  <!-- Academic Citation Block -->
-    <CiteTool 
-      toolName="Solution Molarity Studio & Hydrate Compensation Engine" 
-      toolUrl="https://chemistrydesk.vercel.app/molarity" 
-      bibtexKey="chemistrydesk_molarity" 
-    />
 </BaseLayout>
