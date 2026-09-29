@@ -3,8 +3,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout 
-  title="ChemistryDesk | Computational Chemistry Tools for the Benchtop"
-  description="Precision laboratory calculators for solution molarity, serial dilutions, and materials characterization."
+ title="ChemistryDesk | Offline Chemistry Calculator & Benchtop Suite"
+  description="Research-grade, 100% offline chemistry calculators for benchtop laboratories. Compute molarity, hydrate compensation, serial dilutions, and PXRD Scherrer crystallite size with zero latency."
 >
   <main style="max-width: 1000px; margin: 3rem auto; padding: 0 1.5rem; color: #0f172a; font-family: system-ui, -apple-system, sans-serif;">
     
@@ -13,6 +13,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <span style="display: inline-block; background: #e0f2fe; color: #0369a1; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.35rem 0.85rem; border-radius: 9999px; margin-bottom: 1rem;">
         Benchtop Scientific Utilities
       </span>
+      <!-- Offline & Precision Trust Badges -->
+      <div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1rem;">
+        <span style="display: inline-flex; align-items: center; gap: 0.35rem; background: #ecfdf5; color: #059669; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 9999px; border: 1px solid #a7f3d0;">
+          ⚡ 100% Offline Capable (PWA)
+        </span>
+        <span style="display: inline-flex; align-items: center; gap: 0.35rem; background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 9999px; border: 1px solid #bae6fd;">
+          🔬 Research-Grade Precision
+        </span>
+      </div>
       <h1 style="font-size: 2.5rem; font-weight: 800; letter-spacing: -0.025em; line-height: 1.2; margin: 0 0 1rem 0;">
         Computational Chemistry Tools for the Modern Benchtop
       </h1>
@@ -139,6 +148,31 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         ChemistryDesk operates entirely client-side, running pure mathematical evaluations in real time without transmitting proprietary formulation parameters across remote servers. Review our dedicated module guides for explicit theoretical derivations, worked numerical problems, and Standard Operating Procedures (SOPs).
       </p>
     </section>
-
+<!-- Offline Wet-Lab Utility Section for SEO -->
+  <section style="margin-top: 3.5rem; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 2rem; box-sizing: border-box;">
+    <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.75rem;">
+      <span style="font-size: 1.5rem;">📶</span>
+      <h2 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin: 0;">
+        Zero-Latency, 100% Offline Chemistry Calculator Suite
+      </h2>
+    </div>
+    <p style="font-size: 0.95rem; color: #475569; line-height: 1.7; margin-bottom: 1.25rem;">
+      Modern wet laboratories, cleanrooms, and subterranean analytical suites (such as XRD, SEM, and NMR instrument rooms) frequently have shielded cellular reception and intermittent Wi-Fi. ChemistryDesk is built as an installable Progressive Web App (PWA). All mathematical formulas, formula weights, and serial dilution ladders execute entirely on your device.
+    </p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
+      <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 1rem;">
+        <strong style="color: #0f172a; font-size: 0.9rem; display: block; margin-bottom: 0.35rem;">⚡ No Internet Required</strong>
+        <span style="font-size: 0.85rem; color: #64748b;">All calculations execute locally once the page loads or the app is installed.</span>
+      </div>
+      <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 1rem;">
+        <strong style="color: #0f172a; font-size: 0.9rem; display: block; margin-bottom: 0.35rem;">🔒 Complete Data Privacy</strong>
+        <span style="font-size: 0.85rem; color: #64748b;">Proprietary formulas and sample weights remain on your local machine and are never transmitted to external servers.</span>
+      </div>
+      <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 1rem;">
+        <strong style="color: #0f172a; font-size: 0.9rem; display: block; margin-bottom: 0.35rem;">💻 Installable on Any Device</strong>
+        <span style="font-size: 0.85rem; color: #64748b;">Click "Install App" in your browser bar to add ChemistryDesk directly to your desktop or mobile home screen.</span>
+      </div>
+    </div>
+  </section>
   </main>
 </BaseLayout>
