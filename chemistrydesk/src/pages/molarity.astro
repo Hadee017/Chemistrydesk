@@ -1,12 +1,13 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { REAGENTS_DATABASE } from '../data/reagents';
 ---
 
 <BaseLayout 
   title="Solution Molarity Calculator & Solute Mass Studio | ChemistryDesk"
   description="Research-grade solution molarity calculator. Automatically compensates for crystalline hydration water (·nH2O) and chemical assay purity. Features dynamic GHS safety alerts, step-by-step SOPs, Overleaf LaTeX export, and printable bottle labels."
 >
- <!-- Unified Structured Data Schema (@graph) -->
+  <!-- Unified Structured Data Schema (@graph) -->
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@graph": [
@@ -96,6 +97,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       }
     ]
   })} />
+
+  <!-- Breadcrumb Navigation -->
+  <main style="max-width: 1140px; margin: 0 auto; padding: 1.5rem 1rem 3rem; box-sizing: border-box;">
+    <nav style="font-size: 0.85rem; margin-bottom: 1.25rem;">
       <a href="/" style="color: #0284c7; text-decoration: none; font-weight: 600;">Home</a> &rsaquo; 
       <span style="color: #64748b;"> Solution Preparation</span> &rsaquo; 
       <span style="color: #0f172a; font-weight: 700;">Molarity Studio</span>
@@ -118,6 +123,34 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <button id="shareSetupBtn" style="background: #e0f2fe; border: 1px solid #bae6fd; color: #0284c7; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem;">
           <span>🔗 Share Setup URL</span>
         </button>
+      </div>
+    </div>
+
+    <!-- REAGENT AUTOCOMPLETE DATABASE SEARCH BAR -->
+    <div style="background: linear-gradient(to right, #f8fafc, #f1f5f9); border: 2px solid #0284c7; border-radius: 12px; padding: 1.25rem; margin-bottom: 1.75rem; position: relative; box-shadow: 0 4px 6px -1px rgba(2, 132, 199, 0.08);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+        <label for="reagentSearchInput" style="font-size: 0.88rem; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.03em; display: flex; align-items: center; gap: 0.45rem;">
+          <span>🔍</span> Reagent Database Auto-Lookup (40+ Bench Standards)
+        </label>
+        <span style="font-size: 0.75rem; font-weight: 700; color: #0284c7; background: #e0f2fe; padding: 2px 8px; border-radius: 6px;">Instant Auto-Fill</span>
+      </div>
+
+      <div style="position: relative;">
+        <input 
+          type="text" 
+          id="reagentSearchInput" 
+          placeholder="Start typing formula or name (e.g., CuSO4, Copper, NaOH, EDTA, KMnO4, Iron, Glucose)..." 
+          autocomplete="off" 
+          style="width: 100%; padding: 0.85rem 1rem; font-size: 0.98rem; font-weight: 600; color: #0f172a; border: 1.5px solid #cbd5e1; border-radius: 8px; outline: none; box-sizing: border-box; background: #ffffff; transition: all 0.2s ease;"
+        />
+        <div 
+          id="reagentSearchDropdown" 
+          style="display: none; position: absolute; top: calc(100% + 6px); left: 0; right: 0; background: #ffffff; border: 1.5px solid #0284c7; border-radius: 8px; max-height: 280px; overflow-y: auto; z-index: 200; box-shadow: 0 12px 28px rgba(15, 23, 42, 0.15);"
+        >
+        </div>
+      </div>
+      <div style="font-size: 0.78rem; color: #64748b; margin-top: 0.4rem;">
+        Auto-populates formula, anhydrous MW, crystal water hydration stoichiometry, assay purity, and GHS handling alerts.
       </div>
     </div>
 
@@ -164,7 +197,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
         <!-- Custom Compound Name -->
         <div style="margin-bottom: 1.25rem;">
-          <label style="display: block; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: #475569; margin-bottom: 0.35rem;">
+          <label for="soluteName" style="display: block; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: #475569; margin-bottom: 0.35rem;">
             Reagent Chemical Name
           </label>
           <input type="text" id="soluteName" value="Sodium Chloride (NaCl)" style="width: 100%; padding: 0.65rem 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; font-weight: 700; color: #0f172a; box-sizing: border-box;" />
@@ -172,7 +205,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
         <!-- Target Concentration -->
         <div style="margin-bottom: 1.25rem;">
-          <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #1e293b; margin-bottom: 0.4rem;">
+          <label for="concInput" style="display: block; font-size: 0.85rem; font-weight: 700; color: #1e293b; margin-bottom: 0.4rem;">
             TARGET CONCENTRATION (C)
           </label>
           <div style="display: flex;">
@@ -187,7 +220,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
         <!-- Target Final Volume -->
         <div style="margin-bottom: 1.25rem;">
-          <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #1e293b; margin-bottom: 0.4rem;">
+          <label for="volInput" style="display: block; font-size: 0.85rem; font-weight: 700; color: #1e293b; margin-bottom: 0.4rem;">
             FINAL SOLUTION VOLUME (V)
           </label>
           <div style="display: flex;">
@@ -202,7 +235,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
         <!-- Molecular Weight (Anhydrous) -->
         <div style="margin-bottom: 1.25rem;">
-          <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #1e293b; margin-bottom: 0.4rem;">
+          <label for="mwInput" style="display: block; font-size: 0.85rem; font-weight: 700; color: #1e293b; margin-bottom: 0.4rem;">
             ANHYDROUS FORMULA WEIGHT (MW)
           </label>
           <div style="display: flex;">
@@ -213,7 +246,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
         <!-- Hydration Water Compensator -->
         <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; margin-bottom: 1.25rem;">
-          <label style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; color: #1e293b; margin-bottom: 0.4rem;">
+          <label for="hydrateCount" style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; color: #1e293b; margin-bottom: 0.4rem;">
             <span>CRYSTALLINE HYDRATE WATER (&middot;nH₂O)</span>
             <span style="color: #0284c7; font-weight: 800;" id="hydrateTag">Anhydrous (0 H₂O)</span>
           </label>
@@ -223,7 +256,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
         <!-- Reagent Purity Assay Compensator -->
         <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem;">
-          <label style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; color: #1e293b; margin-bottom: 0.4rem;">
+          <label for="puritySlider" style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; color: #1e293b; margin-bottom: 0.4rem;">
             <span>REAGENT ASSAY PURITY (P%)</span>
             <span style="color: #0284c7; font-weight: 800;" id="purityVal">99.5%</span>
           </label>
@@ -424,6 +457,18 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       border-color: #0284c7;
       transform: translateY(-1px);
     }
+    .reagent-search-row {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.15s ease;
+    }
+    .reagent-search-row:hover {
+      background: #f0f9ff;
+    }
     @media print {
       body * {
         visibility: hidden !important;
@@ -448,6 +493,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       }
     }
   </style>
+
+  <!-- Pass Reagents Database to Client-Side -->
+  <div id="reagentsDatabaseData" data-reagents={JSON.stringify(REAGENTS_DATABASE)} style="display: none;"></div>
 
   <script is:inline>
     function sanitizeNum(val) {
@@ -484,6 +532,21 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     var labelWeighedMass = document.getElementById('labelWeighedMass');
     var labelFw = document.getElementById('labelFw');
     var labelDate = document.getElementById('labelDate');
+
+    // Parse Reagents Database from Data Element
+    var reagentsRaw = document.getElementById('reagentsDatabaseData');
+    var REAGENTS = [];
+    if (reagentsRaw && reagentsRaw.dataset.reagents) {
+      try {
+        REAGENTS = JSON.parse(reagentsRaw.dataset.reagents);
+      } catch (err) {
+        console.error('Failed to parse reagents database', err);
+      }
+    }
+
+    // Search Engine Elements
+    var reagentSearchInput = document.getElementById('reagentSearchInput');
+    var reagentSearchDropdown = document.getElementById('reagentSearchDropdown');
 
     function calculateMolarity() {
       var cFactor = parseFloat(concUnit.value);
@@ -543,6 +606,86 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       urlParams.set('h', nWaters);
       urlParams.set('p', purityPercent);
       window.history.replaceState({}, '', window.location.pathname + '?' + urlParams.toString());
+    }
+
+    // Select Reagent from Database Search
+    function applyReagent(reagent) {
+      soluteName.value = reagent.name + ' (' + reagent.formula + ')';
+      mwInput.value = reagent.anhydrousMw;
+      hydrateCount.value = reagent.defaultHydrate;
+      puritySlider.value = reagent.typicalPurity;
+      activeReagentTag.textContent = reagent.name.split(' (')[0];
+
+      // GHS Safety & Notes
+      var ghsList = (reagent.ghs && reagent.ghs.length > 0) ? reagent.ghs.join(' | ') : 'Non-Hazardous under standard handling.';
+      var notes = reagent.notes ? ' — ' + reagent.notes : '';
+      ghsHazardText.textContent = ghsList + notes;
+      ghsPpeText.textContent = reagent.category === 'acid' || reagent.category === 'base' 
+        ? 'Chemical Splash Goggles, Nitrile Gloves, Lab Coat, Fume Hood' 
+        : 'Safety Glasses, Nitrile Gloves, Lab Coat';
+
+      reagentSearchInput.value = reagent.name + ' (' + reagent.formula + ')';
+      reagentSearchDropdown.style.display = 'none';
+
+      calculateMolarity();
+    }
+
+    // Setup Live Search Handlers
+    if (reagentSearchInput && reagentSearchDropdown) {
+      reagentSearchInput.addEventListener('input', function(e) {
+        var query = e.target.value.toLowerCase().trim();
+        if (!query) {
+          reagentSearchDropdown.style.display = 'none';
+          return;
+        }
+
+        var matches = REAGENTS.filter(function(r) {
+          return r.name.toLowerCase().indexOf(query) !== -1 || 
+                 r.formula.toLowerCase().indexOf(query) !== -1 ||
+                 r.category.toLowerCase().indexOf(query) !== -1;
+        });
+
+        if (matches.length === 0) {
+          reagentSearchDropdown.innerHTML = '<div style="padding: 0.85rem 1rem; font-size: 0.85rem; color: #94a3b8;">No matching laboratory standard found. Enter custom values below.</div>';
+          reagentSearchDropdown.style.display = 'block';
+          return;
+        }
+
+        var html = '';
+        matches.forEach(function(r) {
+          html += '<div class="reagent-search-row" data-id="' + r.id + '">' +
+                    '<div>' +
+                      '<strong style="color: #0f172a; font-size: 0.9rem;">' + r.name + '</strong>' +
+                      '<span style="color: #64748b; font-size: 0.82rem; margin-left: 0.4rem; font-family: monospace;">' + r.formula + '</span>' +
+                    '</div>' +
+                    '<div style="text-align: right;">' +
+                      '<span style="font-size: 0.8rem; font-weight: 700; color: #0284c7;">' + r.anhydrousMw.toFixed(2) + ' g/mol</span>' +
+                      '<span style="display: block; font-size: 0.72rem; color: #64748b;">Hydrate: ' + r.defaultHydrate + 'H₂O</span>' +
+                    '</div>' +
+                  '</div>';
+        });
+
+        reagentSearchDropdown.innerHTML = html;
+        reagentSearchDropdown.style.display = 'block';
+
+        var rows = reagentSearchDropdown.querySelectorAll('.reagent-search-row');
+        rows.forEach(function(row) {
+          row.addEventListener('click', function() {
+            var selectedId = row.getAttribute('data-id');
+            var selected = REAGENTS.find(function(item) { return item.id === selectedId; });
+            if (selected) {
+              applyReagent(selected);
+            }
+          });
+        });
+      });
+
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!reagentSearchInput.contains(e.target) && !reagentSearchDropdown.contains(e.target)) {
+          reagentSearchDropdown.style.display = 'none';
+        }
+      });
     }
 
     // Parse URL on initial load if present
@@ -618,6 +761,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     loadUrlParams();
     calculateMolarity();
   </script>
+
   <!-- Related Analytical Workflows Hub -->
   <section style="max-width: 900px; margin: 3rem auto 1.5rem; padding: 1.25rem 1.5rem; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; box-sizing: border-box;">
     <h3 style="margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 0.5rem;">
