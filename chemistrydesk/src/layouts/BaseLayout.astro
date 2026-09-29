@@ -31,13 +31,15 @@ const fullCanonicalUrl = new URL(cleanPath, siteOrigin).href;
   <title>{title}</title>
   <meta name="description" content={description} />
   <link rel="canonical" href={fullCanonicalUrl} />
-<!-- Favicon & PWA Web Manifest -->
+
+  <!-- Favicon & PWA Web Manifest -->
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="manifest" href="/manifest.json" />
   <meta name="theme-color" content="#0284c7" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="ChemistryDesk" />
+
   <!-- OpenGraph / Social Media Cards -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="ChemistryDesk" />
@@ -49,49 +51,90 @@ const fullCanonicalUrl = new URL(cleanPath, siteOrigin).href;
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
-  </head>
-  <body style="margin: 0; padding: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #ffffff; color: #0f172a; min-height: 100vh; display: flex; flex-direction: column;">
-    
-    <!-- Modern Sticky Benchtop Header -->
-    <header style="position: sticky; top: 0; z-index: 100; width: 100%; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-bottom: 1.5px solid #e2e8f0; box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);">
-      <div style="max-width: 1140px; margin: 0 auto; padding: 0.75rem 1.5rem; display: flex; align-items: center; justify-content: space-between; box-sizing: border-box;">
-        
-        <!-- Brand Title -->
-        <a href="/" style="display: flex; align-items: center; gap: 0.65rem; text-decoration: none; color: inherit;">
-          <span style="font-size: 1.6rem; line-height: 1;">⚗️</span>
-          <div style="display: flex; flex-direction: column;">
-            <span style="font-size: 1.15rem; font-weight: 800; letter-spacing: -0.025em; color: #0f172a; line-height: 1.15;">ChemistryDesk</span>
-            <span style="font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #0284c7;">Benchtop Studio</span>
-          </div>
-        </a>
+</head>
+<body style="margin: 0; padding: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #ffffff; color: #0f172a; min-height: 100vh; display: flex; flex-direction: column;">
+  
+  <!-- Modern Sticky Benchtop Header -->
+  <header style="position: sticky; top: 0; z-index: 100; width: 100%; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-bottom: 1.5px solid #e2e8f0; box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);">
+    <div style="max-width: 1140px; margin: 0 auto; padding: 0.75rem 1.5rem; display: flex; align-items: center; justify-content: space-between; box-sizing: border-box;">
+      
+      <!-- Brand Title -->
+      <a href="/" style="display: flex; align-items: center; gap: 0.65rem; text-decoration: none; color: inherit;">
+        <span style="font-size: 1.6rem; line-height: 1;">⚗️</span>
+        <div style="display: flex; flex-direction: column;">
+          <span style="font-size: 1.15rem; font-weight: 800; letter-spacing: -0.025em; color: #0f172a; line-height: 1.15;">ChemistryDesk</span>
+          <span style="font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #0284c7;">Benchtop Studio</span>
+        </div>
+      </a>
 
-        <!-- Modern Pill Nav Links -->
-        <nav style="display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap;">
-          <a href="/" style={`text-decoration: none; font-size: 0.85rem; font-weight: 700; padding: 0.45rem 0.85rem; border-radius: 8px; transition: all 0.2s ease; ${Astro.url.pathname === '/' ? 'background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd;' : 'background: transparent; color: #475569; border: 1px solid transparent;'}`}>Home</a>
-          <a href="/molarity" style={`text-decoration: none; font-size: 0.85rem; font-weight: 700; padding: 0.45rem 0.85rem; border-radius: 8px; transition: all 0.2s ease; ${Astro.url.pathname.startsWith('/molarity') ? 'background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd;' : 'background: transparent; color: #475569; border: 1px solid transparent;'}`}>Molarity</a>
-          <a href="/dilution" style={`text-decoration: none; font-size: 0.85rem; font-weight: 700; padding: 0.45rem 0.85rem; border-radius: 8px; transition: all 0.2s ease; ${Astro.url.pathname.startsWith('/dilution') ? 'background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd;' : 'background: transparent; color: #475569; border: 1px solid transparent;'}`}>Dilution</a>
-          <a href="/scherrer" style={`text-decoration: none; font-size: 0.85rem; font-weight: 700; padding: 0.45rem 0.85rem; border-radius: 8px; transition: all 0.2s ease; ${Astro.url.pathname.startsWith('/scherrer') ? 'background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd;' : 'background: transparent; color: #475569; border: 1px solid transparent;'}`}>PXRD Scherrer</a>
-          <a href="/about" style={`text-decoration: none; font-size: 0.85rem; font-weight: 700; padding: 0.45rem 0.85rem; border-radius: 8px; transition: all 0.2s ease; ${Astro.url.pathname.startsWith('/about') ? 'background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd;' : 'background: transparent; color: #475569; border: 1px solid transparent;'}`}>About</a>
-          <a href="/contact" style={`text-decoration: none; font-size: 0.85rem; font-weight: 700; padding: 0.45rem 0.85rem; border-radius: 8px; transition: all 0.2s ease; ${Astro.url.pathname.startsWith('/contact') ? 'background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd;' : 'background: transparent; color: #475569; border: 1px solid transparent;'}`}>Contact</a>
-        </nav>
+      <!-- Modern Pill Nav Links -->
+      <nav style="display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap;">
+        <a href="/" style={`text-decoration: none; font-size: 0.85rem; font-weight: 700; padding: 0.45rem 0.85rem; border-radius: 8px; transition: all 0.2s ease; ${Astro.url.pathname === '/' ? 'background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd;' : 'background: transparent; color: #475569; border: 1px solid transparent;'}`}>Home</a>
+        <a href="/molarity" style={`text-decoration: none; font-size: 0.85rem; font-weight: 700; padding: 0.45rem 0.85rem; border-radius: 8px; transition: all 0.2s ease; ${Astro.url.pathname.startsWith('/molarity') ? 'background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd;' : 'background: transparent; color: #475569; border: 1px solid transparent;'}`}>Molarity</a>
+        <a href="/dilution" style={`text-decoration: none; font-size: 0.85rem; font-weight: 700; padding: 0.45rem 0.85rem; border-radius: 8px; transition: all 0.2s ease; ${Astro.url.pathname.startsWith('/dilution') ? 'background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd;' : 'background: transparent; color: #475569; border: 1px solid transparent;'}`}>Dilution</a>
+        <a href="/scherrer" style={`text-decoration: none; font-size: 0.85rem; font-weight: 700; padding: 0.45rem 0.85rem; border-radius: 8px; transition: all 0.2s ease; ${Astro.url.pathname.startsWith('/scherrer') ? 'background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd;' : 'background: transparent; color: #475569; border: 1px solid transparent;'}`}>PXRD Scherrer</a>
+        <a href="/about" style={`text-decoration: none; font-size: 0.85rem; font-weight: 700; padding: 0.45rem 0.85rem; border-radius: 8px; transition: all 0.2s ease; ${Astro.url.pathname.startsWith('/about') ? 'background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd;' : 'background: transparent; color: #475569; border: 1px solid transparent;'}`}>About</a>
+        <a href="/contact" style={`text-decoration: none; font-size: 0.85rem; font-weight: 700; padding: 0.45rem 0.85rem; border-radius: 8px; transition: all 0.2s ease; ${Astro.url.pathname.startsWith('/contact') ? 'background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd;' : 'background: transparent; color: #475569; border: 1px solid transparent;'}`}>Contact</a>
+        <button id="pwaInstallBtn" style="display: none; align-items: center; gap: 0.35rem; font-size: 0.8rem; font-weight: 700; padding: 0.4rem 0.75rem; border-radius: 8px; background: #0284c7; color: #ffffff; border: none; cursor: pointer; transition: all 0.2s ease;">
+          <span>📥</span> Install App
+        </button>
+      </nav>
 
-      </div>
-    </header>
-
-    <!-- Main Content Slot with safe top breathing room -->
-    <div style="flex: 1; padding-top: 1rem;">
-      <slot />
     </div>
+  </header>
 
-    <!-- AdSense Mandatory Compliance Footer -->
-    <footer style="margin-top: 5rem; border-top: 1px solid #e2e8f0; background: #ffffff; padding: 2.5rem 1.5rem; text-align: center; font-size: 0.875rem; color: #64748b;">
-      <div style="display: flex; justify-content: center; gap: 1.75rem; flex-wrap: wrap; margin-bottom: 1rem; font-weight: 500;">
-        <a href="/about" style="color: #475569; text-decoration: none;">About Us</a>
-        <a href="/contact" style="color: #475569; text-decoration: none;">Contact Us</a>
-        <a href="/privacy-policy" style="color: #475569; text-decoration: none;">Privacy Policy</a>
-        <a href="/terms" style="color: #475569; text-decoration: none;">Terms of Service</a>
-      </div>
-      <div>&copy; 2026 ChemistryDesk. Designed for benchtop precision and educational reference.</div>
-    </footer>
-  </body>
+  <!-- Main Content Slot with safe top breathing room -->
+  <div style="flex: 1; padding-top: 1rem;">
+    <slot />
+  </div>
+
+  <!-- AdSense Mandatory Compliance Footer -->
+  <footer style="margin-top: 5rem; border-top: 1px solid #e2e8f0; background: #ffffff; padding: 2.5rem 1.5rem; text-align: center; font-size: 0.875rem; color: #64748b;">
+    <div style="display: flex; justify-content: center; gap: 1.75rem; flex-wrap: wrap; margin-bottom: 1rem; font-weight: 500;">
+      <a href="/about" style="color: #475569; text-decoration: none;">About Us</a>
+      <a href="/contact" style="color: #475569; text-decoration: none;">Contact Us</a>
+      <a href="/privacy-policy" style="color: #475569; text-decoration: none;">Privacy Policy</a>
+      <a href="/terms" style="color: #475569; text-decoration: none;">Terms of Service</a>
+    </div>
+    <div>&copy; 2026 ChemistryDesk. Designed for benchtop precision and educational reference.</div>
+  </footer>
+
+  <script is:inline>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(() => console.log('ChemistryDesk offline engine active.'))
+          .catch((err) => console.warn('PWA registration error:', err));
+      });
+    }
+
+    let deferredPrompt;
+    const installBtn = document.getElementById('pwaInstallBtn');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      if (installBtn) {
+        installBtn.style.display = 'inline-flex';
+      }
+    });
+
+    if (installBtn) {
+      installBtn.addEventListener('click', async () => {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          installBtn.style.display = 'none';
+        }
+        deferredPrompt = null;
+      });
+    }
+
+    window.addEventListener('appinstalled', () => {
+      if (installBtn) installBtn.style.display = 'none';
+      deferredPrompt = null;
+    });
+  </script>
+</body>
 </html>
