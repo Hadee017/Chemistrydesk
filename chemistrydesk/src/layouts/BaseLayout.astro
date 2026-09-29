@@ -31,7 +31,13 @@ const fullCanonicalUrl = new URL(cleanPath, siteOrigin).href;
   <title>{title}</title>
   <meta name="description" content={description} />
   <link rel="canonical" href={fullCanonicalUrl} />
-
+<!-- Favicon & PWA Web Manifest -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#0284c7" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="ChemistryDesk" />
   <!-- OpenGraph / Social Media Cards -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="ChemistryDesk" />

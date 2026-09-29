@@ -1,0 +1,17 @@
+{
+  "name": "ChemistryDesk Studio",
+  "short_name": "ChemistryDesk",
+  "description": "High-precision analytical chemistry solvers and benchtop laboratory preparation tools.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0284c7",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
