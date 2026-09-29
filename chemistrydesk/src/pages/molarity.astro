@@ -1,0 +1,624 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout 
+  title="Solution Molarity Calculator & Solute Mass Studio | ChemistryDesk"
+  description="Research-grade solution molarity calculator. Automatically compensates for crystalline hydration water (·nH2O) and chemical assay purity. Features dynamic GHS safety alerts, step-by-step SOPs, Overleaf LaTeX export, and printable bottle labels."
+>
+  <!-- Schema: WebApplication -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "ChemistryDesk Solution Molarity & Solute Mass Studio",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "All",
+    "browserRequirements": "Requires JavaScript",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  })} />
+
+  <!-- Schema: HowTo -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Accurately Prepare a Molar Solution with Chemical Purity and Hydration Correction",
+    "step": [
+      {
+        "@type": "HowToStep",
+        "name": "Determine Solute Formula Mass & Hydration State",
+        "text": "Identify the anhydrous molecular weight and stoichiometric coordinated crystal water (·nH2O) from the manufacturer bottle label."
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Define Working Volume and Concentration",
+        "text": "Specify the target volume (mL or L) and required molarity (M or mM)."
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Compensate for Reagent Assay Purity",
+        "text": "Adjust the theoretical mass upward by dividing by the decimal assay purity (e.g., 0.98 for 98% ACS reagent grade) to weigh sufficient active chemical."
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Dissolve in Initial Solvent",
+        "text": "Weigh the calculated gross mass on a calibrated 4-decimal balance. Dissolve in a beaker with 60% to 70% of the target solvent volume."
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Quantitative Transfer & Meniscus Alignment",
+        "text": "Equilibrate any dissolution enthalpy to room temperature, transfer quantitatively to a Class-A volumetric flask, rinse the beaker, and dilute to the calibration line."
+      }
+    ]
+  })} />
+
+  <!-- Schema: FAQPage -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the difference between molarity and molality?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Molarity (M) denotes moles of solute per liter of total solution, which is temperature-dependent due to solvent thermal expansion. Molality (m) is moles of solute per kilogram of pure solvent, which remains strictly temperature-invariant."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why must chemical assay purity be factored into molarity mass calculations?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Commercial reagents are rarely 100% pure due to atmospheric moisture absorption, trace isomers, or manufacturing tolerances. If a salt has an assay of 98%, weighing 100 g supplies only 98 g of active solute, producing an under-concentrated solution unless mathematically compensated."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does crystalline hydration water affect balance weighing?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Hydrates incorporate water molecules into their crystal lattice (e.g., CuSO4·5H2O). Because water adds significant molecular mass without contributing active ions, weighing must be based on the complete hydrate formula weight (249.68 g/mol) rather than the anhydrous weight (159.60 g/mol)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why should solutes never be dissolved directly inside a volumetric flask?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Dissolution of salts frequently produces significant enthalpy of solution (exothermic heat or endothermic cooling). Volumetric flasks are calibrated strictly at 20°C; thermal expansion of glass and liquids causes significant volumetric calibration errors before thermal equilibrium is restored."
+        }
+      }
+    ]
+  })} />
+
+  <main style="max-width: 1140px; margin: 1.5rem auto 4rem auto; padding: 0 1.5rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #0f172a;">
+    
+    <!-- Breadcrumb Navigation -->
+    <nav style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.25rem;">
+      <a href="/" style="color: #0284c7; text-decoration: none; font-weight: 600;">Home</a> &rsaquo; 
+      <span style="color: #64748b;"> Solution Preparation</span> &rsaquo; 
+      <span style="color: #0f172a; font-weight: 700;">Molarity Studio</span>
+    </nav>
+
+    <!-- Header Section -->
+    <div style="border-bottom: 1.5px solid #e2e8f0; padding-bottom: 1.75rem; margin-bottom: 2rem;">
+      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <span style="font-size: 2.5rem;">🧪</span>
+          <div>
+            <h1 style="font-size: 2.25rem; font-weight: 800; color: #0f172a; letter-spacing: -0.025em; margin: 0;">
+              Solution Molarity &amp; Reagent Prep Studio
+            </h1>
+            <p style="color: #64748b; font-size: 0.95rem; margin-top: 0.25rem; margin-bottom: 0;">
+              Two-way analytical mass solver with crystal hydration water compensation (&middot;nH₂O), manufacturer assay purity corrections, dynamic GHS safety alerts, and benchtop bottle label generation.
+            </p>
+          </div>
+        </div>
+        <button id="shareSetupBtn" style="background: #e0f2fe; border: 1px solid #bae6fd; color: #0284c7; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem;">
+          <span>🔗 Share Setup URL</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- PRESET CHEMICAL REAGENTS -->
+    <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1.25rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+      <div style="font-weight: 800; font-size: 0.85rem; color: #0f172a; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+        <span>Common Analytical Standards:</span>
+        <span style="font-size: 0.75rem; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 9999px; font-weight: 800;">1-Click Setup</span>
+      </div>
+      <div id="molarityPresetGrid" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+        <button class="molarity-preset-btn" data-name="Sodium Chloride (NaCl)" data-mw="58.44" data-purity="99.5" data-hydrate="0" data-ghs="Non-Hazardous" data-ppe="Safety Glasses, Nitrile Gloves">NaCl (58.44 g/mol)</button>
+        <button class="molarity-preset-btn" data-name="Sodium Hydroxide (NaOH)" data-mw="40.00" data-purity="97.0" data-hydrate="0" data-ghs="Corrosive (Skin / Eye Burns), Exothermic Dissolution" data-ppe="Face Shield, Chemical Splash Apron, Nitrile Gloves">NaOH (40.00 g/mol)</button>
+        <button class="molarity-preset-btn" data-name="Potassium Chloride (KCl)" data-mw="74.55" data-purity="99.0" data-hydrate="0" data-ghs="Non-Hazardous" data-ppe="Safety Glasses, Gloves">KCl (74.55 g/mol)</button>
+        <button class="molarity-preset-btn" data-name="Copper(II) Sulfate Pentahydrate" data-mw="159.60" data-purity="98.0" data-hydrate="5" data-ghs="Toxic to Aquatic Life, Eye Irritant" data-ppe="Safety Goggles, Lab Coat, Nitrile Gloves">CuSO₄·5H₂O (249.68 g/mol)</button>
+        <button class="molarity-preset-btn" data-name="Magnesium Sulfate Heptahydrate" data-mw="120.37" data-purity="99.0" data-hydrate="7" data-ghs="Non-Hazardous" data-ppe="Lab Coat, Gloves">MgSO₄·7H₂O (246.47 g/mol)</button>
+        <button class="molarity-preset-btn" data-name="Iron(II) Sulfate Heptahydrate" data-mw="151.91" data-purity="99.0" data-hydrate="7" data-ghs="Harmful if Swallowed, Skin Irritant" data-ppe="Safety Glasses, Gloves, Fume Hood if Dust Forms">FeSO₄·7H₂O (278.01 g/mol)</button>
+        <button class="molarity-preset-btn" data-name="Cobalt(II) Chloride Hexahydrate" data-mw="129.84" data-purity="98.0" data-hydrate="6" data-ghs="Carcinogen (Inhalation), Aquatic Chronic Hazard" data-ppe="Certified Chemical Fume Hood, Heavy Nitrile Gloves, Goggles">CoCl₂·6H₂O (237.93 g/mol)</button>
+        <button class="molarity-preset-btn" data-name="Calcium Chloride Dihydrate" data-mw="110.98" data-purity="99.0" data-hydrate="2" data-ghs="Serious Eye Irritation" data-ppe="Safety Glasses, Gloves">CaCl₂·2H₂O (147.01 g/mol)</button>
+        <button class="molarity-preset-btn" data-name="Potassium Permanganate (KMnO4)" data-mw="158.03" data-purity="99.0" data-hydrate="0" data-ghs="Strong Oxidizer, Acute Aquatic Toxin" data-ppe="Safety Goggles, Lab Coat, Avoid Organic Contact">KMnO₄ (158.03 g/mol)</button>
+        <button class="molarity-preset-btn" data-name="Tris Base (C4H11NO3)" data-mw="121.14" data-purity="99.8" data-hydrate="0" data-ghs="Mild Skin/Eye Irritant" data-ppe="Standard Bench PPE">Tris Base (121.14 g/mol)</button>
+        <button class="molarity-preset-btn" data-name="D-Glucose Anhydrous (C6H12O6)" data-mw="180.16" data-purity="99.5" data-hydrate="0" data-ghs="Non-Hazardous" data-ppe="Standard Bench PPE">D-Glucose (180.16 g/mol)</button>
+        <button class="molarity-preset-btn" data-name="EDTA Disodium Dihydrate" data-mw="336.21" data-purity="99.0" data-hydrate="2" data-ghs="Harmful if Inhaled, Organ Toxicity (STOT RE 2)" data-ppe="Fume Hood / Dust Mask, Nitrile Gloves">EDTA·2Na·2H₂O (372.24 g/mol)</button>
+      </div>
+    </div>
+
+    <!-- DYNAMIC GHS SAFETY & PPE ALERT BANNER -->
+    <div id="ghsAlertBanner" style="background: #fffbeb; border-left: 4px solid #f59e0b; padding: 1rem 1.25rem; margin-bottom: 2rem; border-radius: 0 8px 8px 0; font-size: 0.85rem; color: #92400e;">
+      <div style="font-weight: 800; text-transform: uppercase; margin-bottom: 0.25rem;">⚠️ Laboratory Handling Advisory:</div>
+      <div id="ghsHazardText">Standard Analytical Salt — Non-Hazardous under ambient conditions.</div>
+      <div style="margin-top: 0.35rem; font-size: 0.8rem; color: #b45309;"><strong>Mandatory PPE:</strong> <span id="ghsPpeText">Safety Glasses, Nitrile Gloves, Lab Coat</span></div>
+    </div>
+
+    <!-- WORKBENCH GRID -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+      
+      <!-- LEFT COLUMN: Inputs -->
+      <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 1.75rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 0.75rem;">
+          <h2 style="font-size: 0.95rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #0f172a; margin: 0;">
+            1. Formulation Parameters
+          </h2>
+          <span id="activeReagentTag" style="font-size: 0.75rem; font-weight: 800; color: #0284c7; background: #f0f9ff; padding: 3px 10px; border-radius: 6px; border: 1px solid #bae6fd;">Custom Solute</span>
+        </div>
+
+        <!-- Custom Compound Name -->
+        <div style="margin-bottom: 1.25rem;">
+          <label style="display: block; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: #475569; margin-bottom: 0.35rem;">
+            Reagent Chemical Name
+          </label>
+          <input type="text" id="soluteName" value="Sodium Chloride (NaCl)" style="width: 100%; padding: 0.65rem 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; font-weight: 700; color: #0f172a; box-sizing: border-box;" />
+        </div>
+
+        <!-- Target Concentration -->
+        <div style="margin-bottom: 1.25rem;">
+          <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #1e293b; margin-bottom: 0.4rem;">
+            TARGET CONCENTRATION (C)
+          </label>
+          <div style="display: flex;">
+            <input type="text" inputmode="decimal" id="concInput" value="0.5" style="flex: 1; padding: 0.75rem 1rem; border: 1.5px solid #cbd5e1; border-right: none; border-radius: 8px 0 0 8px; font-size: 1rem; font-weight: 700; color: #0f172a; outline: none;" />
+            <select id="concUnit" style="background: #f1f5f9; border: 1.5px solid #cbd5e1; padding: 0 0.85rem; border-radius: 0 8px 8px 0; font-size: 0.85rem; font-weight: 700; color: #334155; cursor: pointer;">
+              <option value="1" selected>M (mol/L)</option>
+              <option value="1e-3">mM (mmol/L)</option>
+              <option value="1e-6">&mu;M (&mu;mol/L)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Target Final Volume -->
+        <div style="margin-bottom: 1.25rem;">
+          <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #1e293b; margin-bottom: 0.4rem;">
+            FINAL SOLUTION VOLUME (V)
+          </label>
+          <div style="display: flex;">
+            <input type="text" inputmode="decimal" id="volInput" value="500" style="flex: 1; padding: 0.75rem 1rem; border: 1.5px solid #cbd5e1; border-right: none; border-radius: 8px 0 0 8px; font-size: 1rem; font-weight: 700; color: #0f172a; outline: none;" />
+            <select id="volUnit" style="background: #f1f5f9; border: 1.5px solid #cbd5e1; padding: 0 0.85rem; border-radius: 0 8px 8px 0; font-size: 0.85rem; font-weight: 700; color: #334155; cursor: pointer;">
+              <option value="1e-3" selected>mL</option>
+              <option value="1">Liters (L)</option>
+              <option value="1e-6">&mu;L</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Molecular Weight (Anhydrous) -->
+        <div style="margin-bottom: 1.25rem;">
+          <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #1e293b; margin-bottom: 0.4rem;">
+            ANHYDROUS FORMULA WEIGHT (MW)
+          </label>
+          <div style="display: flex;">
+            <input type="text" inputmode="decimal" id="mwInput" value="58.44" style="flex: 1; padding: 0.75rem 1rem; border: 1.5px solid #cbd5e1; border-right: none; border-radius: 8px 0 0 8px; font-size: 1rem; font-weight: 700; color: #0f172a; outline: none;" />
+            <span style="background: #f1f5f9; border: 1.5px solid #cbd5e1; padding: 0 1rem; border-radius: 0 8px 8px 0; font-size: 0.85rem; font-weight: 700; color: #475569; display: flex; align-items: center;">g/mol</span>
+          </div>
+        </div>
+
+        <!-- Hydration Water Compensator -->
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; margin-bottom: 1.25rem;">
+          <label style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; color: #1e293b; margin-bottom: 0.4rem;">
+            <span>CRYSTALLINE HYDRATE WATER (&middot;nH₂O)</span>
+            <span style="color: #0284c7; font-weight: 800;" id="hydrateTag">Anhydrous (0 H₂O)</span>
+          </label>
+          <input type="number" id="hydrateCount" min="0" max="24" value="0" style="width: 100%; padding: 0.5rem 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem; font-weight: 700; color: #0f172a; box-sizing: border-box;" />
+          <span style="display: block; font-size: 0.75rem; color: #64748b; margin-top: 0.35rem;">Adds 18.01528 g/mol per crystal water molecule to target formula mass.</span>
+        </div>
+
+        <!-- Reagent Purity Assay Compensator -->
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem;">
+          <label style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; color: #1e293b; margin-bottom: 0.4rem;">
+            <span>REAGENT ASSAY PURITY (P%)</span>
+            <span style="color: #0284c7; font-weight: 800;" id="purityVal">99.5%</span>
+          </label>
+          <input type="range" id="puritySlider" min="50" max="100" step="0.1" value="99.5" style="width: 100%; accent-color: #0284c7; cursor: pointer;" />
+          <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #64748b; margin-top: 0.25rem;">
+            <span>50% Technical Grade</span>
+            <span>98% ACS Grade</span>
+            <span>100% Pure</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN: Output HUD & Action Center -->
+      <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        
+        <!-- Primary Result HUD -->
+        <div style="background: #0f172a; border-radius: 14px; padding: 2rem; color: #ffffff; box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.3); border: 1px solid #334155;">
+          <span style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #38bdf8;">
+            Mass of Reagent to Weigh on Balance
+          </span>
+          <div id="primaryMassGrams" style="font-size: 3.25rem; font-weight: 900; color: #38bdf8; margin: 0.4rem 0 0.75rem 0; line-height: 1;">--</div>
+
+          <div style="border-top: 1px solid #334155; padding-top: 1.25rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; font-size: 0.9rem;">
+            <div>
+              <span style="color: #94a3b8; display: block; font-size: 0.75rem; text-transform: uppercase; font-weight: 700;">Effective Formula Mass</span>
+              <strong id="displayEffectiveMw" style="color: #34d399; font-size: 1.35rem;">--</strong>
+            </div>
+            <div>
+              <span style="color: #94a3b8; display: block; font-size: 0.75rem; text-transform: uppercase; font-weight: 700;">Moles Solute (n)</span>
+              <strong id="displayTotalMoles" style="color: #f8fafc; font-size: 1.35rem;">--</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Preparation Metrics Cards -->
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1.25rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+          <div>
+            <span style="color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; display: block;">Theoretical Pure Mass</span>
+            <strong id="displayPureMass" style="color: #0f172a; font-size: 1.25rem; display: block; margin: 0.2rem 0;">--</strong>
+            <span style="display: block; font-size: 0.75rem; color: #64748b; font-family: monospace;">Mass at 100% assay</span>
+          </div>
+          <div>
+            <span style="color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; display: block;">Mass Concentration</span>
+            <strong id="displayMassConc" style="color: #0f172a; font-size: 1.25rem; display: block; margin: 0.2rem 0;">--</strong>
+            <span style="display: block; font-size: 0.75rem; color: #64748b; font-family: monospace;">g/L equivalent</span>
+          </div>
+        </div>
+
+        <!-- Practical Benchtop Preparation Protocol (SOP) -->
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem; flex-wrap: wrap; gap: 0.5rem;">
+            <h3 style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #0f172a; margin: 0;">Practical Benchtop SOP &amp; Actions</h3>
+            <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+              <button id="copyMolarityLatex" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.4rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Copy LaTeX</button>
+              <button id="printMolarityLabelBtn" style="background: #0284c7; border: none; padding: 0.4rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: white;">Print Bench Label</button>
+              <button id="exportMolarityCsv" style="background: #0f172a; border: none; padding: 0.4rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: white;">Export CSV</button>
+            </div>
+          </div>
+          
+          <div id="molarityStepLog" style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 1rem; font-family: system-ui, sans-serif; font-size: 0.85rem; line-height: 1.7; color: #1e293b;">
+            Calculating solution parameters...
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- PRINTABLE BENCHTOP REAGENT LABEL -->
+    <div id="molarityLabelWrapper" style="display: none; margin-bottom: 3.5rem;">
+      <div id="labelBoxMolarity" style="width: 3.75in; border: 2px solid #000; padding: 0.25in; box-sizing: border-box; font-family: system-ui, sans-serif; background: #fff; color: #000; margin: 0 auto; box-shadow: 0 4px 10px rgba(0,0,0,0.06);">
+        <div style="border-bottom: 2px solid #000; padding-bottom: 4px; display: flex; justify-content: space-between; align-items: baseline;">
+          <span style="font-size: 11pt; font-weight: 900; letter-spacing: -0.02em;">ChemistryDesk LAB STANDARD</span>
+          <span id="labelDate" style="font-size: 8pt; font-weight: bold;"></span>
+        </div>
+        <div style="margin-top: 8px;">
+          <div style="font-size: 8pt; text-transform: uppercase; font-weight: bold; color: #555;">Solution / Solute</div>
+          <div id="labelReagentName" style="font-size: 13pt; font-weight: 900; line-height: 1.2;">Sodium Chloride (NaCl)</div>
+        </div>
+        <div style="margin-top: 8px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 9pt;">
+          <div>Conc: <strong id="labelConc">0.50 M</strong></div>
+          <div>Total Vol: <strong id="labelVol">500 mL</strong></div>
+          <div>Weighed Mass: <strong id="labelWeighedMass">--</strong></div>
+          <div>Effective MW: <strong id="labelFw">--</strong></div>
+        </div>
+        <div style="margin-top: 8px; font-size: 8pt; border-top: 1px dashed #666; padding-top: 6px; display: flex; justify-content: space-between;">
+          <span>Prep By: ________________</span>
+          <span>Store: [ ]RT [ ]4°C [ ]-20°C</span>
+        </div>
+      </div>
+      <div style="text-align: center; margin-top: 1rem;">
+        <button id="triggerMolarityPrint" style="background: #0284c7; color: white; border: none; padding: 0.6rem 1.5rem; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.9rem;">Send Label to Printer</button>
+      </div>
+    </div>
+
+    <!-- EDITORIAL & SCIENTIFIC REFERENCE ARTICLE (ADSENSE E-E-A-T COMPLIANT) -->
+    <article style="border-top: 2px solid #e2e8f0; padding-top: 3.5rem; line-height: 1.85; color: #1e293b;">
+      
+      <h2 style="font-size: 1.85rem; font-weight: 800; color: #0f172a; margin-bottom: 1.25rem; letter-spacing: -0.02em;">
+        Theoretical Principles of Molar Solution Formulation &amp; Analytical Weighing
+      </h2>
+      <p style="font-size: 1rem; margin-bottom: 1.25rem;">
+        Molarity (designated <em>M</em>, with standard SI units of <strong>mol&middot;L<sup>&minus;1</sup></strong> or <strong>mol&middot;dm<sup>&minus;3</sup></strong>) defines the amount of solute in moles dissolved per unit volume of final liquid solution. In analytical chemistry, materials synthesis, and spectrophotometric calibration, formulating precise volumetric solutions is the basis of repeatable stoichiometric calculations.
+      </p>
+
+      <!-- Centered Formula Box -->
+      <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 1.5rem 2rem; margin: 2rem 0; text-align: center;">
+        <div style="font-size: 1.45rem; font-weight: 800; color: #0f172a; font-family: 'Times New Roman', Times, serif;">
+          <i>Mass</i> (g) = <span style="display: inline-block; vertical-align: middle; text-align: center; margin: 0 6px;"><span style="display: block; border-bottom: 2px solid #0f172a; padding: 0 6px;"><i>C</i> &middot; <i>V</i> &middot; <i>MW</i><sub>effective</sub></span><span style="display: block; padding-top: 3px;"><i>Purity</i> (%) / 100</span></span>
+        </div>
+      </div>
+
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2.5rem; margin-bottom: 0.85rem;">
+        Compensating for Crystalline Hydrates (&middot;nH₂O)
+      </h3>
+      <p style="font-size: 1rem;">
+        Many inorganic salts incorporate coordinated water molecules into their crystalline matrices. A classic benchtop example is copper(II) sulfate:
+      </p>
+      <ul style="margin-left: 1.5rem; font-size: 0.95rem; line-height: 1.8;">
+        <li><strong>Anhydrous Copper Sulfate (CuSO₄):</strong> Molar mass = 159.60 g/mol.</li>
+        <li><strong>Copper Sulfate Pentahydrate (CuSO₄&middot;5H₂O):</strong> Molar mass = 159.60 + 5(18.01528) = 249.68 g/mol.</li>
+      </ul>
+      <p style="font-size: 1rem;">
+        Weighing 159.60 g of the pentahydrate delivers only 102.0 g of active CuSO₄ and 57.6 g of water, resulting in a severe <strong>36.1% deficit in target solution concentration</strong>. The effective molecular weight must reflect the complete crystal stoichiometry:
+      </p>
+      <div style="background: #f1f5f9; border-left: 4px solid #0284c7; padding: 0.85rem 1.25rem; margin: 1.25rem 0; font-family: monospace; font-size: 0.9rem; color: #0f172a; font-weight: 600;">
+        MW<sub>effective</sub> = MW<sub>anhydrous</sub> + (n &times; 18.01528 g/mol)
+      </div>
+
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2.5rem; margin-bottom: 0.85rem;">
+        Reagent Assay Purity Correction
+      </h3>
+      <p style="font-size: 1rem;">
+        Analytical reagents are stamped with a certified manufacturer assay purity percentage (<em>P%</em>). Analytical Reagent (AR) grade chemicals often range between 95.0% and 99.5% purity due to atmospheric moisture absorption and synthesis traces. To supply the target moles of pure chemical (<em>n</em>), the balance mass must be adjusted:
+      </p>
+      <div style="background: #f1f5f9; border-left: 4px solid #0284c7; padding: 0.85rem 1.25rem; margin: 1.25rem 0; font-family: monospace; font-size: 0.9rem; color: #0f172a; font-weight: 600;">
+        Mass<sub>weighed</sub> = Mass<sub>theoretical</sub> / (Assay% / 100)
+      </div>
+
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2.5rem; margin-bottom: 0.85rem;">
+        Standard Volumetric Preparation Workflow
+      </h3>
+      <ol style="margin-left: 1.5rem; line-height: 1.8; font-size: 0.95rem;">
+        <li><strong>Analytical Balance Weighing:</strong> Tare a clean weighing boat and weigh the gross mass on a calibrated analytical balance (±0.0001 g precision).</li>
+        <li><strong>Initial Beaker Dissolution:</strong> Transfer the salt into a clean glass beaker containing ~60% of the target deionized water volume. Stir gently until solid dissolution is complete.</li>
+        <li><strong>Thermal Equilibrate:</strong> Allow any endothermic cooling or exothermic heat of solution to return to ambient laboratory temperature (20&deg;C).</li>
+        <li><strong>Quantitative Transfer:</strong> Pour the solution into a Class-A volumetric flask using a clean funnel. Rinse the beaker walls and funnel 3 times with solvent aliquots into the flask.</li>
+        <li><strong>Meniscus Adjustment:</strong> Dilute dropwise until the lowest curved boundary of the meniscus touches the graduation line at eye level. Stopper and invert 10 times.</li>
+      </ol>
+
+      <!-- FAQ Section -->
+      <h3 style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-top: 3rem; margin-bottom: 1.25rem;">
+        Frequently Asked Questions: Solution Molarity &amp; Analytical Weighing
+      </h3>
+      
+      <div style="display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 2rem;">
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What is the physical difference between molarity and molality?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Molarity (M) denotes moles of solute per liter of total solution, which is temperature-dependent due to solvent thermal expansion. Molality (m) represents moles of solute per kilogram of pure solvent, which remains strictly independent of temperature.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Why must chemical assay purity be factored into molarity calculations?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Manufacturer reagents are rarely 100% pure due to residual moisture and trace synthetic precursors. If an assay reads 96.0%, weighing 100 g supplies only 96 g of active solute, yielding an under-concentrated standard unless compensated.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Why should solutions never be dissolved directly inside a volumetric flask?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Salts often display significant dissolution heats (&Delta;H<sub>solution</sub>). Volumetric flasks are calibrated strictly at 20&deg;C; dissolving hot or cold reagents alters glass dimensions and causes inaccurate volume markings before thermal equilibrium.
+          </p>
+        </details>
+      </div>
+
+    </article>
+  </main>
+
+  <style>
+    .molarity-preset-btn {
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      padding: 0.35rem 0.65rem;
+      border-radius: 6px;
+      cursor: pointer;
+      color: #1e293b;
+      font-size: 0.75rem;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+    .molarity-preset-btn:hover {
+      background: #0284c7;
+      color: #ffffff;
+      border-color: #0284c7;
+      transform: translateY(-1px);
+    }
+    @media print {
+      body * {
+        visibility: hidden !important;
+      }
+      #molarityLabelWrapper, #molarityLabelWrapper * {
+        visibility: visible !important;
+      }
+      #molarityLabelWrapper {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        display: block !important;
+      }
+      #labelBoxMolarity {
+        position: absolute;
+        left: 0.25in;
+        top: 0.25in;
+      }
+      #triggerMolarityPrint {
+        display: none !important;
+      }
+    }
+  </style>
+
+  <script is:inline>
+    function sanitizeNum(val) {
+      if (typeof val === 'string') val = val.replace(',', '.').trim();
+      var parsed = parseFloat(val);
+      return isNaN(parsed) ? 0 : parsed;
+    }
+
+    var soluteName = document.getElementById('soluteName');
+    var concInput = document.getElementById('concInput');
+    var concUnit = document.getElementById('concUnit');
+    var volInput = document.getElementById('volInput');
+    var volUnit = document.getElementById('volUnit');
+    var mwInput = document.getElementById('mwInput');
+    var hydrateCount = document.getElementById('hydrateCount');
+    var puritySlider = document.getElementById('puritySlider');
+    var purityVal = document.getElementById('purityVal');
+    var hydrateTag = document.getElementById('hydrateTag');
+    var activeReagentTag = document.getElementById('activeReagentTag');
+
+    var primaryMassGrams = document.getElementById('primaryMassGrams');
+    var displayEffectiveMw = document.getElementById('displayEffectiveMw');
+    var displayTotalMoles = document.getElementById('displayTotalMoles');
+    var displayPureMass = document.getElementById('displayPureMass');
+    var displayMassConc = document.getElementById('displayMassConc');
+    var molarityStepLog = document.getElementById('molarityStepLog');
+    var ghsHazardText = document.getElementById('ghsHazardText');
+    var ghsPpeText = document.getElementById('ghsPpeText');
+
+    var molarityLabelWrapper = document.getElementById('molarityLabelWrapper');
+    var labelReagentName = document.getElementById('labelReagentName');
+    var labelConc = document.getElementById('labelConc');
+    var labelVol = document.getElementById('labelVol');
+    var labelWeighedMass = document.getElementById('labelWeighedMass');
+    var labelFw = document.getElementById('labelFw');
+    var labelDate = document.getElementById('labelDate');
+
+    function calculateMolarity() {
+      var cFactor = parseFloat(concUnit.value);
+      var vFactor = parseFloat(volUnit.value);
+      var concVal = sanitizeNum(concInput.value);
+      var volVal = sanitizeNum(volInput.value);
+      var anhydrousMw = sanitizeNum(mwInput.value);
+      var nWaters = parseInt(hydrateCount.value) || 0;
+      var purityPercent = sanitizeNum(puritySlider.value);
+
+      purityVal.textContent = purityPercent.toFixed(1) + '%';
+      hydrateTag.textContent = nWaters === 0 ? 'Anhydrous (0 H₂O)' : (nWaters + ' H₂O Hydrate');
+
+      if (concVal <= 0 || volVal <= 0 || anhydrousMw <= 0 || purityPercent <= 0) {
+        primaryMassGrams.textContent = '--';
+        displayEffectiveMw.textContent = '--';
+        displayTotalMoles.textContent = '--';
+        displayPureMass.textContent = '--';
+        displayMassConc.textContent = '--';
+        return;
+      }
+
+      var concMolar = concVal * cFactor;
+      var volLiters = volVal * vFactor;
+      var waterMw = 18.01528;
+      var effectiveMw = anhydrousMw + (nWaters * waterMw);
+      var molesSolute = concMolar * volLiters;
+      var theoreticalPureMass = molesSolute * effectiveMw;
+      var grossMassToWeigh = theoreticalPureMass / (purityPercent / 100);
+      var massConcentration = grossMassToWeigh / volLiters;
+
+      primaryMassGrams.textContent = grossMassToWeigh.toFixed(4) + ' g';
+      displayEffectiveMw.textContent = effectiveMw.toFixed(3) + ' g/mol';
+      displayTotalMoles.textContent = molesSolute < 1e-3 ? molesSolute.toExponential(4) + ' mol' : molesSolute.toFixed(4) + ' mol';
+      displayPureMass.textContent = theoreticalPureMass.toFixed(4) + ' g';
+      displayMassConc.textContent = massConcentration.toFixed(3) + ' g/L';
+
+      molarityStepLog.innerHTML = 
+        '1. Tare weighing boat on a calibrated analytical balance and weigh <strong>' + grossMassToWeigh.toFixed(4) + ' g</strong> of ' + soluteName.value + ' (compensating for ' + purityPercent.toFixed(1) + '% assay purity).<br />' +
+        '2. Add approximately <strong>' + (volVal * 0.65).toFixed(1) + ' ' + volUnit.options[volUnit.selectedIndex].text + '</strong> of solvent to a beaker and stir to completely dissolve the solute.<br />' +
+        '3. Quantitatively transfer to a <strong>' + volVal + ' ' + volUnit.options[volUnit.selectedIndex].text + '</strong> Class-A volumetric flask and dilute until meniscus reaches the mark.<br />' +
+        '4. Result: <strong>' + concVal + ' ' + concUnit.options[concUnit.selectedIndex].text + '</strong> active solution containing ' + (molesSolute < 1e-3 ? molesSolute.toExponential(4) : molesSolute.toFixed(4)) + ' moles solute.';
+
+      labelReagentName.textContent = soluteName.value;
+      labelConc.textContent = concVal + ' ' + concUnit.options[concUnit.selectedIndex].text;
+      labelVol.textContent = volVal + ' ' + volUnit.options[volUnit.selectedIndex].text;
+      labelWeighedMass.textContent = grossMassToWeigh.toFixed(4) + ' g';
+      labelFw.textContent = effectiveMw.toFixed(2) + ' g/mol';
+      if (labelDate) labelDate.textContent = new Date().toLocaleDateString();
+
+      // Sync URL parameters for sharing
+      var urlParams = new URLSearchParams(window.location.search);
+      urlParams.set('chem', soluteName.value);
+      urlParams.set('c', concVal);
+      urlParams.set('v', volVal);
+      urlParams.set('mw', anhydrousMw);
+      urlParams.set('h', nWaters);
+      urlParams.set('p', purityPercent);
+      window.history.replaceState({}, '', window.location.pathname + '?' + urlParams.toString());
+    }
+
+    // Parse URL on initial load if present
+    function loadUrlParams() {
+      var params = new URLSearchParams(window.location.search);
+      if (params.has('chem')) soluteName.value = params.get('chem');
+      if (params.has('c')) concInput.value = params.get('c');
+      if (params.has('v')) volInput.value = params.get('v');
+      if (params.has('mw')) mwInput.value = params.get('mw');
+      if (params.has('h')) hydrateCount.value = params.get('h');
+      if (params.has('p')) puritySlider.value = params.get('p');
+    }
+
+    document.querySelectorAll('.molarity-preset-btn').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        var t = e.currentTarget;
+        soluteName.value = t.dataset.name;
+        mwInput.value = t.dataset.mw;
+        puritySlider.value = t.dataset.purity;
+        hydrateCount.value = t.dataset.hydrate;
+        ghsHazardText.textContent = t.dataset.ghs;
+        ghsPpeText.textContent = t.dataset.ppe;
+        activeReagentTag.textContent = t.dataset.name.split(' (')[0];
+        calculateMolarity();
+      });
+    });
+
+    [concInput, concUnit, volInput, volUnit, mwInput, hydrateCount, puritySlider, soluteName].forEach(function(el) {
+      el.addEventListener('input', calculateMolarity);
+      el.addEventListener('change', calculateMolarity);
+    });
+
+    document.getElementById('copyMolarityLatex').addEventListener('click', function() {
+      var latex = 'm = \\frac{C \\cdot V \\cdot MW_{\\mathrm{eff}}}{P\\%} = ' + primaryMassGrams.textContent;
+      navigator.clipboard.writeText(latex);
+      alert('LaTeX equation copied to clipboard.');
+    });
+
+    document.getElementById('printMolarityLabelBtn').addEventListener('click', function() {
+      molarityLabelWrapper.style.display = molarityLabelWrapper.style.display === 'none' ? 'block' : 'none';
+      if (molarityLabelWrapper.style.display === 'block') {
+        molarityLabelWrapper.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+
+    document.getElementById('triggerMolarityPrint').addEventListener('click', function() {
+      window.print();
+    });
+
+    document.getElementById('exportMolarityCsv').addEventListener('click', function() {
+      var csv = 'Parameter,Value,Unit\n' +
+        'Reagent_Name,' + soluteName.value + ',text\n' +
+        'Target_Concentration,' + concInput.value + ',' + concUnit.options[concUnit.selectedIndex].text + '\n' +
+        'Volume,' + volInput.value + ',' + volUnit.options[volUnit.selectedIndex].text + '\n' +
+        'Anhydrous_MW,' + mwInput.value + ',g/mol\n' +
+        'Hydrate_Water_stoichiometry,' + hydrateCount.value + ',integer\n' +
+        'Effective_MW,' + displayEffectiveMw.textContent.replace(' g/mol','') + ',g/mol\n' +
+        'Purity_Assay,' + puritySlider.value + ',percent\n' +
+        'Mass_To_Weigh,' + primaryMassGrams.textContent.replace(' g','') + ',grams\n';
+      var blob = new Blob([csv], { type: 'text/csv' });
+      var url = window.URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.setAttribute('href', url);
+      a.setAttribute('download', 'molarity_recipe_' + soluteName.value.replace(/[^a-zA-Z0-9]/g, '_') + '.csv');
+      a.click();
+    });
+
+    document.getElementById('shareSetupBtn').addEventListener('click', function() {
+      navigator.clipboard.writeText(window.location.href);
+      alert('Experiment URL copied to clipboard.');
+    });
+
+    loadUrlParams();
+    calculateMolarity();
+  </script>
+</BaseLayout>
