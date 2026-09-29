@@ -75,8 +75,13 @@ const fullCanonicalUrl = new URL(cleanPath, siteOrigin).href;
         <a href="/scherrer" style={`text-decoration: none; font-size: 0.85rem; font-weight: 700; padding: 0.45rem 0.85rem; border-radius: 8px; transition: all 0.2s ease; ${Astro.url.pathname.startsWith('/scherrer') ? 'background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd;' : 'background: transparent; color: #475569; border: 1px solid transparent;'}`}>PXRD Scherrer</a>
         <a href="/about" style={`text-decoration: none; font-size: 0.85rem; font-weight: 700; padding: 0.45rem 0.85rem; border-radius: 8px; transition: all 0.2s ease; ${Astro.url.pathname.startsWith('/about') ? 'background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd;' : 'background: transparent; color: #475569; border: 1px solid transparent;'}`}>About</a>
         <a href="/contact" style={`text-decoration: none; font-size: 0.85rem; font-weight: 700; padding: 0.45rem 0.85rem; border-radius: 8px; transition: all 0.2s ease; ${Astro.url.pathname.startsWith('/contact') ? 'background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd;' : 'background: transparent; color: #475569; border: 1px solid transparent;'}`}>Contact</a>
-        <button id="pwaInstallBtn" style="display: none; align-items: center; gap: 0.35rem; font-size: 0.8rem; font-weight: 700; padding: 0.4rem 0.75rem; border-radius: 8px; background: #0284c7; color: #ffffff; border: none; cursor: pointer; transition: all 0.2s ease;">
-          <span>📥</span> Install App
+        <button id="pwaInstallBtn" type="button" title="Install ChemistryDesk as a native offline app" style="display: inline-flex; flex-direction: column; align-items: center; justify-content: center; padding: 0.35rem 0.85rem; border-radius: 8px; background: #0284c7; color: #ffffff; border: none; cursor: pointer; transition: all 0.2s ease; line-height: 1.15; box-shadow: 0 1px 3px rgba(2, 132, 199, 0.3);">
+          <span style="display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.8rem; font-weight: 700;">
+            <span>📥</span> Install App
+          </span>
+          <span style="font-size: 0.62rem; font-weight: 700; opacity: 0.92; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 1px;">
+            100% Offline
+          </span>
         </button>
       </nav>
 
@@ -99,42 +104,41 @@ const fullCanonicalUrl = new URL(cleanPath, siteOrigin).href;
     <div>&copy; 2026 ChemistryDesk. Designed for benchtop precision and educational reference.</div>
   </footer>
 
-  <script is:inline>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
-          .then(() => console.log('ChemistryDesk offline engine active.'))
-          .catch((err) => console.warn('PWA registration error:', err));
-      });
-    }
-
-    let deferredPrompt;
-    const installBtn = document.getElementById('pwaInstallBtn');
-
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      if (installBtn) {
-        installBtn.style.display = 'inline-flex';
-      }
+ <script is:inline>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(() => console.log('ChemistryDesk offline engine active.'))
+        .catch((err) => console.warn('PWA registration error:', err));
     });
+  }
 
-    if (installBtn) {
-      installBtn.addEventListener('click', async () => {
-        if (!deferredPrompt) return;
+  let deferredPrompt;
+  const installBtn = document.getElementById('pwaInstallBtn');
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+  });
+
+  if (installBtn) {
+    installBtn.addEventListener('click', async () => {
+      if (deferredPrompt) {
         deferredPrompt.prompt();
         const { outcome } = await deferredPrompt.userChoice;
         if (outcome === 'accepted') {
           installBtn.style.display = 'none';
         }
         deferredPrompt = null;
-      });
-    }
-
-    window.addEventListener('appinstalled', () => {
-      if (installBtn) installBtn.style.display = 'none';
-      deferredPrompt = null;
+      } else {
+        alert("To install ChemistryDesk for 100% offline benchtop use:\n\n• Desktop: Click the 'Install' icon inside your browser's address bar (top-right).\n• Mobile: Tap your browser menu (⋮ or Share) and select 'Add to Home screen'.");
+      }
     });
-  </script>
+  }
+
+  window.addEventListener('appinstalled', () => {
+    if (installBtn) installBtn.style.display = 'none';
+  });
+</script>
 </body>
 </html>
