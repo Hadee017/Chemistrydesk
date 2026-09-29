@@ -6,99 +6,96 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   title="Solution Molarity Calculator & Solute Mass Studio | ChemistryDesk"
   description="Research-grade solution molarity calculator. Automatically compensates for crystalline hydration water (·nH2O) and chemical assay purity. Features dynamic GHS safety alerts, step-by-step SOPs, Overleaf LaTeX export, and printable bottle labels."
 >
-  <!-- Schema: WebApplication -->
+ <!-- Unified Structured Data Schema (@graph) -->
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "ChemistryDesk Solution Molarity & Solute Mass Studio",
-    "applicationCategory": "EducationalApplication",
-    "operatingSystem": "All",
-    "browserRequirements": "Requires JavaScript",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    }
-  })} />
-
-  <!-- Schema: HowTo -->
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "HowTo",
-    "name": "How to Accurately Prepare a Molar Solution with Chemical Purity and Hydration Correction",
-    "step": [
+    "@graph": [
       {
-        "@type": "HowToStep",
-        "name": "Determine Solute Formula Mass & Hydration State",
-        "text": "Identify the anhydrous molecular weight and stoichiometric coordinated crystal water (·nH2O) from the manufacturer bottle label."
+        "@type": "WebApplication",
+        "@id": "https://chemistrydesk.vercel.app/molarity#app",
+        "name": "ChemistryDesk Solution Molarity & Reagent Prep Studio",
+        "url": "https://chemistrydesk.vercel.app/molarity",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
       },
       {
-        "@type": "HowToStep",
-        "name": "Define Working Volume and Concentration",
-        "text": "Specify the target volume (mL or L) and required molarity (M or mM)."
+        "@type": "HowTo",
+        "@id": "https://chemistrydesk.vercel.app/molarity#howto",
+        "name": "How to Accurately Prepare a Molar Solution with Chemical Purity and Hydration Correction",
+        "step": [
+          {
+            "@type": "HowToStep",
+            "name": "Determine Solute Formula Mass & Hydration State",
+            "text": "Identify the anhydrous molecular weight and stoichiometric coordinated crystal water (·nH2O) from the manufacturer bottle label."
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Define Working Volume and Concentration",
+            "text": "Specify the target volume (mL or L) and required molarity (M or mM)."
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Compensate for Reagent Assay Purity",
+            "text": "Adjust the theoretical mass upward by dividing by the decimal assay purity (e.g., 0.98 for 98% ACS reagent grade) to weigh sufficient active chemical."
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Dissolve in Initial Solvent",
+            "text": "Weigh the calculated gross mass on a calibrated 4-decimal balance. Dissolve in a beaker with 60% to 70% of the target solvent volume."
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Quantitative Transfer & Meniscus Alignment",
+            "text": "Equilibrate any dissolution enthalpy to room temperature, transfer quantitatively to a Class-A volumetric flask, rinse the beaker, and dilute to the calibration line."
+          }
+        ]
       },
       {
-        "@type": "HowToStep",
-        "name": "Compensate for Reagent Assay Purity",
-        "text": "Adjust the theoretical mass upward by dividing by the decimal assay purity (e.g., 0.98 for 98% ACS reagent grade) to weigh sufficient active chemical."
-      },
-      {
-        "@type": "HowToStep",
-        "name": "Dissolve in Initial Solvent",
-        "text": "Weigh the calculated gross mass on a calibrated 4-decimal balance. Dissolve in a beaker with 60% to 70% of the target solvent volume."
-      },
-      {
-        "@type": "HowToStep",
-        "name": "Quantitative Transfer & Meniscus Alignment",
-        "text": "Equilibrate any dissolution enthalpy to room temperature, transfer quantitatively to a Class-A volumetric flask, rinse the beaker, and dilute to the calibration line."
+        "@type": "FAQPage",
+        "@id": "https://chemistrydesk.vercel.app/molarity#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is the difference between molarity and molality?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Molarity (M) denotes moles of solute per liter of total solution, which is temperature-dependent due to solvent thermal expansion. Molality (m) is moles of solute per kilogram of pure solvent, which remains strictly temperature-invariant."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why must chemical assay purity be factored into molarity mass calculations?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Commercial reagents are rarely 100% pure due to atmospheric moisture absorption, trace isomers, or manufacturing tolerances. If a salt has an assay of 98%, weighing 100 g supplies only 98 g of active solute, producing an under-concentrated solution unless mathematically compensated."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does crystalline hydration water affect balance weighing?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Hydrates incorporate water molecules into their crystal lattice (e.g., CuSO4·5H2O). Because water adds significant molecular mass without contributing active ions, weighing must be based on the complete hydrate formula weight (249.68 g/mol) rather than the anhydrous weight (159.60 g/mol)."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why should solutes never be dissolved directly inside a volumetric flask?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Dissolution of salts frequently produces significant enthalpy of solution (exothermic heat or endothermic cooling). Volumetric flasks are calibrated strictly at 20°C; thermal expansion of glass and liquids causes significant volumetric calibration errors before thermal equilibrium is restored."
+            }
+          }
+        ]
       }
     ]
   })} />
-
-  <!-- Schema: FAQPage -->
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "What is the difference between molarity and molality?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Molarity (M) denotes moles of solute per liter of total solution, which is temperature-dependent due to solvent thermal expansion. Molality (m) is moles of solute per kilogram of pure solvent, which remains strictly temperature-invariant."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Why must chemical assay purity be factored into molarity mass calculations?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Commercial reagents are rarely 100% pure due to atmospheric moisture absorption, trace isomers, or manufacturing tolerances. If a salt has an assay of 98%, weighing 100 g supplies only 98 g of active solute, producing an under-concentrated solution unless mathematically compensated."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "How does crystalline hydration water affect balance weighing?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Hydrates incorporate water molecules into their crystal lattice (e.g., CuSO4·5H2O). Because water adds significant molecular mass without contributing active ions, weighing must be based on the complete hydrate formula weight (249.68 g/mol) rather than the anhydrous weight (159.60 g/mol)."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Why should solutes never be dissolved directly inside a volumetric flask?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Dissolution of salts frequently produces significant enthalpy of solution (exothermic heat or endothermic cooling). Volumetric flasks are calibrated strictly at 20°C; thermal expansion of glass and liquids causes significant volumetric calibration errors before thermal equilibrium is restored."
-        }
-      }
-    ]
-  })} />
-
-  <main style="max-width: 1140px; margin: 1.5rem auto 4rem auto; padding: 0 1.5rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #0f172a;">
-    
-    <!-- Breadcrumb Navigation -->
-    <nav style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.25rem;">
       <a href="/" style="color: #0284c7; text-decoration: none; font-weight: 600;">Home</a> &rsaquo; 
       <span style="color: #64748b;"> Solution Preparation</span> &rsaquo; 
       <span style="color: #0f172a; font-weight: 700;">Molarity Studio</span>
