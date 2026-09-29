@@ -1,0 +1,99 @@
+---
+interface Props {
+  toolName: string;
+  toolUrl: string;
+  bibtexKey: string;
+}
+
+const { toolName, toolUrl, bibtexKey } = Astro.props;
+const year = 2026;
+---
+
+<div style="margin-top: 2.5rem; background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+      <span style="font-size: 1.25rem;">📖</span>
+      <h3 style="margin: 0; font-size: 1.05rem; font-weight: 700; color: #0f172a;">Cite This Calculation & Methodology</h3>
+    </div>
+    <button id="copyCiteBtn" type="button" style="display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.78rem; font-weight: 700; padding: 0.35rem 0.75rem; border-radius: 6px; background: #0284c7; color: #ffffff; border: none; cursor: pointer; transition: all 0.2s ease;">
+      <span id="copyCiteIcon">📋</span> <span id="copyCiteText">Copy Citation</span>
+    </button>
+  </div>
+
+  <p style="font-size: 0.85rem; color: #64748b; margin-top: 0; margin-bottom: 0.85rem; line-height: 1.5;">
+    Published in an academic manuscript, thesis, or laboratory standard operating procedure? Select your target format below:
+  </p>
+
+  <!-- Style Tabs -->
+  <div style="display: flex; gap: 0.35rem; margin-bottom: 0.85rem; flex-wrap: wrap;">
+    <button type="button" class="cite-tab active" data-format="bibtex" style="padding: 0.3rem 0.65rem; font-size: 0.78rem; font-weight: 700; border-radius: 6px; border: 1px solid #cbd5e1; background: #0f172a; color: #ffffff; cursor: pointer;">BibTeX</button>
+    <button type="button" class="cite-tab" data-format="acs" style="padding: 0.3rem 0.65rem; font-size: 0.78rem; font-weight: 600; border-radius: 6px; border: 1px solid #cbd5e1; background: #f8fafc; color: #334155; cursor: pointer;">ACS</button>
+    <button type="button" class="cite-tab" data-format="apa" style="padding: 0.3rem 0.65rem; font-size: 0.78rem; font-weight: 600; border-radius: 6px; border: 1px solid #cbd5e1; background: #f8fafc; color: #334155; cursor: pointer;">APA 7</button>
+    <button type="button" class="cite-tab" data-format="ieee" style="padding: 0.3rem 0.65rem; font-size: 0.78rem; font-weight: 600; border-radius: 6px; border: 1px solid #cbd5e1; background: #f8fafc; color: #334155; cursor: pointer;">IEEE / RSC</button>
+  </div>
+
+  <!-- Citation Text Display Area -->
+  <pre id="citeOutput" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; font-size: 0.82rem; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; color: #0f172a; white-space: pre-wrap; word-break: break-all; margin: 0; line-height: 1.5;"></pre>
+</div>
+
+<script is:inline define:vars={{ toolName, toolUrl, bibtexKey, year }}>
+  const citations = {
+    bibtex: `@software{${bibtexKey}_${year},
+  author    = {ChemistryDesk Benchtop Contributors},
+  title     = {${toolName}},
+  year      = {${year}},
+  publisher = {ChemistryDesk Precision Scientific Utilities},
+  url       = {${toolUrl}}
+}`,
+    acs: `ChemistryDesk Benchtop Contributors. ${toolName}. ChemistryDesk, ${year}. ${toolUrl} (accessed ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}).`,
+    apa: `ChemistryDesk Benchtop Contributors. (${year}). ${toolName} [Web software]. ChemistryDesk. ${toolUrl}`,
+    ieee: `ChemistryDesk Benchtop Contributors, "${toolName}," ChemistryDesk, ${year}. [Online]. Available: ${toolUrl}.`
+  };
+
+  let activeFormat = 'bibtex';
+  const citeOutput = document.getElementById('citeOutput');
+  const tabs = document.querySelectorAll('.cite-tab');
+  const copyBtn = document.getElementById('copyCiteBtn');
+  const copyText = document.getElementById('copyCiteText');
+  const copyIcon = document.getElementById('copyCiteIcon');
+
+  function renderCitation() {
+    if (citeOutput) {
+      citeOutput.textContent = citations[activeFormat];
+    }
+  }
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => {
+        t.style.background = '#f8fafc';
+        t.style.color = '#334155';
+        t.style.fontWeight = '600';
+      });
+      tab.style.background = '#0f172a';
+      tab.style.color = '#ffffff';
+      tab.style.fontWeight = '700';
+      activeFormat = tab.getAttribute('data-format');
+      renderCitation();
+    });
+  });
+
+  if (copyBtn) {
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(citations[activeFormat]);
+        copyText.textContent = 'Copied!';
+        copyIcon.textContent = '✅';
+        setTimeout(() => {
+          copyText.textContent = 'Copy Citation';
+          copyIcon.textContent = '📋';
+        }, 2000);
+      } catch (err) {
+        console.error('Failed to copy citation:', err);
+      }
+    });
+  }
+
+  // Initial render
+  renderCitation();
+</script>

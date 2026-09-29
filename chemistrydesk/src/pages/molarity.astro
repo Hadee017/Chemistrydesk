@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { REAGENTS_DATABASE } from '../data/reagents';
+import CiteTool from '../components/CiteTool.astro';
 ---
 
 <BaseLayout 
@@ -785,4 +786,10 @@ import { REAGENTS_DATABASE } from '../data/reagents';
       </a>
     </div>
   </section>
+  <!-- Academic Citation Block -->
+    <CiteTool 
+      toolName="Solution Molarity Studio & Hydrate Compensation Engine" 
+      toolUrl="https://chemistrydesk.vercel.app/molarity" 
+      bibtexKey="chemistrydesk_molarity" 
+    />
 </BaseLayout>
