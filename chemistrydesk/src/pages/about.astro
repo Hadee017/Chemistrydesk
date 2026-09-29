@@ -3,32 +3,73 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout 
-  title="About Us | ChemistryDesk Laboratory Suite" 
-  description="About ChemistryDesk: Our mission to provide open-access, zero-lag computational chemistry tools for researchers and students."
+  title="About ChemistryDesk | Research-Grade Benchtop Computational Suite"
+  description="Learn about ChemistryDesk, an open scientific utility suite developed by physical and analytical chemists to eliminate benchtop volumetric errors and provide standardized stoichiometric workflows."
 >
-  <main style="max-width: 800px; margin: 3rem auto; padding: 0 1.5rem; line-height: 1.8; color: #334155; font-family: system-ui, -apple-system, sans-serif;">
-    <h1 style="color: #0f172a; font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem;">About ChemistryDesk</h1>
-    <p style="color: #64748b; font-size: 0.875rem; margin-bottom: 2rem;">Dedicated to Accessible Benchtop Computational Chemistry</p>
+  <main style="max-width: 900px; margin: 3rem auto; padding: 0 1.5rem; line-height: 1.8; color: #1e293b; font-family: system-ui, -apple-system, sans-serif;">
+    
+    <!-- Hero / Mission -->
+    <div style="border-bottom: 2px solid #e2e8f0; padding-bottom: 2rem; margin-bottom: 2.5rem;">
+      <span style="display: inline-block; background: #e0f2fe; color: #0284c7; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.3rem 0.85rem; border-radius: 9999px; margin-bottom: 0.75rem;">
+        Scientific Precision &amp; Transparency
+      </span>
+      <h1 style="font-size: 2.5rem; font-weight: 800; color: #0f172a; letter-spacing: -0.025em; margin: 0 0 1rem 0;">
+        About ChemistryDesk
+      </h1>
+      <p style="font-size: 1.15rem; color: #475569; margin: 0; line-height: 1.6;">
+        A research-grade computational suite developed to bridge the gap between theoretical stoichiometry and practical wet-lab formulation.
+      </p>
+    </div>
 
-    <section style="margin-bottom: 2rem;">
-      <h2 style="color: #0f172a; font-size: 1.25rem; font-weight: 700;">Our Mission</h2>
-      <p>ChemistryDesk was founded to address a persistent gap in standard laboratory workflows: everyday computational tasks—such as crystal hydration mass compensation, serial dilution ladders, and powder XRD line broadening calculations—are often trapped behind paid software licenses, slow mobile apps, or cluttered, ad-heavy portals.</p>
-      <p>Our platform delivers clean, instantaneous, client-side scientific calculators paired directly with rigorous theoretical background, mathematical derivations, and practical benchtop Standard Operating Procedures (SOPs).</p>
+    <!-- Editorial & Scientific Authority -->
+    <section style="margin-bottom: 3rem;">
+      <h2 style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem;">
+        Editorial Leadership &amp; Scientific Background
+      </h2>
+      <p>
+        ChemistryDesk was founded and is actively maintained by <strong>Bilal Khan</strong>, a physical chemistry researcher and educator based in Hazro, District Attock, Pakistan. His research background encompasses <strong>materials chemistry, metal-organic frameworks (HKUST-1 composites), advanced oxidation processes (AOPs), and solution plasma catalytic degradation</strong>.
+      </p>
+      <p>
+        Having worked extensively across academic synthesis laboratories and practical teaching academies, the founder designed ChemistryDesk to solve a persistent lab failure point: the discrepancy between theoretical textbook formulas and practical balance weighing—specifically accounting for <em>crystalline hydration water (&middot;nH₂O)</em>, manufacturer <em>assay purity percentages</em>, and <em>instrumental X-ray peak broadening</em>.
+      </p>
     </section>
 
-    <section style="margin-bottom: 2rem;">
-      <h2 style="color: #0f172a; font-size: 1.25rem; font-weight: 700;">Editorial Standards & Accuracy</h2>
-      <p>Every computational engine deployed on ChemistryDesk is engineered using standard analytical principles:</p>
-      <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
-        <li>Standard atomic weights adhere to current IUPAC periodic table standards.</li>
-        <li>Physical crystallographic equations (such as the Scherrer formula) account for instrument broadening and exact radiation source wavelengths.</li>
-        <li>Solution preparation formulas explicitly calculate hydration state additions (MW_effective = MW_base + n &times; 18.015 g/mol) to eliminate negative concentration errors on the benchtop.</li>
+    <!-- Standards & Methodological Accuracy -->
+    <section style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 2rem; margin-bottom: 3rem;">
+      <h2 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 0; margin-bottom: 1rem;">
+        Computational &amp; Analytical Standards
+      </h2>
+      <p style="font-size: 0.95rem; margin-bottom: 1rem;">
+        All calculators on ChemistryDesk adhere strictly to internationally recognized scientific conventions:
+      </p>
+      <ul style="margin: 0; padding-left: 1.5rem; font-size: 0.95rem; color: #334155;">
+        <li style="margin-bottom: 0.65rem;">
+          <strong>IUPAC Standard Atomic Weights:</strong> Formula masses are computed from standard isotope abundances to four decimal places.
+        </li>
+        <li style="margin-bottom: 0.65rem;">
+          <strong>Hydration Stoichiometry:</strong> Hydrate molecular contributions explicitly track molar water mass ($18.01528\text{ g/mol}$) to prevent systematic molarity deficits.
+        </li>
+        <li style="margin-bottom: 0.65rem;">
+          <strong>Scherrer Crystallite Deconvolution:</strong> PXRD peak broadening evaluations incorporate full instrumental baseline subtraction ($b_{\text{std}}$) and shape factors ($K = 0.94$).
+        </li>
+        <li>
+          <strong>Client-Side Execution:</strong> All numerical evaluations execute directly within the user's browser using double-precision arithmetic. Proprietary experimental parameters and research formulations are never transmitted to external servers.
+        </li>
       </ul>
     </section>
 
-    <section style="margin-bottom: 2rem;">
-      <h2 style="color: #0f172a; font-size: 1.25rem; font-weight: 700;">Platform Architecture</h2>
-      <p>ChemistryDesk is built using modern static web architectures (Astro) deployed to global edge networks. This ensures that calculations load in milliseconds, consume minimal device memory, and function securely without tracking proprietary laboratory data.</p>
+    <!-- Open Access & Contact Info -->
+    <section>
+      <h2 style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem;">
+        Peer Review &amp; Method Verification
+      </h2>
+      <p>
+        ChemistryDesk is an open educational and laboratory utility. If you identify a formula edge case, require a specific reagent addition to our database, or wish to propose an analytical workflow collaboration, please reach out directly through our <a href="/contact" style="color: #0284c7; font-weight: 700; text-decoration: none;">Contact Page</a>.
+      </p>
+      <p style="font-size: 0.9rem; color: #64748b; margin-top: 2rem; border-top: 1px solid #e2e8f0; padding-top: 1rem;">
+        <em>Last Methodological Review: September 2026 | Compliant with standard analytical laboratory operating procedures.</em>
+      </p>
     </section>
+
   </main>
 </BaseLayout>
