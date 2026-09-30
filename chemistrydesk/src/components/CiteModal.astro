@@ -1,0 +1,96 @@
+---
+// src/components/CiteModal.astro
+const doi = "10.5281/zenodo.23059466";
+const doiUrl = "https://doi.org/10.5281/zenodo.23059466";
+---
+
+<!-- Trigger Button -->
+<button 
+  id="open-cite-modal-btn"
+  type="button" 
+  class="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-md transition-colors"
+>
+  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v5m4-5v5m4-5v5M3 10h18M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z" />
+  </svg>
+  Cite this Calculation (DOI)
+</button>
+
+<!-- Modal Overlay -->
+<div id="cite-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+  <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full p-6 border border-slate-200 space-y-4 text-left">
+    <div class="flex items-center justify-between border-b pb-3">
+      <div>
+        <h3 class="text-base font-bold text-slate-900">Academic Citation & DOI</h3>
+        <p class="text-xs text-slate-500">Persistent scholarly identifier for scientific attribution</p>
+      </div>
+      <button id="close-cite-modal-btn" class="text-slate-400 hover:text-slate-600 text-lg font-bold">&times;</button>
+    </div>
+
+    <!-- Active DOI Display -->
+    <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-lg flex items-center justify-between text-xs">
+      <span class="text-emerald-900 font-medium">DataCite DOI:</span>
+      <a href={doiUrl} target="_blank" rel="noopener noreferrer" class="font-mono text-emerald-700 underline font-semibold">
+        {doi}
+      </a>
+    </div>
+
+    <!-- BibTeX Format -->
+    <div class="space-y-1">
+      <div class="flex justify-between items-center text-xs font-semibold text-slate-700">
+        <span>BibTeX format</span>
+        <button id="copy-bibtex-btn" class="text-emerald-600 hover:text-emerald-700 text-xs font-medium">Copy BibTeX</button>
+      </div>
+      <pre id="bibtex-code" class="p-3 bg-slate-900 text-emerald-400 font-mono text-[11px] rounded-lg overflow-x-auto whitespace-pre">@software&#123;khan_chemistrydesk_2026,
+  author    = &#123;Khan, Bilal&#125;,
+  title     = &#123;ChemistryDesk: Precision Analytical Web Engine&#125;,
+  year      = &#123;2026&#125;,
+  publisher = &#123;Zenodo&#125;,
+  version   = &#123;v1.0.1&#125;,
+  doi       = &#123;10.5281/zenodo.23059466&#125;,
+  url       = &#123;https://doi.org/10.5281/zenodo.23059466&#125;
+&#125;</pre>
+    </div>
+
+    <!-- ACS Format -->
+    <div class="space-y-1">
+      <div class="flex justify-between items-center text-xs font-semibold text-slate-700">
+        <span>ACS Style</span>
+        <button id="copy-acs-btn" class="text-emerald-600 hover:text-emerald-700 text-xs font-medium">Copy ACS</button>
+      </div>
+      <div id="acs-code" class="p-2.5 bg-slate-50 border border-slate-200 rounded text-xs text-slate-700 font-serif">
+        Khan, B. <em>ChemistryDesk: Precision Analytical Web Engine</em>, v1.0.1; Zenodo, 2026. DOI: 10.5281/zenodo.23059466.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const modal = document.getElementById('cite-modal');
+  const openBtn = document.getElementById('open-cite-modal-btn');
+  const closeBtn = document.getElementById('close-cite-modal-btn');
+  const copyBibtexBtn = document.getElementById('copy-bibtex-btn');
+  const copyAcsBtn = document.getElementById('copy-acs-btn');
+
+  openBtn?.addEventListener('click', () => modal?.classList.remove('hidden'));
+  closeBtn?.addEventListener('click', () => modal?.classList.add('hidden'));
+
+  // Close when clicking outside dialog
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) modal.classList.add('hidden');
+  });
+
+  copyBibtexBtn?.addEventListener('click', () => {
+    const text = document.getElementById('bibtex-code')?.innerText || '';
+    navigator.clipboard.writeText(text);
+    copyBibtexBtn.innerText = 'Copied!';
+    setTimeout(() => { copyBibtexBtn.innerText = 'Copy BibTeX'; }, 2000);
+  });
+
+  copyAcsBtn?.addEventListener('click', () => {
+    const text = document.getElementById('acs-code')?.innerText || '';
+    navigator.clipboard.writeText(text);
+    copyAcsBtn.innerText = 'Copied!';
+    setTimeout(() => { copyAcsBtn.innerText = 'Copy ACS'; }, 2000);
+  });
+</script>
