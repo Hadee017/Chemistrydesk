@@ -1,21 +1,18 @@
-# ChemistryDesk Precision Scientific Utilities
-> Open-access, research-grade, offline-capable computational web engines for laboratory chemistry, material characterization, and benchtop solution preparation.
+# ChemistryDesk
 
-## Core Interactive Calculators & Tools
+> Modular, open-access, client-side computational suite for benchtop chemical formulation, analytical stock preparation, and materials crystallite characterization.
 
-- [Offline Solution Molarity Studio & Hydrate Compensation Engine](https://chemistrydesk.vercel.app/molarity): 
-  Two-way analytical mass solver to calculate required solute mass or final molarity. Automatically compensates for stoichiometric crystal hydration water (·nH2O, e.g., CuSO4·5H2O, FeSO4·7H2O) and manufacturer assay purity percentages. Includes 40+ bench standard reagent auto-lookup, dynamic GHS handling warnings, printable laboratory bottle labels, CSV recipe export, and instant academic citation drawers (BibTeX, ACS, APA 7, IEEE). Fully offline-capable via Progressive Web App (PWA) Service Worker caching.
+- Canonical URL: https://chemistrydesk.vercel.app
+- Source Code Repository: https://github.com/Hadee017/Chemistrydesk
+- Permanent Scientific Archive (DOI): https://doi.org/10.5281/zenodo.23059466
+- Primary DOI: 10.5281/zenodo.23059466
+- Current Stable Version: v1.0.1
+- Author / Developer: Bilal Khan
+- Academic Affiliation: University of Education, Lahore (Attock Campus)
+- Architecture: Progressive Web App (PWA), zero server retention, client-side Web Workers
 
-- [Stock Dilution & Serial Ladder Studio](https://chemistrydesk.vercel.app/dilution):
-  Solves C1V1 = C2V2 equations, multi-point analytical calibration standards, and geometric serial dilution ladders for spectrophotometry and analytical assays.
-
-- [PXRD Scherrer Crystallite Studio](https://chemistrydesk.vercel.app/scherrer):
-  Calculates mean crystallite domain dimensions from Powder X-ray Diffraction (PXRD) peak profiles using the Scherrer equation with full-width at half-maximum (FWHM) and instrumental peak broadening corrections.
-
-## Technical Architecture & Offline Use
-- Built for air-gapped wet chemistry labs and low-connectivity environments.
-- Fully operable offline in modern web browsers using client-side Web Workers and Service Worker caching.
-- Zero server-side data retention; all formulations run securely client-side in the browser.
-
-## Citation & Academic Grounding
-All ChemistryDesk tools provide built-in academic citation drawer components adhering to ACS, APA 7, IEEE, and standard BibTeX formats for inclusion in experimental methodology sections and supplementary information files.
+## Citation Specifications
+To cite ChemistryDesk in scholarly work, theses, or peer-reviewed manuscripts:
+- BibTeX: @software{khan_chemistrydesk_2026, author = {Khan, Bilal}, title = {ChemistryDesk: Precision Analytical Web Engine}, year = {2026}, version = {v1.0.1}, publisher = {Zenodo}, doi = {10.5281/zenodo.23059466}, url = {https://doi.org/10.5281/zenodo.23059466}}
+- ACS Style: Khan, B. ChemistryDesk: Precision Analytical Web Engine, v1.0.1; Zenodo, 2026. https://doi.org/10.5281/zenodo.23059466.
+- APA 7: Khan, B. (2026). ChemistryDesk: Precision Analytical Web Engine (Version 1.0.1) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.23059466
