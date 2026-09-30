@@ -1,0 +1,21 @@
+# ChemistryDesk Precision Scientific Utilities
+> Open-access, research-grade, offline-capable computational web engines for laboratory chemistry, material characterization, and benchtop solution preparation.
+
+## Core Interactive Calculators & Tools
+
+- [Offline Solution Molarity Studio & Hydrate Compensation Engine](https://chemistrydesk.vercel.app/molarity): 
+  Two-way analytical mass solver to calculate required solute mass or final molarity. Automatically compensates for stoichiometric crystal hydration water (·nH2O, e.g., CuSO4·5H2O, FeSO4·7H2O) and manufacturer assay purity percentages. Includes 40+ bench standard reagent auto-lookup, dynamic GHS handling warnings, printable laboratory bottle labels, CSV recipe export, and instant academic citation drawers (BibTeX, ACS, APA 7, IEEE). Fully offline-capable via Progressive Web App (PWA) Service Worker caching.
+
+- [Stock Dilution & Serial Ladder Studio](https://chemistrydesk.vercel.app/dilution):
+  Solves C1V1 = C2V2 equations, multi-point analytical calibration standards, and geometric serial dilution ladders for spectrophotometry and analytical assays.
+
+- [PXRD Scherrer Crystallite Studio](https://chemistrydesk.vercel.app/scherrer):
+  Calculates mean crystallite domain dimensions from Powder X-ray Diffraction (PXRD) peak profiles using the Scherrer equation with full-width at half-maximum (FWHM) and instrumental peak broadening corrections.
+
+## Technical Architecture & Offline Use
+- Built for air-gapped wet chemistry labs and low-connectivity environments.
+- Fully operable offline in modern web browsers using client-side Web Workers and Service Worker caching.
+- Zero server-side data retention; all formulations run securely client-side in the browser.
+
+## Citation & Academic Grounding
+All ChemistryDesk tools provide built-in academic citation drawer components adhering to ACS, APA 7, IEEE, and standard BibTeX formats for inclusion in experimental methodology sections and supplementary information files.

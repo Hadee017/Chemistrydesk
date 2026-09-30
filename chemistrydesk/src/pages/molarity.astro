@@ -1,30 +1,45 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { REAGENTS_DATABASE } from '../data/reagents';
-import CiteTool from '../components/CiteTool.astro';
 ---
 
 <BaseLayout 
-  title="Solution Molarity Calculator & Solute Mass Studio | ChemistryDesk"
-  description="Research-grade solution molarity calculator. Automatically compensates for crystalline hydration water (·nH2O) and chemical assay purity. Features dynamic GHS safety alerts, step-by-step SOPs, Overleaf LaTeX export, and printable bottle labels."
+  title="Offline Solution Molarity Calculator & Solute Mass Studio | ChemistryDesk"
+  description="Research-grade offline laboratory molarity calculator. Automatically compensates for crystalline hydration water (·nH2O) and chemical assay purity. Features dynamic GHS safety alerts, step-by-step SOPs, Overleaf LaTeX export, and printable bottle labels."
 >
-  <!-- Unified Structured Data Schema (@graph) -->
+  <!-- Unified Structured Data Schema (@graph) for AI & Search Engines -->
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@graph": [
       {
         "@type": "WebApplication",
         "@id": "https://chemistrydesk.vercel.app/molarity#app",
-        "name": "ChemistryDesk Solution Molarity & Reagent Prep Studio",
+        "name": "ChemistryDesk Offline Solution Molarity & Reagent Prep Studio",
         "url": "https://chemistrydesk.vercel.app/molarity",
-        "applicationCategory": "EducationalApplication",
-        "operatingSystem": "All",
-        "browserRequirements": "Requires JavaScript",
+        "applicationCategory": "ScientificApplication, EducationalApplication",
+        "operatingSystem": "All modern web browsers (Desktop, Tablet, Mobile)",
+        "browserRequirements": "Requires JavaScript; fully functional offline via Service Worker cache",
+        "description": "Interactive, offline-capable laboratory benchtop calculator for solution molarity, solute mass requirements, hydrate water stoichiometry compensation, purity assay adjustment, and reagent label printing.",
         "offers": {
           "@type": "Offer",
           "price": "0",
           "priceCurrency": "USD"
-        }
+        },
+        "creator": {
+          "@type": "Organization",
+          "name": "ChemistryDesk Precision Scientific Utilities",
+          "url": "https://chemistrydesk.vercel.app"
+        },
+        "featureList": [
+          "Offline laboratory benchtop calculation via Service Worker / PWA",
+          "Hydrate crystal water stoichiometry compensation",
+          "Manufacturer chemical assay purity correction",
+          "40+ analytical bench standard reagent autocomplete",
+          "Printable standard benchtop reagent label generator",
+          "CSV laboratory recipe export",
+          "Direct academic citation export (BibTeX, ACS, APA 7, IEEE)",
+          "Overleaf LaTeX formula export"
+        ]
       },
       {
         "@type": "HowTo",
@@ -64,6 +79,14 @@ import CiteTool from '../components/CiteTool.astro';
         "mainEntity": [
           {
             "@type": "Question",
+            "name": "Does ChemistryDesk Molarity Studio work offline in the laboratory?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. ChemistryDesk uses a client-side Service Worker architecture. Once loaded in your browser, the molarity solver, hydrate compensator, and reagent label generator function completely offline at the bench without an active internet connection."
+            }
+          },
+          {
+            "@type": "Question",
             "name": "What is the difference between molarity and molality?",
             "acceptedAnswer": {
               "@type": "Answer",
@@ -98,7 +121,6 @@ import CiteTool from '../components/CiteTool.astro';
       }
     ]
   })} />
-
   <!-- Breadcrumb Navigation -->
   <main style="max-width: 1140px; margin: 0 auto; padding: 1.5rem 1rem 3rem; box-sizing: border-box;">
     <nav style="font-size: 0.85rem; margin-bottom: 1.25rem;">
