@@ -1,0 +1,951 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout 
+  title="Buffer Calculator & Preparation Studio | Henderson-Hasselbalch, Purity & Capacity"
+  description="Research-grade laboratory buffer calculator. Solves Henderson-Hasselbalch, Van Slyke buffer capacity, hydrate/purity corrections, custom reagents, and printable SOPs."
+>
+  <!-- Schema: WebApplication -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "ChemistryDesk Buffer Preparation & Henderson-Hasselbalch Studio",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "All",
+    "browserRequirements": "Requires JavaScript",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  })} />
+
+  <!-- Schema: HowTo -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Accurately Prepare a Laboratory Buffer Solution Using the Henderson-Hasselbalch Equation",
+    "step": [
+      {
+        "@type": "HowToStep",
+        "name": "Select or Define Reagent Dissociation Pair",
+        "text": "Select a common buffer or enter any custom weak acid and conjugate base pair with its dissociation pKa value."
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Adjust for Hydration States and Chemical Purity",
+        "text": "Compensate for crystalline waters of hydration and manufacturer assay purity fraction."
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Calculate Conjugate Acid-Base Ratio",
+        "text": "Apply the Henderson-Hasselbalch equation: pH = pKa + log10([A-]/[HA]) to compute exact component concentrations."
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Dissolve in Partial Volume and Verify Temperature",
+        "text": "Dissolve reagents in approximately 70-80% of target volume deionized water at the intended working temperature."
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Fine-Tune pH and Dilute to Meniscus",
+        "text": "Calibrate a pH meter, verify the solution pH, and dilute to the final calibration mark in a Class-A volumetric flask."
+      }
+    ]
+  })} />
+
+  <!-- Schema: FAQPage -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the Henderson-Hasselbalch equation and how is it used?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The Henderson-Hasselbalch equation is pH = pKa + log10([A-]/[HA]), where pKa is the acid dissociation constant of the weak acid, [A-] is the concentration of conjugate base, and [HA] is the concentration of weak acid. It defines the equilibrium pH of a buffer solution."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the effective buffering range of a chemical buffer?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A buffer is generally effective within ±1.0 pH unit of its pKa (pKa - 1 to pKa + 1). Outside this range, the concentration ratio between conjugate base and acid exceeds 10:1 or drops below 1:10, causing the Van Slyke buffer capacity (β) to drop precipitously."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why must chemical purity and hydration states be factored into buffer preparation?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Many buffer salts are commercialized as crystalline hydrates (e.g., sodium phosphate dibasic heptahydrate) or have assay purities less than 100%. Failing to adjust mass for hydration water and active purity introduces systematic molarity and pH errors."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why does temperature alter the pH of Tris buffer?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Tris has a steep negative temperature coefficient of approximately -0.028 pH units per degree Celsius. A Tris buffer titrated to pH 8.0 at 25°C will shift to approximately pH 8.4 when cooled to 4°C."
+        }
+      }
+    ]
+  })} />
+
+  <main style="max-width: 1140px; margin: 1.5rem auto 4rem auto; padding: 0 1.5rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #0f172a;">
+    
+    <!-- Navigation Breadcrumbs -->
+    <nav style="font-size: 0.85rem; color: #475569; margin-bottom: 1.25rem;">
+      <a href="/" style="color: #0284c7; text-decoration: none; font-weight: 600;">Home</a> &rsaquo; 
+      <span style="color: #64748b;"> Solution Preparation</span> &rsaquo; 
+      <span style="color: #0f172a; font-weight: 700;">Buffer Studio</span>
+    </nav>
+
+    <!-- Header Hero Card -->
+    <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 16px; padding: 2rem; margin-bottom: 2rem; color: #ffffff; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.15);">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.5rem;">
+        <div style="max-width: 760px;">
+          <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); padding: 0.3rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem;">
+            <span>Aqueous Formulation &amp; Equilibrium Engine</span>
+          </div>
+          <h1 style="font-size: 2.35rem; font-weight: 800; color: #ffffff; letter-spacing: -0.025em; margin: 0; line-height: 1.2;">
+            Laboratory Buffer Calculator &amp; Recipe Studio
+          </h1>
+          <p style="color: #cbd5e1; font-size: 1rem; margin-top: 0.65rem; margin-bottom: 0; line-height: 1.6;">
+            Henderson-Hasselbalch mass solver, dynamic titration curve, Van Slyke buffer capacity (&beta;), hydrate/purity compensation, and custom reagent definition.
+          </p>
+        </div>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+          <button id="saveCustomBufferBtn" type="button" style="background: #334155; border: 1px solid #475569; color: white; padding: 0.65rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700;">
+            💾 Save Setup
+          </button>
+          <button id="shareSetupBtn" type="button" style="background: #0284c7; border: none; color: white; padding: 0.65rem 1.25rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+            <span>🔗 Share Recipe URL</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1-CLICK BENCHMARK PRESETS -->
+    <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1.5rem; margin-bottom: 2.25rem; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem; flex-wrap: wrap; gap: 0.5rem;">
+        <div style="font-weight: 800; font-size: 0.9rem; color: #0f172a; text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 0.5rem;">
+          <span>Standard Laboratory Buffer Presets:</span>
+          <span style="font-size: 0.75rem; background: #e0f2fe; color: #0369a1; padding: 3px 10px; border-radius: 9999px; font-weight: 800;">1-Click Setup</span>
+        </div>
+        <button id="customReagentToggleBtn" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; color: #0284c7; cursor: pointer;">
+          ✏️ Input Any Custom Reagent Pair
+        </button>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 0.55rem;">
+        <button class="buffer-preset-btn" data-system="phosphate" data-pka="7.20" data-dpka="-0.0028" data-acid="NaH2PO4 (monobasic)" data-ac-mw="119.98" data-base="Na2HPO4 (dibasic)" data-ba-mw="141.96" data-ph="7.40" data-conc="50" data-vol="1000">Phosphate Buffer (PBS pH 7.4, 50 mM)</button>
+        <button class="buffer-preset-btn" data-system="tris" data-pka="8.06" data-dpka="-0.0280" data-acid="Tris-HCl" data-ac-mw="157.60" data-base="Tris Base" data-ba-mw="121.14" data-ph="8.00" data-conc="100" data-vol="500">Tris-HCl (pH 8.0, 100 mM)</button>
+        <button class="buffer-preset-btn" data-system="acetate" data-pka="4.76" data-dpka="0.0002" data-acid="Acetic Acid (glacial)" data-ac-mw="60.05" data-base="Sodium Acetate" data-ba-mw="82.03" data-ph="5.00" data-conc="50" data-vol="1000">Sodium Acetate (pH 5.0, 50 mM)</button>
+        <button class="buffer-preset-btn" data-system="citrate" data-pka="4.76" data-dpka="-0.0024" data-acid="Citric Acid" data-ac-mw="192.12" data-base="Sodium Citrate" data-ba-mw="258.06" data-ph="4.50" data-conc="50" data-vol="500">Citrate Buffer (pH 4.5, 50 mM)</button>
+        <button class="buffer-preset-btn" data-system="hepes" data-pka="7.50" data-dpka="-0.0140" data-acid="HEPES (free acid)" data-ac-mw="238.30" data-base="HEPES Sodium Salt" data-ba-mw="260.29" data-ph="7.40" data-conc="25" data-vol="1000">HEPES (pH 7.4, 25 mM)</button>
+        <button class="buffer-preset-btn" data-system="carbonate" data-pka="10.33" data-dpka="-0.0090" data-acid="Sodium Bicarbonate" data-ac-mw="84.01" data-base="Sodium Carbonate" data-ba-mw="105.99" data-ph="9.60" data-conc="50" data-vol="1000">Carbonate Coating (pH 9.6, 50 mM)</button>
+        <button class="buffer-preset-btn" data-system="glycine" data-pka="2.35" data-dpka="-0.0025" data-acid="Glycine-HCl" data-ac-mw="111.53" data-base="Glycine (free)" data-ba-mw="75.07" data-ph="2.80" data-conc="100" data-vol="500">Glycine-HCl Elution (pH 2.8, 100 mM)</button>
+        <button class="buffer-preset-btn" data-system="mes" data-pka="6.15" data-dpka="-0.0110" data-acid="MES (free acid)" data-ac-mw="195.24" data-base="MES Sodium Salt" data-ba-mw="217.22" data-ph="6.00" data-conc="50" data-vol="500">MES Buffer (pH 6.0, 50 mM)</button>
+      </div>
+    </div>
+
+    <!-- ALERT BANNER: Buffering Capacity Range Warning -->
+    <div id="bufferWarnBox" style="display: none; background: #fffbeb; border-left: 4px solid #f59e0b; padding: 0.85rem 1.25rem; margin-bottom: 1.75rem; border-radius: 0 8px 8px 0; font-size: 0.85rem; color: #92400e;"></div>
+
+    <!-- MAIN COMPUTATION WORKBENCH (Two-Column Layout) -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+      
+      <!-- LEFT COLUMN: Inputs Form -->
+      <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 1.75rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 0.75rem;">
+          <h2 style="font-size: 0.95rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #0f172a; margin: 0;">
+            1. Buffer Formulation Parameters
+          </h2>
+          <span id="activeSystemTag" style="font-size: 0.75rem; font-weight: 800; color: #0284c7; background: #f0f9ff; padding: 3px 10px; border-radius: 6px; border: 1px solid #bae6fd;">Phosphate Buffer</span>
+        </div>
+
+        <!-- Buffer System Selector -->
+        <div style="margin-bottom: 1.25rem;">
+          <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
+            BUFFER SYSTEM SELECTION
+          </label>
+          <select id="bufferSystemSelect" style="width: 100%; padding: 0.65rem 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; font-weight: 600; color: #0f172a; background: white; cursor: pointer;">
+            <option value="phosphate" selected>Phosphate (NaH2PO4 / Na2HPO4, pKa 7.20)</option>
+            <option value="tris">Tris (Tris-HCl / Tris Base, pKa 8.06)</option>
+            <option value="acetate">Acetate (Acetic Acid / Na-Acetate, pKa 4.76)</option>
+            <option value="citrate">Citrate (Citric Acid / Na-Citrate, pKa 4.76)</option>
+            <option value="hepes">HEPES (Free Acid / Na-Salt, pKa 7.50)</option>
+            <option value="carbonate">Carbonate (Bicarbonate / Carbonate, pKa 10.33)</option>
+            <option value="glycine">Glycine (Glycine-HCl / Free Base, pKa 2.35)</option>
+            <option value="mes">MES (Free Acid / Na-Salt, pKa 6.15)</option>
+            <option value="custom">-- Custom User-Defined Reagent System --</option>
+          </select>
+        </div>
+
+        <!-- Target pH and Temperature -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+          <div>
+            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
+              TARGET pH
+            </label>
+            <input type="text" inputmode="decimal" id="targetPH" value="7.40" style="width: 100%; padding: 0.65rem 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem; font-weight: 700; color: #0f172a; box-sizing: border-box;" />
+          </div>
+          <div>
+            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
+              TEMPERATURE (&deg;C)
+            </label>
+            <input type="text" inputmode="decimal" id="tempC" value="25.0" style="width: 100%; padding: 0.65rem 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem; font-weight: 700; color: #0f172a; box-sizing: border-box;" />
+          </div>
+        </div>
+
+        <!-- Concentration & Target Volume -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+          <div>
+            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
+              TOTAL CONCENTRATION
+            </label>
+            <div style="display: flex;">
+              <input type="text" inputmode="decimal" id="totalConc" value="50.0" style="flex: 1; padding: 0.65rem 0.75rem; border: 1.5px solid #cbd5e1; border-right: none; border-radius: 6px 0 0 6px; font-size: 0.95rem; font-weight: 700; color: #0f172a;" />
+              <select id="concUnit" style="background: #f8fafc; border: 1.5px solid #cbd5e1; padding: 0 0.5rem; border-radius: 0 6px 6px 0; font-size: 0.85rem; font-weight: 600; color: #475569;">
+                <option value="mM" selected>mM</option>
+                <option value="M">M</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
+              TARGET VOLUME
+            </label>
+            <div style="display: flex;">
+              <input type="text" inputmode="decimal" id="targetVol" value="1000.0" style="flex: 1; padding: 0.65rem 0.75rem; border: 1.5px solid #cbd5e1; border-right: none; border-radius: 6px 0 0 6px; font-size: 0.95rem; font-weight: 700; color: #0f172a;" />
+              <select id="volUnit" style="background: #f8fafc; border: 1.5px solid #cbd5e1; padding: 0 0.5rem; border-radius: 0 6px 6px 0; font-size: 0.85rem; font-weight: 600; color: #475569;">
+                <option value="mL" selected>mL</option>
+                <option value="L">L</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Custom Reagents Definition Box -->
+        <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 1.15rem; margin-top: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+            <span style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: #0f172a;">
+              2. Chemical Reagents &amp; Dissociation Constant
+            </span>
+            <span style="font-size: 0.7rem; color: #0284c7; font-weight: 700;">Directly Editable</span>
+          </div>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.75rem;">
+            <div>
+              <label style="display: block; font-size: 0.72rem; font-weight: 700; color: #475569; margin-bottom: 0.2rem;">Weak Acid [HA] Name</label>
+              <input type="text" id="acidName" value="NaH2PO4 (monobasic)" style="width: 100%; padding: 0.5rem 0.65rem; border: 1px solid #cbd5e1; border-radius: 5px; font-size: 0.85rem; font-weight: 600; box-sizing: border-box;" />
+            </div>
+            <div>
+              <label style="display: block; font-size: 0.72rem; font-weight: 700; color: #475569; margin-bottom: 0.2rem;">Conjugate Base [A-] Name</label>
+              <input type="text" id="baseName" value="Na2HPO4 (dibasic)" style="width: 100%; padding: 0.5rem 0.65rem; border: 1px solid #cbd5e1; border-radius: 5px; font-size: 0.85rem; font-weight: 600; box-sizing: border-box;" />
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem;">
+            <div>
+              <label style="display: block; font-size: 0.72rem; font-weight: 700; color: #475569; margin-bottom: 0.2rem;">pKa (@ 25&deg;C)</label>
+              <input type="text" inputmode="decimal" id="refPka" value="7.20" style="width: 100%; padding: 0.5rem 0.65rem; border: 1px solid #cbd5e1; border-radius: 5px; font-size: 0.85rem; font-weight: 700; box-sizing: border-box;" />
+            </div>
+            <div>
+              <label style="display: block; font-size: 0.72rem; font-weight: 700; color: #475569; margin-bottom: 0.2rem;">Acid MW (g/mol)</label>
+              <input type="text" inputmode="decimal" id="acidMW" value="119.98" style="width: 100%; padding: 0.5rem 0.65rem; border: 1px solid #cbd5e1; border-radius: 5px; font-size: 0.85rem; font-weight: 700; box-sizing: border-box;" />
+            </div>
+            <div>
+              <label style="display: block; font-size: 0.72rem; font-weight: 700; color: #475569; margin-bottom: 0.2rem;">Base MW (g/mol)</label>
+              <input type="text" inputmode="decimal" id="baseMW" value="141.96" style="width: 100%; padding: 0.5rem 0.65rem; border: 1px solid #cbd5e1; border-radius: 5px; font-size: 0.85rem; font-weight: 700; box-sizing: border-box;" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Chemical Assay Purity & Hydration Multiplier Toggle -->
+        <details style="margin-top: 1.25rem; background: #ffffff; border: 1.5px dashed #cbd5e1; border-radius: 8px; padding: 0.85rem 1rem;">
+          <summary style="font-size: 0.8rem; font-weight: 800; color: #0284c7; cursor: pointer; text-transform: uppercase;">
+            ⚙️ Chemical Assay Purity &amp; Hydration Multiplier
+          </summary>
+          <div style="margin-top: 0.85rem; display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-size: 0.8rem;">
+            <div>
+              <label style="display: block; font-weight: 700; color: #475569; margin-bottom: 0.25rem;">Acid Form Purity (%)</label>
+              <input type="text" inputmode="decimal" id="acidPurity" value="100.0" style="width: 100%; padding: 0.45rem 0.6rem; border: 1px solid #cbd5e1; border-radius: 5px; font-weight: 700; box-sizing: border-box;" />
+            </div>
+            <div>
+              <label style="display: block; font-weight: 700; color: #475569; margin-bottom: 0.25rem;">Base Form Purity (%)</label>
+              <input type="text" inputmode="decimal" id="basePurity" value="100.0" style="width: 100%; padding: 0.45rem 0.6rem; border: 1px solid #cbd5e1; border-radius: 5px; font-weight: 700; box-sizing: border-box;" />
+            </div>
+          </div>
+          <p style="margin: 0.5rem 0 0; font-size: 0.72rem; color: #64748b; line-height: 1.4;">
+            Compensates for hydrated salts (e.g. heptahydrate) and commercial reagent assay percentage automatically.
+          </p>
+        </details>
+
+      </div>
+
+      <!-- RIGHT COLUMN: Output HUD & Real-Time Dynamic Visuals -->
+      <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        
+        <!-- Primary Output Display Card -->
+        <div style="background: #0f172a; border-radius: 14px; padding: 2rem; color: #ffffff; box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.3); border: 1px solid #334155;">
+          <span style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #38bdf8;">
+            Required Conjugate Masses to Weigh
+          </span>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem;">
+            <div>
+              <span id="displayAcidLabel" style="color: #94a3b8; font-size: 0.75rem; text-transform: uppercase; font-weight: 700; display: block;">Acid Form [HA]</span>
+              <div id="acidMassDisplay" style="font-size: 2.25rem; font-weight: 900; color: #38bdf8; margin: 0.2rem 0;">-- g</div>
+              <span id="acidMolarityDisplay" style="color: #cbd5e1; font-size: 0.8rem; font-family: monospace;">-- mM</span>
+            </div>
+            <div>
+              <span id="displayBaseLabel" style="color: #94a3b8; font-size: 0.75rem; text-transform: uppercase; font-weight: 700; display: block;">Base Form [A-]</span>
+              <div id="baseMassDisplay" style="font-size: 2.25rem; font-weight: 900; color: #34d399; margin: 0.2rem 0;">-- g</div>
+              <span id="baseMolarityDisplay" style="color: #cbd5e1; font-size: 0.8rem; font-family: monospace;">-- mM</span>
+            </div>
+          </div>
+
+          <div style="border-top: 1px solid #334155; margin-top: 1.25rem; padding-top: 1rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.85rem;">
+            <div>
+              <span style="color: #94a3b8; font-size: 0.75rem; text-transform: uppercase;">Corrected pKa (@ T)</span>
+              <strong id="displayCorrPka" style="color: #f8fafc; font-size: 1.15rem; display: block;">--</strong>
+            </div>
+            <div>
+              <span style="color: #94a3b8; font-size: 0.75rem; text-transform: uppercase;">[Base] / [Acid] Ratio</span>
+              <strong id="displayRatio" style="color: #f8fafc; font-size: 1.15rem; display: block;">--</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dynamic Buffer Titration & Buffer Capacity Curve (SVG) -->
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <span style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; color: #1e293b;">
+              Equilibrium Buffer Curve &amp; Capacity Zone (&plusmn;1.0 pH)
+            </span>
+            <span id="betaQualityBadge" style="font-size: 0.75rem; font-weight: 800; color: #0284c7; background: #e0f2fe; padding: 2px 8px; border-radius: 4px;">Optimal</span>
+          </div>
+
+          <div style="width: 100%; height: 160px; background: #0f172a; border-radius: 10px; position: relative; overflow: hidden; border: 1px solid #1e293b;">
+            <svg id="bufferCurveSvg" viewBox="0 0 400 160" style="width: 100%; height: 100%;">
+              <line x1="30" y1="135" x2="380" y2="135" stroke="#334155" stroke-width="1.5" />
+              <line x1="30" y1="15" x2="30" y2="135" stroke="#334155" stroke-width="1.5" />
+              
+              <rect id="bufferPlateauZone" x="140" y="20" width="120" height="115" fill="rgba(56, 189, 248, 0.12)" stroke="rgba(56, 189, 248, 0.3)" stroke-dasharray="2,2" />
+              
+              <path id="titrationCurvePath" d="M 30 130 C 150 120, 180 85, 200 75 C 220 65, 250 30, 380 20" fill="none" stroke="#38bdf8" stroke-width="2.5" />
+              
+              <circle id="workingPointCircle" cx="200" cy="75" r="5" fill="#f43f5e" stroke="#ffffff" stroke-width="1.5" />
+              <text id="workingPointLabel" x="200" y="60" font-size="11" fill="#f43f5e" font-family="monospace" font-weight="700" text-anchor="middle">pH 7.40</text>
+            </svg>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #64748b; font-weight: 600; margin-top: 0.4rem;">
+            <span>pKa - 2.0 (Acid Form)</span>
+            <span>Equilibrium Center (pKa)</span>
+            <span>pKa + 2.0 (Base Form)</span>
+          </div>
+        </div>
+
+        <!-- Van Slyke Buffer Capacity Quantitative Meter -->
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 800; color: #334155; margin-bottom: 0.4rem; text-transform: uppercase;">
+            <span>Van Slyke Buffer Capacity (&beta;)</span>
+            <span id="betaRatioDisplay" style="color: #0284c7; font-weight: 800;">--</span>
+          </div>
+          <div style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-bottom: 0.4rem;">
+            <span id="betaValueDisplay">--</span> <span style="font-size: 0.85rem; font-weight: 600; color: #64748b;">mM / &Delta;pH</span>
+          </div>
+          <div style="height: 12px; width: 100%; background: #e2e8f0; border-radius: 9999px; overflow: hidden; position: relative;">
+            <div id="betaProgressBar" style="width: 80%; height: 100%; background: linear-gradient(90deg, #0284c7, #10b981); transition: width 0.3s ease;"></div>
+          </div>
+          <p style="margin: 0.4rem 0 0; font-size: 0.72rem; color: #64748b;">
+            Maximum capacity occurs when target pH equals pKa. Buffer strength drops rapidly beyond &plusmn;1.0 pH unit.
+          </p>
+        </div>
+
+        <!-- SOP Laboratory Protocol Card -->
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.4rem;">
+            <h3 style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #475569; margin: 0;">Step-by-Step Benchtop Protocol</h3>
+            <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+              <button id="copyBufferLatexBtn" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #334155;">Copy LaTeX</button>
+              <button id="copyProtocolBtn" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #334155;">Copy Steps</button>
+              <button id="printLabelBtn" type="button" style="background: #0284c7; border: none; padding: 0.25rem 0.65rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: white;">🖨️ Print Label</button>
+              <button id="toggleCiteBtn" type="button" style="background: #e0f2fe; border: 1px solid #7dd3fc; padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #0369a1; display: inline-flex; align-items: center; gap: 0.35rem;"><span>📖</span> Cite</button>
+            </div>
+          </div>
+
+          <!-- Standalone Academic Citation Drawer -->
+          <div id="citeDrawer" style="display: none; margin: 0.75rem 0 1rem 0; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 0.85rem; background: #f8fafc;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.4rem;">
+              <div style="display: flex; gap: 0.3rem; flex-wrap: wrap;">
+                <button type="button" class="inline-cite-tab" data-format="bibtex" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 700; border-radius: 5px; border: 1px solid #0f172a; background: #0f172a; color: #fff; cursor: pointer;">BibTeX</button>
+                <button type="button" class="inline-cite-tab" data-format="acs" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">ACS</button>
+                <button type="button" class="inline-cite-tab" data-format="rsc" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">RSC</button>
+                <button type="button" class="inline-cite-tab" data-format="nature" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Nature</button>
+                <button type="button" class="inline-cite-tab" data-format="elsevier" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Elsevier</button>
+                <button type="button" class="inline-cite-tab" data-format="wiley" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Wiley</button>
+              </div>
+              <button id="inlineCopyCiteBtn" type="button" style="padding: 0.25rem 0.65rem; font-size: 0.75rem; font-weight: 700; border-radius: 5px; background: #0284c7; color: #fff; border: none; cursor: pointer;">📋 Copy</button>
+            </div>
+            <pre id="inlineCiteOutput" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.75rem; font-size: 0.75rem; font-family: ui-monospace, monospace; color: #0f172a; white-space: pre-wrap; word-break: break-all; margin: 0; line-height: 1.45;"></pre>
+            <div style="margin-top: 0.5rem; text-align: right;">
+              <a href="https://doi.org/10.5281/zenodo.23059466" target="_blank" rel="noopener noreferrer" style="font-size: 0.72rem; color: #0284c7; text-decoration: none; font-weight: 600;">Indexed via CERN Zenodo (DOI: 10.5281/zenodo.23059466) &rarr;</a>
+            </div>
+          </div>
+
+          <ol id="protocolSteps" style="margin: 0; padding-left: 1.25rem; font-size: 0.85rem; line-height: 1.6; color: #334155;"></ol>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- PRINT-ONLY BENCHTOP BOTTLE LABEL MODAL -->
+    <div id="printLabelModal" style="display: none;">
+      <div id="labelBox" style="width: 3.75in; height: 2.25in; border: 2px solid #000; padding: 0.2in; box-sizing: border-box; font-family: sans-serif; background: #fff; color: #000; position: relative;">
+        <div style="border-bottom: 2px solid #000; padding-bottom: 4px; display: flex; justify-content: space-between; align-items: baseline;">
+          <span style="font-size: 11pt; font-weight: 900; letter-spacing: -0.02em;">ChemistryDesk BUFFER STANDARD</span>
+          <span id="labelDate" style="font-size: 8pt; font-weight: bold;"></span>
+        </div>
+        <div style="margin-top: 6px;">
+          <div style="font-size: 7.5pt; text-transform: uppercase; font-weight: bold; color: #555;">Buffer Formulation</div>
+          <div id="labelBufferName" style="font-size: 13pt; font-weight: 900; line-height: 1.1;">PHOSPHATE BUFFER</div>
+        </div>
+        <div style="margin-top: 6px; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 8.5pt;">
+          <div>pH: <strong id="labelTargetPH">7.40</strong></div>
+          <div>Total Conc: <strong id="labelTotalConc">50 mM</strong></div>
+          <div>Acid: <span id="labelAcidAmt">--</span></div>
+          <div>Base: <span id="labelBaseAmt">--</span></div>
+        </div>
+        <div style="margin-top: 6px; font-size: 7.5pt; border-top: 1px dashed #666; padding-top: 4px;">
+          Storage: [ ] RT &nbsp; [ ] 4&deg;C &nbsp; [ ] -20&deg;C | Sterile: [ ] 0.22 &mu;m &nbsp; [ ] Autoclaved
+        </div>
+        <div style="margin-top: 6px; display: flex; justify-content: space-between; font-size: 7.5pt;">
+          <span>Prep By: ________________</span>
+          <span>Exp Date: _______________</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- EXTENSIVE SCIENTIFIC REFERENCE (Theory, Derivation & FAQ) -->
+    <!-- ================================================================= -->
+    <article style="border-top: 2px solid #e2e8f0; padding-top: 3.5rem; line-height: 1.85; color: #1e293b;">
+      
+      <h2 style="font-size: 2rem; font-weight: 800; color: #0f172a; margin-bottom: 1.25rem; letter-spacing: -0.02em;">
+        Theoretical Foundation: Henderson-Hasselbalch Equilibrium &amp; Buffer Capacity
+      </h2>
+      <p style="font-size: 1rem; margin-bottom: 1.25rem;">
+        A buffer solution resists dramatic changes in hydronium ion concentration (&Delta;pH) when small quantities of strong acid or base are introduced. The thermodynamic foundation of buffer behavior resides in the chemical equilibrium between a weak Br&oslash;nsted-Lowry acid (HA) and its conjugate base (A&minus;):
+      </p>
+
+      <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 1.75rem 2rem; margin: 2rem 0; text-align: center; box-shadow: inset 0 1px 3px rgba(0,0,0,0.03);">
+        <div style="font-size: 1.45rem; font-weight: 800; color: #0f172a; font-family: 'Times New Roman', Times, serif;">
+          HA + H<sub>2</sub>O &nbsp;&rightleftharpoons;&nbsp; H<sub>3</sub>O<sup>+</sup> + A<sup>&minus;</sup> 
+          &nbsp;&emsp;&rArr;&emsp;&nbsp;
+          <i>K</i><sub>a</sub> = <span style="display: inline-block; vertical-align: middle; text-align: center; margin: 0 4px;"><span style="display: block; border-bottom: 1.5px solid #0f172a; padding: 0 4px;">[H<sub>3</sub>O<sup>+</sup>][A<sup>&minus;</sup>]</span><span style="display: block; padding-top: 2px;">[HA]</span></span>
+        </div>
+      </div>
+
+      <p style="font-size: 1rem; margin-bottom: 1.25rem;">
+        Taking the negative logarithm (&minus;log<sub>10</sub>) of both sides yields Lawrence Joseph Henderson's classical relationship, later re-formulated by Karl Albert Hasselbalch:
+      </p>
+
+      <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 1.75rem 2rem; margin: 2rem 0; text-align: center; box-shadow: inset 0 1px 3px rgba(0,0,0,0.03);">
+        <div style="font-size: 1.65rem; font-weight: 800; color: #0f172a; font-family: 'Times New Roman', Times, serif;">
+          <b>pH = p<i>K</i><sub>a</sub> + log<sub>10</sub><span style="font-size: 1.4rem;">(</span><span style="display: inline-block; vertical-align: middle; text-align: center; margin: 0 4px;"><span style="display: block; border-bottom: 1.5px solid #0f172a; padding: 0 4px;">[A<sup>&minus;</sup>]</span><span style="display: block; padding-top: 2px;">[HA]</span></span><span style="font-size: 1.4rem;">)</span></b>
+        </div>
+      </div>
+
+      <h3 style="font-size: 1.45rem; font-weight: 800; color: #0f172a; margin-top: 2.5rem; margin-bottom: 0.85rem;">
+        Van Slyke Quantitative Buffer Capacity (&beta;)
+      </h3>
+      <p style="font-size: 1rem;">
+        While the Henderson-Hasselbalch equation defines equilibrium pH, Donald Van Slyke established the mathematical metric for buffer strength (&beta;), defined as the differential increment of strong base (dB) required to produce a unit change in pH (dpH):
+      </p>
+
+      <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 1.75rem 2rem; margin: 1.5rem 0; text-align: center;">
+        <div style="font-size: 1.35rem; font-weight: 700; color: #0f172a; font-family: 'Times New Roman', Times, serif;">
+          &beta; = <span style="display: inline-block; vertical-align: middle; text-align: center; margin: 0 4px;"><span style="display: block; border-bottom: 1.5px solid #0f172a; padding: 0 4px;">d<i>B</i></span><span style="display: block; padding-top: 2px;">d(pH)</span></span> = 2.303 &times; <i>C</i><sub>total</sub> &times; <span style="display: inline-block; vertical-align: middle; text-align: center; margin: 0 4px;"><span style="display: block; border-bottom: 1.5px solid #0f172a; padding: 0 4px;"><i>K</i><sub>a</sub> &middot; [H<sup>+</sup>]</span><span style="display: block; padding-top: 2px;">(<i>K</i><sub>a</sub> + [H<sup>+</sup>])<sup>2</sup></span></span>
+        </div>
+      </div>
+
+      <p style="font-size: 1rem;">
+        Maximum buffer capacity (&beta;<sub>max</sub> = 0.576 &times; <i>C</i><sub>total</sub>) is strictly achieved when pH = p<i>K</i><sub>a</sub>, at which point [A&minus;] = [HA]. When target pH deviates by more than &plusmn;1.0 pH units from p<i>K</i><sub>a</sub>, &beta; drops to less than 33% of maximum capacity, leaving the solution susceptible to sudden pH excursions.
+      </p>
+
+      <!-- FAQ ACCORDION -->
+      <h3 style="font-size: 1.65rem; font-weight: 800; color: #0f172a; margin-top: 3.5rem; margin-bottom: 1.25rem;">
+        Frequently Asked Questions: Analytical Buffer Formulation
+      </h3>
+      
+      <div style="display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 2rem;">
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Why must pH be measured and verified at the intended working temperature?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            The ionization constant (<i>K</i><sub>a</sub>) of buffer molecules varies with temperature according to the standard enthalpy of dissociation. For amine buffers such as Tris, the temperature coefficient is approximately &minus;0.028 pH/&deg;C. Adjusting a Tris buffer to pH 8.0 at 25&deg;C will yield a pH of approximately 8.4 when placed in a 4&deg;C cold room.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What is the difference between single-component titration and dual-salt weighing?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Dual-salt weighing mixes exact calculated stoichiometric masses of conjugate acid and base (e.g., NaH<sub>2</sub>PO<sub>4</sub> and Na<sub>2</sub>HPO<sub>4</sub>), fixing both the final pH and the total ionic strength without adding extra counter-ions. Single-component titration dissolves one form and titrates with concentrated HCl or NaOH, which introduces extraneous counter-ions.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Why does diluting concentrated 10x PBS shift the working pH?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Phosphate dissociation involves multivalent ions whose activity coefficients are strongly sensitive to ionic strength. Diluting from 10x to 1x reduces ionic strength, shifting the apparent p<i>K</i><sub>a</sub> upward by 0.2 to 0.4 units. Always verify pH after diluting stock concentrates.
+          </p>
+        </details>
+      </div>
+
+    </article>
+  </main>
+
+  <style>
+    .buffer-preset-btn {
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      padding: 0.4rem 0.75rem;
+      border-radius: 8px;
+      cursor: pointer;
+      color: #1e293b;
+      font-size: 0.8rem;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+    .buffer-preset-btn:hover {
+      background: #0284c7;
+      color: #ffffff;
+      border-color: #0284c7;
+      transform: translateY(-1px);
+    }
+    @media print {
+      body * {
+        visibility: hidden !important;
+      }
+      #printLabelModal, #printLabelModal * {
+        visibility: visible !important;
+      }
+      #printLabelModal {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        display: block !important;
+      }
+      #labelBox {
+        position: absolute;
+        left: 0.25in;
+        top: 0.25in;
+      }
+    }
+  </style>
+
+  <script is:inline>
+    var bufferSystems = {
+      phosphate: { pKa: 7.20, dpKa: -0.0028, acidName: 'NaH2PO4 (monobasic)', acidMW: 119.98, baseName: 'Na2HPO4 (dibasic)', baseMW: 141.96 },
+      tris: { pKa: 8.06, dpKa: -0.0280, acidName: 'Tris-HCl', acidMW: 157.60, baseName: 'Tris Base', baseMW: 121.14 },
+      acetate: { pKa: 4.76, dpKa: 0.0002, acidName: 'Acetic Acid (glacial)', acidMW: 60.05, baseName: 'Sodium Acetate', baseMW: 82.03 },
+      citrate: { pKa: 4.76, dpKa: -0.0024, acidName: 'Citric Acid', acidMW: 192.12, baseName: 'Sodium Citrate', baseMW: 258.06 },
+      hepes: { pKa: 7.50, dpKa: -0.0140, acidName: 'HEPES (free acid)', acidMW: 238.30, baseName: 'HEPES Sodium Salt', baseMW: 260.29 },
+      carbonate: { pKa: 10.33, dpKa: -0.0090, acidName: 'Sodium Bicarbonate', acidMW: 84.01, baseName: 'Sodium Carbonate', baseMW: 105.99 },
+      glycine: { pKa: 2.35, dpKa: -0.0025, acidName: 'Glycine-HCl', acidMW: 111.53, baseName: 'Glycine (free)', acidMW: 75.07 },
+      mes: { pKa: 6.15, dpKa: -0.0110, acidName: 'MES (free acid)', acidMW: 195.24, baseName: 'MES Sodium Salt', baseMW: 217.22 }
+    };
+
+    function sanitizeInput(val) {
+      if (typeof val === 'string') {
+        val = val.replace(',', '.').trim();
+      }
+      var parsed = parseFloat(val);
+      return isNaN(parsed) ? 0 : parsed;
+    }
+
+    var sysSelect = document.getElementById('bufferSystemSelect');
+    var inpPH = document.getElementById('targetPH');
+    var inpTemp = document.getElementById('tempC');
+    var inpConc = document.getElementById('totalConc');
+    var selConcUnit = document.getElementById('concUnit');
+    var inpVol = document.getElementById('targetVol');
+    var selVolUnit = document.getElementById('volUnit');
+
+    var inpAcidName = document.getElementById('acidName');
+    var inpBaseName = document.getElementById('baseName');
+    var inpRefPka = document.getElementById('refPka');
+    var inpAcidMW = document.getElementById('acidMW');
+    var inpBaseMW = document.getElementById('baseMW');
+    var inpAcidPurity = document.getElementById('acidPurity');
+    var inpBasePurity = document.getElementById('basePurity');
+
+    var activeSystemTag = document.getElementById('activeSystemTag');
+    var warnBox = document.getElementById('bufferWarnBox');
+    var acidMassDisplay = document.getElementById('acidMassDisplay');
+    var baseMassDisplay = document.getElementById('baseMassDisplay');
+    var acidMolarityDisplay = document.getElementById('acidMolarityDisplay');
+    var baseMolarityDisplay = document.getElementById('baseMolarityDisplay');
+    var displayCorrPka = document.getElementById('displayCorrPka');
+    var displayRatio = document.getElementById('displayRatio');
+    var betaValueDisplay = document.getElementById('betaValueDisplay');
+    var betaRatioDisplay = document.getElementById('betaRatioDisplay');
+    var betaQualityBadge = document.getElementById('betaQualityBadge');
+    var betaProgressBar = document.getElementById('betaProgressBar');
+    var protocolSteps = document.getElementById('protocolSteps');
+
+    var workingPointCircle = document.getElementById('workingPointCircle');
+    var workingPointLabel = document.getElementById('workingPointLabel');
+
+    function syncUrl() {
+      var p = new URLSearchParams();
+      p.set('sys', sysSelect.value);
+      p.set('ph', inpPH.value);
+      p.set('c', inpConc.value);
+      p.set('v', inpVol.value);
+      p.set('t', inpTemp.value);
+      window.history.replaceState({}, '', window.location.pathname + '?' + p.toString());
+    }
+
+    function renderDynamicTitrationSvg(pKa, targetPH) {
+      var minPH = pKa - 2.5;
+      var maxPH = pKa + 2.5;
+      var svgWidth = 330;
+      
+      var clampedPH = Math.min(Math.max(targetPH, minPH), maxPH);
+      var xPos = 40 + ((clampedPH - minPH) / (maxPH - minPH)) * svgWidth;
+      
+      var alpha = 1 / (1 + Math.pow(10, pKa - clampedPH));
+      var yPos = 130 - (alpha * 105);
+      
+      if (workingPointCircle) {
+        workingPointCircle.setAttribute('cx', xPos.toFixed(1));
+        workingPointCircle.setAttribute('cy', yPos.toFixed(1));
+      }
+      
+      if (workingPointLabel) {
+        workingPointLabel.setAttribute('x', xPos.toFixed(1));
+        workingPointLabel.setAttribute('y', (yPos - 12).toFixed(1));
+        workingPointLabel.textContent = 'pH ' + targetPH.toFixed(2);
+      }
+    }
+
+    function runBufferEngine() {
+      var targetPH = sanitizeInput(inpPH.value);
+      var tempC = sanitizeInput(inpTemp.value) || 25.0;
+      var rawConc = sanitizeInput(inpConc.value);
+      var rawVol = sanitizeInput(inpVol.value);
+      var refPka = sanitizeInput(inpRefPka.value);
+      var acidMW = sanitizeInput(inpAcidMW.value);
+      var baseMW = sanitizeInput(inpBaseMW.value);
+      var acidPurityPct = Math.max(0.1, sanitizeInput(inpAcidPurity.value) || 100);
+      var basePurityPct = Math.max(0.1, sanitizeInput(inpBasePurity.value) || 100);
+
+      warnBox.style.display = 'none';
+
+      if (targetPH <= 0 || targetPH >= 14 || rawConc <= 0 || rawVol <= 0 || refPka <= 0 || acidMW <= 0 || baseMW <= 0) {
+        acidMassDisplay.textContent = '-- g';
+        baseMassDisplay.textContent = '-- g';
+        displayCorrPka.textContent = '--';
+        displayRatio.textContent = '--';
+        betaValueDisplay.textContent = '--';
+        betaRatioDisplay.textContent = '--';
+        return;
+      }
+
+      var cTotalM = selConcUnit.value === 'mM' ? rawConc / 1000 : rawConc;
+      var volL = selVolUnit.value === 'mL' ? rawVol / 1000 : rawVol;
+
+      var currentSys = bufferSystems[sysSelect.value];
+      var dpKa_dT = currentSys ? currentSys.dpKa : -0.005;
+      var pKa_T = refPka + dpKa_dT * (tempC - 25.0);
+      displayCorrPka.textContent = pKa_T.toFixed(3);
+
+      var deltaPH = Math.abs(targetPH - pKa_T);
+      if (deltaPH > 1.0) {
+        warnBox.style.display = 'block';
+        warnBox.innerHTML = '<strong>Buffering Window Advisory:</strong> Target pH (' + targetPH.toFixed(2) + ') is outside the recommended range (pKa &plusmn; 1.0 &rarr; ' + (pKa_T - 1.0).toFixed(2) + ' - ' + (pKa_T + 1.0).toFixed(2) + '). Buffer capacity drops sharply beyond this threshold.';
+      }
+
+      var ratio = Math.pow(10, targetPH - pKa_T);
+      displayRatio.textContent = ratio >= 1000 || ratio <= 0.001 ? ratio.toExponential(2) : ratio.toFixed(3);
+
+      var fracBase = ratio / (1 + ratio);
+      var fracAcid = 1 / (1 + ratio);
+
+      var cBaseM = cTotalM * fracBase;
+      var cAcidM = cTotalM * fracAcid;
+
+      var theoreticalAcidG = cAcidM * volL * acidMW;
+      var theoreticalBaseG = cBaseM * volL * baseMW;
+
+      var massAcidG = theoreticalAcidG / (acidPurityPct / 100);
+      var massBaseG = theoreticalBaseG / (basePurityPct / 100);
+
+      acidMassDisplay.textContent = massAcidG >= 10 ? massAcidG.toFixed(2) + ' g' : massAcidG.toFixed(3) + ' g';
+      baseMassDisplay.textContent = massBaseG >= 10 ? massBaseG.toFixed(2) + ' g' : massBaseG.toFixed(3) + ' g';
+
+      acidMolarityDisplay.textContent = (cAcidM * 1000).toFixed(2) + ' mM ' + inpAcidName.value;
+      baseMolarityDisplay.textContent = (cBaseM * 1000).toFixed(2) + ' mM ' + inpBaseName.value;
+
+      var Ka = Math.pow(10, -pKa_T);
+      var H = Math.pow(10, -targetPH);
+      var betaM = 2.303 * cTotalM * ((Ka * H) / Math.pow(Ka + H, 2));
+      var beta_mM = betaM * 1000;
+      betaValueDisplay.textContent = beta_mM.toFixed(2);
+
+      var betaMax_mM = 0.576 * (cTotalM * 1000);
+      var betaPct = Math.min(Math.max((beta_mM / betaMax_mM) * 100, 5), 100);
+      betaProgressBar.style.width = betaPct.toFixed(0) + '%';
+      betaRatioDisplay.textContent = ((beta_mM / betaMax_mM) * 100).toFixed(0) + '% of b_max';
+
+      if (deltaPH <= 0.3) {
+        betaQualityBadge.textContent = 'Maximum Capacity (Near pKa)';
+        betaQualityBadge.style.color = '#0284c7';
+      } else if (deltaPH <= 1.0) {
+        betaQualityBadge.textContent = 'Optimal Working Range';
+        betaQualityBadge.style.color = '#059669';
+      } else {
+        betaQualityBadge.textContent = 'Sub-optimal Capacity (>1.0 pH from pKa)';
+        betaQualityBadge.style.color = '#d97706';
+      }
+
+      renderDynamicTitrationSvg(pKa_T, targetPH);
+
+      var partialVolML = (volL * 1000 * 0.8).toFixed(0);
+      var finalVolML = (volL * 1000).toFixed(0);
+      protocolSteps.innerHTML = 
+        '<li>Prepare a clean <strong>' + finalVolML + ' mL</strong> Class-A volumetric flask or calibrated beaker.</li>' +
+        '<li>Dispense approximately <strong>' + partialVolML + ' mL</strong> of deionized or Milli-Q water into the vessel.</li>' +
+        '<li>Accurately weigh <strong>' + massAcidG.toFixed(3) + ' g</strong> of ' + inpAcidName.value + ' and <strong>' + massBaseG.toFixed(3) + ' g</strong> of ' + inpBaseName.value + ' on an analytical balance.</li>' +
+        '<li>Transfer both salts into the flask and stir with a PTFE magnetic bar until dissolved.</li>' +
+        '<li>Calibrate your pH electrode at <strong>' + tempC.toFixed(1) + '&deg;C</strong> and verify the solution pH (Target: ' + targetPH.toFixed(2) + '). Fine-tune with trace dilute HCl or NaOH if necessary.</li>' +
+        '<li>Dilute with deionized water up to the final <strong>' + finalVolML + ' mL</strong> graduation line and invert 10 times to homogenize.</li>';
+
+      document.getElementById('labelBufferName').textContent = activeSystemTag.textContent.toUpperCase();
+      document.getElementById('labelTargetPH').textContent = targetPH.toFixed(2);
+      document.getElementById('labelTotalConc').textContent = rawConc + ' ' + selConcUnit.value;
+      document.getElementById('labelAcidAmt').textContent = massAcidG.toFixed(2) + ' g (' + inpAcidName.value.split(' ')[0] + ')';
+      document.getElementById('labelBaseAmt').textContent = massBaseG.toFixed(2) + ' g (' + inpBaseName.value.split(' ')[0] + ')';
+      document.getElementById('labelDate').textContent = new Date().toLocaleDateString();
+
+      syncUrl();
+    }
+
+    document.getElementById('customReagentToggleBtn').addEventListener('click', function() {
+      sysSelect.value = 'custom';
+      activeSystemTag.textContent = 'Custom Reagent Buffer';
+      inpAcidName.focus();
+    });
+
+    document.querySelectorAll('.buffer-preset-btn').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        var t = e.currentTarget;
+        var sys = t.dataset.system;
+        sysSelect.value = sys;
+        inpPH.value = t.dataset.ph;
+        inpConc.value = t.dataset.conc;
+        inpVol.value = t.dataset.vol;
+        inpAcidName.value = t.dataset.acid;
+        inpAcidMW.value = t.dataset.acMw;
+        inpBaseName.value = t.dataset.base;
+        inpBaseMW.value = t.dataset.baMw;
+        inpRefPka.value = t.dataset.pka;
+        inpAcidPurity.value = '100.0';
+        inpBasePurity.value = '100.0';
+        activeSystemTag.textContent = t.textContent.split('(')[0].trim() || 'Selected Buffer';
+        runBufferEngine();
+      });
+    });
+
+    sysSelect.addEventListener('change', function() {
+      var selected = sysSelect.value;
+      if (selected !== 'custom' && bufferSystems[selected]) {
+        var data = bufferSystems[selected];
+        inpAcidName.value = data.acidName;
+        inpAcidMW.value = data.acidMW.toString();
+        inpBaseName.value = data.baseName;
+        inpBaseMW.value = data.baseMW.toString();
+        inpRefPka.value = data.pKa.toString();
+        inpAcidPurity.value = '100.0';
+        inpBasePurity.value = '100.0';
+        activeSystemTag.textContent = sysSelect.options[sysSelect.selectedIndex].text.split('(')[0].trim();
+      } else {
+        activeSystemTag.textContent = 'Custom User Buffer';
+      }
+      runBufferEngine();
+    });
+
+    [inpAcidName, inpBaseName, inpRefPka, inpAcidMW, inpBaseMW].forEach(function(inp) {
+      inp.addEventListener('input', function() {
+        sysSelect.value = 'custom';
+        activeSystemTag.textContent = 'Custom: ' + (inpAcidName.value.split(' ')[0] || 'Buffer');
+        runBufferEngine();
+      });
+    });
+
+    [inpPH, inpTemp, inpConc, inpVol, inpAcidPurity, inpBasePurity].forEach(function(inp) {
+      inp.addEventListener('input', runBufferEngine);
+    });
+
+    [selConcUnit, selVolUnit].forEach(function(sel) {
+      sel.addEventListener('change', runBufferEngine);
+    });
+
+    document.getElementById('saveCustomBufferBtn').addEventListener('click', function() {
+      var customData = {
+        acidName: inpAcidName.value,
+        baseName: inpBaseName.value,
+        pKa: inpRefPka.value,
+        acidMW: inpAcidMW.value,
+        baseMW: inpBaseMW.value,
+        pH: inpPH.value,
+        conc: inpConc.value,
+        vol: inpVol.value
+      };
+      localStorage.setItem('chemistrydesk_buffer_custom', JSON.stringify(customData));
+      alert('Custom buffer recipe saved to browser storage.');
+    });
+
+    document.getElementById('copyProtocolBtn').addEventListener('click', function() {
+      var text = protocolSteps.innerText;
+      navigator.clipboard.writeText(text);
+      alert('Benchtop preparation protocol copied.');
+    });
+
+    document.getElementById('shareSetupBtn').addEventListener('click', function() {
+      navigator.clipboard.writeText(window.location.href);
+      alert('Recipe URL copied to clipboard.');
+    });
+
+    document.getElementById('printLabelBtn').addEventListener('click', function() {
+      window.print();
+    });
+
+    document.getElementById('copyBufferLatexBtn').addEventListener('click', function() {
+      var ph = inpPH.value;
+      var pka = displayCorrPka.textContent;
+      var r = displayRatio.textContent;
+      var latex = '\\mathrm{pH} = \\mathrm{p}K_a + \\log_{10}\\left(\\frac{[\\mathrm{A}^-]}{[\\mathrm{HA}]}\\right) \\implies ' + ph + ' = ' + pka + ' + \\log_{10}(' + r + ')';
+      navigator.clipboard.writeText(latex);
+      alert('LaTeX equilibrium equation copied to clipboard.');
+    });
+
+    // --- ACADEMIC CITATIONS SYSTEM (Zenodo DOI: 10.5281/zenodo.23059466) ---
+    var citeDrawer = document.getElementById('citeDrawer');
+    var toggleCiteBtn = document.getElementById('toggleCiteBtn');
+    var inlineCiteOutput = document.getElementById('inlineCiteOutput');
+    var inlineTabs = document.querySelectorAll('.inline-cite-tab');
+    var inlineCopyBtn = document.getElementById('inlineCopyCiteBtn');
+
+    var zenodoDoi = "10.5281/zenodo.23059466";
+    var currentYear = new Date().getFullYear();
+
+    var bufferCitations = {
+      bibtex: '@software{khan_chemistrydesk_buffer_' + currentYear + ',\n' +
+              '  author       = {Khan, Bilal},\n' +
+              '  title        = {ChemistryDesk: Laboratory Buffer Preparation & Henderson-Hasselbalch Studio},\n' +
+              '  year         = {' + currentYear + '},\n' +
+              '  version      = {v1.0.1},\n' +
+              '  publisher    = {Zenodo},\n' +
+              '  doi          = {' + zenodoDoi + '},\n' +
+              '  url          = {https://chemistrydesk.vercel.app/buffer}\n' +
+              '}',
+      acs: 'Khan, B. ChemistryDesk: Laboratory Buffer Preparation & Henderson-Hasselbalch Studio, version 1.0.1; Zenodo, ' + currentYear + '. https://doi.org/' + zenodoDoi + '.',
+      rsc: 'B. Khan, ChemistryDesk: Laboratory Buffer Preparation & Henderson-Hasselbalch Studio, version 1.0.1, Zenodo, ' + currentYear + ', DOI: ' + zenodoDoi + '.',
+      nature: 'Khan, B. ChemistryDesk: Laboratory Buffer Preparation & Henderson-Hasselbalch Studio. Zenodo https://doi.org/' + zenodoDoi + ' (' + currentYear + ').',
+      elsevier: 'Khan, B., ' + currentYear + '. ChemistryDesk: Laboratory Buffer Preparation & Henderson-Hasselbalch Studio (Version 1.0.1). Zenodo. https://doi.org/' + zenodoDoi + '.',
+      wiley: 'B. Khan, ChemistryDesk: Laboratory Buffer Preparation & Henderson-Hasselbalch Studio, version 1.0.1, Zenodo, ' + currentYear + ', DOI: ' + zenodoDoi + '.'
+    };
+
+    var activeCiteFormat = 'bibtex';
+
+    function renderCite() {
+      if (inlineCiteOutput) {
+        inlineCiteOutput.textContent = bufferCitations[activeCiteFormat] || bufferCitations['bibtex'];
+      }
+    }
+
+    if (toggleCiteBtn && citeDrawer) {
+      toggleCiteBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        var isClosed = window.getComputedStyle(citeDrawer).display === 'none';
+        citeDrawer.style.display = isClosed ? 'block' : 'none';
+        toggleCiteBtn.style.background = isClosed ? '#0284c7' : '#e0f2fe';
+        toggleCiteBtn.style.color = isClosed ? '#ffffff' : '#0369a1';
+        if (isClosed) renderCite();
+      });
+    }
+
+    inlineTabs.forEach(function(tab) {
+      tab.addEventListener('click', function(e) {
+        e.preventDefault();
+        inlineTabs.forEach(function(t) {
+          t.style.background = '#ffffff';
+          t.style.color = '#334155';
+          t.style.borderColor = '#cbd5e1';
+          t.style.fontWeight = '600';
+        });
+        tab.style.background = '#0f172a';
+        tab.style.color = '#ffffff';
+        tab.style.borderColor = '#0f172a';
+        tab.style.fontWeight = '700';
+        activeCiteFormat = tab.getAttribute('data-format') || 'bibtex';
+        renderCite();
+      });
+    });
+
+    if (inlineCopyBtn) {
+      inlineCopyBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        navigator.clipboard.writeText(bufferCitations[activeCiteFormat]).then(function() {
+          inlineCopyBtn.textContent = '✅ Copied!';
+          setTimeout(function() {
+            inlineCopyBtn.textContent = '📋 Copy';
+          }, 1800);
+        }).catch(function(err) {
+          console.error(err);
+        });
+      });
+    }
+
+    var params = new URLSearchParams(window.location.search);
+    if (params.has('sys') && bufferSystems[params.get('sys')]) sysSelect.value = params.get('sys');
+    if (params.has('ph')) inpPH.value = params.get('ph');
+    if (params.has('c')) inpConc.value = params.get('c');
+    if (params.has('v')) inpVol.value = params.get('v');
+    if (params.has('t')) inpTemp.value = params.get('t');
+
+    renderCite();
+    runBufferEngine();
+  </script>
+
+  <!-- Related Analytical Workflows Hub -->
+  <section style="max-width: 900px; margin: 3rem auto 1.5rem; padding: 1.25rem 1.5rem; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; box-sizing: border-box;">
+    <h3 style="margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 0.5rem;">
+      <span>🔗</span> Upstream &amp; Downstream Analytical Workflows
+    </h3>
+    <p style="margin: 0 0 1rem; font-size: 0.85rem; color: #64748b; line-height: 1.4;">
+      Connect your buffer formulations with upstream molarity preparation and serial dilution ladders:
+    </p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
+      <a href="/molarity" style="display: block; padding: 1rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
+        <div style="font-weight: 700; font-size: 0.92rem; color: #0284c7; margin-bottom: 0.35rem;">Solution Molarity Studio &rarr;</div>
+        <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">
+          Formulate your primary concentrated stock solutions from dry powder, factoring in crystalline hydration (&middot;nH₂O) and chemical purity.
+        </div>
+      </a>
+      <a href="/dilution" style="display: block; padding: 1rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
+        <div style="font-weight: 700; font-size: 0.92rem; color: #0284c7; margin-bottom: 0.35rem;">Stock Dilution &amp; Serial Ladder Studio &rarr;</div>
+        <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">
+          Dilute 10&times; buffer concentrates (like 10&times; PBS or TAE) into working 1&times; solutions with automated multi-tube serial ladders.
+        </div>
+      </a>
+    </div>
+  </section>
+</BaseLayout>
