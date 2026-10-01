@@ -343,10 +343,12 @@ import { REAGENTS_DATABASE } from '../data/reagents';
           <div id="citeDrawer" style="display: none; margin-bottom: 1rem; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 0.85rem; background: #f8fafc;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.4rem;">
               <div style="display: flex; gap: 0.3rem;">
-                <button type="button" class="inline-cite-tab" data-format="bibtex" style="padding: 0.25rem 0.55rem; font-size: 0.75rem; font-weight: 700; border-radius: 5px; border: 1px solid #0f172a; background: #0f172a; color: #fff; cursor: pointer;">BibTeX</button>
-                <button type="button" class="inline-cite-tab" data-format="acs" style="padding: 0.25rem 0.55rem; font-size: 0.75rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">ACS</button>
-                <button type="button" class="inline-cite-tab" data-format="apa" style="padding: 0.25rem 0.55rem; font-size: 0.75rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">APA 7</button>
-                <button type="button" class="inline-cite-tab" data-format="ieee" style="padding: 0.25rem 0.55rem; font-size: 0.75rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">IEEE</button>
+               <button type="button" class="inline-cite-tab" data-format="bibtex" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 700; border-radius: 5px; border: 1px solid #0f172a; background: #0f172a; color: #fff; cursor: pointer;">BibTeX</button>
+<button type="button" class="inline-cite-tab" data-format="acs" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">ACS</button>
+<button type="button" class="inline-cite-tab" data-format="rsc" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">RSC</button>
+<button type="button" class="inline-cite-tab" data-format="nature" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Nature</button>
+<button type="button" class="inline-cite-tab" data-format="elsevier" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Elsevier</button>
+<button type="button" class="inline-cite-tab" data-format="wiley" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Wiley</button>
               </div>
               <button id="inlineCopyCiteBtn" type="button" style="padding: 0.25rem 0.6rem; font-size: 0.75rem; font-weight: 700; border-radius: 5px; background: #0284c7; color: #fff; border: none; cursor: pointer;">📋 Copy</button>
             </div>
@@ -804,17 +806,24 @@ import { REAGENTS_DATABASE } from '../data/reagents';
   const inlineTabs = document.querySelectorAll('.inline-cite-tab');
   const inlineCopyBtn = document.getElementById('inlineCopyCiteBtn');
 
+  const doi = "10.5281/zenodo.23059466";
+  const currentYear = new Date().getFullYear();
+
   const molCitations = {
-    bibtex: `@software{chemistrydesk_molarity_2026,
-  author    = {ChemistryDesk Benchtop Contributors},
-  title     = {Solution Molarity Studio & Hydrate Compensation Engine},
-  year      = {2026},
-  publisher = {ChemistryDesk Precision Scientific Utilities},
-  url       = {https://chemistrydesk.vercel.app/molarity}
+    bibtex: `@software{khan_chemistrydesk_molarity_${currentYear},
+  author       = {Khan, Bilal},
+  title        = {ChemistryDesk: Solution Molarity Studio & Hydrate Compensation Engine},
+  year         = {${currentYear}},
+  version      = {v1.0.1},
+  publisher    = {Zenodo},
+  doi          = {${doi}},
+  url          = {https://chemistrydesk.vercel.app/molarity}
 }`,
-    acs: `ChemistryDesk Benchtop Contributors. Solution Molarity Studio & Hydrate Compensation Engine. ChemistryDesk, 2026. https://chemistrydesk.vercel.app/molarity (accessed ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}).`,
-    apa: `ChemistryDesk Benchtop Contributors. (2026). Solution Molarity Studio & Hydrate Compensation Engine [Web software]. ChemistryDesk. https://chemistrydesk.vercel.app/molarity`,
-    ieee: `ChemistryDesk Benchtop Contributors, "Solution Molarity Studio & Hydrate Compensation Engine," ChemistryDesk, 2026. [Online]. Available: https://chemistrydesk.vercel.app/molarity.`
+    acs: `Khan, B. ChemistryDesk: Solution Molarity Studio & Hydrate Compensation Engine, version 1.0.1; Zenodo, ${currentYear}. https://doi.org/${doi}.`,
+    rsc: `B. Khan, ChemistryDesk: Solution Molarity Studio & Hydrate Compensation Engine, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`,
+    nature: `Khan, B. ChemistryDesk: Solution Molarity Studio & Hydrate Compensation Engine. Zenodo https://doi.org/${doi} (${currentYear}).`,
+    elsevier: `Khan, B., ${currentYear}. ChemistryDesk: Solution Molarity Studio & Hydrate Compensation Engine (Version 1.0.1). Zenodo. https://doi.org/${doi}.`,
+    wiley: `B. Khan, ChemistryDesk: Solution Molarity Studio & Hydrate Compensation Engine, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`
   };
 
   let currentInlineFormat = 'bibtex';
