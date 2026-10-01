@@ -137,7 +137,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
     </div>
 
-    <!-- QUICK BENCH PRESETS (NEW FEATURE TO BEAT COMPETITION) -->
+    <!-- QUICK BENCH PRESETS -->
     <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 12px; padding: 1.25rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
       <div style="font-weight: 800; font-size: 0.85rem; color: #0f172a; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
         <span>Common Laboratory Stock Dilutions:</span>
@@ -296,11 +296,33 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
               <h3 style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #475569; margin: 0;">Execution Protocol</h3>
-              <div style="display: flex; gap: 0.5rem;">
-                <button id="copyProtocolBtn" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #334155;">Copy Steps</button>
-                <button id="printLabelBtn" style="background: #0284c7; border: none; padding: 0.25rem 0.65rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: white;">🖨️ Print Label</button>
+              <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+                <button id="copyDilutionLatex" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #334155;">Copy LaTeX</button>
+                <button id="copyProtocolBtn" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #334155;">Copy Steps</button>
+                <button id="printLabelBtn" type="button" style="background: #0284c7; border: none; padding: 0.25rem 0.65rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: white;">🖨️ Print Label</button>
+                <button id="toggleCiteBtn" type="button" style="background: #e0f2fe; border: 1px solid #7dd3fc; padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #0369a1; display: inline-flex; align-items: center; gap: 0.35rem;"><span>📖</span> Cite</button>
               </div>
             </div>
+
+            <!-- Standalone Academic Citation Drawer -->
+            <div id="citeDrawer" style="display: none; margin: 0.75rem 0 1rem 0; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 0.85rem; background: #f8fafc;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.4rem;">
+                <div style="display: flex; gap: 0.3rem; flex-wrap: wrap;">
+                  <button type="button" class="inline-cite-tab" data-format="bibtex" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 700; border-radius: 5px; border: 1px solid #0f172a; background: #0f172a; color: #fff; cursor: pointer;">BibTeX</button>
+                  <button type="button" class="inline-cite-tab" data-format="acs" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">ACS</button>
+                  <button type="button" class="inline-cite-tab" data-format="rsc" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">RSC</button>
+                  <button type="button" class="inline-cite-tab" data-format="nature" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Nature</button>
+                  <button type="button" class="inline-cite-tab" data-format="elsevier" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Elsevier</button>
+                  <button type="button" class="inline-cite-tab" data-format="wiley" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Wiley</button>
+                </div>
+                <button id="inlineCopyCiteBtn" type="button" style="padding: 0.25rem 0.65rem; font-size: 0.75rem; font-weight: 700; border-radius: 5px; background: #0284c7; color: #fff; border: none; cursor: pointer;">📋 Copy</button>
+              </div>
+              <pre id="inlineCiteOutput" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.75rem; font-size: 0.75rem; font-family: ui-monospace, monospace; color: #0f172a; white-space: pre-wrap; word-break: break-all; margin: 0; line-height: 1.45;"></pre>
+              <div style="margin-top: 0.5rem; text-align: right;">
+                <a href="https://doi.org/10.5281/zenodo.23059466" target="_blank" rel="noopener noreferrer" style="font-size: 0.72rem; color: #0284c7; text-decoration: none; font-weight: 600;">Indexed via CERN Zenodo (DOI: 10.5281/zenodo.23059466) &rarr;</a>
+              </div>
+            </div>
+
             <ol id="protocolSteps" style="margin: 0; padding-left: 1.25rem; font-size: 0.85rem; line-height: 1.6; color: #334155;"></ol>
           </div>
         </div>
@@ -913,6 +935,96 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       alert('Experiment URL copied.');
     });
 
+    // --- COPY DILUTION LATEX ---
+    document.getElementById('copyDilutionLatex')?.addEventListener('click', () => {
+      const uV1 = (document.getElementById('unitV1') as HTMLSelectElement)?.value || 'mL';
+      const latex = `C_1 V_1 = C_2 V_2 \\implies V_1 = \\frac{C_2 \\cdot V_2}{C_1} = ${inpV1.value}\\text{ }${uV1}`;
+      navigator.clipboard.writeText(latex);
+      alert('LaTeX equation copied to clipboard.');
+    });
+
+    // --- ACADEMIC CITATION SYSTEM ---
+    const citeDrawer = document.getElementById('citeDrawer');
+    const toggleCiteBtn = document.getElementById('toggleCiteBtn');
+    const inlineCiteOutput = document.getElementById('inlineCiteOutput');
+    const inlineTabs = document.querySelectorAll('.inline-cite-tab');
+    const inlineCopyBtn = document.getElementById('inlineCopyCiteBtn');
+
+    const doi = "10.5281/zenodo.23059466";
+    const currentYear = new Date().getFullYear();
+
+    const dilCitations: Record<string, string> = {
+      bibtex: `@software{khan_chemistrydesk_dilution_${currentYear},
+  author       = {Khan, Bilal},
+  title        = {ChemistryDesk: Stock Dilution & Serial Ladder Studio},
+  year         = {${currentYear}},
+  version      = {v1.0.1},
+  publisher    = {Zenodo},
+  doi          = {${doi}},
+  url          = {https://chemistrydesk.vercel.app/dilution}
+}`,
+      acs: `Khan, B. ChemistryDesk: Stock Dilution & Serial Ladder Studio, version 1.0.1; Zenodo, ${currentYear}. https://doi.org/${doi}.`,
+      rsc: `B. Khan, ChemistryDesk: Stock Dilution & Serial Ladder Studio, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`,
+      nature: `Khan, B. ChemistryDesk: Stock Dilution & Serial Ladder Studio. Zenodo https://doi.org/${doi} (${currentYear}).`,
+      elsevier: `Khan, B., ${currentYear}. ChemistryDesk: Stock Dilution & Serial Ladder Studio (Version 1.0.1). Zenodo. https://doi.org/${doi}.`,
+      wiley: `B. Khan, ChemistryDesk: Stock Dilution & Serial Ladder Studio, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`
+    };
+
+    let currentInlineFormat = 'bibtex';
+
+    function updateInlineCite() {
+      if (inlineCiteOutput) {
+        inlineCiteOutput.textContent = dilCitations[currentInlineFormat] || dilCitations['bibtex'];
+      }
+    }
+
+    if (toggleCiteBtn && citeDrawer) {
+      toggleCiteBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const isHidden = window.getComputedStyle(citeDrawer).display === 'none';
+        citeDrawer.style.display = isHidden ? 'block' : 'none';
+        toggleCiteBtn.style.background = isHidden ? '#0284c7' : '#e0f2fe';
+        toggleCiteBtn.style.color = isHidden ? '#ffffff' : '#0369a1';
+        if (isHidden) updateInlineCite();
+      });
+    }
+
+    inlineTabs.forEach(tab => {
+      tab.addEventListener('click', (e) => {
+        e.preventDefault();
+        inlineTabs.forEach(t => {
+          const el = t as HTMLElement;
+          el.style.background = '#ffffff';
+          el.style.color = '#334155';
+          el.style.borderColor = '#cbd5e1';
+          el.style.fontWeight = '600';
+        });
+        const activeTab = tab as HTMLElement;
+        activeTab.style.background = '#0f172a';
+        activeTab.style.color = '#ffffff';
+        activeTab.style.borderColor = '#0f172a';
+        activeTab.style.fontWeight = '700';
+        currentInlineFormat = activeTab.getAttribute('data-format') || 'bibtex';
+        updateInlineCite();
+      });
+    });
+
+    if (inlineCopyBtn) {
+      inlineCopyBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        try {
+          await navigator.clipboard.writeText(dilCitations[currentInlineFormat]);
+          inlineCopyBtn.textContent = '✅ Copied!';
+          setTimeout(() => {
+            inlineCopyBtn.textContent = '📋 Copy';
+          }, 1800);
+        } catch (err) {
+          console.error('Failed to copy citation:', err);
+        }
+      });
+    }
+
+    updateInlineCite();
     adjustInputStates();
     runSingleEngine();
   </script>
