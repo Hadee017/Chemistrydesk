@@ -141,14 +141,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </button>
       </div>
       <div style="display: flex; flex-wrap: wrap; gap: 0.55rem;">
-        <button class="buffer-preset-btn" data-system="phosphate" data-pka="7.20" data-dpka="-0.0028" data-acid="NaH2PO4 (monobasic)" data-ac-mw="119.98" data-base="Na2HPO4 (dibasic)" data-ba-mw="141.96" data-ph="7.40" data-conc="50" data-vol="1000">Phosphate Buffer (PBS pH 7.4, 50 mM)</button>
-        <button class="buffer-preset-btn" data-system="tris" data-pka="8.06" data-dpka="-0.0280" data-acid="Tris-HCl" data-ac-mw="157.60" data-base="Tris Base" data-ba-mw="121.14" data-ph="8.00" data-conc="100" data-vol="500">Tris-HCl (pH 8.0, 100 mM)</button>
-        <button class="buffer-preset-btn" data-system="acetate" data-pka="4.76" data-dpka="0.0002" data-acid="Acetic Acid (glacial)" data-ac-mw="60.05" data-base="Sodium Acetate" data-ba-mw="82.03" data-ph="5.00" data-conc="50" data-vol="1000">Sodium Acetate (pH 5.0, 50 mM)</button>
-        <button class="buffer-preset-btn" data-system="citrate" data-pka="4.76" data-dpka="-0.0024" data-acid="Citric Acid" data-ac-mw="192.12" data-base="Sodium Citrate" data-ba-mw="258.06" data-ph="4.50" data-conc="50" data-vol="500">Citrate Buffer (pH 4.5, 50 mM)</button>
-        <button class="buffer-preset-btn" data-system="hepes" data-pka="7.50" data-dpka="-0.0140" data-acid="HEPES (free acid)" data-ac-mw="238.30" data-base="HEPES Sodium Salt" data-ba-mw="260.29" data-ph="7.40" data-conc="25" data-vol="1000">HEPES (pH 7.4, 25 mM)</button>
-        <button class="buffer-preset-btn" data-system="carbonate" data-pka="10.33" data-dpka="-0.0090" data-acid="Sodium Bicarbonate" data-ac-mw="84.01" data-base="Sodium Carbonate" data-ba-mw="105.99" data-ph="9.60" data-conc="50" data-vol="1000">Carbonate Coating (pH 9.6, 50 mM)</button>
-        <button class="buffer-preset-btn" data-system="glycine" data-pka="2.35" data-dpka="-0.0025" data-acid="Glycine-HCl" data-ac-mw="111.53" data-base="Glycine (free)" data-ba-mw="75.07" data-ph="2.80" data-conc="100" data-vol="500">Glycine-HCl Elution (pH 2.8, 100 mM)</button>
-        <button class="buffer-preset-btn" data-system="mes" data-pka="6.15" data-dpka="-0.0110" data-acid="MES (free acid)" data-ac-mw="195.24" data-base="MES Sodium Salt" data-ba-mw="217.22" data-ph="6.00" data-conc="50" data-vol="500">MES Buffer (pH 6.0, 50 mM)</button>
+        <button class="buffer-preset-btn" data-system="phosphate" data-pka="7.20" data-dpka="-0.0028" data-acid="NaH2PO4 (monobasic)" data-ac-mw="119.98" data-base="Na2HPO4 (dibasic)" data-ba-mw="141.96" data-ph="7.40" data-conc="50" data-uconc="mM" data-vol="1000" data-uvol="mL">Phosphate Buffer (PBS pH 7.4, 50 mM)</button>
+        <button class="buffer-preset-btn" data-system="tris" data-pka="8.06" data-dpka="-0.0280" data-acid="Tris-HCl" data-ac-mw="157.60" data-base="Tris Base" data-ba-mw="121.14" data-ph="8.00" data-conc="100" data-uconc="mM" data-vol="500" data-uvol="mL">Tris-HCl (pH 8.0, 100 mM)</button>
+        <button class="buffer-preset-btn" data-system="acetate" data-pka="4.76" data-dpka="0.0002" data-acid="Acetic Acid (glacial)" data-ac-mw="60.05" data-base="Sodium Acetate" data-ba-mw="82.03" data-ph="5.00" data-conc="50" data-uconc="mM" data-vol="1000" data-uvol="mL">Sodium Acetate (pH 5.0, 50 mM)</button>
+        <button class="buffer-preset-btn" data-system="citrate" data-pka="4.76" data-dpka="-0.0024" data-acid="Citric Acid" data-ac-mw="192.12" data-base="Sodium Citrate" data-ba-mw="258.06" data-ph="4.50" data-conc="50" data-uconc="mM" data-vol="500" data-uvol="mL">Citrate Buffer (pH 4.5, 50 mM)</button>
+        <button class="buffer-preset-btn" data-system="hepes" data-pka="7.50" data-dpka="-0.0140" data-acid="HEPES (free acid)" data-ac-mw="238.30" data-base="HEPES Sodium Salt" data-ba-mw="260.29" data-ph="7.40" data-conc="25" data-uconc="mM" data-vol="1000" data-uvol="mL">HEPES (pH 7.4, 25 mM)</button>
+        <button class="buffer-preset-btn" data-system="carbonate" data-pka="10.33" data-dpka="-0.0090" data-acid="Sodium Bicarbonate" data-ac-mw="84.01" data-base="Sodium Carbonate" data-ba-mw="105.99" data-ph="9.60" data-conc="50" data-uconc="mM" data-vol="1000" data-uvol="mL">Carbonate Coating (pH 9.6, 50 mM)</button>
+        <button class="buffer-preset-btn" data-system="glycine" data-pka="2.35" data-dpka="-0.0025" data-acid="Glycine-HCl" data-ac-mw="111.53" data-base="Glycine (free)" data-ba-mw="75.07" data-ph="2.80" data-conc="100" data-uconc="mM" data-vol="500" data-uvol="mL">Glycine-HCl Elution (pH 2.8, 100 mM)</button>
+        <button class="buffer-preset-btn" data-system="mes" data-pka="6.15" data-dpka="-0.0110" data-acid="MES (free acid)" data-ac-mw="195.24" data-base="MES Sodium Salt" data-ba-mw="217.22" data-ph="6.00" data-conc="50" data-uconc="mM" data-vol="500" data-uvol="mL">MES Buffer (pH 6.0, 50 mM)</button>
       </div>
     </div>
 
@@ -172,7 +172,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
             BUFFER SYSTEM SELECTION
           </label>
-          <select id="bufferSystemSelect" style="width: 100%; padding: 0.65rem 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; font-weight: 600; color: #0f172a; background: white; cursor: pointer;">
+          <select id="bufferSystemSelect" style="width: 100%; padding: 0.65rem 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; font-weight: 600; color: #0f172a; background: white; cursor: pointer; box-sizing: border-box;">
             <option value="phosphate" selected>Phosphate (NaH2PO4 / Na2HPO4, pKa 7.20)</option>
             <option value="tris">Tris (Tris-HCl / Tris Base, pKa 8.06)</option>
             <option value="acetate">Acetate (Acetic Acid / Na-Acetate, pKa 4.76)</option>
@@ -201,17 +201,18 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </div>
         </div>
 
-        <!-- Concentration & Target Volume -->
+        <!-- Concentration & Target Volume with Full Unit Suites -->
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
           <div>
             <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
               TOTAL CONCENTRATION
             </label>
-            <div style="display: flex;">
-              <input type="text" inputmode="decimal" id="totalConc" value="50.0" style="flex: 1; padding: 0.65rem 0.75rem; border: 1.5px solid #cbd5e1; border-right: none; border-radius: 6px 0 0 6px; font-size: 0.95rem; font-weight: 700; color: #0f172a;" />
-              <select id="concUnit" style="background: #f8fafc; border: 1.5px solid #cbd5e1; padding: 0 0.5rem; border-radius: 0 6px 6px 0; font-size: 0.85rem; font-weight: 600; color: #475569;">
+            <div style="display: flex; width: 100%; box-sizing: border-box;">
+              <input type="text" inputmode="decimal" id="totalConc" value="50.0" style="flex: 1; min-width: 0; padding: 0.65rem 0.75rem; border: 1.5px solid #cbd5e1; border-right: none; border-radius: 6px 0 0 6px; font-size: 0.95rem; font-weight: 700; color: #0f172a; box-sizing: border-box;" />
+              <select id="concUnit" style="background: #f8fafc; border: 1.5px solid #cbd5e1; padding: 0 0.6rem; border-radius: 0 6px 6px 0; font-size: 0.85rem; font-weight: 600; color: #475569; cursor: pointer; flex-shrink: 0; box-sizing: border-box;">
                 <option value="mM" selected>mM</option>
-                <option value="M">M</option>
+                <option value="M">M (mol/L)</option>
+                <option value="uM">&mu;M</option>
               </select>
             </div>
           </div>
@@ -219,11 +220,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
               TARGET VOLUME
             </label>
-            <div style="display: flex;">
-              <input type="text" inputmode="decimal" id="targetVol" value="1000.0" style="flex: 1; padding: 0.65rem 0.75rem; border: 1.5px solid #cbd5e1; border-right: none; border-radius: 6px 0 0 6px; font-size: 0.95rem; font-weight: 700; color: #0f172a;" />
-              <select id="volUnit" style="background: #f8fafc; border: 1.5px solid #cbd5e1; padding: 0 0.5rem; border-radius: 0 6px 6px 0; font-size: 0.85rem; font-weight: 600; color: #475569;">
+            <div style="display: flex; width: 100%; box-sizing: border-box;">
+              <input type="text" inputmode="decimal" id="targetVol" value="1000.0" style="flex: 1; min-width: 0; padding: 0.65rem 0.75rem; border: 1.5px solid #cbd5e1; border-right: none; border-radius: 6px 0 0 6px; font-size: 0.95rem; font-weight: 700; color: #0f172a; box-sizing: border-box;" />
+              <select id="volUnit" style="background: #f8fafc; border: 1.5px solid #cbd5e1; padding: 0 0.6rem; border-radius: 0 6px 6px 0; font-size: 0.85rem; font-weight: 600; color: #475569; cursor: pointer; flex-shrink: 0; box-sizing: border-box;">
                 <option value="mL" selected>mL</option>
                 <option value="L">L</option>
+                <option value="uL">&mu;L</option>
+                <option value="dL">dL</option>
               </select>
             </div>
           </div>
@@ -607,9 +610,24 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       p.set('sys', sysSelect.value);
       p.set('ph', inpPH.value);
       p.set('c', inpConc.value);
+      p.set('uc', selConcUnit.value);
       p.set('v', inpVol.value);
+      p.set('uv', selVolUnit.value);
       p.set('t', inpTemp.value);
       window.history.replaceState({}, '', window.location.pathname + '?' + p.toString());
+    }
+
+    function toStandardMolar(conc, unit) {
+      if (unit === 'mM') return conc / 1000;
+      if (unit === 'uM') return conc / 1000000;
+      return conc; // M or mol/L
+    }
+
+    function toStandardLiters(vol, unit) {
+      if (unit === 'mL') return vol / 1000;
+      if (unit === 'uL') return vol / 1000000;
+      if (unit === 'dL') return vol / 10;
+      return vol; // L
     }
 
     function renderDynamicTitrationSvg(pKa, targetPH) {
@@ -658,8 +676,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         return;
       }
 
-      var cTotalM = selConcUnit.value === 'mM' ? rawConc / 1000 : rawConc;
-      var volL = selVolUnit.value === 'mL' ? rawVol / 1000 : rawVol;
+      var cTotalM = toStandardMolar(rawConc, selConcUnit.value);
+      var volL = toStandardLiters(rawVol, selVolUnit.value);
 
       var currentSys = bufferSystems[sysSelect.value];
       var dpKa_dT = currentSys ? currentSys.dpKa : -0.005;
@@ -687,11 +705,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       var massAcidG = theoreticalAcidG / (acidPurityPct / 100);
       var massBaseG = theoreticalBaseG / (basePurityPct / 100);
 
-      acidMassDisplay.textContent = massAcidG >= 10 ? massAcidG.toFixed(2) + ' g' : massAcidG.toFixed(3) + ' g';
-      baseMassDisplay.textContent = massBaseG >= 10 ? massBaseG.toFixed(2) + ' g' : massBaseG.toFixed(3) + ' g';
+      function formatMassDisplay(g) {
+        if (g < 0.01) return (g * 1000).toFixed(2) + ' mg';
+        if (g >= 10) return g.toFixed(2) + ' g';
+        return g.toFixed(3) + ' g';
+      }
 
-      acidMolarityDisplay.textContent = (cAcidM * 1000).toFixed(2) + ' mM ' + inpAcidName.value;
-      baseMolarityDisplay.textContent = (cBaseM * 1000).toFixed(2) + ' mM ' + inpBaseName.value;
+      acidMassDisplay.textContent = formatMassDisplay(massAcidG);
+      baseMassDisplay.textContent = formatMassDisplay(massBaseG);
+
+      acidMolarityDisplay.textContent = (cAcidM >= 0.01 ? (cAcidM * 1000).toFixed(2) + ' mM' : (cAcidM * 1000000).toFixed(1) + ' µM') + ' ' + inpAcidName.value;
+      baseMolarityDisplay.textContent = (cBaseM >= 0.01 ? (cBaseM * 1000).toFixed(2) + ' mM' : (cBaseM * 1000000).toFixed(1) + ' µM') + ' ' + inpBaseName.value;
 
       var Ka = Math.pow(10, -pKa_T);
       var H = Math.pow(10, -targetPH);
@@ -702,7 +726,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       var betaMax_mM = 0.576 * (cTotalM * 1000);
       var betaPct = Math.min(Math.max((beta_mM / betaMax_mM) * 100, 5), 100);
       betaProgressBar.style.width = betaPct.toFixed(0) + '%';
-      betaRatioDisplay.textContent = ((beta_mM / betaMax_mM) * 100).toFixed(0) + '% of b_max';
+      betaRatioDisplay.textContent = ((beta_mM / betaMax_mM) * 100).toFixed(0) + '% of β_max';
 
       if (deltaPH <= 0.3) {
         betaQualityBadge.textContent = 'Maximum Capacity (Near pKa)';
@@ -717,21 +741,22 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       renderDynamicTitrationSvg(pKa_T, targetPH);
 
-      var partialVolML = (volL * 1000 * 0.8).toFixed(0);
-      var finalVolML = (volL * 1000).toFixed(0);
+      var volML = volL * 1000;
+      var partialVolML = (volML * 0.8).toFixed(1);
+      var finalVolFormatted = volML >= 1000 ? (volML / 1000).toFixed(2) + ' L' : volML.toFixed(1) + ' mL';
       protocolSteps.innerHTML = 
-        '<li>Prepare a clean <strong>' + finalVolML + ' mL</strong> Class-A volumetric flask or calibrated beaker.</li>' +
-        '<li>Dispense approximately <strong>' + partialVolML + ' mL</strong> of deionized or Milli-Q water into the vessel.</li>' +
-        '<li>Accurately weigh <strong>' + massAcidG.toFixed(3) + ' g</strong> of ' + inpAcidName.value + ' and <strong>' + massBaseG.toFixed(3) + ' g</strong> of ' + inpBaseName.value + ' on an analytical balance.</li>' +
-        '<li>Transfer both salts into the flask and stir with a PTFE magnetic bar until dissolved.</li>' +
-        '<li>Calibrate your pH electrode at <strong>' + tempC.toFixed(1) + '&deg;C</strong> and verify the solution pH (Target: ' + targetPH.toFixed(2) + '). Fine-tune with trace dilute HCl or NaOH if necessary.</li>' +
-        '<li>Dilute with deionized water up to the final <strong>' + finalVolML + ' mL</strong> graduation line and invert 10 times to homogenize.</li>';
+        '<li>Prepare a clean Class-A volumetric flask or calibrated vessel suitable for <strong>' + finalVolFormatted + '</strong>.</li>' +
+        '<li>Dispense approximately <strong>' + partialVolML + ' mL</strong> of deionized or Milli-Q water into the container.</li>' +
+        '<li>Accurately weigh <strong>' + formatMassDisplay(massAcidG) + '</strong> of ' + inpAcidName.value + ' and <strong>' + formatMassDisplay(massBaseG) + '</strong> of ' + inpBaseName.value + ' on an analytical balance.</li>' +
+        '<li>Transfer both reagents into the vessel and stir with a PTFE magnetic bar until completely dissolved.</li>' +
+        '<li>Calibrate your pH probe at <strong>' + tempC.toFixed(1) + '&deg;C</strong> and verify the solution pH (Target: ' + targetPH.toFixed(2) + '). Fine-tune with trace dilute HCl or NaOH if necessary.</li>' +
+        '<li>Dilute with deionized water up to the final <strong>' + finalVolFormatted + '</strong> graduation line and invert 10 times to homogenize.</li>';
 
       document.getElementById('labelBufferName').textContent = activeSystemTag.textContent.toUpperCase();
       document.getElementById('labelTargetPH').textContent = targetPH.toFixed(2);
       document.getElementById('labelTotalConc').textContent = rawConc + ' ' + selConcUnit.value;
-      document.getElementById('labelAcidAmt').textContent = massAcidG.toFixed(2) + ' g (' + inpAcidName.value.split(' ')[0] + ')';
-      document.getElementById('labelBaseAmt').textContent = massBaseG.toFixed(2) + ' g (' + inpBaseName.value.split(' ')[0] + ')';
+      document.getElementById('labelAcidAmt').textContent = formatMassDisplay(massAcidG) + ' (' + inpAcidName.value.split(' ')[0] + ')';
+      document.getElementById('labelBaseAmt').textContent = formatMassDisplay(massBaseG) + ' (' + inpBaseName.value.split(' ')[0] + ')';
       document.getElementById('labelDate').textContent = new Date().toLocaleDateString();
 
       syncUrl();
@@ -750,7 +775,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         sysSelect.value = sys;
         inpPH.value = t.dataset.ph;
         inpConc.value = t.dataset.conc;
+        selConcUnit.value = t.dataset.uconc || 'mM';
         inpVol.value = t.dataset.vol;
+        selVolUnit.value = t.dataset.uvol || 'mL';
         inpAcidName.value = t.dataset.acid;
         inpAcidMW.value = t.dataset.acMw;
         inpBaseName.value = t.dataset.base;
@@ -806,7 +833,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         baseMW: inpBaseMW.value,
         pH: inpPH.value,
         conc: inpConc.value,
-        vol: inpVol.value
+        uconc: selConcUnit.value,
+        vol: inpVol.value,
+        uvol: selVolUnit.value
       };
       localStorage.setItem('chemistrydesk_buffer_custom', JSON.stringify(customData));
       alert('Custom buffer recipe saved to browser storage.');
@@ -918,7 +947,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     if (params.has('sys') && bufferSystems[params.get('sys')]) sysSelect.value = params.get('sys');
     if (params.has('ph')) inpPH.value = params.get('ph');
     if (params.has('c')) inpConc.value = params.get('c');
+    if (params.has('uc')) selConcUnit.value = params.get('uc');
     if (params.has('v')) inpVol.value = params.get('v');
+    if (params.has('uv')) selVolUnit.value = params.get('uv');
     if (params.has('t')) inpTemp.value = params.get('t');
 
     renderCite();
