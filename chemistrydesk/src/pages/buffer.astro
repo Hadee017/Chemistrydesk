@@ -200,29 +200,28 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             <input type="text" inputmode="decimal" id="tempC" value="25.0" style="width: 100%; padding: 0.65rem 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem; font-weight: 700; color: #0f172a; box-sizing: border-box;" />
           </div>
         </div>
-
-        <!-- Concentration & Target Volume with Full Unit Suites -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
-          <div>
+<!-- Concentration & Target Volume with Full Unit Suites -->
+        <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0.75rem; margin-bottom: 1.25rem;">
+          <div style="min-width: 0;">
             <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
               TOTAL CONCENTRATION
             </label>
-            <div style="display: flex; width: 100%; box-sizing: border-box;">
-              <input type="text" inputmode="decimal" id="totalConc" value="50.0" style="flex: 1; min-width: 0; padding: 0.65rem 0.75rem; border: 1.5px solid #cbd5e1; border-right: none; border-radius: 6px 0 0 6px; font-size: 0.95rem; font-weight: 700; color: #0f172a; box-sizing: border-box;" />
-              <select id="concUnit" style="background: #f8fafc; border: 1.5px solid #cbd5e1; padding: 0 0.6rem; border-radius: 0 6px 6px 0; font-size: 0.85rem; font-weight: 600; color: #475569; cursor: pointer; flex-shrink: 0; box-sizing: border-box;">
+            <div style="display: flex; width: 100%; border: 1.5px solid #cbd5e1; border-radius: 6px; overflow: hidden; background: #ffffff; box-sizing: border-box;">
+              <input type="text" inputmode="decimal" id="totalConc" value="50.0" style="width: 100%; min-width: 0; flex: 1; padding: 0.65rem 0.5rem; border: none; font-size: 0.95rem; font-weight: 700; color: #0f172a; outline: none; box-sizing: border-box;" />
+              <select id="concUnit" style="background: #f8fafc; border: none; border-left: 1px solid #cbd5e1; padding: 0 0.4rem; font-size: 0.8rem; font-weight: 700; color: #475569; cursor: pointer; outline: none; flex-shrink: 0;">
                 <option value="mM" selected>mM</option>
-                <option value="M">M (mol/L)</option>
+                <option value="M">M</option>
                 <option value="uM">&mu;M</option>
               </select>
             </div>
           </div>
-          <div>
+          <div style="min-width: 0;">
             <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
               TARGET VOLUME
             </label>
-            <div style="display: flex; width: 100%; box-sizing: border-box;">
-              <input type="text" inputmode="decimal" id="targetVol" value="1000.0" style="flex: 1; min-width: 0; padding: 0.65rem 0.75rem; border: 1.5px solid #cbd5e1; border-right: none; border-radius: 6px 0 0 6px; font-size: 0.95rem; font-weight: 700; color: #0f172a; box-sizing: border-box;" />
-              <select id="volUnit" style="background: #f8fafc; border: 1.5px solid #cbd5e1; padding: 0 0.6rem; border-radius: 0 6px 6px 0; font-size: 0.85rem; font-weight: 600; color: #475569; cursor: pointer; flex-shrink: 0; box-sizing: border-box;">
+            <div style="display: flex; width: 100%; border: 1.5px solid #cbd5e1; border-radius: 6px; overflow: hidden; background: #ffffff; box-sizing: border-box;">
+              <input type="text" inputmode="decimal" id="targetVol" value="1000.0" style="width: 100%; min-width: 0; flex: 1; padding: 0.65rem 0.5rem; border: none; font-size: 0.95rem; font-weight: 700; color: #0f172a; outline: none; box-sizing: border-box;" />
+              <select id="volUnit" style="background: #f8fafc; border: none; border-left: 1px solid #cbd5e1; padding: 0 0.4rem; font-size: 0.8rem; font-weight: 700; color: #475569; cursor: pointer; outline: none; flex-shrink: 0;">
                 <option value="mL" selected>mL</option>
                 <option value="L">L</option>
                 <option value="uL">&mu;L</option>
@@ -231,7 +230,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             </div>
           </div>
         </div>
-
         <!-- Custom Reagents Definition Box -->
         <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 1.15rem; margin-top: 1.25rem;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
