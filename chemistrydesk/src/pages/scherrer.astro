@@ -5,7 +5,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   title="PXRD Scherrer Calculator — Crystallite Domain Size & Peak Deconvolution | ChemistryDesk"
   description="Calculate mean crystallite domain size (τ) from powder X-ray diffraction peak FWHM. Features instrumental broadening deconvolution and shape factor selection."
 >
-<!-- 1. WebApplication Schema -->
+  <!-- 1. WebApplication Schema -->
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@type": "WebApplication",
@@ -109,6 +109,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       }
     ]
   })} />
+
   <main style="max-width: 1140px; margin: 1.5rem auto 4rem auto; padding: 0 1.5rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #0f172a;">
     
     <!-- Navigation Breadcrumbs -->
@@ -132,7 +133,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             High-precision coherent domain sizing, custom specimen inputs, instrumental broadening deconvolution, dynamic peak simulation, and printable sample vial labeling.
           </p>
         </div>
-        <button id="shareSetupBtn" style="background: #0284c7; border: none; color: white; padding: 0.65rem 1.25rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+        <button id="shareSetupBtn" type="button" style="background: #0284c7; border: none; color: white; padding: 0.65rem 1.25rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
           <span>Share Setup URL</span>
         </button>
       </div>
@@ -374,10 +375,29 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem; flex-wrap: wrap; gap: 0.5rem;">
             <h3 style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #0f172a; margin: 0;">Academic Reporting Hub</h3>
             <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
-              <button id="copyLatexBtn" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.4rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Copy LaTeX</button>
-              <button id="copyBibtexBtn" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.4rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Copy BibTeX</button>
-              <button id="printLabelBtn" style="background: #059669; border: none; padding: 0.4rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: white;">Print Vial Label</button>
-              <button id="exportCsvBtn" style="background: #0284c7; border: none; padding: 0.4rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: white;">Export CSV</button>
+              <button id="copyLatexBtn" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.4rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Copy LaTeX</button>
+              <button id="toggleCiteBtn" type="button" style="background: #e0f2fe; border: 1px solid #7dd3fc; padding: 0.4rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #0369a1; display: inline-flex; align-items: center; gap: 0.35rem;"><span>📖</span> Cite</button>
+              <button id="printLabelBtn" type="button" style="background: #059669; border: none; padding: 0.4rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: white;">Print Vial Label</button>
+              <button id="exportCsvBtn" type="button" style="background: #0284c7; border: none; padding: 0.4rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: white;">Export CSV</button>
+            </div>
+          </div>
+
+          <!-- Standalone Academic Citation Drawer -->
+          <div id="citeDrawer" style="display: none; margin: 0.75rem 0 1rem 0; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 0.85rem; background: #f8fafc;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.4rem;">
+              <div style="display: flex; gap: 0.3rem; flex-wrap: wrap;">
+                <button type="button" class="inline-cite-tab" data-format="bibtex" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 700; border-radius: 5px; border: 1px solid #0f172a; background: #0f172a; color: #fff; cursor: pointer;">BibTeX</button>
+                <button type="button" class="inline-cite-tab" data-format="acs" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">ACS</button>
+                <button type="button" class="inline-cite-tab" data-format="rsc" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">RSC</button>
+                <button type="button" class="inline-cite-tab" data-format="nature" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Nature</button>
+                <button type="button" class="inline-cite-tab" data-format="elsevier" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Elsevier</button>
+                <button type="button" class="inline-cite-tab" data-format="wiley" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Wiley</button>
+              </div>
+              <button id="inlineCopyCiteBtn" type="button" style="padding: 0.25rem 0.65rem; font-size: 0.75rem; font-weight: 700; border-radius: 5px; background: #0284c7; color: #fff; border: none; cursor: pointer;">📋 Copy</button>
+            </div>
+            <pre id="inlineCiteOutput" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.75rem; font-size: 0.75rem; font-family: ui-monospace, monospace; color: #0f172a; white-space: pre-wrap; word-break: break-all; margin: 0; line-height: 1.45;"></pre>
+            <div style="margin-top: 0.5rem; text-align: right;">
+              <a href="https://doi.org/10.5281/zenodo.23059466" target="_blank" rel="noopener noreferrer" style="font-size: 0.72rem; color: #0284c7; text-decoration: none; font-weight: 600;">Indexed via CERN Zenodo (DOI: 10.5281/zenodo.23059466) &rarr;</a>
             </div>
           </div>
           
@@ -412,7 +432,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
       </div>
       <div style="text-align: center; margin-top: 1rem;">
-        <button id="triggerPrintBtn" style="background: #0f172a; color: white; border: none; padding: 0.5rem 1.5rem; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.9rem;">Send to Printer</button>
+        <button id="triggerPrintBtn" type="button" style="background: #0f172a; color: white; border: none; padding: 0.5rem 1.5rem; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.9rem;">Send to Printer</button>
       </div>
     </div>
 
@@ -917,16 +937,88 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       var sizeNm = primarySizeNm.textContent;
       
       var thetaHalved = (parseFloat(twoTheta) / 2).toFixed(2);
-      var latexStr = 'D = \\frac{K \\cdot \\lambda}{\\beta \\cdot \\cos(\\theta)} = \\frac{' + k + ' \\cdot ' + lambda + '\\,\\mathrm{\\u00C5}}{' + beta + '\\,\\mathrm{rad} \\cdot \\cos(' + thetaHalved + '^\\circ)} = ' + sizeNm;
+      var latexStr = 'D = \\frac{K \\cdot \\lambda}{\\beta \\cdot \\cos(\\theta)} = \\frac{' + k + ' \\cdot ' + lambda + '\\,\\mathrm{\\AA}}{' + beta + '\\,\\mathrm{rad} \\cdot \\cos(' + thetaHalved + '^\\circ)} = ' + sizeNm;
       navigator.clipboard.writeText(latexStr);
       alert('Complete LaTeX derivation equation copied to clipboard.');
     });
 
-    document.getElementById('copyBibtexBtn').addEventListener('click', function() {
-      var bibtex = '@article{scherrer1918bestimmung,\n  title={Bestimmung der Gr{\\"o}{\\ss}e und der inneren Struktur von Kolloidteilchen mittels R{\\"o}ntgenstrahlen},\n  author={Scherrer, Paul},\n  journal={Nachrichten von der Gesellschaft der Wissenschaften zu G{\\"o}ttingen, Mathematisch-Physikalische Klasse},\n  volume={1918},\n  pages={98--100},\n  year={1918}\n}';
-      navigator.clipboard.writeText(bibtex);
-      alert('Scherrer BibTeX citation copied to clipboard.');
+    // --- ACADEMIC CITATION SYSTEM (Zenodo DOI: 10.5281/zenodo.23059466) ---
+    var citeDrawer = document.getElementById('citeDrawer');
+    var toggleCiteBtn = document.getElementById('toggleCiteBtn');
+    var inlineCiteOutput = document.getElementById('inlineCiteOutput');
+    var inlineTabs = document.querySelectorAll('.inline-cite-tab');
+    var inlineCopyBtn = document.getElementById('inlineCopyCiteBtn');
+
+    var doi = "10.5281/zenodo.23059466";
+    var currentYear = new Date().getFullYear();
+
+    var scherrerCitations = {
+      bibtex: '@software{khan_chemistrydesk_scherrer_' + currentYear + ',\n' +
+              '  author       = {Khan, Bilal},\n' +
+              '  title        = {ChemistryDesk: PXRD Scherrer Crystallite Size & Strain Studio},\n' +
+              '  year         = {' + currentYear + '},\n' +
+              '  version      = {v1.0.1},\n' +
+              '  publisher    = {Zenodo},\n' +
+              '  doi          = {' + doi + '},\n' +
+              '  url          = {https://chemistrydesk.vercel.app/scherrer}\n' +
+              '}',
+      acs: 'Khan, B. ChemistryDesk: PXRD Scherrer Crystallite Size & Strain Studio, version 1.0.1; Zenodo, ' + currentYear + '. https://doi.org/' + doi + '.',
+      rsc: 'B. Khan, ChemistryDesk: PXRD Scherrer Crystallite Size & Strain Studio, version 1.0.1, Zenodo, ' + currentYear + ', DOI: ' + doi + '.',
+      nature: 'Khan, B. ChemistryDesk: PXRD Scherrer Crystallite Size & Strain Studio. Zenodo https://doi.org/' + doi + ' (' + currentYear + ').',
+      elsevier: 'Khan, B., ' + currentYear + '. ChemistryDesk: PXRD Scherrer Crystallite Size & Strain Studio (Version 1.0.1). Zenodo. https://doi.org/' + doi + '.',
+      wiley: 'B. Khan, ChemistryDesk: PXRD Scherrer Crystallite Size & Strain Studio, version 1.0.1, Zenodo, ' + currentYear + ', DOI: ' + doi + '.'
+    };
+
+    var currentInlineFormat = 'bibtex';
+
+    function updateInlineCite() {
+      if (inlineCiteOutput) {
+        inlineCiteOutput.textContent = scherrerCitations[currentInlineFormat] || scherrerCitations['bibtex'];
+      }
+    }
+
+    if (toggleCiteBtn && citeDrawer) {
+      toggleCiteBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        var isHidden = window.getComputedStyle(citeDrawer).display === 'none';
+        citeDrawer.style.display = isHidden ? 'block' : 'none';
+        toggleCiteBtn.style.background = isHidden ? '#0284c7' : '#e0f2fe';
+        toggleCiteBtn.style.color = isHidden ? '#ffffff' : '#0369a1';
+        if (isHidden) updateInlineCite();
+      });
+    }
+
+    inlineTabs.forEach(function(tab) {
+      tab.addEventListener('click', function(e) {
+        e.preventDefault();
+        inlineTabs.forEach(function(t) {
+          t.style.background = '#ffffff';
+          t.style.color = '#334155';
+          t.style.borderColor = '#cbd5e1';
+          t.style.fontWeight = '600';
+        });
+        tab.style.background = '#0f172a';
+        tab.style.color = '#ffffff';
+        tab.style.borderColor = '#0f172a';
+        tab.style.fontWeight = '700';
+        currentInlineFormat = tab.getAttribute('data-format') || 'bibtex';
+        updateInlineCite();
+      });
     });
+
+    if (inlineCopyBtn) {
+      inlineCopyBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        navigator.clipboard.writeText(scherrerCitations[currentInlineFormat]).then(function() {
+          inlineCopyBtn.textContent = '✅ Copied!';
+          setTimeout(function() {
+            inlineCopyBtn.textContent = '📋 Copy';
+          }, 1800);
+        }).catch(function(err) {
+          console.error('Failed to copy citation:', err);
+        });
+      });
+    }
 
     document.getElementById('exportCsvBtn').addEventListener('click', function() {
       var csv = 'Parameter,Value,Unit\n' +
@@ -978,6 +1070,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       select.addEventListener('change', runScherrerEngine);
     });
 
+    updateInlineCite();
     loadUrlParams();
     runScherrerEngine();
   </script>
