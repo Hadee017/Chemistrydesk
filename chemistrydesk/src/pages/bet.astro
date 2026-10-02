@@ -4,7 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 <BaseLayout 
   title="BET Surface Area Calculator & Multipoint Physisorption Studio | ChemistryDesk"
-  description="Research-grade BET surface area calculator. Solve for specific surface area, monolayer capacity, or minimum sample mass with Rouquerol checks, SVG regression, and tube labels."
+  description="Free research-grade BET surface area calculator. Solve multipoint isotherms and single-point BET with Excel/CSV paste, Rouquerol criteria checks, dynamic SVG plots, and printable tube labels."
 >
   <!-- Schema: WebApplication -->
   <script type="application/ld+json" set:html={JSON.stringify({
@@ -105,7 +105,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             BET Surface Area &amp; Physisorption Studio
           </h1>
           <p style="color: #64748b; font-size: 0.95rem; margin-top: 0.25rem; margin-bottom: 0;">
-            Two-way monolayer capacity solver, multipoint linear regression, Rouquerol consistency diagnostics, and degas tube labels[cite: 1].
+            Multipoint isotherm regression, automated Rouquerol consistency evaluation, Excel/CSV paste importer, and single-point QC estimator.
           </p>
         </div>
       </div>
@@ -114,119 +114,108 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <div style="margin-top: 1.5rem; display: flex; align-items: center; justify-content: flex-start;">
         <div style="background: #e2e8f0; padding: 4px; border-radius: 10px; display: inline-flex; gap: 4px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.06);">
           <button 
-            id="modeSingleBtn" 
+            id="modeMultiBtn" 
             style="background: #0284c7; color: #ffffff; border: none; padding: 0.65rem 1.4rem; border-radius: 8px; font-size: 0.875rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: all 0.2s ease;"
           >
-            <span>🎯</span> Direct Parameter Solver (Two-Way)
+            <span>📈</span> Multipoint BET Regression &amp; Rouquerol Diagnostics
           </button>
           <button 
-            id="modeMultiBtn" 
+            id="modeSingleBtn" 
             style="background: transparent; color: #475569; border: none; padding: 0.65rem 1.4rem; border-radius: 8px; font-size: 0.875rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s ease;"
           >
-            <span>📈</span> Multipoint Isotherm Regression &amp; Plot
+            <span>⚡</span> Single-Point BET (Rapid QC @ P/P₀ ≈ 0.30)
           </button>
         </div>
       </div>
     </div>
 
-    <!-- QUICK BENCH PRESETS -->
-    <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 12px; padding: 1.25rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
-      <div style="font-weight: 800; font-size: 0.85rem; color: #0f172a; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
-        <span>Common Standard Adsorbents &amp; Frameworks:</span>
-        <span style="font-size: 0.75rem; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 9999px; font-weight: 700;">1-Click Setup</span>
-      </div>
-      <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-        <button class="bet-preset-btn" data-name="MCM-41 Mesoporous Silica" data-gas="0.162" data-mass="0.125" data-sbet="980" data-vm="225" data-temp="150">MCM-41 Silica (N₂ at 77 K)</button>
-        <button class="bet-preset-btn" data-name="SBA-15 Hexagonal Silica" data-gas="0.162" data-mass="0.150" data-sbet="750" data-vm="172" data-temp="150">SBA-15 Silica (N₂ at 77 K)</button>
-        <button class="bet-preset-btn" data-name="HKUST-1 (Cu-BTC) MOF" data-gas="0.162" data-mass="0.080" data-sbet="1650" data-vm="379" data-temp="120">HKUST-1 MOF (Microporous)</button>
-        <button class="bet-preset-btn" data-name="UiO-66 (Zr) MOF" data-gas="0.162" data-mass="0.090" data-sbet="1150" data-vm="264" data-temp="120">UiO-66 MOF (Microporous)</button>
-        <button class="bet-preset-btn" data-name="Degussa P25 Titania" data-gas="0.162" data-mass="0.500" data-sbet="50" data-vm="11.5" data-temp="100">TiO₂ P25 Nanoparticles</button>
-      </div>
-    </div>
+    <!-- Solvent / Degas & Transducer Advisory Bar -->
+    <div id="transducerAlertBox" style="display: none; background: #fffbeb; border-left: 4px solid #f59e0b; padding: 0.85rem 1.25rem; margin-bottom: 1.5rem; border-radius: 0 8px 8px 0; font-size: 0.85rem; color: #92400e;"></div>
 
-    <!-- Transducer Sensitivity & Rouquerol Warning Box -->
-    <div id="sensitivityWarningBox" style="display: none; background: #fffbeb; border-left: 4px solid #f59e0b; padding: 0.85rem 1.25rem; margin-bottom: 1.5rem; border-radius: 0 8px 8px 0; font-size: 0.85rem; color: #92400e;"></div>
-
-    <!-- MODE 1: DIRECT TWO-WAY PARAMETER SOLVER -->
-    <div id="singleModeSection">
+    <!-- MODE 1: MULTIPOINT ISOTHERM REGRESSION & ROUQUEROL STUDIO -->
+    <div id="multiModeSection">
       
       <!-- Toolbar -->
       <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 2rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; font-size: 0.85rem;">
-        <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
-          <span style="font-weight: 700; color: #475569; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Solve For:</span>
-          <select id="targetVariable" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.65rem; border-radius: 6px; font-weight: 700; color: #0284c7; cursor: pointer;">
-            <option value="sbet">Specific Surface Area (S_BET) [Standard]</option>
-            <option value="mass">Minimum Sample Mass Required (m)</option>
-            <option value="vm">Monolayer Volume Capacity (V_m)</option>
-          </select>
+        <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+          <div style="display: flex; align-items: center; gap: 0.35rem;">
+            <span style="font-weight: 700; color: #475569; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Adsorbate Gas:</span>
+            <select id="adsorbateSelect" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 0.35rem 0.65rem; border-radius: 6px; font-weight: 600; color: #0284c7; cursor: pointer;">
+              <option value="0.162" selected>Nitrogen (N₂, 77.35 K) — σ = 0.162 nm²</option>
+              <option value="0.142">Argon (Ar, 87.27 K) — σ = 0.142 nm²</option>
+              <option value="0.170">Carbon Dioxide (CO₂, 273.15 K) — σ = 0.170 nm²</option>
+            </select>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 0.35rem;">
+            <span style="font-weight: 700; color: #475569; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Dry Mass (g):</span>
+            <input type="number" id="inpSampleMass" step="0.0001" value="0.1250" style="width: 95px; background: #ffffff; border: 1px solid #cbd5e1; padding: 0.35rem 0.5rem; border-radius: 6px; font-weight: 600; font-family: monospace;" />
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 0.35rem;">
+            <span style="font-weight: 700; color: #475569; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Degas (°C):</span>
+            <input type="number" id="inpDegasTemp" value="120" style="width: 75px; background: #ffffff; border: 1px solid #cbd5e1; padding: 0.35rem 0.5rem; border-radius: 6px; font-weight: 600; font-family: monospace;" />
+          </div>
         </div>
 
-        <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
-          <span style="font-weight: 700; color: #475569; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Adsorbate Probe:</span>
-          <select id="adsorbateSelect" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 0.35rem 0.65rem; border-radius: 6px; font-weight: 600; color: #334155; cursor: pointer;">
-            <option value="0.162" selected>Nitrogen (N₂, 77.35 K) — σ = 0.162 nm²</option>
-            <option value="0.142">Argon (Ar, 87.27 K) — σ = 0.142 nm²</option>
-            <option value="0.170">Carbon Dioxide (CO₂, 273.15 K) — σ = 0.170 nm²</option>
-          </select>
+        <div style="display: flex; gap: 0.5rem;">
+          <button id="togglePasteBoxBtn" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; padding: 0.35rem 0.75rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 700;">📋 Paste Excel / CSV</button>
+          <button id="shareBtn" style="background: #e0f2fe; border: 1px solid #bae6fd; color: #0284c7; padding: 0.35rem 0.75rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 700;">🔗 Share Setup</button>
         </div>
+      </div>
 
-        <button id="shareBtn" style="background: #e0f2fe; border: 1px solid #bae6fd; color: #0284c7; padding: 0.35rem 0.75rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 700;">🔗 Share Setup</button>
+      <!-- Collapsible Excel / CSV Direct Paste Box -->
+      <div id="pasteContainer" style="display: none; background: #f8fafc; border: 1.5px dashed #0284c7; border-radius: 10px; padding: 1.25rem; margin-bottom: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <strong style="font-size: 0.85rem; color: #0f172a;">Paste Raw Two-Column Data (P/P₀ and Volume Adsorbed):</strong>
+          <span style="font-size: 0.75rem; color: #64748b;">Supports tab-separated (Excel) or comma-separated (CSV) values</span>
+        </div>
+        <textarea id="pasteTextArea" placeholder="0.055&#9;82.4&#10;0.092&#9;91.2&#10;0.134&#9;98.5&#10;0.175&#9;104.2&#10;0.210&#9;109.1" style="width: 100%; height: 90px; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0.5rem; font-family: monospace; font-size: 0.8rem; box-sizing: border-box; resize: vertical;"></textarea>
+        <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 0.5rem;">
+          <button id="cancelPasteBtn" style="background: #ffffff; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; cursor: pointer;">Cancel</button>
+          <button id="applyPasteBtn" style="background: #0284c7; color: white; border: none; padding: 0.35rem 0.85rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer;">Parse &amp; Populate Table</button>
+        </div>
       </div>
 
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
         
-        <!-- Inputs Form -->
+        <!-- Isotherm & Rouquerol Data Table Panel -->
         <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-          <h2 style="font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; margin-top: 0; margin-bottom: 1.25rem;">
-            Parameter Inputs
-          </h2>
-
-          <div style="margin-bottom: 1.25rem;" id="fieldVm">
-            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
-              MONOLAYER CAPACITY (V_m)
-            </label>
-            <div style="display: flex;">
-              <input type="number" id="inpVm" step="any" value="225.0" style="flex: 1; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-right: none; border-radius: 6px 0 0 6px; font-size: 0.95rem; font-weight: 600; outline: none;" />
-              <select id="unitVm" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 0 0.75rem; border-radius: 0 6px 6px 0; font-size: 0.85rem; font-weight: 600; color: #475569;">
-                <option value="cm3">cm³/g (STP)</option>
-                <option value="mL">mL/g (STP)</option>
-              </select>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <h2 style="font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; margin: 0;">
+              Equilibrium Isotherm Points &amp; Rouquerol Checks
+            </h2>
+            <div style="display: flex; gap: 0.4rem;">
+              <button id="addRowBtn" style="background: #ecfdf5; border: 1px solid #a7f3d0; color: #059669; font-size: 0.75rem; font-weight: 700; padding: 0.3rem 0.6rem; border-radius: 6px; cursor: pointer;">+ Add Row</button>
+              <button id="downloadCsvBtn" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; font-size: 0.75rem; font-weight: 700; padding: 0.3rem 0.6rem; border-radius: 6px; cursor: pointer;">📥 CSV</button>
             </div>
           </div>
 
-          <div style="margin-bottom: 1.25rem;" id="fieldMass">
-            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
-              DEGASSED SAMPLE DRY MASS (m)
-            </label>
-            <div style="display: flex;">
-              <input type="number" id="inpMass" step="any" value="0.1250" style="flex: 1; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-right: none; border-radius: 6px 0 0 6px; font-size: 0.95rem; font-weight: 600; outline: none;" />
-              <select id="unitMass" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 0 0.75rem; border-radius: 0 6px 6px 0; font-size: 0.85rem; font-weight: 600; color: #475569;">
-                <option value="g">g</option>
-                <option value="mg">mg</option>
-              </select>
-            </div>
+          <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-bottom: 1rem;">
+              <thead>
+                <tr style="border-bottom: 1.5px solid #e2e8f0; text-align: left; color: #475569; font-size: 0.75rem;">
+                  <th style="padding: 0.45rem 0.2rem;">#</th>
+                  <th style="padding: 0.45rem 0.2rem;">P/P₀</th>
+                  <th style="padding: 0.45rem 0.2rem;">V<sub>a</sub> (cm³/g)</th>
+                  <th style="padding: 0.45rem 0.2rem;">V<sub>a</sub>(1 &minus; P/P₀)</th>
+                  <th style="padding: 0.45rem 0.2rem;">Status</th>
+                  <th style="padding: 0.45rem 0.2rem; text-align: right;">Del</th>
+                </tr>
+              </thead>
+              <tbody id="isothermTableBody">
+                <!-- Dynamically populated via JS -->
+              </tbody>
+            </table>
           </div>
 
-          <div style="margin-bottom: 1.25rem;" id="fieldSbet">
-            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
-              SPECIFIC SURFACE AREA (S_BET)
-            </label>
-            <div style="display: flex;">
-              <input type="number" id="inpSbet" step="any" value="980.0" disabled style="flex: 1; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-right: none; border-radius: 6px 0 0 6px; font-size: 0.95rem; font-weight: 600; background: #f8fafc; color: #64748b; outline: none;" />
-              <select id="unitSbet" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 0 0.75rem; border-radius: 0 6px 6px 0; font-size: 0.85rem; font-weight: 600; color: #475569;">
-                <option value="m2g">m²/g</option>
-              </select>
-            </div>
+          <!-- Regression Diagnostics Bar -->
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; font-family: monospace; font-size: 0.8rem;">
+            <div>Slope (s): <strong id="regSlope" style="color: #0f172a;">--</strong></div>
+            <div>Intercept (i): <strong id="regIntercept" style="color: #0f172a;">--</strong></div>
+            <div>Constant (C): <strong id="regC" style="color: #0284c7;">--</strong></div>
+            <div>Fit (R²): <strong id="regR2" style="color: #059669;">--</strong></div>
           </div>
-
-          <div style="margin-bottom: 1.25rem;">
-            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
-              DEGAS ACTIVATION TEMPERATURE (°C)
-            </label>
-            <input type="number" id="inpTemp" value="120" style="width: 100%; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem; font-weight: 600; box-sizing: border-box;" />
-          </div>
-
-          <div id="singleWarn" style="display: none; background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 0.75rem; border-radius: 6px; font-size: 0.8rem; margin-top: 1rem;"></div>
         </div>
 
         <!-- Readout & Actions Panel -->
@@ -234,27 +223,27 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           
           <!-- Live Result Readout -->
           <div style="background: #0f172a; border-radius: 12px; padding: 1.75rem; color: #ffffff; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
-            <span id="readoutLabel" style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #38bdf8;">
-              Calculated Specific Surface Area (S_BET)
+            <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #38bdf8;">
+              Multipoint BET Surface Area (S_BET)
             </span>
             <div id="primaryResult" style="font-size: 2.5rem; font-weight: 800; color: #38bdf8; margin: 0.25rem 0 0.75rem 0;">--</div>
 
             <div style="border-top: 1px solid #334155; padding-top: 1rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.85rem;">
               <div>
-                <span style="color: #94a3b8; display: block; font-size: 0.75rem; text-transform: uppercase;">Total Surface in Tube</span>
+                <span style="color: #94a3b8; display: block; font-size: 0.75rem; text-transform: uppercase;">Total Tube Surface</span>
                 <strong id="displayTotalArea" style="color: #34d399; font-size: 1.15rem;">--</strong>
               </div>
               <div>
-                <span style="color: #94a3b8; display: block; font-size: 0.75rem; text-transform: uppercase;">Monolayer Capacity</span>
+                <span style="color: #94a3b8; display: block; font-size: 0.75rem; text-transform: uppercase;">Monolayer Capacity (V_m)</span>
                 <strong id="displayVm" style="color: #e2e8f0; font-size: 1.15rem;">--</strong>
               </div>
             </div>
           </div>
 
-          <!-- Transducer Tube Area Scale Visualizer -->
+          <!-- Volumetric Cell Coverage Scale Visualizer -->
           <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.25rem;">
             <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 700; color: #64748b; margin-bottom: 0.5rem; text-transform: uppercase;">
-              <span>Cell Surface Coverage (Min Target: 2.0 m²)</span>
+              <span>Cell Surface Coverage (Target: &ge; 2.0 m²)</span>
               <span id="scaleStatusText">--</span>
             </div>
             <div style="height: 12px; width: 100%; background: #e2e8f0; border-radius: 9999px; overflow: hidden; display: flex;">
@@ -298,83 +287,107 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
 
       </div>
-    </div>
-
-    <!-- MODE 2: MULTIPOINT ISOTHERM REGRESSION STUDIO & DYNAMIC PLOT -->
-    <div id="multiModeSection" style="display: none; margin-bottom: 3rem;">
-      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.75rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-        
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem;">
-          <h2 style="font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; margin: 0;">
-            Multipoint Adsorption Isotherm Data
-          </h2>
-          <div style="display: flex; gap: 0.5rem;">
-            <button id="addPointBtn" style="background: #ecfdf5; border: 1px solid #a7f3d0; color: #059669; font-size: 0.78rem; font-weight: 700; padding: 0.35rem 0.75rem; border-radius: 6px; cursor: pointer;">+ Add Pressure Point</button>
-            <button id="downloadCsvBtn" style="background: #0284c7; color: white; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer;">📥 Export CSV</button>
-          </div>
-        </div>
-
-        <table style="width: 100%; border-collapse: collapse; margin-bottom: 1.25rem; font-size: 0.85rem;">
-          <thead>
-            <tr style="border-bottom: 1.5px solid #e2e8f0; text-align: left; color: #475569; font-size: 0.75rem;">
-              <th style="padding: 0.5rem 0.25rem;">Point</th>
-              <th style="padding: 0.5rem 0.25rem;">Relative Pressure (P/P₀)</th>
-              <th style="padding: 0.5rem 0.25rem;">Volume Adsorbed (cm³/g STP)</th>
-              <th style="padding: 0.5rem 0.25rem; text-align: right;">Action</th>
-            </tr>
-          </thead>
-          <tbody id="isothermTableBody">
-            <!-- Dynamically populated via JS -->
-          </tbody>
-        </table>
-
-        <!-- Regression Statistics Bar -->
-        <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 0.85rem 1.25rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; font-family: monospace; font-size: 0.85rem;">
-          <div>Slope (s): <strong id="regSlope" style="color: #0f172a;">--</strong></div>
-          <div>Intercept (i): <strong id="regIntercept" style="color: #0f172a;">--</strong></div>
-          <div>C-Constant: <strong id="regC" style="color: #0284c7;">--</strong></div>
-          <div>Correlation (R²): <strong id="regR2" style="color: #059669;">--</strong></div>
-        </div>
-      </div>
 
       <!-- Live Dynamic Linear BET SVG Plot -->
-      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem;">
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem;">
         <h3 style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #475569; margin: 0 0 0.5rem 0;">
           Dynamic Linear BET Coordinate Plot
         </h3>
-        <p style="font-size: 0.8rem; color: #64748b; margin-top: 0; margin-bottom: 1rem;">Plot of 1 / [V<sub>a</sub>((P₀/P) - 1)] versus P/P₀ confirming linear boundary conditions.</p>
+        <p style="font-size: 0.8rem; color: #64748b; margin-top: 0; margin-bottom: 1rem;">Plot of 1 / [V<sub>a</sub>((P₀/P) - 1)] vs P/P₀ confirming linear boundary regression.</p>
         <div style="width: 100%; height: 260px;">
           <svg id="betPlotSvg" viewBox="0 0 600 240" style="width: 100%; height: 100%; overflow: visible; font-family: monospace; font-size: 11px;"></svg>
         </div>
       </div>
+
     </div>
 
-    <!-- EDITORIAL & SCIENTIFIC DERIVATION ARTICLE -->
+    <!-- MODE 2: SINGLE-POINT BET (RAPID QC MODE) -->
+    <div id="singleModeSection" style="display: none; margin-bottom: 3rem;">
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 2rem;">
+        <h2 style="font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; margin-top: 0; margin-bottom: 1rem;">
+          Single-Point BET Estimator (IUPAC Rapid QC Method)
+        </h2>
+        <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.5rem; line-height: 1.6;">
+          For materials with high C-constants (C &gt; 100), the y-intercept is near zero. A single isotherm point measured at <strong>P/P₀ = 0.300</strong> estimates the specific surface area with &lt; 2% error according to the relation <em>S<sub>BET</sub> = V<sub>a</sub>(1 &minus; P/P₀) &times; 4.353</em>.
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem;">
+          <div>
+            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">RELATIVE PRESSURE (P/P₀)</label>
+            <input type="number" id="singleP" step="0.001" value="0.300" style="width: 100%; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem; font-weight: 600; box-sizing: border-box; font-family: monospace;" />
+          </div>
+          <div>
+            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">VOLUME ADSORBED V_a (cm³/g STP)</label>
+            <input type="number" id="singleV" step="0.1" value="125.4" style="width: 100%; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem; font-weight: 600; box-sizing: border-box; font-family: monospace;" />
+          </div>
+          <div>
+            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">SAMPLE DRY MASS (g)</label>
+            <input type="number" id="singleMass" step="0.0001" value="0.1250" style="width: 100%; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem; font-weight: 600; box-sizing: border-box; font-family: monospace;" />
+          </div>
+        </div>
+
+        <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 1.25rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #64748b;">Single-Point Estimated Area:</span>
+            <div id="singleResultArea" style="font-size: 2.2rem; font-weight: 800; color: #0284c7; font-family: monospace;">--</div>
+          </div>
+          <div style="text-align: right; font-size: 0.85rem; color: #475569; font-family: monospace;">
+            <div>Monolayer V_m: <strong id="singleResultVm">--</strong> cm³/g</div>
+            <div>Total Area in Cell: <strong id="singleResultCell">--</strong> m²</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EDITORIAL & SCIENTIFIC DERIVATION ARTICLE (OUTRANKING CONTENT) -->
     <article style="border-top: 1px solid #e2e8f0; padding-top: 3.5rem; line-height: 1.85; color: #334155;">
       
       <h2 style="font-size: 1.85rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem; letter-spacing: -0.02em;">
         Mathematical Foundations of the Brunauer–Emmett–Teller (BET) Model
       </h2>
       <p>
-        The Brunauer–Emmett–Teller (BET) formulation represents the standard IUPAC methodology for quantifying the specific surface area of porous and divided materials[cite: 1]. Extending the Langmuir monolayer hypothesis, BET theory accounts for multilayer physisorption under dynamic thermodynamic equilibrium:
+        The Brunauer–Emmett–Teller (BET) equation represents the definitive IUPAC standard for determining the specific surface area of finely divided, porous, and nanostructured materials. Developed as an extension of the Langmuir monolayer model, it accounts for infinite multimolecular condensation on solid surfaces:
       </p>
       
       <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.25rem 2rem; margin: 1.5rem 0; text-align: center; box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);">
-        <div style="font-size: 1.45rem; font-weight: 800; color: #0f172a; letter-spacing: 0.05em; font-family: 'Times New Roman', Times, serif;">
+        <div style="font-size: 1.35rem; font-weight: 800; color: #0f172a; letter-spacing: 0.05em; font-family: 'Times New Roman', Times, serif;">
           <b>1 / [ V<sub>a</sub> · ((P<sub>0</sub>/P) &minus; 1) ] = [ (C &minus; 1) / (V<sub>m</sub> &middot; C) ] &middot; (P/P<sub>0</sub>) + [ 1 / (V<sub>m</sub> &middot; C) ]</b>
         </div>
       </div>
 
       <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
-        The Rouquerol Criteria for Microporous Frameworks
+        The Rouquerol Criteria: Solving Negative C-Constants in MOFs
       </h3>
       <p>
-        When evaluating materials with significant microporosity (such as MOFs, COFs, and zeolites), pore condensation and localized filling take place at relative pressures well below P/P₀ = 0.05[cite: 1]. Enforcing the classical range (0.05–0.30) yields unphysical negative intercepts and negative C constants[cite: 1]. Rouquerol consistency criteria resolve this via two rules:
+        In microporous architectures (such as zeolites, activated carbons, and Metal-Organic Frameworks like HKUST-1, UiO-66, or ZIF-8), pore condensation occurs at very low relative pressures (P/P₀ &lt; 0.05). Applying the traditional mesoporous evaluation range (0.05–0.30) violates thermodynamic assumptions, yielding unphysical negative y-intercepts and negative energetic C-constants.
       </p>
-      <ol style="padding-left: 1.25rem; font-size: 0.92rem;">
-        <li>The term <strong>V<sub>a</sub>(1 &minus; P/P₀)</strong> must monotonically increase with relative pressure P/P₀ across the selected linear region[cite: 1].</li>
-        <li>The y-intercept of the linear regression fit must remain strictly positive (<em>i</em> &gt; 0), confirming an energetically valid C &gt; 0[cite: 1].</li>
+      <p>
+        To preserve experimental validity, researchers must apply the <strong>Rouquerol consistency criteria</strong>:
+      </p>
+      <ol style="padding-left: 1.25rem; font-size: 0.92rem; line-height: 1.8;">
+        <li><strong>Monotonic Increase Rule:</strong> The quantity <strong>V<sub>a</sub>(1 &minus; P/P₀)</strong> must continuously increase with relative pressure. Any isotherm point occurring after the maximum V<sub>a</sub>(1 &minus; P/P₀) value must be excluded from the linear fit.</li>
+        <li><strong>Positive Intercept Rule:</strong> The y-intercept (<em>i</em>) must be strictly greater than zero to guarantee an energetically valid C-constant (C &gt; 0).</li>
+        <li><strong>Monolayer Range Alignment:</strong> The relative pressure corresponding to the derived monolayer capacity (P/P₀ at V<sub>m</sub>) must lie within the chosen linear fitting range.</li>
       </ol>
+
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
+        Worked Laboratory Case Studies
+      </h3>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
+        <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 1.15rem;">
+          <h4 style="margin: 0 0 0.5rem 0; font-size: 0.95rem; color: #0284c7;">Case 1: Mesoporous Silica (MCM-41)</h4>
+          <p style="font-size: 0.82rem; color: #475569; margin: 0; line-height: 1.6;">
+            Evaluated in the standard range (P/P₀ = 0.062–0.252) with N₂ at 77 K (σ = 0.162 nm²). Linear slope s = 0.0039, intercept i = 0.00049. Derived V<sub>m</sub> = 227.8 cm³/g, C = 8.96. Resulting S<sub>BET</sub> = <strong>991.6 m²/g</strong>.
+          </p>
+        </div>
+        <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 1.15rem;">
+          <h4 style="margin: 0 0 0.5rem 0; font-size: 0.95rem; color: #0284c7;">Case 2: Microporous MOF (HKUST-1)</h4>
+          <p style="font-size: 0.82rem; color: #475569; margin: 0; line-height: 1.6;">
+            Pore filling occurs below 0.05. Using Rouquerol criteria, the range is restricted to P/P₀ = 0.008–0.052. V<sub>a</sub>(1 &minus; P/P₀) increases monotonically, yielding C = 142.6 and an accurate S<sub>BET</sub> of <strong>1640.2 m²/g</strong> without negative intercept errors.
+          </p>
+        </div>
+      </div>
 
       <!-- FAQ ACCORDION SECTION -->
       <h3 style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-top: 3rem; margin-bottom: 1.25rem;">
@@ -385,12 +398,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
           <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What is the mathematical equation for converting Vm to SBET?</summary>
           <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
-            The specific surface area is derived via <strong>S<sub>BET</sub> = (V<sub>m</sub> &middot; N<sub>A</sub> &middot; &sigma;) / V<sub>molar</sub></strong>, where N<sub>A</sub> is Avogadro's number, &sigma; is the cross-sectional area of the probe gas molecule (0.162 nm² for N₂ at 77.35 K), and V<sub>molar</sub> is 22,414 cm³/mol at STP[cite: 1]. For nitrogen, this reduces to <strong>S<sub>BET</sub> = V<sub>m</sub> &times; 4.353 m²/g</strong>[cite: 1].
+            The specific surface area is derived via <strong>S<sub>BET</sub> = (V<sub>m</sub> &middot; N<sub>A</sub> &middot; &sigma;) / V<sub>molar</sub></strong>, where N<sub>A</sub> is Avogadro's number (6.022 &times; 10²³), &sigma; is the cross-sectional area of the probe gas molecule (0.162 nm² for N₂ at 77.35 K), and V<sub>molar</sub> is 22,414 cm³/mol at STP. For nitrogen, this reduces to <strong>S<sub>BET</sub> = V<sub>m</sub> &times; 4.353 m²/g</strong>.
           </p>
         </details>
 
         <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
-          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Why must samples be degassed before BET measurements?</summary>
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Why must samples be degassed under vacuum before BET analysis?</summary>
           <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
             Atmospheric moisture, carbon dioxide, and synthetic solvents adsorb strongly into pores during synthesis and air exposure. Vacuum outgassing at 100°C–150°C cleanses the interstitial surface area, preventing underestimation of the true monolayer volume.
           </p>
@@ -433,23 +446,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   </div>
 
   <style>
-    .bet-preset-btn {
-      background: #f8fafc;
-      border: 1.5px solid #cbd5e1;
-      padding: 0.35rem 0.65rem;
-      border-radius: 6px;
-      cursor: pointer;
-      color: #1e293b;
-      font-size: 0.75rem;
-      font-weight: 700;
-      transition: all 0.2s ease;
-    }
-    .bet-preset-btn:hover {
-      background: #0284c7;
-      color: #ffffff;
-      border-color: #0284c7;
-      transform: translateY(-1px);
-    }
     @media print {
       body * {
         visibility: hidden !important;
@@ -474,25 +470,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   <script>
     // MODE SWITCHING
-    const singleSection = document.getElementById('singleModeSection')!;
     const multiSection = document.getElementById('multiModeSection')!;
-    const modeSingleBtn = document.getElementById('modeSingleBtn')!;
+    const singleSection = document.getElementById('singleModeSection')!;
     const modeMultiBtn = document.getElementById('modeMultiBtn')!;
-
-    modeSingleBtn.addEventListener('click', () => {
-      singleSection.style.display = 'block';
-      multiSection.style.display = 'none';
-      modeSingleBtn.style.background = '#0284c7';
-      modeSingleBtn.style.color = '#ffffff';
-      modeSingleBtn.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
-      modeMultiBtn.style.background = 'transparent';
-      modeMultiBtn.style.color = '#475569';
-      modeMultiBtn.style.boxShadow = 'none';
-    });
+    const modeSingleBtn = document.getElementById('modeSingleBtn')!;
 
     modeMultiBtn.addEventListener('click', () => {
-      singleSection.style.display = 'none';
       multiSection.style.display = 'block';
+      singleSection.style.display = 'none';
       modeMultiBtn.style.background = '#0284c7';
       modeMultiBtn.style.color = '#ffffff';
       modeMultiBtn.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
@@ -502,183 +487,126 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       runMultiEngine();
     });
 
+    modeSingleBtn.addEventListener('click', () => {
+      multiSection.style.display = 'none';
+      singleSection.style.display = 'block';
+      modeSingleBtn.style.background = '#0284c7';
+      modeSingleBtn.style.color = '#ffffff';
+      modeSingleBtn.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+      modeMultiBtn.style.background = 'transparent';
+      modeMultiBtn.style.color = '#475569';
+      modeMultiBtn.style.boxShadow = 'none';
+      runSinglePointEngine();
+    });
+
+    // PASTE BOX TOGGLING
+    const togglePasteBtn = document.getElementById('togglePasteBoxBtn')!;
+    const pasteContainer = document.getElementById('pasteContainer')!;
+    const cancelPasteBtn = document.getElementById('cancelPasteBtn')!;
+    const applyPasteBtn = document.getElementById('applyPasteBtn')!;
+    const pasteTextArea = document.getElementById('pasteTextArea') as HTMLTextAreaElement;
+
+    togglePasteBtn.addEventListener('click', () => {
+      const isClosed = pasteContainer.style.display === 'none';
+      pasteContainer.style.display = isClosed ? 'block' : 'none';
+      if (isClosed) pasteTextArea.focus();
+    });
+
+    cancelPasteBtn.addEventListener('click', () => {
+      pasteContainer.style.display = 'none';
+    });
+
+    applyPasteBtn.addEventListener('click', () => {
+      const text = pasteTextArea.value.trim();
+      if (!text) return;
+      const lines = text.split('\n');
+      const newPoints: Array<{ p: number; v: number }> = [];
+
+      lines.forEach(line => {
+        const clean = line.trim().replace(/,/g, ' ').replace(/\t/g, ' ');
+        const parts = clean.split(/\s+/);
+        if (parts.length >= 2) {
+          const p = parseFloat(parts[0]);
+          const v = parseFloat(parts[1]);
+          if (!isNaN(p) && !isNaN(v) && p > 0 && p < 1 && v > 0) {
+            newPoints.push({ p, v });
+          }
+        }
+      });
+
+      if (newPoints.length >= 2) {
+        newPoints.sort((a, b) => a.p - b.p);
+        isothermPoints = newPoints;
+        renderIsothermTable();
+        runMultiEngine();
+        pasteContainer.style.display = 'none';
+        pasteTextArea.value = '';
+      } else {
+        alert('Could not parse at least 2 valid points. Format: P/P0 [tab or space] Volume');
+      }
+    });
+
     // TRANSDUCER AREA SENSITIVITY CHECK
     function checkSensitivity(totalArea: number) {
-      const box = document.getElementById('sensitivityWarningBox')!;
+      const box = document.getElementById('transducerAlertBox')!;
       if (totalArea > 0 && totalArea < 2.0) {
         box.style.display = 'block';
-        box.innerHTML = '<strong>Transducer Sensitivity Alert:</strong> Total cell surface area (' + totalArea.toFixed(2) + ' m²) is below recommended limit (≥ 2.0 m²). Increase degassed sample mass to maintain reliable pressure resolution.';
+        box.innerHTML = '<strong>Transducer Sensitivity Alert:</strong> Total cell surface area (' + totalArea.toFixed(2) + ' m²) is below the recommended 2.0 m² threshold. Consider increasing sample mass to improve precision.';
       } else {
         box.style.display = 'none';
       }
     }
 
-    // TWO-WAY DIRECT SOLVER LOGIC
-    const targetVarSelect = document.getElementById('targetVariable') as HTMLSelectElement;
+    // MULTIPOINT ENGINE CORE
     const adsorbateSelect = document.getElementById('adsorbateSelect') as HTMLSelectElement;
-    const inpVm = document.getElementById('inpVm') as HTMLInputElement;
-    const inpMass = document.getElementById('inpMass') as HTMLInputElement;
-    const inpSbet = document.getElementById('inpSbet') as HTMLInputElement;
-    const inpTemp = document.getElementById('inpTemp') as HTMLInputElement;
+    const inpSampleMass = document.getElementById('inpSampleMass') as HTMLInputElement;
+    const inpDegasTemp = document.getElementById('inpDegasTemp') as HTMLInputElement;
 
-    function adjustInputStates() {
-      const target = targetVarSelect.value;
-      [inpVm, inpMass, inpSbet].forEach(i => {
-        i.disabled = false;
-        i.style.background = '#ffffff';
-        i.style.color = '#0f172a';
-      });
-
-      if (target === 'sbet') {
-        inpSbet.disabled = true;
-        inpSbet.style.background = '#f8fafc';
-        inpSbet.style.color = '#64748b';
-        document.getElementById('readoutLabel')!.textContent = 'Calculated Specific Surface Area (S_BET)';
-      } else if (target === 'mass') {
-        inpMass.disabled = true;
-        inpMass.style.background = '#f8fafc';
-        inpMass.style.color = '#64748b';
-        document.getElementById('readoutLabel')!.textContent = 'Recommended Sample Mass (m)';
-      } else if (target === 'vm') {
-        inpVm.disabled = true;
-        inpVm.style.background = '#f8fafc';
-        inpVm.style.color = '#64748b';
-        document.getElementById('readoutLabel')!.textContent = 'Monolayer Volume Capacity (V_m)';
-      }
-      runSingleEngine();
-    }
-
-    targetVarSelect.addEventListener('change', adjustInputStates);
-    adsorbateSelect.addEventListener('change', runSingleEngine);
+    let isothermPoints = [
+      { p: 0.055, v: 82.4 },
+      { p: 0.092, v: 91.2 },
+      { p: 0.134, v: 98.5 },
+      { p: 0.175, v: 104.2 },
+      { p: 0.210, v: 109.1 },
+      { p: 0.252, v: 114.8 }
+    ];
 
     function getConvFactor(): number {
       const sigma = parseFloat(adsorbateSelect.value) || 0.162;
       return (6.02214076e23 * (sigma * 1e-18)) / 22414.0;
     }
 
-    function runSingleEngine() {
-      const target = targetVarSelect.value;
-      const conv = getConvFactor();
-      const uMass = (document.getElementById('unitMass') as HTMLSelectElement).value;
-
-      let vmRaw = parseFloat(inpVm.value) || 0;
-      let massRaw = parseFloat(inpMass.value) || 0;
-      let sbetRaw = parseFloat(inpSbet.value) || 0;
-      const temp = inpTemp.value || '120';
-
-      let mass_g = (uMass === 'mg') ? massRaw / 1000 : massRaw;
-
-      const warnEl = document.getElementById('singleWarn')!;
-      const displayPrimary = document.getElementById('primaryResult')!;
-      const displayTotalArea = document.getElementById('displayTotalArea')!;
-      const displayVm = document.getElementById('displayVm')!;
-      const coverageBar = document.getElementById('coverageBar')!;
-      const scaleStatusText = document.getElementById('scaleStatusText')!;
-      const protocolEl = document.getElementById('protocolSteps')!;
-
-      warnEl.style.display = 'none';
-
-      if (target === 'sbet') {
-        if (vmRaw > 0) {
-          sbetRaw = vmRaw * conv;
-          inpSbet.value = sbetRaw.toFixed(1);
-          displayPrimary.textContent = sbetRaw.toFixed(1) + ' m²/g';
-        }
-      } else if (target === 'mass') {
-        if (sbetRaw > 0) {
-          // Calculate mass needed for standard 3.0 m² cell area
-          mass_g = 3.0 / sbetRaw;
-          massRaw = (uMass === 'mg') ? mass_g * 1000 : mass_g;
-          inpMass.value = massRaw.toFixed(4);
-          displayPrimary.textContent = massRaw.toFixed(4) + ' ' + uMass;
-        }
-      } else if (target === 'vm') {
-        if (sbetRaw > 0) {
-          vmRaw = sbetRaw / conv;
-          inpVm.value = vmRaw.toFixed(2);
-          displayPrimary.textContent = vmRaw.toFixed(2) + ' cm³/g';
-        }
-      }
-
-      if (sbetRaw > 0 && mass_g > 0) {
-        const totalArea = sbetRaw * mass_g;
-        displayTotalArea.textContent = totalArea.toFixed(2) + ' m²';
-        displayVm.textContent = vmRaw.toFixed(2) + ' cm³/g';
-
-        checkSensitivity(totalArea);
-
-        const covPct = Math.min(Math.max((totalArea / 5.0) * 100, 2), 100);
-        coverageBar.style.width = covPct + '%';
-        coverageBar.style.background = (totalArea >= 2.0) ? '#059669' : '#f59e0b';
-        scaleStatusText.textContent = totalArea.toFixed(2) + ' m² in cell (' + (totalArea >= 2.0 ? 'Optimal' : 'Low Sensitivity') + ')';
-
-        protocolEl.innerHTML = `
-          <li>Load <strong>${mass_g.toFixed(4)} g</strong> of adsorbent into a clean, pre-weighed bulb or tube.</li>
-          <li>Outgas under vacuum (&lt; 10⁻³ Torr) at <strong>${temp}°C</strong> for 6–12 hours.</li>
-          <li>Determine net degassed dry mass on an analytical balance to 0.1 mg precision.</li>
-          <li>Analyze with <strong>${adsorbateSelect.options[adsorbateSelect.selectedIndex].text.split('—')[0]}</strong> at 77.35 K.</li>
-          <li>Derived specific surface area: <strong>${sbetRaw.toFixed(1)} m²/g</strong> (Total cell surface: ${totalArea.toFixed(2)} m²).</li>
-        `;
-      }
-    }
-
-    // PRESET BUTTONS LISTENER
-    document.querySelectorAll('.bet-preset-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const t = e.currentTarget as HTMLElement;
-        inpVm.value = t.dataset.vm!;
-        inpMass.value = t.dataset.mass!;
-        inpSbet.value = t.dataset.sbet!;
-        inpTemp.value = t.dataset.temp!;
-        adsorbateSelect.value = t.dataset.gas!;
-        document.getElementById('labelSampleName')!.textContent = t.dataset.name!;
-        targetVarSelect.value = 'sbet';
-        adjustInputStates();
-      });
-    });
-
-    // PRINT TUBE LABEL
-    document.getElementById('printLabelBtn')?.addEventListener('click', () => {
-      const sbet = inpSbet.value + ' m²/g';
-      const mass = inpMass.value + ' ' + (document.getElementById('unitMass') as HTMLSelectElement).value;
-      const gas = adsorbateSelect.options[adsorbateSelect.selectedIndex].text.split('—')[0];
-      const temp = inpTemp.value + ' °C';
-
-      document.getElementById('labelDate')!.textContent = new Date().toLocaleDateString();
-      document.getElementById('labelMass')!.textContent = mass;
-      document.getElementById('labelTemp')!.textContent = temp;
-      document.getElementById('labelSbet')!.textContent = sbet;
-      document.getElementById('labelGas')!.textContent = gas;
-
-      window.print();
-    });
-
-    // ENGINE 2: MULTIPOINT ISOTHERM REGRESSION & DYNAMIC SVG PLOT
-    let isothermPoints = [
-      { p: 0.062, v: 84.1 },
-      { p: 0.098, v: 92.4 },
-      { p: 0.135, v: 98.7 },
-      { p: 0.174, v: 104.2 },
-      { p: 0.210, v: 109.1 },
-      { p: 0.252, v: 114.8 }
-    ];
-
     function renderIsothermTable() {
       const tbody = document.getElementById('isothermTableBody')!;
       tbody.innerHTML = '';
+
+      let prevRouqVal = -1;
+
       isothermPoints.forEach((pt, i) => {
+        const rouqVal = pt.v * (1.0 - pt.p);
+        const isDecreasing = (prevRouqVal !== -1 && rouqVal < prevRouqVal);
+        prevRouqVal = rouqVal;
+
         const tr = document.createElement('tr');
         tr.style.borderBottom = '1px solid #f1f5f9';
         tr.innerHTML = `
-          <td style="padding: 0.45rem 0.25rem; font-weight: 700; color: #64748b; font-family: monospace;">#${i + 1}</td>
-          <td style="padding: 0.45rem 0.25rem;">
-            <input type="number" step="0.001" value="${pt.p}" data-index="${i}" data-field="p" class="iso-input" style="width: 100%; border: 1px solid #cbd5e1; border-radius: 4px; padding: 0.35rem 0.5rem; font-family: monospace; font-size: 0.85rem; box-sizing: border-box;" />
+          <td style="padding: 0.45rem 0.2rem; font-weight: 700; color: #64748b; font-family: monospace;">#${i + 1}</td>
+          <td style="padding: 0.45rem 0.2rem;">
+            <input type="number" step="0.001" value="${pt.p}" data-index="${i}" data-field="p" class="iso-input" style="width: 75px; border: 1px solid #cbd5e1; border-radius: 4px; padding: 0.25rem 0.4rem; font-family: monospace; font-size: 0.82rem;" />
           </td>
-          <td style="padding: 0.45rem 0.25rem;">
-            <input type="number" step="0.1" value="${pt.v}" data-index="${i}" data-field="v" class="iso-input" style="width: 100%; border: 1px solid #cbd5e1; border-radius: 4px; padding: 0.35rem 0.5rem; font-family: monospace; font-size: 0.85rem; box-sizing: border-box;" />
+          <td style="padding: 0.45rem 0.2rem;">
+            <input type="number" step="0.1" value="${pt.v}" data-index="${i}" data-field="v" class="iso-input" style="width: 85px; border: 1px solid #cbd5e1; border-radius: 4px; padding: 0.25rem 0.4rem; font-family: monospace; font-size: 0.82rem;" />
           </td>
-          <td style="padding: 0.45rem 0.25rem; text-align: right;">
-            <button data-index="${i}" class="del-pt-btn" style="background: none; border: none; color: #ef4444; font-size: 0.85rem; cursor: pointer; padding: 0.2rem 0.4rem;">✕</button>
+          <td style="padding: 0.45rem 0.2rem; font-family: monospace; font-size: 0.8rem; color: #334155;">
+            ${rouqVal.toFixed(2)}
+          </td>
+          <td style="padding: 0.45rem 0.2rem;">
+            <span style="font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; ${isDecreasing ? 'background: #fef2f2; color: #ef4444; border: 1px solid #fecaca;' : 'background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;'}">
+              ${isDecreasing ? 'Violation' : 'Valid'}
+            </span>
+          </td>
+          <td style="padding: 0.45rem 0.2rem; text-align: right;">
+            <button data-index="${i}" class="del-pt-btn" style="background: none; border: none; color: #ef4444; font-size: 0.85rem; cursor: pointer; padding: 0.2rem;">✕</button>
           </td>
         `;
         tbody.appendChild(tr);
@@ -708,7 +636,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       });
     }
 
-    document.getElementById('addPointBtn')?.addEventListener('click', () => {
+    document.getElementById('addRowBtn')?.addEventListener('click', () => {
       const lastP = isothermPoints.length > 0 ? isothermPoints[isothermPoints.length - 1].p : 0.05;
       isothermPoints.push({ p: parseFloat(Math.min(0.35, lastP + 0.03).toFixed(3)), v: 120.0 });
       renderIsothermTable();
@@ -716,6 +644,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     });
 
     function runMultiEngine() {
+      const conv = getConvFactor();
+      const mass = parseFloat(inpSampleMass.value) || 0.125;
+      const temp = inpDegasTemp.value || '120';
+
       const valid = isothermPoints.filter(pt => pt.p > 0 && pt.p < 1 && pt.v > 0);
       if (valid.length < 2) return;
 
@@ -730,8 +662,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       const n = xVals.length;
       let sX = 0, sY = 0, sXY = 0, sXX = 0, sYY = 0;
       for (let i = 0; i < n; i++) {
-        sX += xVals[i]; sY += yVals[i];
-        sXY += xVals[i] * yVals[i];
+        sX += xVals[i]; sY += yVals[i]; sXY += xVals[i] * yVals[i];
         sXX += xVals[i] * xVals[i]; sYY += yVals[i] * yVals[i];
       }
 
@@ -747,13 +678,34 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       const vm = 1.0 / (slope + intercept);
       const cConst = 1.0 + (slope / intercept);
+      const sbet = vm * conv;
+      const totalArea = sbet * mass;
 
       document.getElementById('regSlope')!.textContent = slope.toFixed(4);
       document.getElementById('regIntercept')!.textContent = intercept.toFixed(4);
       document.getElementById('regC')!.textContent = cConst.toFixed(1);
       document.getElementById('regR2')!.textContent = r2.toFixed(4);
 
-      // Render Dynamic SVG Regression Line
+      document.getElementById('primaryResult')!.textContent = sbet.toFixed(1) + ' m²/g';
+      document.getElementById('displayTotalArea')!.textContent = totalArea.toFixed(2) + ' m²';
+      document.getElementById('displayVm')!.textContent = vm.toFixed(2) + ' cm³/g';
+
+      checkSensitivity(totalArea);
+
+      const covPct = Math.min(Math.max((totalArea / 5.0) * 100, 2), 100);
+      const coverageBar = document.getElementById('coverageBar')!;
+      coverageBar.style.width = covPct + '%';
+      coverageBar.style.background = (totalArea >= 2.0) ? '#059669' : '#f59e0b';
+      document.getElementById('scaleStatusText')!.textContent = totalArea.toFixed(2) + ' m² in cell (' + (totalArea >= 2.0 ? 'Optimal' : 'Low Sensitivity') + ')';
+
+      const protocolEl = document.getElementById('protocolSteps')!;
+      protocolEl.innerHTML = `
+        <li>Degas <strong>${mass.toFixed(4)} g</strong> of sample under high vacuum (&lt; 10⁻³ Torr) at <strong>${temp}°C</strong> for 6–12 h.</li>
+        <li>Collect N₂ isotherm at 77.35 K across the designated relative pressure interval.</li>
+        <li>Monolayer capacity derived: <strong>${vm.toFixed(2)} cm³/g STP</strong> with C-constant = <strong>${cConst.toFixed(1)}</strong>.</li>
+        <li>Specific Surface Area: <strong>${sbet.toFixed(1)} m²/g</strong> (Total cell surface: ${totalArea.toFixed(2)} m²).</li>
+      `;
+
       renderBetPlot(xVals, yVals, slope, intercept);
     }
 
@@ -795,11 +747,49 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       svg.innerHTML = svgHtml;
     }
 
+    // SINGLE-POINT BET ENGINE
+    function runSinglePointEngine() {
+      const p = parseFloat((document.getElementById('singleP') as HTMLInputElement).value) || 0.3;
+      const v = parseFloat((document.getElementById('singleV') as HTMLInputElement).value) || 0;
+      const m = parseFloat((document.getElementById('singleMass') as HTMLInputElement).value) || 0.125;
+      const conv = getConvFactor();
+
+      if (p > 0 && p < 1 && v > 0) {
+        const vmSingle = v * (1.0 - p);
+        const sbetSingle = vmSingle * conv;
+        const totalArea = sbetSingle * m;
+
+        document.getElementById('singleResultArea')!.textContent = sbetSingle.toFixed(1) + ' m²/g';
+        document.getElementById('singleResultVm')!.textContent = vmSingle.toFixed(2);
+        document.getElementById('singleResultCell')!.textContent = totalArea.toFixed(2);
+      }
+    }
+
+    ['singleP', 'singleV', 'singleMass'].forEach(id => {
+      document.getElementById(id)?.addEventListener('input', runSinglePointEngine);
+    });
+
+    // PRINT TUBE LABEL
+    document.getElementById('printLabelBtn')?.addEventListener('click', () => {
+      const sbet = document.getElementById('primaryResult')!.textContent || '--';
+      const mass = inpSampleMass.value + ' g';
+      const gas = adsorbateSelect.options[adsorbateSelect.selectedIndex].text.split('—')[0];
+      const temp = inpDegasTemp.value + ' °C';
+
+      document.getElementById('labelDate')!.textContent = new Date().toLocaleDateString();
+      document.getElementById('labelMass')!.textContent = mass;
+      document.getElementById('labelTemp')!.textContent = temp;
+      document.getElementById('labelSbet')!.textContent = sbet;
+      document.getElementById('labelGas')!.textContent = gas;
+
+      window.print();
+    });
+
     // CSV DOWNLOAD
     document.getElementById('downloadCsvBtn')?.addEventListener('click', () => {
-      let csv = 'Point,Relative_Pressure_P_P0,Volume_Adsorbed_cm3_g_STP\n';
+      let csv = 'Point,Relative_Pressure_P_P0,Volume_Adsorbed_cm3_g_STP,Rouquerol_Va_1_minus_P\n';
       isothermPoints.forEach((pt, i) => {
-        csv += `${i + 1},${pt.p},${pt.v}\n`;
+        csv += `${i + 1},${pt.p},${pt.v},${(pt.v * (1 - pt.p)).toFixed(3)}\n`;
       });
       const blob = new Blob([csv], { type: 'text/csv' });
       const url = window.URL.createObjectURL(blob);
@@ -810,13 +800,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     });
 
     // EVENT BINDINGS
-    [inpVm, inpMass, inpSbet, inpTemp].forEach(inp => {
-      inp.addEventListener('input', runSingleEngine);
+    [inpSampleMass, inpDegasTemp].forEach(inp => {
+      inp.addEventListener('input', runMultiEngine);
     });
-
-    ['unitVm', 'unitMass'].forEach(id => {
-      document.getElementById(id)?.addEventListener('change', runSingleEngine);
-    });
+    adsorbateSelect.addEventListener('change', runMultiEngine);
 
     document.getElementById('copyProtocolBtn')?.addEventListener('click', () => {
       const text = document.getElementById('protocolSteps')?.innerText || '';
@@ -830,7 +817,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     });
 
     document.getElementById('copyBetLatex')?.addEventListener('click', () => {
-      const latex = `S_{\\text{BET}} = \\frac{V_m \\cdot N_A \\cdot \\sigma}{V_{\\text{molar}}} = ${inpSbet.value}\\text{ m}^2/\\text{g}`;
+      const sbetVal = document.getElementById('primaryResult')!.textContent || '--';
+      const latex = `S_{\\text{BET}} = \\frac{V_m \\cdot N_A \\cdot \\sigma}{V_{\\text{molar}}} = ${sbetVal}`;
       navigator.clipboard.writeText(latex);
       alert('LaTeX equation copied to clipboard.');
     });
@@ -918,9 +906,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     // INIT
     updateInlineCite();
-    adjustInputStates();
     renderIsothermTable();
-    runSingleEngine();
+    runMultiEngine();
+    runSinglePointEngine();
   </script>
 
   <!-- Related Analytical Workflows Hub -->
