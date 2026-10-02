@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { toolsCatalog } from '../data/tools';
 ---
 
 <BaseLayout 
@@ -30,85 +31,27 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </p>
     </div>
 
-    <!-- Tool Grid -->
+    <!-- Automated Tool Grid (Dynamically rendered from toolsCatalog) -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 4rem;">
-      
-      <!-- Card 1: Molarity Studio -->
-      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between;">
-        <div>
-          <div style="font-size: 2rem; margin-bottom: 0.75rem;">🧪</div>
-          <h2 style="font-size: 1.25rem; font-weight: 700; margin: 0 0 0.5rem 0; color: #0f172a;">Solution Molarity Studio</h2>
-          <p style="color: #64748b; font-size: 0.875rem; line-height: 1.6; margin: 0;">
-            Accurately calculate solute mass with automatic compensation for crystalline hydration water (&middot; nH₂O) and reagent assay purity. Includes printable benchtop labels.
-          </p>
+      {toolsCatalog.map((tool) => (
+        <div style={`background: #ffffff; border: 1.5px solid ${tool.badgeColor ? tool.badgeColor : (tool.badge === 'Live Studio' ? '#0284c7' : '#e2e8f0')}; border-radius: 12px; padding: 1.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; position: relative;`}>
+          {tool.badge && (
+            <span style={`position: absolute; top: 1rem; right: 1rem; background: ${tool.badgeColor ? '#ecfdf5' : '#e0f2fe'}; color: ${tool.badgeColor ? tool.badgeColor : '#0369a1'}; font-size: 0.7rem; font-weight: 800; padding: 2px 8px; border-radius: 9999px; text-transform: uppercase;`}>
+              {tool.badge}
+            </span>
+          )}
+          <div>
+            <div style="font-size: 2rem; margin-bottom: 0.75rem;">{tool.icon}</div>
+            <h2 style="font-size: 1.25rem; font-weight: 700; margin: 0 0 0.5rem 0; color: #0f172a;">{tool.title}</h2>
+            <p style="color: #64748b; font-size: 0.875rem; line-height: 1.6; margin: 0;">
+              {tool.description}
+            </p>
+          </div>
+          <a href={tool.path} style={`display: inline-block; margin-top: 1.5rem; color: ${tool.badgeColor || '#0284c7'}; font-weight: 700; font-size: 0.875rem; text-decoration: none;`}>
+            Open {tool.title.split(' ')[0]} Studio &rarr;
+          </a>
         </div>
-        <a href="/molarity" style="display: inline-block; margin-top: 1.5rem; color: #0284c7; font-weight: 700; font-size: 0.875rem; text-decoration: none;">
-          Open Molarity Studio &rarr;
-        </a>
-      </div>
-
-      <!-- Card 2: Serial Dilution -->
-      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between;">
-        <div>
-          <div style="font-size: 2rem; margin-bottom: 0.75rem;">💧</div>
-          <h2 style="font-size: 1.25rem; font-weight: 700; margin: 0 0 0.5rem 0; color: #0f172a;">Serial Dilution Calculator</h2>
-          <p style="color: #64748b; font-size: 0.875rem; line-height: 1.6; margin: 0;">
-            Determine required stock aliquot volumes (V₁) and necessary diluent/solvent additions using standard mass balance (C₁V₁ = C₂V₂) conservation logic.
-          </p>
-        </div>
-        <a href="/dilution" style="display: inline-block; margin-top: 1.5rem; color: #0284c7; font-weight: 700; font-size: 0.875rem; text-decoration: none;">
-          Open Dilution Engine &rarr;
-        </a>
-      </div>
-
-      <!-- Card 3: Buffer Preparation Studio -->
-      <div style="background: #ffffff; border: 1.5px solid #0284c7; border-radius: 12px; padding: 1.75rem; box-shadow: 0 4px 6px -1px rgba(2, 132, 199, 0.08); display: flex; flex-direction: column; justify-content: space-between; position: relative;">
-        <span style="position: absolute; top: 1rem; right: 1rem; background: #e0f2fe; color: #0369a1; font-size: 0.7rem; font-weight: 800; padding: 2px 8px; border-radius: 9999px; text-transform: uppercase;">
-          Live Studio
-        </span>
-        <div>
-          <div style="font-size: 2rem; margin-bottom: 0.75rem;">⚖️</div>
-          <h2 style="font-size: 1.25rem; font-weight: 700; margin: 0 0 0.5rem 0; color: #0f172a;">Buffer Preparation Studio</h2>
-          <p style="color: #64748b; font-size: 0.875rem; line-height: 1.6; margin: 0;">
-            Calculate conjugate acid-base masses using the Henderson-Hasselbalch equation. Features dynamic titration curves, Van Slyke capacity (&beta;), and hydrate/purity corrections.
-          </p>
-        </div>
-        <a href="/buffer" style="display: inline-block; margin-top: 1.5rem; color: #0284c7; font-weight: 700; font-size: 0.875rem; text-decoration: none;">
-          Open Buffer Studio &rarr;
-        </a>
-      </div>
-
-      <!-- Card 4: Scherrer PXRD -->
-      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between;">
-        <div>
-          <div style="font-size: 2rem; margin-bottom: 0.75rem;">🔬</div>
-          <h2 style="font-size: 1.25rem; font-weight: 700; margin: 0 0 0.5rem 0; color: #0f172a;">PXRD Scherrer Crystallite Size</h2>
-          <p style="color: #64748b; font-size: 0.875rem; line-height: 1.6; margin: 0;">
-            Calculate volume-weighted coherent crystalline domain dimensions (D) from Powder X-ray Diffraction peak full-width at half-maximum (FWHM) with source presets.
-          </p>
-        </div>
-        <a href="/scherrer" style="display: inline-block; margin-top: 1.5rem; color: #0284c7; font-weight: 700; font-size: 0.875rem; text-decoration: none;">
-          Open Scherrer Calculator &rarr;
-        </a>
-      </div>
-
-      <!-- Card 5: Multipoint BET Surface Area Studio (NEW) -->
-      <div style="background: #ffffff; border: 1.5px solid #059669; border-radius: 12px; padding: 1.75rem; box-shadow: 0 4px 6px -1px rgba(5, 150, 105, 0.08); display: flex; flex-direction: column; justify-content: space-between; position: relative;">
-        <span style="position: absolute; top: 1rem; right: 1rem; background: #ecfdf5; color: #059669; font-size: 0.7rem; font-weight: 800; padding: 2px 8px; border-radius: 9999px; text-transform: uppercase;">
-          New Studio
-        </span>
-        <div>
-          <div style="font-size: 2rem; margin-bottom: 0.75rem;">📊</div>
-          <h2 style="font-size: 1.25rem; font-weight: 700; margin: 0 0 0.5rem 0; color: #0f172a;">BET Surface Area Analyzer</h2>
-          <p style="color: #64748b; font-size: 0.875rem; line-height: 1.6; margin: 0;">
-            Calculate specific surface area (S<sub>BET</sub>), monolayer volume (V<sub>m</sub>), and energetic C-constant from gas adsorption isotherms. Includes Rouquerol checks, dynamic SVG plots, and thermal tube labels.
-          </p>
-        </div>
-        <a href="/bet" style="display: inline-block; margin-top: 1.5rem; color: #059669; font-weight: 700; font-size: 0.875rem; text-decoration: none;">
-          Open BET Physisorption Studio &rarr;
-        </a>
-      </div>
-
+      ))}
     </div>
 
     <!-- Programmatic Long-Tail Solution Formulation Shortcuts -->
@@ -159,7 +102,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </span>
         <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
           <a href="/buffer?sys=phosphate&ph=7.40&c=50&v=1000" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #0369a1; transition: all 0.2s ease;">
-            ⚖️️ 50 mM PBS Buffer (pH 7.4)
+            ⚖️ 50 mM PBS Buffer (pH 7.4)
           </a>
           <a href="/buffer?sys=tris&ph=8.00&c=100&v=500" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #0369a1; transition: all 0.2s ease;">
             ⚖️ 100 mM Tris-HCl (pH 8.0)
@@ -194,7 +137,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
       </div>
 
-      <!-- Category D: Materials Physisorption & BET Surface Area (NEW) -->
+      <!-- Category D: Materials Physisorption & BET Surface Area -->
       <div>
         <span style="display: block; font-size: 0.78rem; font-weight: 800; text-transform: uppercase; color: #475569; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
           Gas Physisorption &amp; Porosity Standards (BET)
@@ -203,7 +146,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <a href="/bet" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #047857; transition: all 0.2s ease;">
             📊 MCM-41 Mesoporous Silica (N₂ at 77 K)
           </a>
-          <a href="/bet?pts=%5B%7B%22p%22%3A0.008%2C%22v%22%3A185%7D%2C%7B%22p%22%3A0.015%2C%22v%22%3A220.4%7D%2C%7B%22p%22%3A0.024%2C%22v%22%3A245.8%7D%2C%7B%22p%22%3A0.038%2C%22v%22%3A271.2%7D%2C%7B%22p%22%3A0.052%2C%22v%22%3A288.6%7D%5D&m=0.1000&gas=0.162" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #047857; transition: all 0.2s ease;">
+          <a href="/bet" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #047857; transition: all 0.2s ease;">
             📊 HKUST-1 MOF Microporous Isotherm
           </a>
         </div>
@@ -218,7 +161,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         In experimental chemical synthesis, material characterization, and analytical titrations, computational precision during initial solution preparation is paramount. Minor errors in compensating for crystal water or neglect of reagent assay variances lead to systematic concentration discrepancies that compromise experimental reproducibility.
       </p>
       <p style="margin-bottom: 0;">
-        ChemistryDesk operates entirely client-side, running pure mathematical evaluations in real time without transmitting proprietary formulation parameters across remote servers[cite: 1]. Review our dedicated module guides for explicit theoretical derivations, worked numerical problems, and Standard Operating Procedures (SOPs)[cite: 1].
+        ChemistryDesk operates entirely client-side, running pure mathematical evaluations in real time without transmitting proprietary formulation parameters across remote servers. Review our dedicated module guides for explicit theoretical derivations, worked numerical problems, and Standard Operating Procedures (SOPs).
       </p>
     </section>
 
@@ -231,20 +174,20 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </h2>
       </div>
       <p style="font-size: 0.95rem; color: #475569; line-height: 1.7; margin-bottom: 1.25rem;">
-        Modern wet laboratories, cleanrooms, and subterranean analytical suites (such as XRD, SEM, and NMR instrument rooms) frequently have shielded cellular reception and intermittent Wi-Fi[cite: 1]. ChemistryDesk is built as an installable Progressive Web App (PWA)[cite: 1]. All mathematical formulas, formula weights, and serial dilution ladders execute entirely on your device[cite: 1].
+        Modern wet laboratories, cleanrooms, and subterranean analytical suites (such as XRD, SEM, and NMR instrument rooms) frequently have shielded cellular reception and intermittent Wi-Fi. ChemistryDesk is built as an installable Progressive Web App (PWA). All mathematical formulas, formula weights, and serial dilution ladders execute entirely on your device.
       </p>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
         <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 1rem;">
           <strong style="color: #0f172a; font-size: 0.9rem; display: block; margin-bottom: 0.35rem;">⚡ No Internet Required</strong>
-          <span style="font-size: 0.85rem; color: #64748b;">All calculations execute locally once the page loads or the app is installed[cite: 1].</span>
+          <span style="font-size: 0.85rem; color: #64748b;">All calculations execute locally once the page loads or the app is installed.</span>
         </div>
         <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 1rem;">
           <strong style="color: #0f172a; font-size: 0.9rem; display: block; margin-bottom: 0.35rem;">🔒 Complete Data Privacy</strong>
-          <span style="font-size: 0.85rem; color: #64748b;">Proprietary formulas and sample weights remain on your local machine and are never transmitted to external servers[cite: 1].</span>
+          <span style="font-size: 0.85rem; color: #64748b;">Proprietary formulas and sample weights remain on your local machine and are never transmitted to external servers.</span>
         </div>
         <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 1rem;">
           <strong style="color: #0f172a; font-size: 0.9rem; display: block; margin-bottom: 0.35rem;">💻 Installable on Any Device</strong>
-          <span style="font-size: 0.85rem; color: #64748b;">Click "Install App" in your browser bar to add ChemistryDesk directly to your desktop or mobile home screen[cite: 1].</span>
+          <span style="font-size: 0.85rem; color: #64748b;">Click "Install App" in your browser bar to add ChemistryDesk directly to your desktop or mobile home screen.</span>
         </div>
       </div>
     </section>
