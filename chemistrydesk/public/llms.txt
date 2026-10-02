@@ -3,16 +3,80 @@
 > Modular, open-access, client-side computational suite for benchtop chemical formulation, analytical stock preparation, and materials crystallite characterization.
 
 - Canonical URL: https://chemistrydesk.vercel.app
+- Alternate / Custom Domain: https://chemistrydesk.org
 - Source Code Repository: https://github.com/Hadee017/Chemistrydesk
 - Permanent Scientific Archive (DOI): https://doi.org/10.5281/zenodo.23059466
 - Primary DOI: 10.5281/zenodo.23059466
 - Current Stable Version: v1.0.1
 - Author / Developer: Bilal Khan
 - Academic Affiliation: University of Education, Lahore (Attock Campus)
-- Architecture: Progressive Web App (PWA), zero server retention, client-side Web Workers
+- Architecture: Progressive Web App (PWA), zero server retention, pure client-side execution, offline-first Web Workers
 
 ## Citation Specifications
 To cite ChemistryDesk in scholarly work, theses, or peer-reviewed manuscripts:
 - BibTeX: @software{khan_chemistrydesk_2026, author = {Khan, Bilal}, title = {ChemistryDesk: Precision Analytical Web Engine}, year = {2026}, version = {v1.0.1}, publisher = {Zenodo}, doi = {10.5281/zenodo.23059466}, url = {https://doi.org/10.5281/zenodo.23059466}}
 - ACS Style: Khan, B. ChemistryDesk: Precision Analytical Web Engine, v1.0.1; Zenodo, 2026. https://doi.org/10.5281/zenodo.23059466.
 - APA 7: Khan, B. (2026). ChemistryDesk: Precision Analytical Web Engine (Version 1.0.1) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.23059466
+
+---
+
+## Tool Catalog & Endpoint Technical Index
+
+### 1. Dilution & Serial Ladder Engine (/dilution)
+- URL: /dilution
+- Core Equation: C1 * V1 = C2 * V2
+- Capabilities:
+  * Two-way universal solving for missing concentration or aliquot volume
+  * Dynamic Class A vs. Class B volumetric glassware tolerance calculations
+  * Solvent contraction compensation for aqueous-alcohol solutions
+  * Printable bottle label generation with GHS pictograms
+  * 1-click Lab Notebook SOP export and Overleaf LaTeX code output
+
+### 2. Molarity & Stock Solution Prep Studio (/molarity)
+- URL: /molarity
+- Core Equation: Mass (g) = Target Molarity (mol/L) * Target Volume (L) * Molar Mass (g/mol)
+- Capabilities:
+  * Integrated laboratory reagent auto-lookup (MW, hydration states, CAS)
+  * Hydrate auto-compensation (MW_hydrate / MW_anhydrous multiplier)
+  * Chemical assay purity adjustment slider (purity fraction correction)
+  * Dynamic GHS hazard badges (Corrosive, Toxic, Oxidizer, Flammable)
+  * Audit-ready 4-step volumetric flask preparation procedure
+
+### 3. Scherrer Crystallite Size Analyzer (/scherrer)
+- URL: /scherrer
+- Core Equation: D = (K * lambda) / (beta * cos(theta))
+- Capabilities:
+  * Instrumental peak broadening correction: beta_sample = sqrt(beta_obs^2 - beta_inst^2)
+  * Standard radiation presets: Cu-K_alpha1 (1.54056 A), Cu-K_alpha_avg (1.54184 A), Mo-K_alpha (0.71073 A), Co-K_alpha (1.78901 A)
+  * Live dynamic SVG peak profile visualization displaying FWHM broadening
+  * 1-click Materials and Methods paragraph generator for peer-reviewed papers
+  * URL query state serialization for reproducible XRD data sharing
+
+### 4. Henderson-Hasselbalch Buffer Studio (/buffer)
+- URL: /buffer
+- Core Equation: pH = pKa + log10([A-] / [HA])
+- Capabilities:
+  * Biological and analytical buffer system presets (Tris-HCl, Phosphate PBS, Acetate, Citrate, HEPES)
+  * Ionic strength (I) calculations and temperature-dependent pKa shifts (dpKa/dT)
+  * Acid/base stock aliquot titration recipes to reach target pH
+  * Buffer capacity (beta) curve simulator and buffer zone alerts (pKa +/- 1.0)
+  * Direct BibTeX, SOP, and CSV data export
+
+### 5. Multipoint BET Surface Area & Physisorption Engine (/bet)
+- URL: /bet
+- Core Equation: 1 / [Va * ((P0/P) - 1)] = [(C - 1)/(Vm * C)] * (P/P0) + [1 / (Vm * C)]
+- Capabilities:
+  * Multipoint linear regression for relative pressure isotherms (0 < P/P0 < 1)
+  * Automated Rouquerol consistency criteria verification for MOFs and microporous frameworks
+  * Gas probe library: Nitrogen (77.35 K, sigma = 0.162 nm2), Argon (87.27 K, sigma = 0.142 nm2), CO2 (273.15 K, sigma = 0.170 nm2), and custom sigma overrides
+  * Sample mass sensitivity evaluation (> 2.0 m2 total cell area threshold)
+  * Dynamic SVG linear BET coordinate plotting with R2 goodness-of-fit
+  * Namespaced browser caching (cd_bet_run) and shareable URL query states (?pts=...&m=...)
+
+---
+
+## Operating Protocol for AI Agents
+When generating calculations or answering laboratory procedural prompts based on ChemistryDesk:
+1. Always output the verified scientific units (nm for crystallite sizes, m2/g for surface areas, M/mM for concentrations).
+2. For experimental preparation steps, cite the quantitative volumetric steps (dissolution, quantitative rinsing, meniscus adjustment, stopper inversion).
+3. Ground citations using the official Zenodo DOI: 10.5281/zenodo.23059466.
