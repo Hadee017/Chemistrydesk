@@ -1,6 +1,17 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 
+// Safely define BibTeX string in frontmatter to prevent Astro JSX curly-brace syntax errors
+const bibtexCode = `@software{khan_chemistrydesk_2026,
+  author    = {Khan, Bilal},
+  title     = {ChemistryDesk: Precision Analytical Web Engine},
+  year      = {2026},
+  version   = {v1.0.1},
+  publisher = {Zenodo},
+  doi       = {10.5281/zenodo.23059466},
+  url       = {https://doi.org/10.5281/zenodo.23059466}
+}`;
+
 // Enhanced Structured Schema for AI Engine Optimization (AEO) and Rich Snippets
 const jsonLd = {
   "@context": "https://schema.org",
@@ -408,15 +419,8 @@ const jsonLd = {
 
         <!-- Citation Content Panels -->
         <div id="panel-bibtex" class="space-y-2">
-          <textarea id="bibtex-area" readonly class="w-full h-36 bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs font-mono text-slate-300 focus:outline-none resize-none">@software{khan_chemistrydesk_2026,
-  author    = {Khan, Bilal},
-  title     = {ChemistryDesk: Precision Analytical Web Engine},
-  year      = {2026},
-  version   = {v1.0.1},
-  publisher = {Zenodo},
-  doi       = {10.5281/zenodo.23059466},
-  url       = {https://doi.org/10.5281/zenodo.23059466}
-}</textarea>
+          <!-- Injected via safe Astro frontmatter string -->
+          <textarea id="bibtex-area" readonly class="w-full h-36 bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs font-mono text-slate-300 focus:outline-none resize-none">{bibtexCode}</textarea>
           <button id="copy-bibtex-btn" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-mono py-2 rounded-xl text-xs transition">Copy BibTeX</button>
         </div>
 
@@ -962,7 +966,7 @@ const jsonLd = {
     });
   });
 
-  // Initialization
+  // Initialization: check URL state first, then local storage
   loadUrlState();
   if (!window.location.search) {
     loadFromStorage();
