@@ -79,5 +79,17 @@ export const toolsCatalog: ToolMeta[] = [
     priority: '0.9',
     changefreq: 'weekly',
     lastmod: '2026-10-03'
+  },
+  {
+    id: 'ghs',
+    title: 'GHS Hazard & Chemical Safety Studio',
+    path: '/ghs',
+    icon: '⚠️️',
+    badge: 'Safety Core',
+    badgeColor: '#dc2626',
+    description: 'Universal chemical entity lookup (110M+ compounds), GHS hazard & precautionary H/P code index, mixture cut-off calculators, and printable OSHA secondary container labels.',
+    priority: '0.9',
+    changefreq: 'weekly',
+    lastmod: '2026-10-03'
   }
 ];

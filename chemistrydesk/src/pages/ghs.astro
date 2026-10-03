@@ -1,0 +1,957 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { 
+  GHS_HAZARD_STATEMENTS, 
+  GHS_PRECAUTIONARY_STATEMENTS, 
+  GHS_PICTOGRAMS, 
+  GHS_GENERIC_CUTOFFS 
+} from '../utils/chemicalLookup';
+---
+
+<BaseLayout 
+  title="GHS Hazard & Chemical Safety Studio | Universal 110M+ Reagent Lookup | ChemistryDesk"
+  description="Universal GHS chemical safety engine. Live lookup for 110M+ compounds via PubChem, full UN Rev. 10 H & P code index, mixture concentration cut-off calculator, and printable OSHA secondary container labels."
+>
+  <!-- Schema: WebApplication -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "ChemistryDesk Universal GHS Hazard & Chemical Safety Studio",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "All",
+    "browserRequirements": "Requires JavaScript",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  })} />
+
+  <!-- Schema: DefinedTermSet (Maps H and P codes for Google Rich Snippets) -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "DefinedTermSet",
+    "name": "Globally Harmonized System of Classification and Labelling of Chemicals (GHS) Statements",
+    "hasDefinedTerm": Object.values(GHS_HAZARD_STATEMENTS).slice(0, 15).map(h => ({
+      "@type": "DefinedTerm",
+      "termCode": h.code,
+      "name": `${h.code}: ${h.statement}`,
+      "description": h.classCategory || h.statement
+    }))
+  })} />
+
+  <!-- Schema: FAQPage -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What are GHS Hazard (H) and Precautionary (P) statements?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Hazard Statements (H-codes) are standardized phrases describing the nature and severity of chemical hazards (H200 Physical, H300 Health, H400 Environmental). Precautionary Statements (P-codes) describe recommended measures to minimize or prevent adverse effects from chemical exposure (P100 General, P200 Prevention, P300 Response, P400 Storage, P500 Disposal)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the concentration cut-off limit for chemical mixtures under GHS?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The generic concentration cut-off is the threshold concentration of a hazardous ingredient in a mixture that triggers mandatory GHS hazard classification on container labels (e.g., ≥0.1% for Carcinogens, Mutagens, and Reproductive toxins, ≥1.0% for Acute Toxins, and ≥3.0% for Category 1 Skin Corrosives)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What information is mandatory on an OSHA GHS secondary container label?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "An OSHA HazCom 2012 secondary container label must clearly display the Product Identifier (chemical/solution name), Signal Word (DANGER or WARNING), Hazard Statements, relevant GHS Pictograms, and Precautionary advice."
+        }
+      }
+    ]
+  })} />
+
+  <main style="max-width: 1060px; margin: 1.5rem auto 3rem auto; padding: 0 1.5rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1e293b;">
+    
+    <!-- Breadcrumb Navigation -->
+    <nav style="font-size: 0.8rem; color: #64748b; margin-bottom: 1.25rem;">
+      <a href="/" style="color: #dc2626; text-decoration: none; font-weight: 600;">Home</a> &rsaquo; 
+      <span style="color: #94a3b8;"> Lab Safety &amp; Compliance</span> &rsaquo; 
+      <span style="color: #0f172a; font-weight: 700;">GHS Safety Studio</span>
+    </nav>
+
+    <!-- Header Section -->
+    <div style="border-bottom: 1px solid #e2e8f0; padding-bottom: 1.75rem; margin-bottom: 2rem;">
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+        <span style="font-size: 2.5rem;">⚠️</span>
+        <div>
+          <h1 style="font-size: 2.25rem; font-weight: 800; color: #0f172a; letter-spacing: -0.025em; margin: 0;">
+            GHS Hazard &amp; Chemical Safety Studio
+          </h1>
+          <p style="color: #64748b; font-size: 0.95rem; margin-top: 0.25rem; margin-bottom: 0;">
+            Universal 110M+ compound lookup, complete UN Rev. 10 H &amp; P statement matrix, mixture cut-off threshold calculations, and printable OSHA secondary container labels.
+          </p>
+        </div>
+      </div>
+
+      <!-- Segmented Mode Switcher -->
+      <div style="margin-top: 1.5rem; display: flex; align-items: center; justify-content: flex-start;">
+        <div style="background: #e2e8f0; padding: 4px; border-radius: 10px; display: inline-flex; gap: 4px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.06); flex-wrap: wrap;">
+          <button 
+            id="modeReagentBtn" 
+            style="background: #dc2626; color: #ffffff; border: none; padding: 0.65rem 1.25rem; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: all 0.2s ease;"
+          >
+            <span>🔍</span> 110M+ Compound &amp; SDS Finder
+          </button>
+          <button 
+            id="modeStatementsBtn" 
+            style="background: transparent; color: #475569; border: none; padding: 0.65rem 1.25rem; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s ease;"
+          >
+            <span>📑</span> H &amp; P Statement Matrix
+          </button>
+          <button 
+            id="modeCutoffBtn" 
+            style="background: transparent; color: #475569; border: none; padding: 0.65rem 1.25rem; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s ease;"
+          >
+            <span>⚖️</span> Mixture Cut-Off Limit Solver
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- MODE 1: UNIVERSAL 110M+ COMPOUND & SDS RESOLVER              -->
+    <!-- ============================================================ -->
+    <div id="reagentModeSection">
+      
+      <!-- Free-Form Universal Search Bar -->
+      <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.04);">
+        <label style="display: block; font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #334155; margin-bottom: 0.5rem;">
+          Universal Chemical Search (Name, Formula, or CAS Number)
+        </label>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+          <input 
+            type="text" 
+            id="chemSearchInput" 
+            placeholder="Type any compound (e.g. Copper Sulfate, Paraquat, HCl, KMnO4, C6H12O6)..." 
+            value="Copper(II) Sulfate Pentahydrate"
+            style="flex: 1; min-width: 260px; padding: 0.75rem 1rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 1rem; font-weight: 600; outline: none; transition: border-color 0.2s;" 
+          />
+          <button 
+            id="btnExecuteSearch" 
+            type="button" 
+            style="background: #dc2626; color: #ffffff; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-size: 0.95rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);"
+          >
+            <span>⚡</span> Search 110M+
+          </button>
+        </div>
+        <div id="searchStatusText" style="margin-top: 0.5rem; font-size: 0.78rem; color: #64748b; display: flex; justify-content: space-between;">
+          <span>Instant local benchmark cache active. Exotic compounds query live NCBI PubChem API.</span>
+          <span id="lookupSpeedBadge" style="font-weight: 700; color: #059669;">Ready</span>
+        </div>
+      </div>
+
+      <!-- Live Chemical Dossier Card -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+        
+        <!-- Entity Identity & Chemical Specifications -->
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+            <div>
+              <span style="font-size: 0.75rem; font-weight: 800; color: #dc2626; text-transform: uppercase; letter-spacing: 0.05em;">Resolved Chemical Entity</span>
+              <h2 id="dossierName" style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin: 0.25rem 0 0 0;">Copper(II) Sulfate Pentahydrate</h2>
+            </div>
+            <span id="dossierSignalBadge" style="background: #fee2e2; color: #991b1b; padding: 4px 10px; border-radius: 9999px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase;">
+              DANGER
+            </span>
+          </div>
+
+          <table style="width: 100%; font-size: 0.88rem; border-collapse: collapse; margin-bottom: 1.25rem;">
+            <tbody>
+              <tr style="border-bottom: 1px solid #f1f5f9;">
+                <td style="padding: 0.5rem 0; color: #64748b; font-weight: 600;">Formula:</td>
+                <td id="dossierFormula" style="padding: 0.5rem 0; text-align: right; font-weight: 800; font-family: monospace; color: #0f172a;">CuSO4 · 5H2O</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #f1f5f9;">
+                <td style="padding: 0.5rem 0; color: #64748b; font-weight: 600;">Anhydrous Molecular Weight:</td>
+                <td id="dossierMwAnh" style="padding: 0.5rem 0; text-align: right; font-weight: 800; color: #0f172a;">159.610 g/mol</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #f1f5f9;">
+                <td style="padding: 0.5rem 0; color: #64748b; font-weight: 600;">Hydrate Waters (· nH₂O):</td>
+                <td id="dossierHydrateN" style="padding: 0.5rem 0; text-align: right; font-weight: 800; color: #0284c7;">5 (Pentahydrate)</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #f1f5f9;">
+                <td style="padding: 0.5rem 0; color: #64748b; font-weight: 600;">Effective Formula Weight:</td>
+                <td id="dossierMwEff" style="padding: 0.5rem 0; text-align: right; font-weight: 800; color: #dc2626;">249.685 g/mol</td>
+              </tr>
+              <tr>
+                <td style="padding: 0.5rem 0; color: #64748b; font-weight: 600;">CAS Registry Number:</td>
+                <td id="dossierCas" style="padding: 0.5rem 0; text-align: right; font-weight: 700; color: #475569;">7758-99-8</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- Official Active Pictograms Visuals -->
+          <div style="margin-top: 1rem; border-top: 1px solid #f1f5f9; padding-top: 1rem;">
+            <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; display: block; margin-bottom: 0.5rem;">
+              Required GHS Pictograms:
+            </span>
+            <div id="dossierPictogramsContainer" style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+              <!-- Renders SVGs dynamically -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Hazard & Precautionary Statements Panel -->
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+          
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); flex: 1;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+              <h3 style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #475569; margin: 0;">
+                GHS Classifications &amp; Protocols
+              </h3>
+              <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+                <button id="btnCopyRiskSummary" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.25rem 0.55rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #334155;">📋 Copy COSHH</button>
+                <button id="btnPrintOshaLabel" type="button" style="background: #dc2626; border: none; padding: 0.25rem 0.65rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: white;">🖨️ Print OSHA Label</button>
+                <button id="toggleCiteBtn" type="button" style="background: #fee2e2; border: 1px solid #fecaca; padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #991b1b; display: inline-flex; align-items: center; gap: 0.35rem;"><span>📖</span> Cite</button>
+              </div>
+            </div>
+
+            <!-- Standalone Academic Citation Drawer -->
+            <div id="citeDrawer" style="display: none; margin: 0.75rem 0 1rem 0; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 0.85rem; background: #f8fafc;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.4rem;">
+                <div style="display: flex; gap: 0.3rem; flex-wrap: wrap;">
+                  <button type="button" class="inline-cite-tab" data-format="bibtex" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 700; border-radius: 5px; border: 1px solid #0f172a; background: #0f172a; color: #fff; cursor: pointer;">BibTeX</button>
+                  <button type="button" class="inline-cite-tab" data-format="acs" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">ACS</button>
+                  <button type="button" class="inline-cite-tab" data-format="rsc" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">RSC</button>
+                  <button type="button" class="inline-cite-tab" data-format="nature" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Nature</button>
+                  <button type="button" class="inline-cite-tab" data-format="elsevier" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Elsevier</button>
+                  <button type="button" class="inline-cite-tab" data-format="wiley" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Wiley</button>
+                </div>
+                <button id="inlineCopyCiteBtn" type="button" style="padding: 0.25rem 0.65rem; font-size: 0.75rem; font-weight: 700; border-radius: 5px; background: #dc2626; color: #fff; border: none; cursor: pointer;">📋 Copy</button>
+              </div>
+              <pre id="inlineCiteOutput" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.75rem; font-size: 0.75rem; font-family: ui-monospace, monospace; color: #0f172a; white-space: pre-wrap; word-break: break-all; margin: 0; line-height: 1.45;"></pre>
+              <div style="margin-top: 0.5rem; text-align: right;">
+                <a href="https://doi.org/10.5281/zenodo.23059466" target="_blank" rel="noopener noreferrer" style="font-size: 0.72rem; color: #dc2626; text-decoration: none; font-weight: 600;">Indexed via CERN Zenodo (DOI: 10.5281/zenodo.23059466) &rarr;</a>
+              </div>
+            </div>
+
+            <!-- Summary Statement Box -->
+            <div id="dossierSummaryBox" style="background: #f8fafc; border-left: 4px solid #dc2626; padding: 0.75rem 1rem; border-radius: 0 6px 6px 0; font-size: 0.85rem; color: #334155; margin-bottom: 1rem;">
+              Harmful if swallowed. Causes serious eye damage. Very toxic to aquatic life.
+            </div>
+
+            <!-- List of H-Codes -->
+            <div style="margin-bottom: 1rem;">
+              <span style="font-size: 0.75rem; font-weight: 800; color: #991b1b; text-transform: uppercase;">Hazard Statements (H-Codes):</span>
+              <ul id="dossierHList" style="margin: 0.35rem 0 0 0; padding-left: 1.25rem; font-size: 0.82rem; line-height: 1.6; color: #334155;">
+                <!-- Renders dynamically -->
+              </ul>
+            </div>
+
+            <!-- List of P-Codes -->
+            <div>
+              <span style="font-size: 0.75rem; font-weight: 800; color: #0284c7; text-transform: uppercase;">Precautionary Statements (P-Codes):</span>
+              <ul id="dossierPList" style="margin: 0.35rem 0 0 0; padding-left: 1.25rem; font-size: 0.82rem; line-height: 1.6; color: #334155;">
+                <!-- Renders dynamically -->
+              </ul>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- MODE 2: COMPLETE UN GHS H & P STATEMENT MATRIX               -->
+    <!-- ============================================================ -->
+    <div id="statementsModeSection" style="display: none; margin-bottom: 3rem;">
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.75rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h2 style="font-size: 1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; margin: 0;">
+              Standardized UN GHS Rev. 10 Statement Dictionary
+            </h2>
+            <p style="font-size: 0.8rem; color: #64748b; margin: 0.25rem 0 0 0;">
+              Filter across all Physical (H200), Health (H300), Environmental (H400), and Precautionary (P100–P500) codes.
+            </p>
+          </div>
+
+          <!-- Code Filter Input -->
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <input 
+              type="text" 
+              id="statementFilterInput" 
+              placeholder="Search code (e.g. H314, P280, eye, flame)..." 
+              style="padding: 0.45rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem; font-weight: 600; width: 250px;" 
+            />
+          </div>
+        </div>
+
+        <!-- 9 Interactive GHS Pictogram Filter Bar -->
+        <div style="border-top: 1px solid #f1f5f9; padding-top: 1rem; margin-bottom: 1.25rem;">
+          <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; display: block; margin-bottom: 0.5rem;">
+            Click Pictogram to Filter Hazard Statements:
+          </span>
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            {Object.entries(GHS_PICTOGRAMS).map(([key, item]) => (
+              <button 
+                type="button" 
+                class="pictogram-filter-btn" 
+                data-pic={key} 
+                title={item.title}
+                style="width: 44px; height: 44px; padding: 4px; border: 1.5px solid #cbd5e1; background: #ffffff; border-radius: 8px; cursor: pointer; transition: all 0.2s ease;"
+              >
+                <div style="width: 100%; height: 100%;" set:html={item.svg}></div>
+              </button>
+            ))}
+            <button 
+              id="btnClearPicFilter" 
+              type="button" 
+              style="padding: 0 0.75rem; font-size: 0.75rem; font-weight: 700; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; cursor: pointer; color: #64748b;"
+            >
+              Reset Filter
+            </button>
+          </div>
+        </div>
+
+        <!-- Statements Table -->
+        <div style="border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden; max-height: 460px; overflow-y: auto;">
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left;">
+            <thead style="background: #f8fafc; border-bottom: 1.5px solid #cbd5e1; position: sticky; top: 0; z-index: 1;">
+              <tr>
+                <th style="padding: 0.6rem 0.75rem; color: #334155; font-weight: 700; width: 85px;">Code</th>
+                <th style="padding: 0.6rem 0.75rem; color: #334155; font-weight: 700;">Standard Statement Phrase</th>
+                <th style="padding: 0.6rem 0.75rem; color: #334155; font-weight: 700; width: 220px;">Hazard Class / Category</th>
+                <th style="padding: 0.6rem 0.75rem; color: #64748b; font-weight: 700; width: 60px; text-align: center;">Copy</th>
+              </tr>
+            </thead>
+            <tbody id="statementsTableBody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- MODE 3: MIXTURE CONCENTRATION CUT-OFF LIMIT SOLVER           -->
+    <!-- ============================================================ -->
+    <div id="cutoffModeSection" style="display: none; margin-bottom: 3rem;">
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.75rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+        
+        <h2 style="font-size: 1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; margin: 0 0 0.25rem 0;">
+          Mixture Generic Concentration Cut-Off Calculator
+        </h2>
+        <p style="font-size: 0.8rem; color: #64748b; margin: 0 0 1.5rem 0;">
+          Under UN GHS guidelines, dangerous goods in aqueous or solvent mixtures only legally trigger label pictograms when exceeding generic cut-off thresholds.
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+          <div>
+            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
+              PREPARED SOLUTE CONCENTRATION (WT% OR VOL%)
+            </label>
+            <div style="display: flex;">
+              <input type="number" id="inpCutoffConc" step="any" value="2.5" style="flex: 1; padding: 0.65rem 0.75rem; border: 1.5px solid #cbd5e1; border-right: none; border-radius: 6px 0 0 6px; font-size: 1rem; font-weight: 700;" />
+              <span style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-left: none; padding: 0 1rem; border-radius: 0 6px 6px 0; display: flex; align-items: center; font-weight: 700; color: #475569;">
+                % (w/w)
+              </span>
+            </div>
+            <span style="font-size: 0.72rem; color: #64748b; display: block; margin-top: 0.35rem;">
+              Example: 12 M HCl diluted to 0.1 M is ~0.36% w/w (below the 3.0% corrosive threshold).
+            </span>
+          </div>
+
+          <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 1rem 1.25rem;">
+            <span style="font-size: 0.75rem; font-weight: 800; color: #475569; text-transform: uppercase; display: block;">Compliance Status:</span>
+            <div id="cutoffComplianceBadge" style="font-size: 1.2rem; font-weight: 800; color: #dc2626; margin: 0.25rem 0;">
+              Triggers Labeling for Acute / Environmental Classes
+            </div>
+            <span id="cutoffComplianceSub" style="font-size: 0.75rem; color: #64748b; display: block;">
+              Compare against UN Generic Cut-Off Limits table below.
+            </span>
+          </div>
+        </div>
+
+        <!-- Cut-Off Rules Evaluation Table -->
+        <div style="border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden;">
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left;">
+            <thead style="background: #f8fafc; border-bottom: 1.5px solid #cbd5e1;">
+              <tr>
+                <th style="padding: 0.6rem 0.75rem; color: #334155; font-weight: 700;">Hazard Class &amp; Category</th>
+                <th style="padding: 0.6rem 0.75rem; color: #334155; font-weight: 700; width: 120px;">UN Generic Cut-Off</th>
+                <th style="padding: 0.6rem 0.75rem; color: #334155; font-weight: 700; width: 110px;">Your Concentration</th>
+                <th style="padding: 0.6rem 0.75rem; color: #334155; font-weight: 700; width: 130px; text-align: center;">Mandatory Label?</th>
+              </tr>
+            </thead>
+            <tbody id="cutoffTableBody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- EDITORIAL & SCIENTIFIC REGULATORY ARTICLE -->
+    <article style="border-top: 1px solid #e2e8f0; padding-top: 3.5rem; line-height: 1.85; color: #334155;">
+      
+      <h2 style="font-size: 1.85rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem; letter-spacing: -0.02em;">
+        Regulatory Principles of the Globally Harmonized System (GHS Rev. 10)
+      </h2>
+      <p>
+        The Globally Harmonized System of Classification and Labelling of Chemicals (GHS), maintained by the United Nations, establishes international criteria for classifying chemical substances and mixtures by physical, health, and environmental hazards. In modern quantitative laboratory science, compliance is mandatory under OSHA Hazard Communication Standard (29 CFR 1910.1200) and European CLP Regulation (EC 1272/2008).
+      </p>
+      
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
+        The Anatomy of GHS Codes: H-Codes vs. P-Codes
+      </h3>
+      <p>
+        Hazard statements are alphanumeric codes consisting of the letter <strong>H</strong> followed by three digits:
+      </p>
+      <ul>
+        <li><strong>H200–H299:</strong> Physical Hazards (Explosives, Flammables, Self-Reactives, Pyrophorics, Oxidizers, Corrosive to Metals).</li>
+        <li><strong>H300–H399:</strong> Health Hazards (Acute Oral/Dermal Toxicity, Skin Corrosion, Eye Damage, Mutagenicity, Carcinogenicity, Reproductive Toxicity, STOT).</li>
+        <li><strong>H400–H499:</strong> Environmental Hazards (Acute and Chronic Aquatic Toxicity, Ozone Depletion).</li>
+      </ul>
+      <p>
+        Precautionary statements follow the letter <strong>P</strong> followed by three digits:
+      </p>
+      <ul>
+        <li><strong>P100 Series:</strong> General precautions (keep out of reach of children, read label).</li>
+        <li><strong>P200 Series:</strong> Prevention measures (wear PPE, avoid open flames, use in well-ventilated areas).</li>
+        <li><strong>P300 Series:</strong> Response protocols (first aid, eye rinsing, poison center contact).</li>
+        <li><strong>P400 Series:</strong> Safe storage protocols (keep locked, store in cool, ventilated area).</li>
+        <li><strong>P500 Series:</strong> Proper hazardous waste disposal procedures.</li>
+      </ul>
+
+      <!-- FAQ ACCORDION SECTION -->
+      <h3 style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-top: 3rem; margin-bottom: 1.25rem;">
+        Frequently Asked Questions: Chemical Safety &amp; Laboratory Compliance
+      </h3>
+
+      <div style="display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 2rem;">
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">When is a secondary container label legally required in a laboratory?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Under OSHA HazCom 2012, if a prepared solution or chemical is transferred from its manufacturer bottle into a secondary vessel (e.g. Schott bottle, beaker, volumetric flask) and is <strong>not</strong> used immediately during the work shift by the person who transferred it, a secondary container label with product identifier, signal word, and hazard statements is legally required.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How does concentration cut-off affect diluted acid and base solutions?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Concentrated mineral acids (such as 12 M HCl or 18 M H₂SO₄) are Category 1 Skin Corrosives (H314). However, when diluted below the 3.0% generic concentration threshold, the solution no longer meets the criteria for Category 1 corrosion and is de-escalated to Category 2 Skin Irritation (H315) or non-hazardous status below 1.0%.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What is the difference between DANGER and WARNING signal words?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            <strong>DANGER</strong> is reserved for severe hazard categories (e.g., Fatal if swallowed, Severe skin burns, Carcinogen Category 1). <strong>WARNING</strong> is assigned to less severe hazard categories (e.g., Harmful if swallowed, Skin irritation, Suspected carcinogen Category 2).
+          </p>
+        </details>
+      </div>
+
+    </article>
+  </main>
+
+  <!-- PRINT-ONLY BENCHTOP SECONDARY CONTAINER LABEL MODAL -->
+  <div id="printLabelModal" style="display: none;">
+    <div id="labelBox" style="width: 4.0in; height: 2.5in; border: 2.5px solid #000; padding: 0.15in; box-sizing: border-box; font-family: system-ui, sans-serif; background: #fff; color: #000; position: relative;">
+      
+      <!-- Top Header -->
+      <div style="border-bottom: 2px solid #000; padding-bottom: 3px; display: flex; justify-content: space-between; align-items: baseline;">
+        <span style="font-size: 11pt; font-weight: 900; letter-spacing: -0.02em;">OSHA GHS SECONDARY CONTAINER</span>
+        <span id="printDate" style="font-size: 8pt; font-weight: bold;"></span>
+      </div>
+
+      <!-- Chemical Name & Signal Word -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
+        <div style="flex: 1; padding-right: 8px;">
+          <div id="printChemName" style="font-size: 13pt; font-weight: 900; line-height: 1.1; text-transform: uppercase;">COPPER(II) SULFATE</div>
+          <div id="printFormula" style="font-size: 8.5pt; font-family: monospace; font-weight: bold; color: #333;">CuSO4 · 5H2O</div>
+        </div>
+        <div id="printSignalWord" style="background: #000; color: #fff; padding: 3px 8px; font-size: 11pt; font-weight: 900; border-radius: 3px; text-transform: uppercase;">
+          DANGER
+        </div>
+      </div>
+
+      <!-- Center Body: Pictograms & Statements -->
+      <div style="display: flex; gap: 8px; margin-top: 6px; border-top: 1px dashed #666; padding-top: 5px;">
+        <div id="printPictograms" style="display: flex; gap: 4px; width: 100px; flex-wrap: wrap;">
+          <!-- Active Pictogram SVGs rendered here -->
+        </div>
+        <div style="flex: 1; font-size: 7.5pt; line-height: 1.25;">
+          <div style="font-weight: bold;">Hazards: <span id="printHazardsText">Harmful if swallowed. Eye damage.</span></div>
+          <div style="margin-top: 3px; color: #333;">Precautions: Wear gloves, eye protection. Store in cool area.</div>
+        </div>
+      </div>
+
+      <!-- Footer: Preparer & Storage -->
+      <div style="position: absolute; bottom: 0.12in; left: 0.15in; right: 0.15in; display: flex; justify-content: space-between; font-size: 7pt; border-top: 1px solid #000; padding-top: 3px;">
+        <span>Prep By: ____________________</span>
+        <span>Storage: [ ]RT [ ]Ventilated [ ]4°C</span>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    @media print {
+      body * {
+        visibility: hidden !important;
+      }
+      #printLabelModal, #printLabelModal * {
+        visibility: visible !important;
+      }
+      #printLabelModal {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        display: block !important;
+      }
+      #labelBox {
+        position: absolute;
+        left: 0.25in;
+        top: 0.25in;
+      }
+    }
+  </style>
+
+  <script>
+    import { 
+      lookupChemical, 
+      GHS_HAZARD_STATEMENTS, 
+      GHS_PRECAUTIONARY_STATEMENTS, 
+      GHS_PICTOGRAMS, 
+      GHS_GENERIC_CUTOFFS,
+      evaluateMixtureCutoff 
+    } from '../utils/chemicalLookup';
+
+    // TAB SWITCHING
+    const reagentSection = document.getElementById('reagentModeSection')!;
+    const statementsSection = document.getElementById('statementsModeSection')!;
+    const cutoffSection = document.getElementById('cutoffModeSection')!;
+    const modeReagentBtn = document.getElementById('modeReagentBtn')!;
+    const modeStatementsBtn = document.getElementById('modeStatementsBtn')!;
+    const modeCutoffBtn = document.getElementById('modeCutoffBtn')!;
+
+    function setTabStyles(activeBtn: HTMLElement) {
+      [modeReagentBtn, modeStatementsBtn, modeCutoffBtn].forEach(btn => {
+        btn.style.background = 'transparent';
+        btn.style.color = '#475569';
+        btn.style.boxShadow = 'none';
+      });
+      activeBtn.style.background = '#dc2626';
+      activeBtn.style.color = '#ffffff';
+      activeBtn.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+    }
+
+    modeReagentBtn.addEventListener('click', () => {
+      reagentSection.style.display = 'block';
+      statementsSection.style.display = 'none';
+      cutoffSection.style.display = 'none';
+      setTabStyles(modeReagentBtn);
+    });
+
+    modeStatementsBtn.addEventListener('click', () => {
+      reagentSection.style.display = 'none';
+      statementsSection.style.display = 'block';
+      cutoffSection.style.display = 'none';
+      setTabStyles(modeStatementsBtn);
+      renderStatementsTable();
+    });
+
+    modeCutoffBtn.addEventListener('click', () => {
+      reagentSection.style.display = 'none';
+      statementsSection.style.display = 'none';
+      cutoffSection.style.display = 'block';
+      setTabStyles(modeCutoffBtn);
+      runCutoffEngine();
+    });
+
+    // ============================================================
+    // MODE 1: CHEMICAL DOSSIER RESOLVER
+    // ============================================================
+    const searchInput = document.getElementById('chemSearchInput') as HTMLInputElement;
+    const btnSearch = document.getElementById('btnExecuteSearch')!;
+    const speedBadge = document.getElementById('lookupSpeedBadge')!;
+
+    let currentEntity: any = null;
+
+    async function handleChemicalSearch() {
+      const q = searchInput.value.trim();
+      if (!q) return;
+
+      speedBadge.textContent = 'Querying...';
+      speedBadge.style.color = '#dc2626';
+
+      const t0 = performance.now();
+      const entity = await lookupChemical(q);
+      const t1 = performance.now();
+
+      speedBadge.textContent = `Resolved in ${(t1 - t0).toFixed(0)} ms`;
+      speedBadge.style.color = '#059669';
+
+      if (entity) {
+        currentEntity = entity;
+        renderEntityDossier(entity);
+      } else {
+        alert(`Compound "${q}" could not be automatically resolved. You can still author custom parameters or check the H/P statement dictionary.`);
+      }
+    }
+
+    function renderEntityDossier(entity: any) {
+      document.getElementById('dossierName')!.textContent = entity.name;
+      document.getElementById('dossierFormula')!.textContent = entity.formula || '--';
+      document.getElementById('dossierMwAnh')!.textContent = entity.molecularWeight.toFixed(3) + ' g/mol';
+      
+      const hydN = entity.hydrateWater || 0;
+      document.getElementById('dossierHydrateN')!.textContent = hydN > 0 ? `${hydN} (· ${hydN}H₂O)` : '0 (Anhydrous)';
+      
+      const effMw = entity.molecularWeight + (hydN * 18.015);
+      document.getElementById('dossierMwEff')!.textContent = effMw.toFixed(3) + ' g/mol';
+      document.getElementById('dossierCas')!.textContent = entity.cas || 'N/A';
+
+      // Signal Badge
+      const sig = entity.ghs?.signalWord || 'Warning';
+      const sigBadge = document.getElementById('dossierSignalBadge')!;
+      sigBadge.textContent = sig.toUpperCase();
+      if (sig === 'Danger') {
+        sigBadge.style.background = '#fee2e2';
+        sigBadge.style.color = '#991b1b';
+      } else if (sig === 'Warning') {
+        sigBadge.style.background = '#fef3c7';
+        sigBadge.style.color = '#92400e';
+      } else {
+        sigBadge.style.background = '#e2e8f0';
+        sigBadge.style.color = '#475569';
+      }
+
+      // Summary
+      document.getElementById('dossierSummaryBox')!.textContent = entity.ghs?.summary || 'Standard laboratory handling precautions apply.';
+
+      // Pictograms
+      const picContainer = document.getElementById('dossierPictogramsContainer')!;
+      picContainer.innerHTML = '';
+      const pics = entity.ghs?.pictograms || ['toxic'];
+      pics.forEach((pKey: string) => {
+        if (GHS_PICTOGRAMS[pKey]) {
+          const div = document.createElement('div');
+          div.style.cssText = 'width: 48px; height: 48px;';
+          div.innerHTML = GHS_PICTOGRAMS[pKey].svg;
+          picContainer.appendChild(div);
+        }
+      });
+
+      // Statements
+      const hList = document.getElementById('dossierHList')!;
+      hList.innerHTML = '';
+      const hCodes = entity.ghs?.hCodes || [];
+      if (hCodes.length > 0) {
+        hCodes.forEach((code: string) => {
+          const phrase = GHS_HAZARD_STATEMENTS[code]?.statement || 'Specific hazard classification';
+          const li = document.createElement('li');
+          li.innerHTML = `<strong>${code}:</strong> ${phrase}`;
+          hList.appendChild(li);
+        });
+      } else {
+        hList.innerHTML = '<li>No classified acute hazard statements.</li>';
+      }
+
+      const pList = document.getElementById('dossierPList')!;
+      pList.innerHTML = '';
+      const pCodes = entity.ghs?.pCodes || ['P280', 'P264'];
+      pCodes.forEach((code: string) => {
+        const phrase = GHS_PRECAUTIONARY_STATEMENTS[code]?.statement || 'Wear standard protective equipment';
+        const li = document.createElement('li');
+        li.innerHTML = `<strong>${code}:</strong> ${phrase}`;
+        pList.appendChild(li);
+      });
+    }
+
+    btnSearch.addEventListener('click', handleChemicalSearch);
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') handleChemicalSearch();
+    });
+
+    // Copy COSHH Risk Summary
+    document.getElementById('btnCopyRiskSummary')?.addEventListener('click', () => {
+      if (!currentEntity) return;
+      const text = `CHEMICAL SAFETY PROTOCOL (COSHH):
+Substance: ${currentEntity.name} (${currentEntity.formula})
+Molecular Weight: ${currentEntity.molecularWeight} g/mol
+Signal Word: ${currentEntity.ghs?.signalWord || 'Warning'}
+Hazards: ${(currentEntity.ghs?.hCodes || []).join(', ')}
+Summary: ${currentEntity.ghs?.summary || 'N/A'}`;
+      navigator.clipboard.writeText(text);
+      alert('COSHH risk assessment summary copied to clipboard.');
+    });
+
+    // Print OSHA Secondary Container Label Modal
+    document.getElementById('btnPrintOshaLabel')?.addEventListener('click', () => {
+      const name = currentEntity ? currentEntity.name : searchInput.value;
+      const formula = currentEntity ? currentEntity.formula : '';
+      const signal = currentEntity?.ghs?.signalWord || 'WARNING';
+
+      document.getElementById('printDate')!.textContent = new Date().toLocaleDateString();
+      document.getElementById('printChemName')!.textContent = name.toUpperCase();
+      document.getElementById('printFormula')!.textContent = formula;
+      document.getElementById('printSignalWord')!.textContent = signal.toUpperCase();
+
+      const printPics = document.getElementById('printPictograms')!;
+      printPics.innerHTML = '';
+      const pics = currentEntity?.ghs?.pictograms || ['toxic'];
+      pics.slice(0, 3).forEach((pKey: string) => {
+        if (GHS_PICTOGRAMS[pKey]) {
+          const div = document.createElement('div');
+          div.style.cssText = 'width: 38px; height: 38px;';
+          div.innerHTML = GHS_PICTOGRAMS[pKey].svg;
+          printPics.appendChild(div);
+        }
+      });
+
+      document.getElementById('printHazardsText')!.textContent = currentEntity?.ghs?.summary || 'Follow standard lab PPE protocols.';
+
+      window.print();
+    });
+
+    // ============================================================
+    // MODE 2: UN GHS STATEMENTS DICTIONARY & PICTOGRAM FILTER
+    // ============================================================
+    const statementsTableBody = document.getElementById('statementsTableBody')!;
+    const statementFilterInput = document.getElementById('statementFilterInput') as HTMLInputElement;
+    let activePicFilter: string | null = null;
+
+    function renderStatementsTable() {
+      const q = statementFilterInput.value.toLowerCase().trim();
+      statementsTableBody.innerHTML = '';
+
+      const allStatements = [
+        ...Object.values(GHS_HAZARD_STATEMENTS),
+        ...Object.values(GHS_PRECAUTIONARY_STATEMENTS)
+      ];
+
+      allStatements.forEach(item => {
+        const matchesQuery = !q || item.code.toLowerCase().includes(q) || item.statement.toLowerCase().includes(q) || (item.classCategory && item.classCategory.toLowerCase().includes(q));
+        
+        let matchesPic = true;
+        if (activePicFilter) {
+          if (activePicFilter === 'corrosive' && !item.statement.toLowerCase().includes('burn') && !item.statement.toLowerCase().includes('corrosive') && !item.statement.toLowerCase().includes('eye damage')) matchesPic = false;
+          if (activePicFilter === 'flame' && !item.statement.toLowerCase().includes('flammable')) matchesPic = false;
+          if (activePicFilter === 'oxidizer' && !item.statement.toLowerCase().includes('oxidiz')) matchesPic = false;
+          if (activePicFilter === 'skull' && !item.statement.toLowerCase().includes('fatal') && !item.statement.toLowerCase().includes('toxic')) matchesPic = false;
+          if (activePicFilter === 'environment' && !item.statement.toLowerCase().includes('aquatic') && !item.statement.toLowerCase().includes('environment')) matchesPic = false;
+        }
+
+        if (matchesQuery && matchesPic) {
+          const tr = document.createElement('tr');
+          tr.style.borderBottom = '1px solid #f1f5f9';
+          const isHazard = item.code.startsWith('H');
+          tr.innerHTML = `
+            <td style="padding: 0.55rem 0.75rem; font-weight: 800; font-family: monospace; color: ${isHazard ? '#dc2626' : '#0284c7'};">${item.code}</td>
+            <td style="padding: 0.55rem 0.75rem; color: #1e293b; font-weight: 600;">${item.statement}</td>
+            <td style="padding: 0.55rem 0.75rem; color: #64748b; font-size: 0.8rem;">${item.classCategory || 'Precautionary Practice'}</td>
+            <td style="padding: 0.55rem 0.75rem; text-align: center;">
+              <button type="button" class="btn-copy-stmt" data-code="${item.code}" data-stmt="${item.statement}" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 4px; padding: 2px 6px; font-size: 0.7rem; cursor: pointer; color: #334155;">📋</button>
+            </td>
+          `;
+          statementsTableBody.appendChild(tr);
+        }
+      });
+
+      document.querySelectorAll('.btn-copy-stmt').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const t = e.currentTarget as HTMLElement;
+          navigator.clipboard.writeText(`${t.dataset.code}: ${t.dataset.stmt}`);
+          alert(`Copied ${t.dataset.code} to clipboard.`);
+        });
+      });
+    }
+
+    statementFilterInput.addEventListener('input', renderStatementsTable);
+
+    document.querySelectorAll('.pictogram-filter-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const t = e.currentTarget as HTMLElement;
+        activePicFilter = t.dataset.pic || null;
+        document.querySelectorAll('.pictogram-filter-btn').forEach(b => (b as HTMLElement).style.borderColor = '#cbd5e1');
+        t.style.borderColor = '#dc2626';
+        renderStatementsTable();
+      });
+    });
+
+    document.getElementById('btnClearPicFilter')?.addEventListener('click', () => {
+      activePicFilter = null;
+      document.querySelectorAll('.pictogram-filter-btn').forEach(b => (b as HTMLElement).style.borderColor = '#cbd5e1');
+      statementFilterInput.value = '';
+      renderStatementsTable();
+    });
+
+    // ============================================================
+    // MODE 3: MIXTURE CUT-OFF LIMIT ENGINE
+    // ============================================================
+    const cutoffInput = document.getElementById('inpCutoffConc') as HTMLInputElement;
+    const cutoffTableBody = document.getElementById('cutoffTableBody')!;
+
+    function runCutoffEngine() {
+      const conc = parseFloat(cutoffInput.value) || 0;
+      cutoffTableBody.innerHTML = '';
+
+      let triggeredCount = 0;
+
+      GHS_GENERIC_CUTOFFS.forEach(rule => {
+        const isTriggered = conc >= rule.cutoffWeightPercent;
+        if (isTriggered) triggeredCount++;
+
+        const tr = document.createElement('tr');
+        tr.style.borderBottom = '1px solid #f1f5f9';
+        tr.style.background = isTriggered ? '#fff1f2' : '#ffffff';
+        tr.innerHTML = `
+          <td style="padding: 0.55rem 0.75rem; font-weight: 600; color: #1e293b;">
+            ${rule.hazardClass} <span style="font-size: 0.75rem; color: #64748b; display: block;">${rule.category}</span>
+          </td>
+          <td style="padding: 0.55rem 0.75rem; font-weight: 700; color: #475569;">≥ ${rule.cutoffWeightPercent}%</td>
+          <td style="padding: 0.55rem 0.75rem; font-weight: 800; color: ${isTriggered ? '#dc2626' : '#059669'};">${conc}%</td>
+          <td style="padding: 0.55rem 0.75rem; text-align: center;">
+            <span style="display: inline-block; padding: 2px 8px; border-radius: 9999px; font-size: 0.75rem; font-weight: 800; background: ${isTriggered ? '#dc2626' : '#e2e8f0'}; color: ${isTriggered ? '#ffffff' : '#475569'};">
+              ${isTriggered ? 'TRIGGERED ⚠️' : 'Exempt'}
+            </span>
+          </td>
+        `;
+        cutoffTableBody.appendChild(tr);
+      });
+
+      const badge = document.getElementById('cutoffComplianceBadge')!;
+      if (triggeredCount > 0) {
+        badge.textContent = `Mandatory Labeling Active (${triggeredCount} Cut-Off Thresholds Exceeded)`;
+        badge.style.color = '#dc2626';
+      } else {
+        badge.textContent = 'Below All Generic Cut-Off Limits (Exempt from Hazardous Labeling)';
+        badge.style.color = '#059669';
+      }
+    }
+
+    cutoffInput.addEventListener('input', runCutoffEngine);
+
+    // ============================================================
+    // ACADEMIC CITATION SYSTEM
+    // ============================================================
+    const citeDrawer = document.getElementById('citeDrawer');
+    const toggleCiteBtn = document.getElementById('toggleCiteBtn');
+    const inlineCiteOutput = document.getElementById('inlineCiteOutput');
+    const inlineTabs = document.querySelectorAll('.inline-cite-tab');
+    const inlineCopyBtn = document.getElementById('inlineCopyCiteBtn');
+
+    const doi = "10.5281/zenodo.23059466";
+    const currentYear = new Date().getFullYear();
+
+    const ghsCitations: Record<string, string> = {
+      bibtex: `@software{khan_chemistrydesk_ghs_${currentYear},
+  author       = {Khan, Bilal},
+  title        = {ChemistryDesk: GHS Hazard & Chemical Safety Studio},
+  year         = {${currentYear}},
+  version      = {v1.0.1},
+  publisher    = {Zenodo},
+  doi          = {${doi}},
+  url          = {https://chemistrydesk.vercel.app/ghs}
+}`,
+      acs: `Khan, B. ChemistryDesk: GHS Hazard & Chemical Safety Studio, version 1.0.1; Zenodo, ${currentYear}. https://doi.org/${doi}.`,
+      rsc: `B. Khan, ChemistryDesk: GHS Hazard & Chemical Safety Studio, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`,
+      nature: `Khan, B. ChemistryDesk: GHS Hazard & Chemical Safety Studio. Zenodo https://doi.org/${doi} (${currentYear}).`,
+      elsevier: `Khan, B., ${currentYear}. ChemistryDesk: GHS Hazard & Chemical Safety Studio (Version 1.0.1). Zenodo. https://doi.org/${doi}.`,
+      wiley: `B. Khan, ChemistryDesk: GHS Hazard & Chemical Safety Studio, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`
+    };
+
+    let currentInlineFormat = 'bibtex';
+
+    function updateInlineCite() {
+      if (inlineCiteOutput) {
+        inlineCiteOutput.textContent = ghsCitations[currentInlineFormat] || ghsCitations['bibtex'];
+      }
+    }
+
+    if (toggleCiteBtn && citeDrawer) {
+      toggleCiteBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const isHidden = window.getComputedStyle(citeDrawer).display === 'none';
+        citeDrawer.style.display = isHidden ? 'block' : 'none';
+        toggleCiteBtn.style.background = isHidden ? '#dc2626' : '#fee2e2';
+        toggleCiteBtn.style.color = isHidden ? '#ffffff' : '#991b1b';
+        if (isHidden) updateInlineCite();
+      });
+    }
+
+    inlineTabs.forEach(tab => {
+      tab.addEventListener('click', (e) => {
+        e.preventDefault();
+        inlineTabs.forEach(t => {
+          const el = t as HTMLElement;
+          el.style.background = '#ffffff';
+          el.style.color = '#334155';
+          el.style.borderColor = '#cbd5e1';
+          el.style.fontWeight = '600';
+        });
+        const activeTab = tab as HTMLElement;
+        activeTab.style.background = '#0f172a';
+        activeTab.style.color = '#ffffff';
+        activeTab.style.borderColor = '#0f172a';
+        activeTab.style.fontWeight = '700';
+        currentInlineFormat = activeTab.getAttribute('data-format') || 'bibtex';
+        updateInlineCite();
+      });
+    });
+
+    if (inlineCopyBtn) {
+      inlineCopyBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        try {
+          await navigator.clipboard.writeText(ghsCitations[currentInlineFormat]);
+          inlineCopyBtn.textContent = '✅ Copied!';
+          setTimeout(() => {
+            inlineCopyBtn.textContent = '📋 Copy';
+          }, 1800);
+        } catch (err) {
+          console.error('Failed to copy citation:', err);
+        }
+      });
+    }
+
+    updateInlineCite();
+
+    // Initial Execute
+    handleChemicalSearch();
+    renderStatementsTable();
+    runCutoffEngine();
+  </script>
+
+  <!-- Related Analytical Workflows Hub -->
+  <section style="max-width: 900px; margin: 3rem auto 1.5rem; padding: 1.25rem 1.5rem; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; box-sizing: border-box;">
+    <h3 style="margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 0.5rem;">
+      <span>🔗</span> Related Analytical Workflows
+    </h3>
+    <p style="margin: 0 0 1rem; font-size: 0.85rem; color: #64748b; line-height: 1.4;">
+      Connect your safety hazard assessment with quantitative solution preparation and spectroscopic analysis:
+    </p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
+      <a href="/molarity" style="display: block; padding: 1rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
+        <div style="font-weight: 700; font-size: 0.92rem; color: #dc2626; margin-bottom: 0.35rem;">Solution Molarity Studio &rarr;</div>
+        <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">
+          Calculate exact reagent mass for this compound, compensating for crystalline hydration (· nH₂O) and purity.
+        </div>
+      </a>
+      <a href="/dilution" style="display: block; padding: 1rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
+        <div style="font-weight: 700; font-size: 0.92rem; color: #dc2626; margin-bottom: 0.35rem;">Serial Dilution Studio &rarr;</div>
+        <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">
+          Diluting concentrated stock solutions below generic GHS concentration cut-offs? Solve multi-step aliquot ladders.
+        </div>
+      </a>
+    </div>
+  </section>
+</BaseLayout>
