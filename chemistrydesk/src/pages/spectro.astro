@@ -338,23 +338,69 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <!-- ============================================================ -->
     <div id="calibModeSection" style="display: none; margin-bottom: 3rem;">
       <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.75rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-        <h2 style="font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; margin-top: 0; margin-bottom: 1.25rem;">
-          Standard Series &amp; Unknown Interpolation
-        </h2>
-
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+        
+        <!-- Header & Action Toolbar -->
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
           <div>
-            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
-              STANDARD CONCENTRATION (µM) VS ABSORBANCE
-            </label>
-            <textarea id="calibDataRaw" rows="6" style="width: 100%; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 0.85rem; box-sizing: border-box; line-height: 1.4;">2.0    0.145
-4.0    0.288
-6.0    0.435
-8.0    0.578
-10.0   0.725</textarea>
-            <span style="font-size: 0.72rem; color: #64748b;">Format: [Conc µM] [Space/Tab] [Absorbance]</span>
+            <h2 style="font-size: 1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; margin: 0;">
+              Standard Series &amp; Unknown Interpolation
+            </h2>
+            <p style="font-size: 0.8rem; color: #64748b; margin: 0.25rem 0 0 0;">
+              Enter standard points in the spreadsheet grid or import instrument data files.
+            </p>
           </div>
 
+          <!-- Unit Selector & File Actions Toolbar -->
+          <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 0.35rem; background: #f8fafc; border: 1px solid #cbd5e1; padding: 0.3rem 0.6rem; border-radius: 6px;">
+              <span style="font-size: 0.75rem; font-weight: 700; color: #475569;">Concentration Unit:</span>
+              <select id="calibUnitSelect" style="background: #ffffff; border: 1px solid #cbd5e1; padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.8rem; font-weight: 700; color: #7c3aed; cursor: pointer;">
+                <option value="µM" selected>µM</option>
+                <option value="mM">mM</option>
+                <option value="M">M</option>
+                <option value="ppm">ppm</option>
+                <option value="mg/L">mg/L</option>
+                <option value="mg/mL">mg/mL</option>
+                <option value="ng/mL">ng/mL</option>
+              </select>
+            </div>
+
+            <!-- Hidden File Input & Button -->
+            <input type="file" id="calibFileInput" accept=".csv,.tsv,.txt" style="display: none;" />
+            <button id="btnUploadCalibFile" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; padding: 0.4rem 0.75rem; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.35rem;">
+              <span>📁</span> Upload File (.csv, .tsv, .txt)
+            </button>
+            <button id="btnAddRowBtn" type="button" style="background: #ede9fe; border: 1px solid #ddd6fe; color: #6d28d9; padding: 0.4rem 0.75rem; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer;">
+              + Add Standard Point
+            </button>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+          
+          <!-- Excel-Style Interactive Spreadsheet Table -->
+          <div>
+            <div style="border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden; max-height: 320px; overflow-y: auto;">
+              <table id="calibTable" style="width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left;">
+                <thead style="background: #f8fafc; border-bottom: 1.5px solid #cbd5e1; position: sticky; top: 0; z-index: 1;">
+                  <tr>
+                    <th style="padding: 0.5rem 0.75rem; color: #64748b; font-weight: 700; width: 40px; text-align: center;">#</th>
+                    <th id="thCalibConc" style="padding: 0.5rem 0.75rem; color: #334155; font-weight: 700;">Standard Conc (µM)</th>
+                    <th style="padding: 0.5rem 0.75rem; color: #334155; font-weight: 700;">Absorbance (a.u.)</th>
+                    <th style="padding: 0.5rem 0.75rem; color: #64748b; font-weight: 700; width: 40px; text-align: center;">✕</th>
+                  </tr>
+                </thead>
+                <tbody id="calibTableBody">
+                  <!-- Generated Rows -->
+                </tbody>
+              </table>
+            </div>
+            <span style="font-size: 0.72rem; color: #64748b; display: block; margin-top: 0.4rem;">
+              Tip: Edit numbers in cells, paste copied Excel cells directly, or upload your data file.
+            </span>
+          </div>
+
+          <!-- Unknown Sample & Interpolation Card -->
           <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 1.25rem; display: flex; flex-direction: column; justify-content: space-between;">
             <div>
               <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #0f172a; margin-bottom: 0.35rem;">
@@ -363,9 +409,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
               <input type="number" id="inpUnkAbs" step="any" value="0.512" style="width: 100%; padding: 0.65rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 1rem; font-weight: 700; box-sizing: border-box;" />
             </div>
 
-            <div style="margin-top: 1rem; padding: 0.75rem; background: #ede9fe; border-radius: 6px;">
+            <div style="margin-top: 1rem; padding: 1rem; background: #ede9fe; border-radius: 8px; border: 1px solid #ddd6fe;">
               <span style="font-size: 0.75rem; color: #5b21b6; font-weight: 700; text-transform: uppercase; display: block;">Interpolated Concentration:</span>
-              <strong id="outUnkConc" style="font-size: 1.5rem; color: #4c1d95;">--</strong>
+              <strong id="outUnkConc" style="font-size: 1.75rem; color: #4c1d95; display: block; margin-top: 0.25rem;">--</strong>
+              <span id="outUnkEquation" style="font-size: 0.75rem; color: #6d28d9; margin-top: 0.25rem; display: block;">c = (A - c₀) / m</span>
             </div>
           </div>
         </div>
@@ -837,29 +884,173 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     });
 
     // ============================================================
-    // MODE 2: CALIBRATION CURVE & UNKNOWNS ENGINE
+    // MODE 2: INTERACTIVE EXCEL TABLE, UPLOAD & CALIBRATION ENGINE
     // ============================================================
-    let lastCalibPoints: Array<{ c: number; a: number }> = [];
+    interface CalibRow {
+      c: number;
+      a: number;
+    }
 
-    function runCalibrationEngine() {
-      const raw = (document.getElementById('calibDataRaw') as HTMLTextAreaElement).value.trim();
-      const lines = raw.split('\n');
-      lastCalibPoints = [];
+    let calibTableData: CalibRow[] = [
+      { c: 2.0, a: 0.145 },
+      { c: 4.0, a: 0.288 },
+      { c: 6.0, a: 0.435 },
+      { c: 8.0, a: 0.578 },
+      { c: 10.0, a: 0.725 }
+    ];
+
+    const calibTableBody = document.getElementById('calibTableBody')!;
+    const calibUnitSelect = document.getElementById('calibUnitSelect') as HTMLSelectElement;
+    const thCalibConc = document.getElementById('thCalibConc')!;
+    const btnAddRowBtn = document.getElementById('btnAddRowBtn')!;
+    const btnUploadCalibFile = document.getElementById('btnUploadCalibFile')!;
+    const calibFileInput = document.getElementById('calibFileInput') as HTMLInputElement;
+
+    function renderCalibTable() {
+      calibTableBody.innerHTML = '';
+      calibTableData.forEach((row, idx) => {
+        const tr = document.createElement('tr');
+        tr.style.borderBottom = '1px solid #f1f5f9';
+        tr.innerHTML = `
+          <td style="padding: 0.4rem 0.5rem; text-align: center; color: #94a3b8; font-weight: 700;">${idx + 1}</td>
+          <td style="padding: 0.4rem 0.5rem;">
+            <input type="number" step="any" class="calib-cell-c" data-idx="${idx}" value="${row.c}" style="width: 100%; padding: 0.35rem 0.5rem; border: 1px solid #cbd5e1; border-radius: 4px; font-weight: 600; font-size: 0.85rem; box-sizing: border-box;" />
+          </td>
+          <td style="padding: 0.4rem 0.5rem;">
+            <input type="number" step="any" class="calib-cell-a" data-idx="${idx}" value="${row.a}" style="width: 100%; padding: 0.35rem 0.5rem; border: 1px solid #cbd5e1; border-radius: 4px; font-weight: 600; font-size: 0.85rem; box-sizing: border-box;" />
+          </td>
+          <td style="padding: 0.4rem 0.5rem; text-align: center;">
+            <button type="button" class="btn-del-row" data-idx="${idx}" style="background: transparent; border: none; color: #ef4444; font-weight: 800; cursor: pointer; font-size: 0.9rem;" title="Delete Row">✕</button>
+          </td>
+        `;
+        calibTableBody.appendChild(tr);
+      });
+
+      // Bind dynamic inputs
+      document.querySelectorAll('.calib-cell-c').forEach(input => {
+        input.addEventListener('input', (e) => {
+          const target = e.target as HTMLInputElement;
+          const i = parseInt(target.dataset.idx || '0');
+          calibTableData[i].c = parseFloat(target.value) || 0;
+          runCalibrationEngine();
+        });
+      });
+
+      document.querySelectorAll('.calib-cell-a').forEach(input => {
+        input.addEventListener('input', (e) => {
+          const target = e.target as HTMLInputElement;
+          const i = parseInt(target.dataset.idx || '0');
+          calibTableData[i].a = parseFloat(target.value) || 0;
+          runCalibrationEngine();
+        });
+      });
+
+      document.querySelectorAll('.btn-del-row').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const target = e.target as HTMLElement;
+          const i = parseInt(target.dataset.idx || '0');
+          if (calibTableData.length > 2) {
+            calibTableData.splice(i, 1);
+            renderCalibTable();
+            runCalibrationEngine();
+          } else {
+            alert('A calibration curve requires at least 2 standard points.');
+          }
+        });
+      });
+    }
+
+    // Add Row Event
+    btnAddRowBtn.addEventListener('click', () => {
+      const last = calibTableData[calibTableData.length - 1] || { c: 0, a: 0 };
+      calibTableData.push({ c: last.c + 2.0, a: parseFloat((last.a + 0.15).toFixed(3)) });
+      renderCalibTable();
+      runCalibrationEngine();
+    });
+
+    // Unit Change Event
+    calibUnitSelect.addEventListener('change', () => {
+      const unit = calibUnitSelect.value;
+      thCalibConc.textContent = `Standard Conc (${unit})`;
+      runCalibrationEngine();
+    });
+
+    // File Upload Handler (.csv, .tsv, .txt)
+    btnUploadCalibFile.addEventListener('click', () => {
+      calibFileInput.click();
+    });
+
+    calibFileInput.addEventListener('change', (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const text = event.target?.result as string;
+        if (!text) return;
+
+        const lines = text.trim().split(/\r?\n/);
+        const parsed: CalibRow[] = [];
+
+        for (const line of lines) {
+          // split by comma, semicolon, or whitespace/tabs
+          const parts = line.trim().split(/[,;\t\s]+/);
+          if (parts.length >= 2) {
+            const c = parseFloat(parts[0].replace(',', '.'));
+            const a = parseFloat(parts[1].replace(',', '.'));
+            if (!isNaN(c) && !isNaN(a)) {
+              parsed.push({ c, a });
+            }
+          }
+        }
+
+        if (parsed.length >= 2) {
+          calibTableData = parsed;
+          renderCalibTable();
+          runCalibrationEngine();
+        } else {
+          alert('Could not parse at least 2 valid numeric rows from file. Ensure format is: Concentration, Absorbance');
+        }
+      };
+      reader.readAsText(file);
+    });
+
+    // Paste from Excel support on table
+    document.getElementById('calibTable')?.addEventListener('paste', (e: ClipboardEvent) => {
+      const clipboardData = e.clipboardData?.getData('text');
+      if (!clipboardData) return;
+
+      const lines = clipboardData.trim().split(/\r?\n/);
+      const pastedPoints: CalibRow[] = [];
 
       for (const line of lines) {
-        const parts = line.trim().split(/\s+/);
+        const parts = line.trim().split(/[\t,;]+/);
         if (parts.length >= 2) {
           const c = parseFloat(parts[0].replace(',', '.'));
           const a = parseFloat(parts[1].replace(',', '.'));
-          if (!isNaN(c) && !isNaN(a)) lastCalibPoints.push({ c, a });
+          if (!isNaN(c) && !isNaN(a)) {
+            pastedPoints.push({ c, a });
+          }
         }
       }
 
-      if (lastCalibPoints.length < 2) return;
+      if (pastedPoints.length >= 2) {
+        e.preventDefault();
+        calibTableData = pastedPoints;
+        renderCalibTable();
+        runCalibrationEngine();
+      }
+    });
+
+    function runCalibrationEngine() {
+      const unit = calibUnitSelect.value;
+      const validPoints = calibTableData.filter(p => !isNaN(p.c) && !isNaN(p.a));
+
+      if (validPoints.length < 2) return;
 
       let sumC = 0, sumA = 0, sumCA = 0, sumCC = 0;
-      const n = lastCalibPoints.length;
-      for (const p of lastCalibPoints) {
+      const n = validPoints.length;
+      for (const p of validPoints) {
         sumC += p.c; sumA += p.a;
         sumCA += p.c * p.a; sumCC += p.c * p.c;
       }
@@ -869,7 +1060,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       const meanA = sumA / n;
       let ssTot = 0, ssRes = 0;
-      for (const p of lastCalibPoints) {
+      for (const p of validPoints) {
         const fitA = slope * p.c + intercept;
         ssTot += Math.pow(p.a - meanA, 2);
         ssRes += Math.pow(p.a - fitA, 2);
@@ -879,20 +1070,21 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       document.getElementById('calibEquation')!.textContent = `A = ${slope.toFixed(4)}·c + (${intercept.toFixed(4)})`;
       document.getElementById('calibR2Text')!.textContent = `R² = ${r2.toFixed(4)}`;
 
-      // Unknown interpolation
+      // Unknown sample interpolation
       const unkAbs = parseFloat((document.getElementById('inpUnkAbs') as HTMLInputElement).value) || 0;
       const unkConc = slope !== 0 ? (unkAbs - intercept) / slope : 0;
-      document.getElementById('outUnkConc')!.textContent = unkConc.toFixed(2) + ' µM';
+      document.getElementById('outUnkConc')!.textContent = `${unkConc.toFixed(2)} ${unit}`;
+      document.getElementById('outUnkEquation')!.textContent = `c = (${unkAbs.toFixed(3)} - ${intercept.toFixed(4)}) / ${slope.toFixed(4)}`;
 
-      renderCalibSvg(lastCalibPoints, slope, intercept, { c: unkConc, a: unkAbs });
+      renderCalibSvg(validPoints, slope, intercept, { c: unkConc, a: unkAbs }, unit);
     }
 
-    function renderCalibSvg(pts: Array<{ c: number; a: number }>, slope: number, intercept: number, unk: { c: number; a: number }) {
+    function renderCalibSvg(pts: Array<{ c: number; a: number }>, slope: number, intercept: number, unk: { c: number; a: number }, unit: string) {
       const svg = document.getElementById('calibSvg')!;
       const maxC = Math.max(...pts.map(p => p.c), unk.c) * 1.15 || 10;
       const maxA = Math.max(...pts.map(p => p.a), unk.a) * 1.2 || 1;
 
-      const padL = 50, padR = 25, padT = 20, padB = 35;
+      const padL = 55, padR = 25, padT = 20, padB = 35;
       const width = 600 - padL - padR;
       const height = 240 - padT - padB;
 
@@ -901,9 +1093,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       let svgHtml = `
         <line x1="${padL}" y1="${padT + height}" x2="${padL + width}" y2="${padT + height}" stroke="#94a3b8" stroke-width="1.5" />
-        <line x1="${padL}" y1="${padT + height}" x2="${padL + width}" y2="${padT + height}" stroke="#94a3b8" stroke-width="1.5" />
+        <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT + height}" stroke="#94a3b8" stroke-width="1.5" />
         <text x="15" y="${padT + height / 2}" transform="rotate(-90 15,${padT + height / 2})" fill="#64748b" font-weight="bold">Absorbance (a.u.)</text>
-        <text x="${padL + width / 2}" y="${padT + height + 25}" fill="#64748b" font-weight="bold">Standard Concentration (µM)</text>
+        <text x="${padL + width / 2}" y="${padT + height + 25}" fill="#64748b" font-weight="bold">Standard Concentration (${unit})</text>
       `;
 
       // Regression line
@@ -927,6 +1119,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       svg.innerHTML = svgHtml;
     }
+
+    document.getElementById('inpUnkAbs')?.addEventListener('input', runCalibrationEngine);
+
+    // Initial render of Excel grid
+    renderCalibTable();
 
     // ============================================================
     // MODE 3: REACTION KINETICS ENGINE
@@ -1008,7 +1205,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       let svgHtml = `
         <line x1="${padL}" y1="${padT + height}" x2="${padL + width}" y2="${padT + height}" stroke="#94a3b8" stroke-width="1.5" />
-        <line x1="${padL}" y1="${padT + height}" x2="${padL + width}" y2="${padT + height}" stroke="#94a3b8" stroke-width="1.5" />
+        <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT + height}" stroke="#94a3b8" stroke-width="1.5" />
         <text x="15" y="${padT + height / 2}" transform="rotate(-90 15,${padT + height / 2})" fill="#64748b" font-weight="bold">ln(C₀ / Cₜ)</text>
         <text x="${padL + width / 2}" y="${padT + height + 25}" fill="#64748b" font-weight="bold">Time (min)</text>
       `;
@@ -1026,13 +1223,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     // CSV EXPORTS
     document.getElementById('downloadCalibCsvBtn')?.addEventListener('click', () => {
-      if (lastCalibPoints.length === 0) return;
-      let csv = 'Standard_Concentration_uM,Absorbance_au\n';
-      lastCalibPoints.forEach(p => { csv += `${p.c},${p.a}\n`; });
+      const unit = calibUnitSelect.value;
+      const validPoints = calibTableData.filter(p => !isNaN(p.c) && !isNaN(p.a));
+      if (validPoints.length === 0) return;
+      let csv = `Standard_Concentration_${unit},Absorbance_au\n`;
+      validPoints.forEach(p => { csv += `${p.c},${p.a}\n`; });
       const blob = new Blob([csv], { type: 'text/csv' });
       const a = document.createElement('a');
       a.href = window.URL.createObjectURL(blob);
-      a.download = 'spectrophotometry_calibration_curve.csv';
+      a.download = `spectrophotometry_calibration_curve_${unit}.csv`;
       a.click();
     });
 
@@ -1057,8 +1256,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       document.getElementById(id)?.addEventListener('change', runSingleEngine);
     });
 
-    document.getElementById('calibDataRaw')?.addEventListener('input', runCalibrationEngine);
-    document.getElementById('inpUnkAbs')?.addEventListener('input', runCalibrationEngine);
     document.getElementById('kineticsDataRaw')?.addEventListener('input', runKineticsEngine);
 
     document.getElementById('copyProtocolBtn')?.addEventListener('click', () => {
