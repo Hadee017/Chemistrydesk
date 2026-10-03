@@ -95,7 +95,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             Beer-Lambert Law &amp; Photodegradation Kinetics Studio
           </h1>
           <p style="color: #64748b; font-size: 0.95rem; margin-top: 0.25rem; margin-bottom: 0;">
-            Spectrophotometric mass balance solver, multi-point calibration curve regressions, unknown interpolation, reaction rate constants, and benchtop label printing.
+            Customizable spectrophotometric mass balance solver, multi-point calibration curve regressions, unknown sample interpolation, reaction rate constants, and benchtop label printing.
           </p>
         </div>
       </div>
@@ -125,21 +125,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
     </div>
 
-    <!-- QUICK BENCH PRESETS -->
-    <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 12px; padding: 1.25rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
-      <div style="font-weight: 800; font-size: 0.85rem; color: #0f172a; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
-        <span>Spectroscopic Reference Standards:</span>
-        <span style="font-size: 0.75rem; background: #ede9fe; color: #6d28d9; padding: 2px 8px; border-radius: 9999px; font-weight: 700;">1-Click Setup</span>
-      </div>
-      <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-        <button class="spectro-preset-btn" data-chem="Methylene Blue" data-abs="0.740" data-path="1.0" data-eps="74000" data-mw="319.85" data-hyd="3" data-purity="98.5" data-wl="664" data-solvent="water">Methylene Blue (664 nm, ε=74,000)</button>
-        <button class="spectro-preset-btn" data-chem="Paraquat Dichloride" data-abs="0.514" data-path="1.0" data-eps="20500" data-mw="257.16" data-hyd="0" data-purity="99.0" data-wl="257" data-solvent="water">Paraquat (257 nm, ε=20,500)</button>
-        <button class="spectro-preset-btn" data-chem="Potassium Permanganate" data-abs="0.525" data-path="1.0" data-eps="2350" data-mw="158.03" data-hyd="0" data-purity="99.5" data-wl="525" data-solvent="water">KMnO₄ (525 nm, ε=2,350)</button>
-        <button class="spectro-preset-btn" data-chem="Bovine Serum Albumin" data-abs="0.660" data-path="1.0" data-eps="43824" data-mw="66463" data-hyd="0" data-purity="98.0" data-wl="280" data-solvent="water">BSA Protein (280 nm, ε=43,824)</button>
-        <button class="spectro-preset-btn" data-chem="Rhodamine B" data-abs="0.820" data-path="1.0" data-eps="106000" data-mw="479.02" data-hyd="0" data-purity="95.0" data-wl="554" data-solvent="ethanol">Rhodamine B (554 nm, ε=106,000)</button>
-      </div>
-    </div>
-
     <!-- Solvent Cutoff Warning Advisory -->
     <div id="solventCutoffBox" style="display: none; background: #fffbeb; border-left: 4px solid #f59e0b; padding: 0.85rem 1.25rem; margin-bottom: 1.5rem; border-radius: 0 8px 8px 0; font-size: 0.85rem; color: #92400e;"></div>
 
@@ -150,8 +135,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <!-- MODE 1: SINGLE-POINT BEER-LAMBERT SOLVER                     -->
     <!-- ============================================================ -->
     <div id="singleModeSection">
-      <!-- Toolbar -->
-      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 2rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; font-size: 0.85rem;">
+      
+      <!-- Toolbar: Variable to Solve & Experiment Details -->
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; font-size: 0.85rem;">
         <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
           <span style="font-weight: 700; color: #475569; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Solve For:</span>
           <select id="targetVariable" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.65rem; border-radius: 6px; font-weight: 700; color: #7c3aed; cursor: pointer;">
@@ -161,19 +147,38 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </select>
         </div>
 
-        <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
-          <span style="font-weight: 700; color: #475569; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Analytical Solvent:</span>
-          <select id="solventSelect" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 0.35rem 0.65rem; border-radius: 6px; font-weight: 600; color: #334155; cursor: pointer;">
-            <option value="water" data-cutoff="190">DI Water (Cutoff: 190 nm)</option>
-            <option value="meoh" data-cutoff="205">Methanol (Cutoff: 205 nm)</option>
-            <option value="etoh" data-cutoff="205">Ethanol (Cutoff: 205 nm)</option>
-            <option value="acn" data-cutoff="190">Acetonitrile (Cutoff: 190 nm)</option>
-            <option value="dmso" data-cutoff="268">DMSO (Cutoff: 268 nm)</option>
-            <option value="acetone" data-cutoff="330">Acetone (Cutoff: 330 nm)</option>
-          </select>
+        <div style="display: flex; gap: 0.5rem;">
+          <button id="btnResetAll" type="button" style="background: #f8fafc; border: 1px solid #cbd5e1; color: #64748b; padding: 0.35rem 0.75rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 700;">↺ Reset Fields</button>
+          <button id="shareBtn" type="button" style="background: #ede9fe; border: 1px solid #ddd6fe; color: #6d28d9; padding: 0.35rem 0.75rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 700;">🔗 Share Setup</button>
         </div>
+      </div>
 
-        <button id="shareBtn" style="background: #ede9fe; border: 1px solid #ddd6fe; color: #6d28d9; padding: 0.35rem 0.75rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 700;">🔗 Share Setup</button>
+      <!-- User-Defined Chemical & Solvent Identity Bar -->
+      <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+        <div>
+          <label style="display: block; font-size: 0.78rem; font-weight: 700; color: #334155; margin-bottom: 0.25rem;">
+            ANALYTE / SOLUTION NAME
+          </label>
+          <input type="text" id="inpAnalyteName" value="Sample Solution" placeholder="e.g., Methylene Blue, Compound X" style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; font-weight: 600; box-sizing: border-box;" />
+        </div>
+        <div>
+          <label style="display: block; font-size: 0.78rem; font-weight: 700; color: #334155; margin-bottom: 0.25rem;">
+            ANALYTICAL SOLVENT
+          </label>
+          <input type="text" id="inpSolventName" value="Deionized Water" placeholder="e.g., Methanol, Acetonitrile, Ethanol" style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; font-weight: 600; box-sizing: border-box;" />
+        </div>
+        <div>
+          <label style="display: block; font-size: 0.78rem; font-weight: 700; color: #334155; margin-bottom: 0.25rem;">
+            SOLVENT UV CUTOFF (nm)
+          </label>
+          <input type="number" id="inpSolventCutoff" value="190" step="1" placeholder="e.g., 190, 205, 330" style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; font-weight: 600; box-sizing: border-box;" />
+        </div>
+        <div>
+          <label style="display: block; font-size: 0.78rem; font-weight: 700; color: #334155; margin-bottom: 0.25rem;">
+            ANALYTICAL WAVELENGTH (λmax, nm)
+          </label>
+          <input type="number" id="inpWavelength" value="500" step="1" placeholder="e.g., 280, 525, 664" style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; font-weight: 600; box-sizing: border-box;" />
+        </div>
       </div>
 
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
@@ -181,14 +186,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <!-- Inputs Form -->
         <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
           <h2 style="font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; margin-top: 0; margin-bottom: 1.25rem;">
-            Instrumental &amp; Chemical Inputs
+            Optical Parameters (A = ε · b · c)
           </h2>
 
           <div style="margin-bottom: 1.25rem;" id="fieldAbs">
             <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
               OPTICAL ABSORBANCE (A, a.u.)
             </label>
-            <input type="number" id="inpAbs" step="any" value="0.740" style="width: 100%; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem; font-weight: 600; box-sizing: border-box;" />
+            <input type="number" id="inpAbs" step="any" value="0.500" style="width: 100%; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem; font-weight: 600; box-sizing: border-box;" />
           </div>
 
           <div style="margin-bottom: 1.25rem;">
@@ -208,7 +213,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
               MOLAR ABSORPTIVITY (ε, L·mol⁻¹·cm⁻¹)
             </label>
-            <input type="number" id="inpEps" step="any" value="74000" style="width: 100%; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem; font-weight: 600; box-sizing: border-box;" />
+            <input type="number" id="inpEps" step="any" value="10000" style="width: 100%; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem; font-weight: 600; box-sizing: border-box;" />
           </div>
 
           <div style="margin-bottom: 1.25rem;" id="fieldConc">
@@ -228,20 +233,20 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <!-- Collapsible Purity & Hydrate Factor -->
           <details style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 0.75rem; margin-top: 1.25rem;">
             <summary style="font-size: 0.8rem; font-weight: 700; color: #0f172a; cursor: pointer;">
-              ⚙️ Hydration (·nH₂O) &amp; Chemical Assay Adjustments
+              ⚙️️ Hydration (·nH₂O) &amp; Chemical Assay Adjustments
             </summary>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 0.75rem;">
               <div>
                 <label style="display: block; font-size: 0.75rem; color: #475569;">Anhydrous MW (g/mol)</label>
-                <input type="number" id="inpMwAnh" value="319.85" step="any" style="width: 100%; padding: 0.4rem; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.85rem; box-sizing: border-box;" />
+                <input type="number" id="inpMwAnh" value="100.00" step="any" style="width: 100%; padding: 0.4rem; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.85rem; box-sizing: border-box;" />
               </div>
               <div>
                 <label style="display: block; font-size: 0.75rem; color: #475569;">Hydrate Waters (·nH₂O)</label>
-                <input type="number" id="inpHydrateN" value="3" step="any" style="width: 100%; padding: 0.4rem; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.85rem; box-sizing: border-box;" />
+                <input type="number" id="inpHydrateN" value="0" step="any" style="width: 100%; padding: 0.4rem; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.85rem; box-sizing: border-box;" />
               </div>
               <div>
                 <label style="display: block; font-size: 0.75rem; color: #475569;">Purity Fraction (%)</label>
-                <input type="number" id="inpPurity" value="98.5" step="any" style="width: 100%; padding: 0.4rem; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.85rem; box-sizing: border-box;" />
+                <input type="number" id="inpPurity" value="100.0" step="any" style="width: 100%; padding: 0.4rem; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.85rem; box-sizing: border-box;" />
               </div>
               <div>
                 <label style="display: block; font-size: 0.75rem; color: #475569;">Target Flask Vol (mL)</label>
@@ -292,7 +297,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
           <!-- Benchtop SOP Protocol -->
           <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.4rem;">
               <h3 style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #475569; margin: 0;">SOP Execution Protocol</h3>
               <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
                 <button id="copyLatexBtn" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #334155;">Copy LaTeX</button>
@@ -549,23 +554,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   </div>
 
   <style>
-    .spectro-preset-btn {
-      background: #f8fafc;
-      border: 1.5px solid #cbd5e1;
-      padding: 0.35rem 0.65rem;
-      border-radius: 6px;
-      cursor: pointer;
-      color: #1e293b;
-      font-size: 0.75rem;
-      font-weight: 700;
-      transition: all 0.2s ease;
-    }
-    .spectro-preset-btn:hover {
-      background: #7c3aed;
-      color: #ffffff;
-      border-color: #7c3aed;
-      transform: translateY(-1px);
-    }
     @media print {
       body * {
         visibility: hidden !important;
@@ -645,18 +633,23 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       }
     }
 
-    function updateSolventAdvisory(wavelength: number) {
-      const select = document.getElementById('solventSelect') as HTMLSelectElement;
-      const cutoff = parseFloat(select.options[select.selectedIndex].dataset.cutoff || '190');
+    function checkSolventCutoff() {
+      const cutoff = parseFloat((document.getElementById('inpSolventCutoff') as HTMLInputElement).value) || 0;
+      const wl = parseFloat((document.getElementById('inpWavelength') as HTMLInputElement).value) || 0;
+      const solventName = (document.getElementById('inpSolventName') as HTMLInputElement).value || 'selected solvent';
       const box = document.getElementById('solventCutoffBox')!;
 
-      if (wavelength > 0 && wavelength <= cutoff + 10) {
+      if (cutoff > 0 && wl > 0 && wl <= cutoff + 10) {
         box.style.display = 'block';
-        box.innerHTML = `<strong>Solvent UV Cutoff Collision:</strong> Selected analytical wavelength (${wavelength} nm) overlaps the optical transmission cutoff of ${select.options[select.selectedIndex].text}. Solvent absorbs strongly in this band. Choose a transparent solvent (e.g., Acetonitrile or DI Water).`;
+        box.innerHTML = `<strong>Solvent UV Cutoff Warning:</strong> Analytical wavelength (${wl} nm) is dangerously close to or below the UV cutoff of ${solventName} (${cutoff} nm). The solvent will absorb incident photons and distort your baseline. Switch to an optically transparent solvent or inspect at a higher absorption band.`;
       } else {
         box.style.display = 'none';
       }
     }
+
+    ['inpSolventCutoff', 'inpWavelength', 'inpSolventName'].forEach(id => {
+      document.getElementById(id)?.addEventListener('input', checkSolventCutoff);
+    });
 
     // TWO-WAY SOLVER LOGIC
     const targetVarSelect = document.getElementById('targetVariable') as HTMLSelectElement;
@@ -765,6 +758,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       if (A_raw >= 0) {
         checkPhotometricSanity(A_raw);
+        checkSolventCutoff();
+
         const T = Math.pow(10, -A_raw) * 100;
         displayT.textContent = T.toFixed(2) + ' %';
 
@@ -797,46 +792,46 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           document.getElementById('outBenchMass')!.textContent = (actualGrams < 0.01 ? (actualGrams * 1000).toFixed(2) + ' mg' : actualGrams.toFixed(4) + ' g');
         }
 
+        const solventStr = (document.getElementById('inpSolventName') as HTMLInputElement).value || 'solvent';
+        const wlStr = (document.getElementById('inpWavelength') as HTMLInputElement).value || '--';
+
         protocolEl.innerHTML = `
-          <li>Zero spectrophotometer at target wavelength using matching <strong>${b_cm} cm</strong> optical solvent blank.</li>
-          <li>Rinse optical cuvette twice with prepared sample before analytical filling.</li>
-          <li>Wipe optical facets with lint-free lens tissue; orient clear windows parallel to the light path.</li>
+          <li>Zero spectrophotometer at <strong>${wlStr} nm</strong> using a <strong>${b_cm} cm</strong> quartz cell filled with pure <strong>${solventStr}</strong>.</li>
+          <li>Rinse optical cuvette twice with sample solution before final transfer to prevent dilution errors.</li>
+          <li>Wipe optical faces clean with lens tissue; position clear windows perpendicular to incident light beam.</li>
           <li>Recorded Optical Absorbance: <strong>${A_raw.toFixed(3)} a.u.</strong> (Transmittance: <strong>${T.toFixed(2)}%</strong>).</li>
           <li>Calculated Solute Molarity: <strong>${c_molar.toExponential(3)} M</strong> (${(c_molar * 1e6).toFixed(2)} µM).</li>
         `;
       }
     }
 
-    // PRESET BUTTONS LISTENER
-    document.querySelectorAll('.spectro-preset-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const t = e.currentTarget as HTMLElement;
-        inpAbs.value = t.dataset.abs!;
-        inpPath.value = t.dataset.path!;
-        inpEps.value = t.dataset.eps!;
-        (document.getElementById('inpMwAnh') as HTMLInputElement).value = t.dataset.mw!;
-        (document.getElementById('inpHydrateN') as HTMLInputElement).value = t.dataset.hyd!;
-        (document.getElementById('inpPurity') as HTMLInputElement).value = t.dataset.purity!;
-        (document.getElementById('solventSelect') as HTMLSelectElement).value = t.dataset.solvent!;
-        (document.getElementById('labelSolutionName') as HTMLElement).textContent = t.dataset.chem!.toUpperCase();
-        targetVarSelect.value = 'c';
-        adjustInputStates();
-        updateSolventAdvisory(parseFloat(t.dataset.wl || '0'));
-      });
+    // RESET HANDLER
+    document.getElementById('btnResetAll')?.addEventListener('click', () => {
+      inpAbs.value = '0.500';
+      inpPath.value = '1.0';
+      inpEps.value = '10000';
+      (document.getElementById('inpAnalyteName') as HTMLInputElement).value = 'Sample Solution';
+      (document.getElementById('inpSolventName') as HTMLInputElement).value = 'Deionized Water';
+      (document.getElementById('inpSolventCutoff') as HTMLInputElement).value = '190';
+      (document.getElementById('inpWavelength') as HTMLInputElement).value = '500';
+      targetVarSelect.value = 'c';
+      adjustInputStates();
     });
 
     // PRINT LABEL HANDLER
     document.getElementById('printLabelBtn')?.addEventListener('click', () => {
+      const analyteName = (document.getElementById('inpAnalyteName') as HTMLInputElement).value || 'WORKING STANDARD';
+      const solventName = (document.getElementById('inpSolventName') as HTMLInputElement).value || 'Aqueous';
       const concStr = document.getElementById('primaryResult')!.textContent || '--';
       const absStr = inpAbs.value + ' a.u.';
       const pathStr = inpPath.value + ' ' + unitPath.value;
-      const solvent = (document.getElementById('solventSelect') as HTMLSelectElement).options[(document.getElementById('solventSelect') as HTMLSelectElement).selectedIndex].text.split(' ')[0];
 
       document.getElementById('labelDate')!.textContent = new Date().toLocaleDateString();
+      document.getElementById('labelSolutionName')!.textContent = analyteName.toUpperCase();
       document.getElementById('labelConc')!.textContent = concStr;
       document.getElementById('labelAbs')!.textContent = absStr;
       document.getElementById('labelPath')!.textContent = pathStr;
-      document.getElementById('labelSolvent')!.textContent = solvent;
+      document.getElementById('labelSolvent')!.textContent = solventName;
 
       window.print();
     });
@@ -906,7 +901,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       let svgHtml = `
         <line x1="${padL}" y1="${padT + height}" x2="${padL + width}" y2="${padT + height}" stroke="#94a3b8" stroke-width="1.5" />
-        <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT + height}" stroke="#94a3b8" stroke-width="1.5" />
+        <line x1="${padL}" y1="${padT + height}" x2="${padL + width}" y2="${padT + height}" stroke="#94a3b8" stroke-width="1.5" />
         <text x="15" y="${padT + height / 2}" transform="rotate(-90 15,${padT + height / 2})" fill="#64748b" font-weight="bold">Absorbance (a.u.)</text>
         <text x="${padL + width / 2}" y="${padT + height + 25}" fill="#64748b" font-weight="bold">Standard Concentration (µM)</text>
       `;
@@ -1013,7 +1008,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       let svgHtml = `
         <line x1="${padL}" y1="${padT + height}" x2="${padL + width}" y2="${padT + height}" stroke="#94a3b8" stroke-width="1.5" />
-        <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT + height}" stroke="#94a3b8" stroke-width="1.5" />
+        <line x1="${padL}" y1="${padT + height}" x2="${padL + width}" y2="${padT + height}" stroke="#94a3b8" stroke-width="1.5" />
         <text x="15" y="${padT + height / 2}" transform="rotate(-90 15,${padT + height / 2})" fill="#64748b" font-weight="bold">ln(C₀ / Cₜ)</text>
         <text x="${padL + width / 2}" y="${padT + height + 25}" fill="#64748b" font-weight="bold">Time (min)</text>
       `;
