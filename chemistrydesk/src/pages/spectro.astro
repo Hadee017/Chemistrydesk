@@ -233,7 +233,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <!-- Collapsible Purity & Hydrate Factor -->
           <details style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 0.75rem; margin-top: 1.25rem;">
             <summary style="font-size: 0.8rem; font-weight: 700; color: #0f172a; cursor: pointer;">
-              ⚙️️ Hydration (·nH₂O) &amp; Chemical Assay Adjustments
+              ⚙ Hydration (·nH₂O) &amp; Chemical Assay Adjustments
             </summary>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 0.75rem;">
               <div>
@@ -302,7 +302,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
               <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
                 <button id="copyLatexBtn" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #334155;">Copy LaTeX</button>
                 <button id="copyProtocolBtn" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #334155;">Copy Steps</button>
-                <button id="printLabelBtn" type="button" style="background: #7c3aed; border: none; padding: 0.25rem 0.65rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: white;">🖨️ Print Label</button>
+                <button id="printLabelBtn" type="button" style="background: #7c3aed; border: none; padding: 0.25rem 0.65rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: white;">🖨️️ Print Label</button>
                 <button id="toggleCiteBtn" type="button" style="background: #ede9fe; border: 1px solid #ddd6fe; padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #6d28d9; display: inline-flex; align-items: center; gap: 0.35rem;"><span>📖</span> Cite</button>
               </div>
             </div>
@@ -440,27 +440,77 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </div>
 
     <!-- ============================================================ -->
-    <!-- MODE 3: REACTION DEGRADATION KINETICS                        -->
+    <!-- MODE 3: REACTION DEGRADATION KINETICS (EXCEL & UPLOAD READY) -->
     <!-- ============================================================ -->
     <div id="kineticsModeSection" style="display: none; margin-bottom: 3rem;">
       <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.75rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-        <h2 style="font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; margin-top: 0; margin-bottom: 1.25rem;">
-          Photocatalytic &amp; Reaction Kinetics Regression
-        </h2>
-
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+        
+        <!-- Header & Action Toolbar -->
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
           <div>
-            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
-              TIME (MIN) VS CONCENTRATION / ABSORBANCE
-            </label>
-            <textarea id="kineticsDataRaw" rows="7" style="width: 100%; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 0.85rem; box-sizing: border-box; line-height: 1.4;">0    1.000
-10   0.780
-20   0.605
-30   0.470
-45   0.325
-60   0.220
-90   0.105</textarea>
-            <span style="font-size: 0.72rem; color: #64748b;">Format: [Time (min)] [Space/Tab] [C or A]</span>
+            <h2 style="font-size: 1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; margin: 0;">
+              Photocatalytic &amp; Reaction Kinetics Regression
+            </h2>
+            <p style="font-size: 0.8rem; color: #64748b; margin: 0.25rem 0 0 0;">
+              Enter reaction degradation intervals or upload time-decay run files.
+            </p>
+          </div>
+
+          <!-- Unit Selector & File Actions Toolbar -->
+          <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 0.35rem; background: #f8fafc; border: 1px solid #cbd5e1; padding: 0.3rem 0.6rem; border-radius: 6px;">
+              <span style="font-size: 0.75rem; font-weight: 700; color: #475569;">Time Unit:</span>
+              <select id="kineticsTimeUnitSelect" style="background: #ffffff; border: 1px solid #cbd5e1; padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.8rem; font-weight: 700; color: #7c3aed; cursor: pointer;">
+                <option value="min" selected>Minutes (min)</option>
+                <option value="s">Seconds (s)</option>
+                <option value="h">Hours (h)</option>
+              </select>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 0.35rem; background: #f8fafc; border: 1px solid #cbd5e1; padding: 0.3rem 0.6rem; border-radius: 6px;">
+              <span style="font-size: 0.75rem; font-weight: 700; color: #475569;">Value Type:</span>
+              <select id="kineticsValTypeSelect" style="background: #ffffff; border: 1px solid #cbd5e1; padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.8rem; font-weight: 700; color: #7c3aed; cursor: pointer;">
+                <option value="Absorbance" selected>Absorbance (a.u.)</option>
+                <option value="µM">Conc (µM)</option>
+                <option value="mM">Conc (mM)</option>
+                <option value="M">Conc (M)</option>
+                <option value="ppm">Conc (ppm)</option>
+              </select>
+            </div>
+
+            <!-- Hidden File Input & Button -->
+            <input type="file" id="kineticsFileInput" accept=".csv,.tsv,.txt" style="display: none;" />
+            <button id="btnUploadKineticsFile" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; padding: 0.4rem 0.75rem; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.35rem;">
+              <span>📁</span> Upload File (.csv, .tsv, .txt)
+            </button>
+            <button id="btnAddKineticsRowBtn" type="button" style="background: #ede9fe; border: 1px solid #ddd6fe; color: #6d28d9; padding: 0.4rem 0.75rem; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer;">
+              + Add Time Point
+            </button>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+          
+          <!-- Excel-Style Interactive Spreadsheet Table for Kinetics -->
+          <div>
+            <div style="border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden; max-height: 320px; overflow-y: auto;">
+              <table id="kineticsTable" style="width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left;">
+                <thead style="background: #f8fafc; border-bottom: 1.5px solid #cbd5e1; position: sticky; top: 0; z-index: 1;">
+                  <tr>
+                    <th style="padding: 0.5rem 0.75rem; color: #64748b; font-weight: 700; width: 40px; text-align: center;">#</th>
+                    <th id="thKineticsTime" style="padding: 0.5rem 0.75rem; color: #334155; font-weight: 700;">Time (min)</th>
+                    <th id="thKineticsVal" style="padding: 0.5rem 0.75rem; color: #334155; font-weight: 700;">Value (Absorbance)</th>
+                    <th style="padding: 0.5rem 0.75rem; color: #64748b; font-weight: 700; width: 40px; text-align: center;">✕</th>
+                  </tr>
+                </thead>
+                <tbody id="kineticsTableBody">
+                  <!-- Generated Rows -->
+                </tbody>
+              </table>
+            </div>
+            <span style="font-size: 0.72rem; color: #64748b; display: block; margin-top: 0.4rem;">
+              Tip: Edit numbers in cells, paste copied Excel columns directly, or upload your data file.
+            </span>
           </div>
 
           <!-- Kinetic Output Metrics Card -->
@@ -468,28 +518,28 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             <table style="width: 100%; font-size: 0.85rem; border-collapse: collapse;">
               <tbody>
                 <tr style="border-bottom: 1px solid #f3e8ff;">
-                  <td style="padding: 0.4rem 0; color: #6b21a8; font-weight: 600;">Degradation Efficiency:</td>
-                  <td id="resDegPct" style="padding: 0.4rem 0; text-align: right; font-weight: 800; color: #047857;">--</td>
+                  <td style="padding: 0.45rem 0; color: #6b21a8; font-weight: 600;">Degradation Efficiency:</td>
+                  <td id="resDegPct" style="padding: 0.45rem 0; text-align: right; font-weight: 800; color: #047857;">--</td>
                 </tr>
                 <tr style="border-bottom: 1px solid #f3e8ff;">
-                  <td style="padding: 0.4rem 0; color: #6b21a8; font-weight: 600;">Pseudo-1st Order (k₁):</td>
-                  <td id="resK1" style="padding: 0.4rem 0; text-align: right; font-weight: 800; color: #4c1d95;">--</td>
+                  <td style="padding: 0.45rem 0; color: #6b21a8; font-weight: 600;">Pseudo-1st Order (k₁):</td>
+                  <td id="resK1" style="padding: 0.45rem 0; text-align: right; font-weight: 800; color: #4c1d95;">--</td>
                 </tr>
                 <tr style="border-bottom: 1px solid #f3e8ff;">
-                  <td style="padding: 0.4rem 0; color: #6b21a8; font-weight: 600;">Correlation (R² 1st):</td>
-                  <td id="resR2K1" style="padding: 0.4rem 0; text-align: right; font-weight: 800; color: #0f172a;">--</td>
+                  <td style="padding: 0.45rem 0; color: #6b21a8; font-weight: 600;">Correlation (R² 1st):</td>
+                  <td id="resR2K1" style="padding: 0.45rem 0; text-align: right; font-weight: 800; color: #0f172a;">--</td>
                 </tr>
                 <tr style="border-bottom: 1px solid #f3e8ff;">
-                  <td style="padding: 0.4rem 0; color: #6b21a8; font-weight: 600;">Degradation Half-Life:</td>
-                  <td id="resTHalf" style="padding: 0.4rem 0; text-align: right; font-weight: 800; color: #4c1d95;">--</td>
+                  <td style="padding: 0.45rem 0; color: #6b21a8; font-weight: 600;">Degradation Half-Life (t₁/₂):</td>
+                  <td id="resTHalf" style="padding: 0.45rem 0; text-align: right; font-weight: 800; color: #4c1d95;">--</td>
                 </tr>
                 <tr>
-                  <td style="padding: 0.4rem 0; color: #6b21a8; font-weight: 600;">Pseudo-2nd Order (k₂):</td>
-                  <td id="resK2" style="padding: 0.4rem 0; text-align: right; font-weight: 800; color: #4c1d95;">--</td>
+                  <td style="padding: 0.45rem 0; color: #6b21a8; font-weight: 600;">Pseudo-2nd Order (k₂):</td>
+                  <td id="resK2" style="padding: 0.45rem 0; text-align: right; font-weight: 800; color: #4c1d95;">--</td>
                 </tr>
               </tbody>
             </table>
-            <button id="downloadKineticsCsvBtn" style="margin-top: 0.75rem; background: #7c3aed; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer;">
+            <button id="downloadKineticsCsvBtn" style="margin-top: 0.75rem; background: #7c3aed; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer;">
               📥 Export Kinetics CSV
             </button>
           </div>
@@ -501,7 +551,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <h3 style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #475569; margin: 0 0 0.5rem 0;">
           Dynamic Linearized Pseudo-First-Order Fit
         </h3>
-        <p style="font-size: 0.8rem; color: #64748b; margin-top: 0; margin-bottom: 1rem;">ln(C₀ / Ct) vs. Irradiation Time (min) extracting rate constant k₁ from slope.</p>
+        <p style="font-size: 0.8rem; color: #64748b; margin-top: 0; margin-bottom: 1rem;">ln(C₀ / Ct) vs. Irradiation Time extracting rate constant k₁ from slope.</p>
         <div style="width: 100%; height: 260px;">
           <svg id="kineticsSvg" viewBox="0 0 600 240" style="width: 100%; height: 100%; overflow: visible; font-family: monospace; font-size: 11px;"></svg>
         </div>
@@ -515,7 +565,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         Theoretical Foundations of the Beer-Lambert-Bouguer Law
       </h2>
       <p>
-        The physical attenuation of monochromatic radiation traversing an isotropic, absorbing medium is described mathematically by the differential Beer-Lambert relation. When an incident light beam of radiant flux <i>P₀</i> passes through an incremental transverse pathlength <i>db</i> containing absorbing chemical species at molar concentration <i>c</i>:
+        The physical attenuation of monochromatic radiation traversing an isotropic, absorbing medium is described mathematically by the differential Beer-Lambert relation[cite: 1]. When an incident light beam of radiant flux <i>P₀</i> passes through an incremental transverse pathlength <i>db</i> containing absorbing chemical species at molar concentration <i>c</i>[cite: 1]:
       </p>
       
       <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.25rem 2rem; margin: 1.5rem 0; text-align: center; box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);">
@@ -926,7 +976,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         calibTableBody.appendChild(tr);
       });
 
-      // Bind dynamic inputs
       document.querySelectorAll('.calib-cell-c').forEach(input => {
         input.addEventListener('input', (e) => {
           const target = e.target as HTMLInputElement;
@@ -960,7 +1009,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       });
     }
 
-    // Add Row Event
     btnAddRowBtn.addEventListener('click', () => {
       const last = calibTableData[calibTableData.length - 1] || { c: 0, a: 0 };
       calibTableData.push({ c: last.c + 2.0, a: parseFloat((last.a + 0.15).toFixed(3)) });
@@ -968,14 +1016,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       runCalibrationEngine();
     });
 
-    // Unit Change Event
     calibUnitSelect.addEventListener('change', () => {
       const unit = calibUnitSelect.value;
       thCalibConc.textContent = `Standard Conc (${unit})`;
       runCalibrationEngine();
     });
 
-    // File Upload Handler (.csv, .tsv, .txt)
     btnUploadCalibFile.addEventListener('click', () => {
       calibFileInput.click();
     });
@@ -993,7 +1039,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         const parsed: CalibRow[] = [];
 
         for (const line of lines) {
-          // split by comma, semicolon, or whitespace/tabs
           const parts = line.trim().split(/[,;\t\s]+/);
           if (parts.length >= 2) {
             const c = parseFloat(parts[0].replace(',', '.'));
@@ -1015,7 +1060,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       reader.readAsText(file);
     });
 
-    // Paste from Excel support on table
     document.getElementById('calibTable')?.addEventListener('paste', (e: ClipboardEvent) => {
       const clipboardData = e.clipboardData?.getData('text');
       if (!clipboardData) return;
@@ -1070,7 +1114,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       document.getElementById('calibEquation')!.textContent = `A = ${slope.toFixed(4)}·c + (${intercept.toFixed(4)})`;
       document.getElementById('calibR2Text')!.textContent = `R² = ${r2.toFixed(4)}`;
 
-      // Unknown sample interpolation
       const unkAbs = parseFloat((document.getElementById('inpUnkAbs') as HTMLInputElement).value) || 0;
       const unkConc = slope !== 0 ? (unkAbs - intercept) / slope : 0;
       document.getElementById('outUnkConc')!.textContent = `${unkConc.toFixed(2)} ${unit}`;
@@ -1098,17 +1141,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <text x="${padL + width / 2}" y="${padT + height + 25}" fill="#64748b" font-weight="bold">Standard Concentration (${unit})</text>
       `;
 
-      // Regression line
       const endC = maxC * 0.95;
       const endA = slope * endC + intercept;
       svgHtml += `<line x1="${scX(0)}" y1="${scY(intercept)}" x2="${scX(endC)}" y2="${scY(endA)}" stroke="#7c3aed" stroke-width="2.5" />`;
 
-      // Standard points
       pts.forEach(p => {
         svgHtml += `<circle cx="${scX(p.c)}" cy="${scY(p.a)}" r="4.5" fill="#7c3aed" stroke="#ffffff" stroke-width="1.5" />`;
       });
 
-      // Unknown sample point
       if (unk.c > 0 && unk.a > 0) {
         svgHtml += `
           <circle cx="${scX(unk.c)}" cy="${scY(unk.a)}" r="6" fill="#ef4444" stroke="#ffffff" stroke-width="1.5" />
@@ -1121,42 +1161,188 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     }
 
     document.getElementById('inpUnkAbs')?.addEventListener('input', runCalibrationEngine);
-
-    // Initial render of Excel grid
     renderCalibTable();
 
     // ============================================================
-    // MODE 3: REACTION KINETICS ENGINE
+    // MODE 3: INTERACTIVE EXCEL TABLE, UPLOAD & KINETICS ENGINE
     // ============================================================
-    let lastKineticsData: Array<{ t: number; v: number }> = [];
+    interface KineticsRow {
+      t: number;
+      v: number;
+    }
 
-    function runKineticsEngine() {
-      const raw = (document.getElementById('kineticsDataRaw') as HTMLTextAreaElement).value.trim();
-      const lines = raw.split('\n');
-      lastKineticsData = [];
+    let kineticsTableData: KineticsRow[] = [
+      { t: 0, v: 1.000 },
+      { t: 10, v: 0.780 },
+      { t: 20, v: 0.605 },
+      { t: 30, v: 0.470 },
+      { t: 45, v: 0.325 },
+      { t: 60, v: 0.220 },
+      { t: 90, v: 0.105 }
+    ];
+
+    const kineticsTableBody = document.getElementById('kineticsTableBody')!;
+    const kineticsTimeUnitSelect = document.getElementById('kineticsTimeUnitSelect') as HTMLSelectElement;
+    const kineticsValTypeSelect = document.getElementById('kineticsValTypeSelect') as HTMLSelectElement;
+    const thKineticsTime = document.getElementById('thKineticsTime')!;
+    const thKineticsVal = document.getElementById('thKineticsVal')!;
+    const btnAddKineticsRowBtn = document.getElementById('btnAddKineticsRowBtn')!;
+    const btnUploadKineticsFile = document.getElementById('btnUploadKineticsFile')!;
+    const kineticsFileInput = document.getElementById('kineticsFileInput') as HTMLInputElement;
+
+    function renderKineticsTable() {
+      kineticsTableBody.innerHTML = '';
+      kineticsTableData.forEach((row, idx) => {
+        const tr = document.createElement('tr');
+        tr.style.borderBottom = '1px solid #f1f5f9';
+        tr.innerHTML = `
+          <td style="padding: 0.4rem 0.5rem; text-align: center; color: #94a3b8; font-weight: 700;">${idx + 1}</td>
+          <td style="padding: 0.4rem 0.5rem;">
+            <input type="number" step="any" class="kinetics-cell-t" data-idx="${idx}" value="${row.t}" style="width: 100%; padding: 0.35rem 0.5rem; border: 1px solid #cbd5e1; border-radius: 4px; font-weight: 600; font-size: 0.85rem; box-sizing: border-box;" />
+          </td>
+          <td style="padding: 0.4rem 0.5rem;">
+            <input type="number" step="any" class="kinetics-cell-v" data-idx="${idx}" value="${row.v}" style="width: 100%; padding: 0.35rem 0.5rem; border: 1px solid #cbd5e1; border-radius: 4px; font-weight: 600; font-size: 0.85rem; box-sizing: border-box;" />
+          </td>
+          <td style="padding: 0.4rem 0.5rem; text-align: center;">
+            <button type="button" class="btn-del-kinetics-row" data-idx="${idx}" style="background: transparent; border: none; color: #ef4444; font-weight: 800; cursor: pointer; font-size: 0.9rem;" title="Delete Row">✕</button>
+          </td>
+        `;
+        kineticsTableBody.appendChild(tr);
+      });
+
+      document.querySelectorAll('.kinetics-cell-t').forEach(input => {
+        input.addEventListener('input', (e) => {
+          const target = e.target as HTMLInputElement;
+          const i = parseInt(target.dataset.idx || '0');
+          kineticsTableData[i].t = parseFloat(target.value) || 0;
+          runKineticsEngine();
+        });
+      });
+
+      document.querySelectorAll('.kinetics-cell-v').forEach(input => {
+        input.addEventListener('input', (e) => {
+          const target = e.target as HTMLInputElement;
+          const i = parseInt(target.dataset.idx || '0');
+          kineticsTableData[i].v = parseFloat(target.value) || 0;
+          runKineticsEngine();
+        });
+      });
+
+      document.querySelectorAll('.btn-del-kinetics-row').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const target = e.target as HTMLElement;
+          const i = parseInt(target.dataset.idx || '0');
+          if (kineticsTableData.length > 2) {
+            kineticsTableData.splice(i, 1);
+            renderKineticsTable();
+            runKineticsEngine();
+          } else {
+            alert('Reaction kinetics regression requires at least 2 time points.');
+          }
+        });
+      });
+    }
+
+    btnAddKineticsRowBtn.addEventListener('click', () => {
+      const last = kineticsTableData[kineticsTableData.length - 1] || { t: 0, v: 1.0 };
+      kineticsTableData.push({ t: last.t + 15, v: parseFloat((last.v * 0.75).toFixed(3)) });
+      renderKineticsTable();
+      runKineticsEngine();
+    });
+
+    kineticsTimeUnitSelect.addEventListener('change', () => {
+      const uTime = kineticsTimeUnitSelect.value;
+      thKineticsTime.textContent = `Time (${uTime})`;
+      runKineticsEngine();
+    });
+
+    kineticsValTypeSelect.addEventListener('change', () => {
+      const uVal = kineticsValTypeSelect.value;
+      thKineticsVal.textContent = `Value (${uVal})`;
+      runKineticsEngine();
+    });
+
+    btnUploadKineticsFile.addEventListener('click', () => {
+      kineticsFileInput.click();
+    });
+
+    kineticsFileInput.addEventListener('change', (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const text = event.target?.result as string;
+        if (!text) return;
+
+        const lines = text.trim().split(/\r?\n/);
+        const parsed: KineticsRow[] = [];
+
+        for (const line of lines) {
+          const parts = line.trim().split(/[,;\t\s]+/);
+          if (parts.length >= 2) {
+            const t = parseFloat(parts[0].replace(',', '.'));
+            const v = parseFloat(parts[1].replace(',', '.'));
+            if (!isNaN(t) && !isNaN(v) && v > 0) {
+              parsed.push({ t, v });
+            }
+          }
+        }
+
+        if (parsed.length >= 2) {
+          kineticsTableData = parsed;
+          renderKineticsTable();
+          runKineticsEngine();
+        } else {
+          alert('Could not parse at least 2 valid numeric rows from file. Ensure format is: Time, Value');
+        }
+      };
+      reader.readAsText(file);
+    });
+
+    document.getElementById('kineticsTable')?.addEventListener('paste', (e: ClipboardEvent) => {
+      const clipboardData = e.clipboardData?.getData('text');
+      if (!clipboardData) return;
+
+      const lines = clipboardData.trim().split(/\r?\n/);
+      const pastedPoints: KineticsRow[] = [];
 
       for (const line of lines) {
-        const parts = line.trim().split(/\s+/);
+        const parts = line.trim().split(/[\t,;]+/);
         if (parts.length >= 2) {
           const t = parseFloat(parts[0].replace(',', '.'));
           const v = parseFloat(parts[1].replace(',', '.'));
-          if (!isNaN(t) && !isNaN(v) && v > 0) lastKineticsData.push({ t, v });
+          if (!isNaN(t) && !isNaN(v) && v > 0) {
+            pastedPoints.push({ t, v });
+          }
         }
       }
 
-      if (lastKineticsData.length < 2) return;
+      if (pastedPoints.length >= 2) {
+        e.preventDefault();
+        kineticsTableData = pastedPoints;
+        renderKineticsTable();
+        runKineticsEngine();
+      }
+    });
 
-      const c0 = lastKineticsData[0].v;
-      const cFinal = lastKineticsData[lastKineticsData.length - 1].v;
+    function runKineticsEngine() {
+      const uTime = kineticsTimeUnitSelect.value;
+      const validPoints = kineticsTableData.filter(p => !isNaN(p.t) && !isNaN(p.v) && p.v > 0);
+
+      if (validPoints.length < 2) return;
+
+      const c0 = validPoints[0].v;
+      const cFinal = validPoints[validPoints.length - 1].v;
       const degPct = Math.max(0, ((c0 - cFinal) / c0) * 100);
       document.getElementById('resDegPct')!.textContent = degPct.toFixed(2) + ' %';
 
       // Pseudo-1st Order: ln(C0/Ct) = k1 * t
       let sumT = 0, sumY = 0, sumTY = 0, sumTT = 0;
-      const n = lastKineticsData.length;
+      const n = validPoints.length;
       const fitPts: Array<{ x: number; y: number }> = [];
 
-      for (const p of lastKineticsData) {
+      for (const p of validPoints) {
         const y = Math.log(c0 / p.v);
         sumT += p.t; sumY += y;
         sumTY += p.t * y; sumTT += p.t * p.t;
@@ -1175,23 +1361,23 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       }
       const r2 = ssTot > 0 ? Math.max(0, 1 - (ssRes / ssTot)) : 1;
 
-      document.getElementById('resK1')!.textContent = k1.toFixed(4) + ' min⁻¹';
+      document.getElementById('resK1')!.textContent = `${k1.toFixed(4)} ${uTime}⁻¹`;
       document.getElementById('resR2K1')!.textContent = r2.toFixed(4);
-      document.getElementById('resTHalf')!.textContent = tHalf.toFixed(2) + ' min';
+      document.getElementById('resTHalf')!.textContent = `${tHalf.toFixed(2)} ${uTime}`;
 
       // Pseudo-2nd Order: (1/Ct - 1/C0) = k2 * t
       let sumY2 = 0, sumTY2 = 0;
-      for (const p of lastKineticsData) {
+      for (const p of validPoints) {
         const y2 = (1 / p.v) - (1 / c0);
         sumY2 += y2; sumTY2 += p.t * y2;
       }
       const k2 = Math.max(0, (n * sumTY2 - sumT * sumY2) / (n * sumTT - sumT * sumT));
-      document.getElementById('resK2')!.textContent = k2.toFixed(4) + ' conc⁻¹·min⁻¹';
+      document.getElementById('resK2')!.textContent = `${k2.toFixed(4)} conc⁻¹·${uTime}⁻¹`;
 
-      renderKineticsSvg(fitPts, k1);
+      renderKineticsSvg(fitPts, k1, uTime);
     }
 
-    function renderKineticsSvg(pts: Array<{ x: number; y: number }>, k1: number) {
+    function renderKineticsSvg(pts: Array<{ x: number; y: number }>, k1: number, uTime: string) {
       const svg = document.getElementById('kineticsSvg')!;
       const maxX = Math.max(...pts.map(p => p.x)) * 1.1 || 10;
       const maxY = Math.max(...pts.map(p => p.y)) * 1.2 || 1;
@@ -1207,7 +1393,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <line x1="${padL}" y1="${padT + height}" x2="${padL + width}" y2="${padT + height}" stroke="#94a3b8" stroke-width="1.5" />
         <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT + height}" stroke="#94a3b8" stroke-width="1.5" />
         <text x="15" y="${padT + height / 2}" transform="rotate(-90 15,${padT + height / 2})" fill="#64748b" font-weight="bold">ln(C₀ / Cₜ)</text>
-        <text x="${padL + width / 2}" y="${padT + height + 25}" fill="#64748b" font-weight="bold">Time (min)</text>
+        <text x="${padL + width / 2}" y="${padT + height + 25}" fill="#64748b" font-weight="bold">Time (${uTime})</text>
       `;
 
       const endX = maxX * 0.95;
@@ -1220,6 +1406,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       svg.innerHTML = svgHtml;
     }
+
+    renderKineticsTable();
 
     // CSV EXPORTS
     document.getElementById('downloadCalibCsvBtn')?.addEventListener('click', () => {
@@ -1236,13 +1424,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     });
 
     document.getElementById('downloadKineticsCsvBtn')?.addEventListener('click', () => {
-      if (lastKineticsData.length === 0) return;
-      let csv = 'Time_min,Concentration_or_Absorbance\n';
-      lastKineticsData.forEach(p => { csv += `${p.t},${p.v}\n`; });
+      const uTime = kineticsTimeUnitSelect.value;
+      const uVal = kineticsValTypeSelect.value;
+      const validPoints = kineticsTableData.filter(p => !isNaN(p.t) && !isNaN(p.v));
+      if (validPoints.length === 0) return;
+      let csv = `Time_${uTime},Value_${uVal}\n`;
+      validPoints.forEach(p => { csv += `${p.t},${p.v}\n`; });
       const blob = new Blob([csv], { type: 'text/csv' });
       const a = document.createElement('a');
       a.href = window.URL.createObjectURL(blob);
-      a.download = 'reaction_kinetics_decay.csv';
+      a.download = `reaction_kinetics_decay_${uTime}.csv`;
       a.click();
     });
 
@@ -1255,8 +1446,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       document.getElementById(id)?.addEventListener('input', runSingleEngine);
       document.getElementById(id)?.addEventListener('change', runSingleEngine);
     });
-
-    document.getElementById('kineticsDataRaw')?.addEventListener('input', runKineticsEngine);
 
     document.getElementById('copyProtocolBtn')?.addEventListener('click', () => {
       const text = document.getElementById('protocolSteps')?.innerText || '';
