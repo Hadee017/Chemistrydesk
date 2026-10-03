@@ -1,0 +1,1195 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout 
+  title="Beer-Lambert Law & Reaction Kinetics Studio | ChemistryDesk"
+  description="Research-grade spectrophotometric suite. Universal Beer-Lambert parameter solver (A = εbc), multi-point calibration curves, unknown interpolation, reaction kinetics regressions, and printable Schott bottle labels."
+>
+  <!-- Schema: WebApplication -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "ChemistryDesk Spectrophotometry & Chemical Kinetics Studio",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "All",
+    "browserRequirements": "Requires JavaScript",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  })} />
+
+  <!-- Schema: HowTo -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Quantify Concentration Using the Beer-Lambert Law",
+    "step": [
+      {
+        "@type": "HowToStep",
+        "name": "Solvent Optical Blanking",
+        "text": "Insert a reference optical cuvette containing analytical solvent and set baseline transmittance to 100% (0.000 Absorbance) at analytical wavelength λmax."
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Measure Absorbance",
+        "text": "Insert the sample cuvette and record the optical absorbance (A), ensuring reading falls within the linear dynamic range (0.100 to 1.000 a.u.)."
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Calculate Solute Molarity",
+        "text": "Divide optical absorbance by the product of molar absorptivity and cuvette pathlength: c = A / (ε · b)."
+      }
+    ]
+  })} />
+
+  <!-- Schema: FAQPage -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Why does the Beer-Lambert law fail at high concentrations (> 0.01 M)?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Above 0.01 M, electrostatic interactions between absorbing chromophores alter local refractive indices and electron cloud distributions. Furthermore, stray light leaking through instrument monochromators becomes significant when transmission drops below 3% (A > 1.5)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How is the pseudo-first-order rate constant extracted from kinetics data?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Plot ln(C₀/Ct) vs reaction time (t). The slope of the resulting linear least-squares regression equals the apparent pseudo-first-order rate constant k₁ (min⁻¹)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is an optical solvent cutoff in spectrophotometry?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The solvent cutoff wavelength is the spectral point below which the pure solvent itself absorbs intensely (A > 1.0 in a 1 cm cell), masking solute absorption peaks."
+        }
+      }
+    ]
+  })} />
+
+  <main style="max-width: 1060px; margin: 1.5rem auto 3rem auto; padding: 0 1.5rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1e293b;">
+    
+    <!-- Breadcrumb Navigation -->
+    <nav style="font-size: 0.8rem; color: #64748b; margin-bottom: 1.25rem;">
+      <a href="/" style="color: #7c3aed; text-decoration: none; font-weight: 600;">Home</a> &rsaquo; 
+      <span style="color: #94a3b8;"> Analytical Chemistry</span> &rsaquo; 
+      <span style="color: #0f172a; font-weight: 700;">UV-Vis &amp; Kinetics Studio</span>
+    </nav>
+
+    <!-- Header Section -->
+    <div style="border-bottom: 1px solid #e2e8f0; padding-bottom: 1.75rem; margin-bottom: 2rem;">
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+        <span style="font-size: 2.5rem;">🌈</span>
+        <div>
+          <h1 style="font-size: 2.25rem; font-weight: 800; color: #0f172a; letter-spacing: -0.025em; margin: 0;">
+            Beer-Lambert Law &amp; Photodegradation Kinetics Studio
+          </h1>
+          <p style="color: #64748b; font-size: 0.95rem; margin-top: 0.25rem; margin-bottom: 0;">
+            Spectrophotometric mass balance solver, multi-point calibration curve regressions, unknown interpolation, reaction rate constants, and benchtop label printing.
+          </p>
+        </div>
+      </div>
+
+      <!-- Segmented Mode Switcher -->
+      <div style="margin-top: 1.5rem; display: flex; align-items: center; justify-content: flex-start;">
+        <div style="background: #e2e8f0; padding: 4px; border-radius: 10px; display: inline-flex; gap: 4px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.06); flex-wrap: wrap;">
+          <button 
+            id="modeSingleBtn" 
+            style="background: #7c3aed; color: #ffffff; border: none; padding: 0.65rem 1.25rem; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: all 0.2s ease;"
+          >
+            <span>🎯</span> Single-Point Solver &amp; Purity
+          </button>
+          <button 
+            id="modeCalibBtn" 
+            style="background: transparent; color: #475569; border: none; padding: 0.65rem 1.25rem; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s ease;"
+          >
+            <span>📊</span> Calibration Curve &amp; Unknowns
+          </button>
+          <button 
+            id="modeKineticsBtn" 
+            style="background: transparent; color: #475569; border: none; padding: 0.65rem 1.25rem; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s ease;"
+          >
+            <span>⏱️</span> Reaction Kinetics (k₁, k₂)
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUICK BENCH PRESETS -->
+    <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 12px; padding: 1.25rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+      <div style="font-weight: 800; font-size: 0.85rem; color: #0f172a; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+        <span>Spectroscopic Reference Standards:</span>
+        <span style="font-size: 0.75rem; background: #ede9fe; color: #6d28d9; padding: 2px 8px; border-radius: 9999px; font-weight: 700;">1-Click Setup</span>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+        <button class="spectro-preset-btn" data-chem="Methylene Blue" data-abs="0.740" data-path="1.0" data-eps="74000" data-mw="319.85" data-hyd="3" data-purity="98.5" data-wl="664" data-solvent="water">Methylene Blue (664 nm, ε=74,000)</button>
+        <button class="spectro-preset-btn" data-chem="Paraquat Dichloride" data-abs="0.514" data-path="1.0" data-eps="20500" data-mw="257.16" data-hyd="0" data-purity="99.0" data-wl="257" data-solvent="water">Paraquat (257 nm, ε=20,500)</button>
+        <button class="spectro-preset-btn" data-chem="Potassium Permanganate" data-abs="0.525" data-path="1.0" data-eps="2350" data-mw="158.03" data-hyd="0" data-purity="99.5" data-wl="525" data-solvent="water">KMnO₄ (525 nm, ε=2,350)</button>
+        <button class="spectro-preset-btn" data-chem="Bovine Serum Albumin" data-abs="0.660" data-path="1.0" data-eps="43824" data-mw="66463" data-hyd="0" data-purity="98.0" data-wl="280" data-solvent="water">BSA Protein (280 nm, ε=43,824)</button>
+        <button class="spectro-preset-btn" data-chem="Rhodamine B" data-abs="0.820" data-path="1.0" data-eps="106000" data-mw="479.02" data-hyd="0" data-purity="95.0" data-wl="554" data-solvent="ethanol">Rhodamine B (554 nm, ε=106,000)</button>
+      </div>
+    </div>
+
+    <!-- Solvent Cutoff Warning Advisory -->
+    <div id="solventCutoffBox" style="display: none; background: #fffbeb; border-left: 4px solid #f59e0b; padding: 0.85rem 1.25rem; margin-bottom: 1.5rem; border-radius: 0 8px 8px 0; font-size: 0.85rem; color: #92400e;"></div>
+
+    <!-- Photometric Dynamic Range Alert Bar -->
+    <div id="linearityAlert" style="display: none; background: #fef2f2; border-left: 4px solid #ef4444; padding: 0.85rem 1.25rem; margin-bottom: 1.5rem; border-radius: 0 8px 8px 0; font-size: 0.85rem; color: #991b1b;"></div>
+
+    <!-- ============================================================ -->
+    <!-- MODE 1: SINGLE-POINT BEER-LAMBERT SOLVER                     -->
+    <!-- ============================================================ -->
+    <div id="singleModeSection">
+      <!-- Toolbar -->
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 2rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; font-size: 0.85rem;">
+        <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+          <span style="font-weight: 700; color: #475569; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Solve For:</span>
+          <select id="targetVariable" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.65rem; border-radius: 6px; font-weight: 700; color: #7c3aed; cursor: pointer;">
+            <option value="c">Solute Concentration (c)</option>
+            <option value="A">Optical Absorbance (A)</option>
+            <option value="eps">Molar Absorptivity (ε)</option>
+          </select>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+          <span style="font-weight: 700; color: #475569; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Analytical Solvent:</span>
+          <select id="solventSelect" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 0.35rem 0.65rem; border-radius: 6px; font-weight: 600; color: #334155; cursor: pointer;">
+            <option value="water" data-cutoff="190">DI Water (Cutoff: 190 nm)</option>
+            <option value="meoh" data-cutoff="205">Methanol (Cutoff: 205 nm)</option>
+            <option value="etoh" data-cutoff="205">Ethanol (Cutoff: 205 nm)</option>
+            <option value="acn" data-cutoff="190">Acetonitrile (Cutoff: 190 nm)</option>
+            <option value="dmso" data-cutoff="268">DMSO (Cutoff: 268 nm)</option>
+            <option value="acetone" data-cutoff="330">Acetone (Cutoff: 330 nm)</option>
+          </select>
+        </div>
+
+        <button id="shareBtn" style="background: #ede9fe; border: 1px solid #ddd6fe; color: #6d28d9; padding: 0.35rem 0.75rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 700;">🔗 Share Setup</button>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+        
+        <!-- Inputs Form -->
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+          <h2 style="font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; margin-top: 0; margin-bottom: 1.25rem;">
+            Instrumental &amp; Chemical Inputs
+          </h2>
+
+          <div style="margin-bottom: 1.25rem;" id="fieldAbs">
+            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
+              OPTICAL ABSORBANCE (A, a.u.)
+            </label>
+            <input type="number" id="inpAbs" step="any" value="0.740" style="width: 100%; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem; font-weight: 600; box-sizing: border-box;" />
+          </div>
+
+          <div style="margin-bottom: 1.25rem;">
+            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
+              CUVETTE PATHLENGTH (b)
+            </label>
+            <div style="display: flex;">
+              <input type="number" id="inpPath" step="any" value="1.0" style="flex: 1; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-right: none; border-radius: 6px 0 0 6px; font-size: 0.95rem; font-weight: 600;" />
+              <select id="unitPath" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 0 0.75rem; border-radius: 0 6px 6px 0; font-size: 0.85rem; font-weight: 600; color: #475569;">
+                <option value="cm">cm</option>
+                <option value="mm">mm</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 1.25rem;" id="fieldEps">
+            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
+              MOLAR ABSORPTIVITY (ε, L·mol⁻¹·cm⁻¹)
+            </label>
+            <input type="number" id="inpEps" step="any" value="74000" style="width: 100%; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem; font-weight: 600; box-sizing: border-box;" />
+          </div>
+
+          <div style="margin-bottom: 1.25rem;" id="fieldConc">
+            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
+              SOLUTE CONCENTRATION (c)
+            </label>
+            <div style="display: flex;">
+              <input type="number" id="inpConc" step="any" value="" placeholder="Calculated..." disabled style="flex: 1; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-right: none; border-radius: 6px 0 0 6px; font-size: 0.95rem; font-weight: 600; background: #f8fafc; color: #64748b;" />
+              <select id="unitConc" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 0 0.75rem; border-radius: 0 6px 6px 0; font-size: 0.85rem; font-weight: 600; color: #475569;">
+                <option value="uM">&micro;M</option>
+                <option value="mM">mM</option>
+                <option value="M">M</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Collapsible Purity & Hydrate Factor -->
+          <details style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 0.75rem; margin-top: 1.25rem;">
+            <summary style="font-size: 0.8rem; font-weight: 700; color: #0f172a; cursor: pointer;">
+              ⚙️ Hydration (·nH₂O) &amp; Chemical Assay Adjustments
+            </summary>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 0.75rem;">
+              <div>
+                <label style="display: block; font-size: 0.75rem; color: #475569;">Anhydrous MW (g/mol)</label>
+                <input type="number" id="inpMwAnh" value="319.85" step="any" style="width: 100%; padding: 0.4rem; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.85rem; box-sizing: border-box;" />
+              </div>
+              <div>
+                <label style="display: block; font-size: 0.75rem; color: #475569;">Hydrate Waters (·nH₂O)</label>
+                <input type="number" id="inpHydrateN" value="3" step="any" style="width: 100%; padding: 0.4rem; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.85rem; box-sizing: border-box;" />
+              </div>
+              <div>
+                <label style="display: block; font-size: 0.75rem; color: #475569;">Purity Fraction (%)</label>
+                <input type="number" id="inpPurity" value="98.5" step="any" style="width: 100%; padding: 0.4rem; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.85rem; box-sizing: border-box;" />
+              </div>
+              <div>
+                <label style="display: block; font-size: 0.75rem; color: #475569;">Target Flask Vol (mL)</label>
+                <input type="number" id="inpPrepVol" value="250" step="any" style="width: 100%; padding: 0.4rem; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.85rem; box-sizing: border-box;" />
+              </div>
+            </div>
+            <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #64748b; border-top: 1px dashed #cbd5e1; padding-top: 0.5rem;">
+              Required Bench Mass: <strong id="outBenchMass" style="color: #7c3aed;">--</strong>
+            </div>
+          </details>
+
+          <div id="singleWarn" style="display: none; background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 0.75rem; border-radius: 6px; font-size: 0.8rem; margin-top: 1rem;"></div>
+        </div>
+
+        <!-- Readout & Actions Panel -->
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+          
+          <!-- Live Result Readout -->
+          <div style="background: #0f172a; border-radius: 12px; padding: 1.75rem; color: #ffffff; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+            <span id="readoutLabel" style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #c084fc;">
+              Calculated Concentration (c)
+            </span>
+            <div id="primaryResult" style="font-size: 2.3rem; font-weight: 800; color: #c084fc; margin: 0.25rem 0 0.75rem 0;">--</div>
+
+            <div style="border-top: 1px solid #334155; padding-top: 1rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.85rem;">
+              <div>
+                <span style="color: #94a3b8; display: block; font-size: 0.75rem; text-transform: uppercase;">Transmittance (%T)</span>
+                <strong id="displayT" style="color: #34d399; font-size: 1.15rem;">--</strong>
+              </div>
+              <div>
+                <span style="color: #94a3b8; display: block; font-size: 0.75rem; text-transform: uppercase;">Photometric Quality</span>
+                <strong id="displayQuality" style="color: #e2e8f0; font-size: 0.95rem;">--</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Optical Transmission Gauge Visualizer -->
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.25rem;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 700; color: #64748b; margin-bottom: 0.5rem; text-transform: uppercase;">
+              <span>Photon Attenuation Balance</span>
+              <span id="percentText">--</span>
+            </div>
+            <div style="height: 12px; width: 100%; background: #e2e8f0; border-radius: 9999px; overflow: hidden; display: flex;">
+              <div id="absorbBar" style="width: 0%; background: #7c3aed; transition: width 0.3s ease;"></div>
+              <div id="transBar" style="width: 100%; background: #10b981; transition: width 0.3s ease;"></div>
+            </div>
+          </div>
+
+          <!-- Benchtop SOP Protocol -->
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
+              <h3 style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #475569; margin: 0;">SOP Execution Protocol</h3>
+              <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+                <button id="copyLatexBtn" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #334155;">Copy LaTeX</button>
+                <button id="copyProtocolBtn" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #334155;">Copy Steps</button>
+                <button id="printLabelBtn" type="button" style="background: #7c3aed; border: none; padding: 0.25rem 0.65rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: white;">🖨️ Print Label</button>
+                <button id="toggleCiteBtn" type="button" style="background: #ede9fe; border: 1px solid #ddd6fe; padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #6d28d9; display: inline-flex; align-items: center; gap: 0.35rem;"><span>📖</span> Cite</button>
+              </div>
+            </div>
+
+            <!-- Standalone Academic Citation Drawer -->
+            <div id="citeDrawer" style="display: none; margin: 0.75rem 0 1rem 0; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 0.85rem; background: #f8fafc;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.4rem;">
+                <div style="display: flex; gap: 0.3rem; flex-wrap: wrap;">
+                  <button type="button" class="inline-cite-tab" data-format="bibtex" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 700; border-radius: 5px; border: 1px solid #0f172a; background: #0f172a; color: #fff; cursor: pointer;">BibTeX</button>
+                  <button type="button" class="inline-cite-tab" data-format="acs" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">ACS</button>
+                  <button type="button" class="inline-cite-tab" data-format="rsc" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">RSC</button>
+                  <button type="button" class="inline-cite-tab" data-format="nature" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Nature</button>
+                  <button type="button" class="inline-cite-tab" data-format="elsevier" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Elsevier</button>
+                  <button type="button" class="inline-cite-tab" data-format="wiley" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Wiley</button>
+                </div>
+                <button id="inlineCopyCiteBtn" type="button" style="padding: 0.25rem 0.65rem; font-size: 0.75rem; font-weight: 700; border-radius: 5px; background: #7c3aed; color: #fff; border: none; cursor: pointer;">📋 Copy</button>
+              </div>
+              <pre id="inlineCiteOutput" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.75rem; font-size: 0.75rem; font-family: ui-monospace, monospace; color: #0f172a; white-space: pre-wrap; word-break: break-all; margin: 0; line-height: 1.45;"></pre>
+              <div style="margin-top: 0.5rem; text-align: right;">
+                <a href="https://doi.org/10.5281/zenodo.23059466" target="_blank" rel="noopener noreferrer" style="font-size: 0.72rem; color: #7c3aed; text-decoration: none; font-weight: 600;">Indexed via CERN Zenodo (DOI: 10.5281/zenodo.23059466) &rarr;</a>
+              </div>
+            </div>
+
+            <ol id="protocolSteps" style="margin: 0; padding-left: 1.25rem; font-size: 0.85rem; line-height: 1.6; color: #334155;"></ol>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- MODE 2: MULTI-POINT CALIBRATION CURVE & UNKNOWNS             -->
+    <!-- ============================================================ -->
+    <div id="calibModeSection" style="display: none; margin-bottom: 3rem;">
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.75rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+        <h2 style="font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; margin-top: 0; margin-bottom: 1.25rem;">
+          Standard Series &amp; Unknown Interpolation
+        </h2>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+          <div>
+            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
+              STANDARD CONCENTRATION (µM) VS ABSORBANCE
+            </label>
+            <textarea id="calibDataRaw" rows="6" style="width: 100%; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 0.85rem; box-sizing: border-box; line-height: 1.4;">2.0    0.145
+4.0    0.288
+6.0    0.435
+8.0    0.578
+10.0   0.725</textarea>
+            <span style="font-size: 0.72rem; color: #64748b;">Format: [Conc µM] [Space/Tab] [Absorbance]</span>
+          </div>
+
+          <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 1.25rem; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #0f172a; margin-bottom: 0.35rem;">
+                UNKNOWN SAMPLE ABSORBANCE (A_unk):
+              </label>
+              <input type="number" id="inpUnkAbs" step="any" value="0.512" style="width: 100%; padding: 0.65rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 1rem; font-weight: 700; box-sizing: border-box;" />
+            </div>
+
+            <div style="margin-top: 1rem; padding: 0.75rem; background: #ede9fe; border-radius: 6px;">
+              <span style="font-size: 0.75rem; color: #5b21b6; font-weight: 700; text-transform: uppercase; display: block;">Interpolated Concentration:</span>
+              <strong id="outUnkConc" style="font-size: 1.5rem; color: #4c1d95;">--</strong>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 1.25rem; flex-wrap: wrap; gap: 0.5rem;">
+          <span style="font-size: 0.85rem; color: #64748b;">
+            Regression: <strong id="calibEquation" style="color: #7c3aed;">A = m·c + c₀</strong> | Fit Quality: <strong id="calibR2Text" style="color: #059669;">R² = --</strong>
+          </span>
+          <button id="downloadCalibCsvBtn" style="background: #7c3aed; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer;">
+            📥 Export Calibration CSV
+          </button>
+        </div>
+      </div>
+
+      <!-- Live Dynamic SVG Calibration Plot -->
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem;">
+        <h3 style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #475569; margin: 0 0 0.5rem 0;">
+          Dynamic Calibration Linearity &amp; Unknown Point
+        </h3>
+        <p style="font-size: 0.8rem; color: #64748b; margin-top: 0; margin-bottom: 1rem;">Absorbance vs. Concentration standard points with least-squares linear trendline.</p>
+        <div style="width: 100%; height: 260px;">
+          <svg id="calibSvg" viewBox="0 0 600 240" style="width: 100%; height: 100%; overflow: visible; font-family: monospace; font-size: 11px;"></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- MODE 3: REACTION DEGRADATION KINETICS                        -->
+    <!-- ============================================================ -->
+    <div id="kineticsModeSection" style="display: none; margin-bottom: 3rem;">
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.75rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+        <h2 style="font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; margin-top: 0; margin-bottom: 1.25rem;">
+          Photocatalytic &amp; Reaction Kinetics Regression
+        </h2>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+          <div>
+            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
+              TIME (MIN) VS CONCENTRATION / ABSORBANCE
+            </label>
+            <textarea id="kineticsDataRaw" rows="7" style="width: 100%; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 0.85rem; box-sizing: border-box; line-height: 1.4;">0    1.000
+10   0.780
+20   0.605
+30   0.470
+45   0.325
+60   0.220
+90   0.105</textarea>
+            <span style="font-size: 0.72rem; color: #64748b;">Format: [Time (min)] [Space/Tab] [C or A]</span>
+          </div>
+
+          <!-- Kinetic Output Metrics Card -->
+          <div style="background: #faf5ff; border: 1px solid #e9d5ff; border-radius: 8px; padding: 1.25rem; display: flex; flex-direction: column; justify-content: space-between;">
+            <table style="width: 100%; font-size: 0.85rem; border-collapse: collapse;">
+              <tbody>
+                <tr style="border-bottom: 1px solid #f3e8ff;">
+                  <td style="padding: 0.4rem 0; color: #6b21a8; font-weight: 600;">Degradation Efficiency:</td>
+                  <td id="resDegPct" style="padding: 0.4rem 0; text-align: right; font-weight: 800; color: #047857;">--</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #f3e8ff;">
+                  <td style="padding: 0.4rem 0; color: #6b21a8; font-weight: 600;">Pseudo-1st Order (k₁):</td>
+                  <td id="resK1" style="padding: 0.4rem 0; text-align: right; font-weight: 800; color: #4c1d95;">--</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #f3e8ff;">
+                  <td style="padding: 0.4rem 0; color: #6b21a8; font-weight: 600;">Correlation (R² 1st):</td>
+                  <td id="resR2K1" style="padding: 0.4rem 0; text-align: right; font-weight: 800; color: #0f172a;">--</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #f3e8ff;">
+                  <td style="padding: 0.4rem 0; color: #6b21a8; font-weight: 600;">Degradation Half-Life:</td>
+                  <td id="resTHalf" style="padding: 0.4rem 0; text-align: right; font-weight: 800; color: #4c1d95;">--</td>
+                </tr>
+                <tr>
+                  <td style="padding: 0.4rem 0; color: #6b21a8; font-weight: 600;">Pseudo-2nd Order (k₂):</td>
+                  <td id="resK2" style="padding: 0.4rem 0; text-align: right; font-weight: 800; color: #4c1d95;">--</td>
+                </tr>
+              </tbody>
+            </table>
+            <button id="downloadKineticsCsvBtn" style="margin-top: 0.75rem; background: #7c3aed; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer;">
+              📥 Export Kinetics CSV
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Dynamic Semi-Log Kinetics Plot -->
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem;">
+        <h3 style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #475569; margin: 0 0 0.5rem 0;">
+          Dynamic Linearized Pseudo-First-Order Fit
+        </h3>
+        <p style="font-size: 0.8rem; color: #64748b; margin-top: 0; margin-bottom: 1rem;">ln(C₀ / Ct) vs. Irradiation Time (min) extracting rate constant k₁ from slope.</p>
+        <div style="width: 100%; height: 260px;">
+          <svg id="kineticsSvg" viewBox="0 0 600 240" style="width: 100%; height: 100%; overflow: visible; font-family: monospace; font-size: 11px;"></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- EDITORIAL & SCIENTIFIC DERIVATION ARTICLE -->
+    <article style="border-top: 1px solid #e2e8f0; padding-top: 3.5rem; line-height: 1.85; color: #334155;">
+      
+      <h2 style="font-size: 1.85rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem; letter-spacing: -0.02em;">
+        Theoretical Foundations of the Beer-Lambert-Bouguer Law
+      </h2>
+      <p>
+        The physical attenuation of monochromatic radiation traversing an isotropic, absorbing medium is described mathematically by the differential Beer-Lambert relation. When an incident light beam of radiant flux <i>P₀</i> passes through an incremental transverse pathlength <i>db</i> containing absorbing chemical species at molar concentration <i>c</i>:
+      </p>
+      
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.25rem 2rem; margin: 1.5rem 0; text-align: center; box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);">
+        <div style="font-size: 1.45rem; font-weight: 800; color: #0f172a; letter-spacing: 0.05em; font-family: 'Times New Roman', Times, serif;">
+          - <i>dP / P</i> = <i>k · c · db</i> &nbsp;&rArr;&nbsp; <b>A = log₁₀(P₀ / P) = ε · b · c</b>
+        </div>
+      </div>
+
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
+        Photometric Deviations &amp; Instrument Stray Light Limitations
+      </h3>
+      <p>
+        Real-world spectrophotometers exhibit critical boundaries. When optical absorbance exceeds 1.200 to 1.500 a.u., less than 3% of incident radiation reaches the detector. At this threshold, internal stray radiation leaking through the optical bench creates an artificial ceiling, leading to negative deviations from linearity. Samples with <i>A</i> &gt; 1.200 must be diluted quantitatively using standard Class-A volumetric equipment[cite: 1].
+      </p>
+
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
+        Photocatalysis &amp; Chemical Kinetics Modeling
+      </h3>
+      <p>
+        In advanced oxidation processes (AOPs), solution plasma treatment, and environmental pollutant breakdown, reaction kinetics are evaluated by monitoring the decay of chromophore absorbance over time. The pseudo-first-order rate constant is extracted via linear regression:
+      </p>
+
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.25rem 2rem; margin: 1.5rem 0; text-align: center; box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);">
+        <div style="font-size: 1.35rem; font-weight: 700; color: #0f172a; font-family: 'Times New Roman', Times, serif;">
+          ln(C₀ / C<sub><i>t</i></sub>) = <i>k</i>₁ · <i>t</i> &nbsp;&nbsp;|&nbsp;&nbsp; <i>t</i><sub>1/2</sub> = ln(2) / <i>k</i>₁
+        </div>
+      </div>
+
+      <!-- FAQ ACCORDION SECTION -->
+      <h3 style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-top: 3rem; margin-bottom: 1.25rem;">
+        Frequently Asked Questions: Spectrophotometry &amp; Chemical Kinetics
+      </h3>
+
+      <div style="display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 2rem;">
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Why does Beer-Lambert fail at high solute concentrations?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Above 0.01 M, inter-chromophore distances shrink below 10 nm. Neighboring electrostatic fields perturb electron distributions, altering molar absorptivity (ε). Furthermore, high optical densities let monochromator stray light dominate the detector signal.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How is unknown concentration calculated from a standard curve?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Using ordinary least-squares regression (<i>A = m·c + c₀</i>), the unknown concentration is calculated via: <i>c_unk = (A_unk - c₀) / m</i>, where <i>m</i> is the slope and <i>c₀</i> is the y-intercept.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What is an optical solvent cutoff?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            The solvent transmission cutoff is the wavelength below which the pure solvent absorbs heavily (<i>A</i> &gt; 1.0 in a 1 cm cuvette), obscuring the solute spectrum. Common cutoffs include DI Water (190 nm), Methanol (205 nm), and Acetone (330 nm).
+          </p>
+        </details>
+      </div>
+
+    </article>
+  </main>
+
+  <!-- PRINT-ONLY BENCHTOP LABEL MODAL -->
+  <div id="printLabelModal" style="display: none;">
+    <div id="labelBox" style="width: 3.75in; height: 2.0in; border: 2px solid #000; padding: 0.2in; box-sizing: border-box; font-family: sans-serif; background: #fff; color: #000; position: relative;">
+      <div style="border-bottom: 2px solid #000; padding-bottom: 4px; display: flex; justify-content: space-between; align-items: baseline;">
+        <span style="font-size: 12pt; font-weight: 900; letter-spacing: -0.02em;">ChemistryDesk OPTICAL STANDARD</span>
+        <span id="labelDate" style="font-size: 8pt; font-weight: bold;"></span>
+      </div>
+      <div style="margin-top: 8px;">
+        <div style="font-size: 8pt; text-transform: uppercase; font-weight: bold; color: #555;">Solution / Chromophore</div>
+        <div id="labelSolutionName" style="font-size: 13pt; font-weight: 900; line-height: 1.1;">SPECTROSCOPIC STANDARD</div>
+      </div>
+      <div style="margin-top: 6px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 9pt;">
+        <div>Conc: <strong id="labelConc">--</strong></div>
+        <div>Absorbance: <strong id="labelAbs">--</strong></div>
+      </div>
+      <div style="margin-top: 6px; font-size: 8pt; border-top: 1px dashed #666; padding-top: 4px;">
+        Solvent: <span id="labelSolvent">Water</span> | Path: <span id="labelPath">1.0 cm</span>
+      </div>
+      <div style="margin-top: 6px; display: flex; justify-content: space-between; font-size: 7.5pt;">
+        <span>Prep By: ________________</span>
+        <span>Storage: [ ]RT [ ]Dark/Amber [ ]4 C</span>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .spectro-preset-btn {
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      padding: 0.35rem 0.65rem;
+      border-radius: 6px;
+      cursor: pointer;
+      color: #1e293b;
+      font-size: 0.75rem;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+    .spectro-preset-btn:hover {
+      background: #7c3aed;
+      color: #ffffff;
+      border-color: #7c3aed;
+      transform: translateY(-1px);
+    }
+    @media print {
+      body * {
+        visibility: hidden !important;
+      }
+      #printLabelModal, #printLabelModal * {
+        visibility: visible !important;
+      }
+      #printLabelModal {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        display: block !important;
+      }
+      #labelBox {
+        position: absolute;
+        left: 0.25in;
+        top: 0.25in;
+      }
+    }
+  </style>
+
+  <script>
+    // MODE SWITCHING
+    const singleSection = document.getElementById('singleModeSection')!;
+    const calibSection = document.getElementById('calibModeSection')!;
+    const kineticsSection = document.getElementById('kineticsModeSection')!;
+    const modeSingleBtn = document.getElementById('modeSingleBtn')!;
+    const modeCalibBtn = document.getElementById('modeCalibBtn')!;
+    const modeKineticsBtn = document.getElementById('modeKineticsBtn')!;
+
+    function setTabStyles(activeBtn: HTMLElement) {
+      [modeSingleBtn, modeCalibBtn, modeKineticsBtn].forEach(btn => {
+        btn.style.background = 'transparent';
+        btn.style.color = '#475569';
+        btn.style.boxShadow = 'none';
+      });
+      activeBtn.style.background = '#7c3aed';
+      activeBtn.style.color = '#ffffff';
+      activeBtn.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+    }
+
+    modeSingleBtn.addEventListener('click', () => {
+      singleSection.style.display = 'block';
+      calibSection.style.display = 'none';
+      kineticsSection.style.display = 'none';
+      setTabStyles(modeSingleBtn);
+    });
+
+    modeCalibBtn.addEventListener('click', () => {
+      singleSection.style.display = 'none';
+      calibSection.style.display = 'block';
+      kineticsSection.style.display = 'none';
+      setTabStyles(modeCalibBtn);
+      runCalibrationEngine();
+    });
+
+    modeKineticsBtn.addEventListener('click', () => {
+      singleSection.style.display = 'none';
+      calibSection.style.display = 'none';
+      kineticsSection.style.display = 'block';
+      setTabStyles(modeKineticsBtn);
+      runKineticsEngine();
+    });
+
+    // PHOTOMETRIC DIAGNOSTICS & SOLVENT CHECKS
+    function checkPhotometricSanity(A: number) {
+      const alertEl = document.getElementById('linearityAlert')!;
+      if (A > 1.20) {
+        alertEl.style.display = 'block';
+        alertEl.innerHTML = '<strong>Photometric Dynamic Range Alert:</strong> Optical Absorbance (' + A.toFixed(3) + ') exceeds 1.200 a.u. (Transmittance < 6.3%). Stray radiation leakage causes negative non-linear deviation. Dilute sample quantitatively before recording spectra.';
+      } else if (A > 0 && A < 0.05) {
+        alertEl.style.display = 'block';
+        alertEl.innerHTML = '<strong>High Detector Noise Advisory:</strong> Optical Absorbance (' + A.toFixed(3) + ') is under 0.050 a.u. Dark-current detector noise creates high relative uncertainty. Increase cuvette pathlength or solute concentration.';
+      } else {
+        alertEl.style.display = 'none';
+      }
+    }
+
+    function updateSolventAdvisory(wavelength: number) {
+      const select = document.getElementById('solventSelect') as HTMLSelectElement;
+      const cutoff = parseFloat(select.options[select.selectedIndex].dataset.cutoff || '190');
+      const box = document.getElementById('solventCutoffBox')!;
+
+      if (wavelength > 0 && wavelength <= cutoff + 10) {
+        box.style.display = 'block';
+        box.innerHTML = `<strong>Solvent UV Cutoff Collision:</strong> Selected analytical wavelength (${wavelength} nm) overlaps the optical transmission cutoff of ${select.options[select.selectedIndex].text}. Solvent absorbs strongly in this band. Choose a transparent solvent (e.g., Acetonitrile or DI Water).`;
+      } else {
+        box.style.display = 'none';
+      }
+    }
+
+    // TWO-WAY SOLVER LOGIC
+    const targetVarSelect = document.getElementById('targetVariable') as HTMLSelectElement;
+    const inpAbs = document.getElementById('inpAbs') as HTMLInputElement;
+    const inpPath = document.getElementById('inpPath') as HTMLInputElement;
+    const inpEps = document.getElementById('inpEps') as HTMLInputElement;
+    const inpConc = document.getElementById('inpConc') as HTMLInputElement;
+    const unitConc = document.getElementById('unitConc') as HTMLSelectElement;
+    const unitPath = document.getElementById('unitPath') as HTMLSelectElement;
+
+    function adjustInputStates() {
+      const target = targetVarSelect.value;
+      [inpAbs, inpEps, inpConc].forEach(i => {
+        i.disabled = false;
+        i.style.background = '#ffffff';
+        i.style.color = '#0f172a';
+      });
+
+      if (target === 'c') {
+        inpConc.disabled = true;
+        inpConc.style.background = '#f8fafc';
+        inpConc.style.color = '#64748b';
+        document.getElementById('readoutLabel')!.textContent = 'Calculated Concentration (c)';
+      } else if (target === 'A') {
+        inpAbs.disabled = true;
+        inpAbs.style.background = '#f8fafc';
+        inpAbs.style.color = '#64748b';
+        document.getElementById('readoutLabel')!.textContent = 'Calculated Absorbance (A)';
+      } else if (target === 'eps') {
+        inpEps.disabled = true;
+        inpEps.style.background = '#f8fafc';
+        inpEps.style.color = '#64748b';
+        document.getElementById('readoutLabel')!.textContent = 'Calculated Molar Absorptivity (ε)';
+      }
+      runSingleEngine();
+    }
+
+    targetVarSelect.addEventListener('change', adjustInputStates);
+
+    function toStandardConc(val: number, unit: string): number {
+      switch (unit) {
+        case 'mM': return val / 1000;
+        case 'uM': return val / 1000000;
+        default: return val;
+      }
+    }
+
+    function fromStandardConc(val: number, unit: string): number {
+      switch (unit) {
+        case 'mM': return val * 1000;
+        case 'uM': return val * 1000000;
+        default: return val;
+      }
+    }
+
+    function runSingleEngine() {
+      const target = targetVarSelect.value;
+      const uConc = unitConc.value;
+      const uPath = unitPath.value;
+
+      let A_raw = parseFloat(inpAbs.value) || 0;
+      let path_raw = parseFloat(inpPath.value) || 0;
+      let eps_raw = parseFloat(inpEps.value) || 0;
+      let conc_raw = parseFloat(inpConc.value) || 0;
+
+      const b_cm = (uPath === 'mm') ? (path_raw / 10) : path_raw;
+      let c_molar = toStandardConc(conc_raw, uConc);
+
+      const warnEl = document.getElementById('singleWarn')!;
+      const displayPrimary = document.getElementById('primaryResult')!;
+      const displayT = document.getElementById('displayT')!;
+      const displayQuality = document.getElementById('displayQuality')!;
+      const absorbBar = document.getElementById('absorbBar')!;
+      const transBar = document.getElementById('transBar')!;
+      const percentText = document.getElementById('percentText')!;
+      const protocolEl = document.getElementById('protocolSteps')!;
+
+      warnEl.style.display = 'none';
+
+      if (b_cm <= 0) {
+        warnEl.style.display = 'block';
+        warnEl.textContent = 'Optical pathlength must be greater than zero.';
+        return;
+      }
+
+      if (target === 'c') {
+        if (eps_raw > 0) {
+          c_molar = A_raw / (eps_raw * b_cm);
+          conc_raw = fromStandardConc(c_molar, uConc);
+          inpConc.value = conc_raw.toExponential(3);
+          displayPrimary.textContent = (c_molar < 0.001 ? (c_molar * 1e6).toFixed(2) + ' µM' : c_molar.toExponential(3) + ' M');
+        }
+      } else if (target === 'A') {
+        if (eps_raw > 0 && c_molar > 0) {
+          A_raw = eps_raw * b_cm * c_molar;
+          inpAbs.value = A_raw.toFixed(4);
+          displayPrimary.textContent = A_raw.toFixed(4) + ' a.u.';
+        }
+      } else if (target === 'eps') {
+        if (c_molar > 0) {
+          eps_raw = A_raw / (b_cm * c_molar);
+          inpEps.value = Math.round(eps_raw).toString();
+          displayPrimary.textContent = Math.round(eps_raw).toLocaleString() + ' L/(mol·cm)';
+        }
+      }
+
+      if (A_raw >= 0) {
+        checkPhotometricSanity(A_raw);
+        const T = Math.pow(10, -A_raw) * 100;
+        displayT.textContent = T.toFixed(2) + ' %';
+
+        if (A_raw >= 0.1 && A_raw <= 1.0) {
+          displayQuality.textContent = 'Optimal Linearity';
+          displayQuality.style.color = '#34d399';
+        } else if (A_raw > 1.2) {
+          displayQuality.textContent = 'Stray Light Non-Linear';
+          displayQuality.style.color = '#ef4444';
+        } else {
+          displayQuality.textContent = 'Low Signal-to-Noise';
+          displayQuality.style.color = '#f59e0b';
+        }
+
+        const absPct = Math.min(Math.max((1 - (T / 100)) * 100, 1), 99);
+        absorbBar.style.width = absPct + '%';
+        transBar.style.width = (100 - absPct) + '%';
+        percentText.textContent = absPct.toFixed(1) + '% Absorbed / ' + (100 - absPct).toFixed(1) + '% Transmitted';
+
+        // Bench Mass Calculation
+        const mwAnh = parseFloat((document.getElementById('inpMwAnh') as HTMLInputElement).value) || 0;
+        const hydN = parseFloat((document.getElementById('inpHydrateN') as HTMLInputElement).value) || 0;
+        const purity = parseFloat((document.getElementById('inpPurity') as HTMLInputElement).value) || 100;
+        const prepVolMl = parseFloat((document.getElementById('inpPrepVol') as HTMLInputElement).value) || 0;
+
+        const hydMw = mwAnh + (hydN * 18.015);
+        if (c_molar > 0 && prepVolMl > 0 && hydMw > 0) {
+          const liters = prepVolMl / 1000;
+          const actualGrams = (c_molar * liters * hydMw) / (purity / 100);
+          document.getElementById('outBenchMass')!.textContent = (actualGrams < 0.01 ? (actualGrams * 1000).toFixed(2) + ' mg' : actualGrams.toFixed(4) + ' g');
+        }
+
+        protocolEl.innerHTML = `
+          <li>Zero spectrophotometer at target wavelength using matching <strong>${b_cm} cm</strong> optical solvent blank.</li>
+          <li>Rinse optical cuvette twice with prepared sample before analytical filling.</li>
+          <li>Wipe optical facets with lint-free lens tissue; orient clear windows parallel to the light path.</li>
+          <li>Recorded Optical Absorbance: <strong>${A_raw.toFixed(3)} a.u.</strong> (Transmittance: <strong>${T.toFixed(2)}%</strong>).</li>
+          <li>Calculated Solute Molarity: <strong>${c_molar.toExponential(3)} M</strong> (${(c_molar * 1e6).toFixed(2)} µM).</li>
+        `;
+      }
+    }
+
+    // PRESET BUTTONS LISTENER
+    document.querySelectorAll('.spectro-preset-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const t = e.currentTarget as HTMLElement;
+        inpAbs.value = t.dataset.abs!;
+        inpPath.value = t.dataset.path!;
+        inpEps.value = t.dataset.eps!;
+        (document.getElementById('inpMwAnh') as HTMLInputElement).value = t.dataset.mw!;
+        (document.getElementById('inpHydrateN') as HTMLInputElement).value = t.dataset.hyd!;
+        (document.getElementById('inpPurity') as HTMLInputElement).value = t.dataset.purity!;
+        (document.getElementById('solventSelect') as HTMLSelectElement).value = t.dataset.solvent!;
+        (document.getElementById('labelSolutionName') as HTMLElement).textContent = t.dataset.chem!.toUpperCase();
+        targetVarSelect.value = 'c';
+        adjustInputStates();
+        updateSolventAdvisory(parseFloat(t.dataset.wl || '0'));
+      });
+    });
+
+    // PRINT LABEL HANDLER
+    document.getElementById('printLabelBtn')?.addEventListener('click', () => {
+      const concStr = document.getElementById('primaryResult')!.textContent || '--';
+      const absStr = inpAbs.value + ' a.u.';
+      const pathStr = inpPath.value + ' ' + unitPath.value;
+      const solvent = (document.getElementById('solventSelect') as HTMLSelectElement).options[(document.getElementById('solventSelect') as HTMLSelectElement).selectedIndex].text.split(' ')[0];
+
+      document.getElementById('labelDate')!.textContent = new Date().toLocaleDateString();
+      document.getElementById('labelConc')!.textContent = concStr;
+      document.getElementById('labelAbs')!.textContent = absStr;
+      document.getElementById('labelPath')!.textContent = pathStr;
+      document.getElementById('labelSolvent')!.textContent = solvent;
+
+      window.print();
+    });
+
+    // ============================================================
+    // MODE 2: CALIBRATION CURVE & UNKNOWNS ENGINE
+    // ============================================================
+    let lastCalibPoints: Array<{ c: number; a: number }> = [];
+
+    function runCalibrationEngine() {
+      const raw = (document.getElementById('calibDataRaw') as HTMLTextAreaElement).value.trim();
+      const lines = raw.split('\n');
+      lastCalibPoints = [];
+
+      for (const line of lines) {
+        const parts = line.trim().split(/\s+/);
+        if (parts.length >= 2) {
+          const c = parseFloat(parts[0].replace(',', '.'));
+          const a = parseFloat(parts[1].replace(',', '.'));
+          if (!isNaN(c) && !isNaN(a)) lastCalibPoints.push({ c, a });
+        }
+      }
+
+      if (lastCalibPoints.length < 2) return;
+
+      let sumC = 0, sumA = 0, sumCA = 0, sumCC = 0;
+      const n = lastCalibPoints.length;
+      for (const p of lastCalibPoints) {
+        sumC += p.c; sumA += p.a;
+        sumCA += p.c * p.a; sumCC += p.c * p.c;
+      }
+
+      const slope = (n * sumCA - sumC * sumA) / (n * sumCC - sumC * sumC);
+      const intercept = (sumA - slope * sumC) / n;
+
+      const meanA = sumA / n;
+      let ssTot = 0, ssRes = 0;
+      for (const p of lastCalibPoints) {
+        const fitA = slope * p.c + intercept;
+        ssTot += Math.pow(p.a - meanA, 2);
+        ssRes += Math.pow(p.a - fitA, 2);
+      }
+      const r2 = ssTot > 0 ? Math.max(0, 1 - (ssRes / ssTot)) : 1;
+
+      document.getElementById('calibEquation')!.textContent = `A = ${slope.toFixed(4)}·c + (${intercept.toFixed(4)})`;
+      document.getElementById('calibR2Text')!.textContent = `R² = ${r2.toFixed(4)}`;
+
+      // Unknown interpolation
+      const unkAbs = parseFloat((document.getElementById('inpUnkAbs') as HTMLInputElement).value) || 0;
+      const unkConc = slope !== 0 ? (unkAbs - intercept) / slope : 0;
+      document.getElementById('outUnkConc')!.textContent = unkConc.toFixed(2) + ' µM';
+
+      renderCalibSvg(lastCalibPoints, slope, intercept, { c: unkConc, a: unkAbs });
+    }
+
+    function renderCalibSvg(pts: Array<{ c: number; a: number }>, slope: number, intercept: number, unk: { c: number; a: number }) {
+      const svg = document.getElementById('calibSvg')!;
+      const maxC = Math.max(...pts.map(p => p.c), unk.c) * 1.15 || 10;
+      const maxA = Math.max(...pts.map(p => p.a), unk.a) * 1.2 || 1;
+
+      const padL = 50, padR = 25, padT = 20, padB = 35;
+      const width = 600 - padL - padR;
+      const height = 240 - padT - padB;
+
+      const scX = (c: number) => padL + (c / maxC) * width;
+      const scY = (a: number) => padT + height - (a / maxA) * height;
+
+      let svgHtml = `
+        <line x1="${padL}" y1="${padT + height}" x2="${padL + width}" y2="${padT + height}" stroke="#94a3b8" stroke-width="1.5" />
+        <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT + height}" stroke="#94a3b8" stroke-width="1.5" />
+        <text x="15" y="${padT + height / 2}" transform="rotate(-90 15,${padT + height / 2})" fill="#64748b" font-weight="bold">Absorbance (a.u.)</text>
+        <text x="${padL + width / 2}" y="${padT + height + 25}" fill="#64748b" font-weight="bold">Standard Concentration (µM)</text>
+      `;
+
+      // Regression line
+      const endC = maxC * 0.95;
+      const endA = slope * endC + intercept;
+      svgHtml += `<line x1="${scX(0)}" y1="${scY(intercept)}" x2="${scX(endC)}" y2="${scY(endA)}" stroke="#7c3aed" stroke-width="2.5" />`;
+
+      // Standard points
+      pts.forEach(p => {
+        svgHtml += `<circle cx="${scX(p.c)}" cy="${scY(p.a)}" r="4.5" fill="#7c3aed" stroke="#ffffff" stroke-width="1.5" />`;
+      });
+
+      // Unknown sample point
+      if (unk.c > 0 && unk.a > 0) {
+        svgHtml += `
+          <circle cx="${scX(unk.c)}" cy="${scY(unk.a)}" r="6" fill="#ef4444" stroke="#ffffff" stroke-width="1.5" />
+          <line x1="${scX(unk.c)}" y1="${padT + height}" x2="${scX(unk.c)}" y2="${scY(unk.a)}" stroke="#ef4444" stroke-dasharray="3,3" />
+          <line x1="${padL}" y1="${scY(unk.a)}" x2="${scX(unk.c)}" y2="${scY(unk.a)}" stroke="#ef4444" stroke-dasharray="3,3" />
+        `;
+      }
+
+      svg.innerHTML = svgHtml;
+    }
+
+    // ============================================================
+    // MODE 3: REACTION KINETICS ENGINE
+    // ============================================================
+    let lastKineticsData: Array<{ t: number; v: number }> = [];
+
+    function runKineticsEngine() {
+      const raw = (document.getElementById('kineticsDataRaw') as HTMLTextAreaElement).value.trim();
+      const lines = raw.split('\n');
+      lastKineticsData = [];
+
+      for (const line of lines) {
+        const parts = line.trim().split(/\s+/);
+        if (parts.length >= 2) {
+          const t = parseFloat(parts[0].replace(',', '.'));
+          const v = parseFloat(parts[1].replace(',', '.'));
+          if (!isNaN(t) && !isNaN(v) && v > 0) lastKineticsData.push({ t, v });
+        }
+      }
+
+      if (lastKineticsData.length < 2) return;
+
+      const c0 = lastKineticsData[0].v;
+      const cFinal = lastKineticsData[lastKineticsData.length - 1].v;
+      const degPct = Math.max(0, ((c0 - cFinal) / c0) * 100);
+      document.getElementById('resDegPct')!.textContent = degPct.toFixed(2) + ' %';
+
+      // Pseudo-1st Order: ln(C0/Ct) = k1 * t
+      let sumT = 0, sumY = 0, sumTY = 0, sumTT = 0;
+      const n = lastKineticsData.length;
+      const fitPts: Array<{ x: number; y: number }> = [];
+
+      for (const p of lastKineticsData) {
+        const y = Math.log(c0 / p.v);
+        sumT += p.t; sumY += y;
+        sumTY += p.t * y; sumTT += p.t * p.t;
+        fitPts.push({ x: p.t, y });
+      }
+
+      const k1 = Math.max(0, (n * sumTY - sumT * sumY) / (n * sumTT - sumT * sumT));
+      const tHalf = k1 > 0 ? (Math.LN2 / k1) : 0;
+
+      const meanY = sumY / n;
+      let ssTot = 0, ssRes = 0;
+      for (const p of fitPts) {
+        const fitY = k1 * p.x;
+        ssTot += Math.pow(p.y - meanY, 2);
+        ssRes += Math.pow(p.y - fitY, 2);
+      }
+      const r2 = ssTot > 0 ? Math.max(0, 1 - (ssRes / ssTot)) : 1;
+
+      document.getElementById('resK1')!.textContent = k1.toFixed(4) + ' min⁻¹';
+      document.getElementById('resR2K1')!.textContent = r2.toFixed(4);
+      document.getElementById('resTHalf')!.textContent = tHalf.toFixed(2) + ' min';
+
+      // Pseudo-2nd Order: (1/Ct - 1/C0) = k2 * t
+      let sumY2 = 0, sumTY2 = 0;
+      for (const p of lastKineticsData) {
+        const y2 = (1 / p.v) - (1 / c0);
+        sumY2 += y2; sumTY2 += p.t * y2;
+      }
+      const k2 = Math.max(0, (n * sumTY2 - sumT * sumY2) / (n * sumTT - sumT * sumT));
+      document.getElementById('resK2')!.textContent = k2.toFixed(4) + ' conc⁻¹·min⁻¹';
+
+      renderKineticsSvg(fitPts, k1);
+    }
+
+    function renderKineticsSvg(pts: Array<{ x: number; y: number }>, k1: number) {
+      const svg = document.getElementById('kineticsSvg')!;
+      const maxX = Math.max(...pts.map(p => p.x)) * 1.1 || 10;
+      const maxY = Math.max(...pts.map(p => p.y)) * 1.2 || 1;
+
+      const padL = 50, padR = 25, padT = 20, padB = 35;
+      const width = 600 - padL - padR;
+      const height = 240 - padT - padB;
+
+      const scX = (x: number) => padL + (x / maxX) * width;
+      const scY = (y: number) => padT + height - (y / maxY) * height;
+
+      let svgHtml = `
+        <line x1="${padL}" y1="${padT + height}" x2="${padL + width}" y2="${padT + height}" stroke="#94a3b8" stroke-width="1.5" />
+        <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT + height}" stroke="#94a3b8" stroke-width="1.5" />
+        <text x="15" y="${padT + height / 2}" transform="rotate(-90 15,${padT + height / 2})" fill="#64748b" font-weight="bold">ln(C₀ / Cₜ)</text>
+        <text x="${padL + width / 2}" y="${padT + height + 25}" fill="#64748b" font-weight="bold">Time (min)</text>
+      `;
+
+      const endX = maxX * 0.95;
+      const endY = k1 * endX;
+      svgHtml += `<line x1="${scX(0)}" y1="${scY(0)}" x2="${scX(endX)}" y2="${scY(endY)}" stroke="#7c3aed" stroke-width="2.5" stroke-dasharray="4,4" />`;
+
+      pts.forEach(p => {
+        svgHtml += `<circle cx="${scX(p.x)}" cy="${scY(p.y)}" r="4.5" fill="#7c3aed" stroke="#ffffff" stroke-width="1.5" />`;
+      });
+
+      svg.innerHTML = svgHtml;
+    }
+
+    // CSV EXPORTS
+    document.getElementById('downloadCalibCsvBtn')?.addEventListener('click', () => {
+      if (lastCalibPoints.length === 0) return;
+      let csv = 'Standard_Concentration_uM,Absorbance_au\n';
+      lastCalibPoints.forEach(p => { csv += `${p.c},${p.a}\n`; });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const a = document.createElement('a');
+      a.href = window.URL.createObjectURL(blob);
+      a.download = 'spectrophotometry_calibration_curve.csv';
+      a.click();
+    });
+
+    document.getElementById('downloadKineticsCsvBtn')?.addEventListener('click', () => {
+      if (lastKineticsData.length === 0) return;
+      let csv = 'Time_min,Concentration_or_Absorbance\n';
+      lastKineticsData.forEach(p => { csv += `${p.t},${p.v}\n`; });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const a = document.createElement('a');
+      a.href = window.URL.createObjectURL(blob);
+      a.download = 'reaction_kinetics_decay.csv';
+      a.click();
+    });
+
+    // EVENT BINDINGS
+    [inpAbs, inpPath, inpEps, inpConc].forEach(inp => {
+      inp.addEventListener('input', runSingleEngine);
+    });
+
+    ['unitConc', 'unitPath', 'inpMwAnh', 'inpHydrateN', 'inpPurity', 'inpPrepVol'].forEach(id => {
+      document.getElementById(id)?.addEventListener('input', runSingleEngine);
+      document.getElementById(id)?.addEventListener('change', runSingleEngine);
+    });
+
+    document.getElementById('calibDataRaw')?.addEventListener('input', runCalibrationEngine);
+    document.getElementById('inpUnkAbs')?.addEventListener('input', runCalibrationEngine);
+    document.getElementById('kineticsDataRaw')?.addEventListener('input', runKineticsEngine);
+
+    document.getElementById('copyProtocolBtn')?.addEventListener('click', () => {
+      const text = document.getElementById('protocolSteps')?.innerText || '';
+      navigator.clipboard.writeText(text);
+      alert('Spectrophotometry protocol copied to clipboard.');
+    });
+
+    document.getElementById('shareBtn')?.addEventListener('click', () => {
+      navigator.clipboard.writeText(window.location.href);
+      alert('Experiment URL copied to clipboard.');
+    });
+
+    document.getElementById('copyLatexBtn')?.addEventListener('click', () => {
+      const latex = `A = \\varepsilon \\cdot b \\cdot c \\implies ${inpAbs.value} = ${inpEps.value} \\times ${inpPath.value}\\,\\text{cm} \\times (${inpConc.value}\\,\\text{M})`;
+      navigator.clipboard.writeText(latex);
+      alert('LaTeX equation copied to clipboard.');
+    });
+
+    // --- ACADEMIC CITATION SYSTEM ---
+    const citeDrawer = document.getElementById('citeDrawer');
+    const toggleCiteBtn = document.getElementById('toggleCiteBtn');
+    const inlineCiteOutput = document.getElementById('inlineCiteOutput');
+    const inlineTabs = document.querySelectorAll('.inline-cite-tab');
+    const inlineCopyBtn = document.getElementById('inlineCopyCiteBtn');
+
+    const doi = "10.5281/zenodo.23059466";
+    const currentYear = new Date().getFullYear();
+
+    const spectroCitations: Record<string, string> = {
+      bibtex: `@software{khan_chemistrydesk_spectro_${currentYear},
+  author       = {Khan, Bilal},
+  title        = {ChemistryDesk: Beer-Lambert Law & Reaction Kinetics Studio},
+  year         = {${currentYear}},
+  version      = {v1.0.1},
+  publisher    = {Zenodo},
+  doi          = {${doi}},
+  url          = {https://chemistrydesk.vercel.app/spectro}
+}`,
+      acs: `Khan, B. ChemistryDesk: Beer-Lambert Law & Reaction Kinetics Studio, version 1.0.1; Zenodo, ${currentYear}. https://doi.org/${doi}.`,
+      rsc: `B. Khan, ChemistryDesk: Beer-Lambert Law & Reaction Kinetics Studio, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`,
+      nature: `Khan, B. ChemistryDesk: Beer-Lambert Law & Reaction Kinetics Studio. Zenodo https://doi.org/${doi} (${currentYear}).`,
+      elsevier: `Khan, B., ${currentYear}. ChemistryDesk: Beer-Lambert Law & Reaction Kinetics Studio (Version 1.0.1). Zenodo. https://doi.org/${doi}.`,
+      wiley: `B. Khan, ChemistryDesk: Beer-Lambert Law & Reaction Kinetics Studio, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`
+    };
+
+    let currentInlineFormat = 'bibtex';
+
+    function updateInlineCite() {
+      if (inlineCiteOutput) {
+        inlineCiteOutput.textContent = spectroCitations[currentInlineFormat] || spectroCitations['bibtex'];
+      }
+    }
+
+    if (toggleCiteBtn && citeDrawer) {
+      toggleCiteBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const isHidden = window.getComputedStyle(citeDrawer).display === 'none';
+        citeDrawer.style.display = isHidden ? 'block' : 'none';
+        toggleCiteBtn.style.background = isHidden ? '#7c3aed' : '#ede9fe';
+        toggleCiteBtn.style.color = isHidden ? '#ffffff' : '#6d28d9';
+        if (isHidden) updateInlineCite();
+      });
+    }
+
+    inlineTabs.forEach(tab => {
+      tab.addEventListener('click', (e) => {
+        e.preventDefault();
+        inlineTabs.forEach(t => {
+          const el = t as HTMLElement;
+          el.style.background = '#ffffff';
+          el.style.color = '#334155';
+          el.style.borderColor = '#cbd5e1';
+          el.style.fontWeight = '600';
+        });
+        const activeTab = tab as HTMLElement;
+        activeTab.style.background = '#0f172a';
+        activeTab.style.color = '#ffffff';
+        activeTab.style.borderColor = '#0f172a';
+        activeTab.style.fontWeight = '700';
+        currentInlineFormat = activeTab.getAttribute('data-format') || 'bibtex';
+        updateInlineCite();
+      });
+    });
+
+    if (inlineCopyBtn) {
+      inlineCopyBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        try {
+          await navigator.clipboard.writeText(spectroCitations[currentInlineFormat]);
+          inlineCopyBtn.textContent = '✅ Copied!';
+          setTimeout(() => {
+            inlineCopyBtn.textContent = '📋 Copy';
+          }, 1800);
+        } catch (err) {
+          console.error('Failed to copy citation:', err);
+        }
+      });
+    }
+
+    updateInlineCite();
+    adjustInputStates();
+    runSingleEngine();
+  </script>
+
+  <!-- Related Analytical Workflows Hub -->
+  <section style="max-width: 900px; margin: 3rem auto 1.5rem; padding: 1.25rem 1.5rem; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; box-sizing: border-box;">
+    <h3 style="margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 0.5rem;">
+      <span>🔗</span> Related Analytical Workflows
+    </h3>
+    <p style="margin: 0 0 1rem; font-size: 0.85rem; color: #64748b; line-height: 1.4;">
+      Connect your spectrophotometric analysis with upstream solution formulation and downstream characterization:
+    </p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
+      <a href="/dilution" style="display: block; padding: 1rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
+        <div style="font-weight: 700; font-size: 0.92rem; color: #7c3aed; margin-bottom: 0.35rem;">Serial Dilution Studio &rarr;</div>
+        <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">
+          Absorbance over 1.2 a.u.? Perform quantitative dilution steps to bring your sample back within the linear range.
+        </div>
+      </a>
+      <a href="/molarity" style="display: block; padding: 1rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
+        <div style="font-weight: 700; font-size: 0.92rem; color: #7c3aed; margin-bottom: 0.35rem;">Solution Molarity Studio &rarr;</div>
+        <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">
+          Formulate stock standards from chemical salts, adjusting for crystalline hydration (·nH₂O) and purity percentages.
+        </div>
+      </a>
+    </div>
+  </section>
+</BaseLayout>

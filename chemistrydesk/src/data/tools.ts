@@ -67,5 +67,17 @@ export const toolsCatalog: ToolMeta[] = [
     priority: '0.9',
     changefreq: 'weekly',
     lastmod: '2026-10-02'
+  },
+  {
+    id: 'spectro',
+    title: 'UV-Vis & Chemical Kinetics Studio',
+    path: '/spectro',
+    icon: '🌈',
+    badge: 'New Studio',
+    badgeColor: '#7c3aed',
+    description: 'Solve Beer-Lambert parameters (A = εbc), multi-point standard calibration curves, unknown concentration interpolation, and reaction degradation rate kinetics.',
+    priority: '0.9',
+    changefreq: 'weekly',
+    lastmod: '2026-10-03'
   }
 ];
