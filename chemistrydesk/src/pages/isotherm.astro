@@ -4,7 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 <BaseLayout 
   title="Adsorption Isotherm Studio | Langmuir, Freundlich, Temkin & D-R Models | ChemistryDesk"
-  description="Fit Langmuir, Freundlich, Temkin, and Dubinin-Radushkevich adsorption isotherms. Batch mass-balance solver, non-linear error metrics (R², RMSE, χ²), mean energy E, and dynamic SVG equilibrium curves."
+  description="Fit Langmuir, Freundlich, Temkin, and Dubinin-Radushkevich adsorption isotherms. Batch mass-balance solver, non-linear error metrics (R², RMSE, χ²), Van 't Hoff thermodynamics, and dynamic SVG equilibrium curves."
 >
   <!-- Schema: WebApplication -->
   <script type="application/ld+json" set:html={JSON.stringify({
@@ -24,7 +24,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       "Freundlich Multilayer Heterogeneity Solver",
       "Temkin Heat of Sorption Estimation",
       "Dubinin-Radushkevich Mean Free Energy (E) Calculation",
-      "Dynamic SVG Isotherm Overlay Plot",
+      "Van 't Hoff Adsorption Thermodynamics (ΔH°, ΔS°, ΔG°)",
+      "Dynamic SVG Isotherm Overlay & Linearized Diagnostics",
       "OriginLab and GraphPad Prism CSV Export"
     ]
   })} />
@@ -52,10 +53,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       },
       {
         "@type": "Question",
-        "name": "How does Dubinin-Radushkevich mean free energy (E) distinguish physisorption from chemisorption?",
+        "name": "How are thermodynamic parameters (ΔH°, ΔS°, ΔG°) calculated from adsorption isotherms?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "The mean free energy of adsorption E = 1 / sqrt(2 * beta). If E < 8 kJ/mol, the process is dominated by physical forces (physisorption). If 8 <= E <= 16 kJ/mol, ion-exchange or electrostatic sorption dominates. If E > 16 kJ/mol, chemical bonding (chemisorption) governs adsorption."
+          "text": "By evaluating the Langmuir affinity constant KL across multiple temperatures, the Van 't Hoff equation ln(KL) = (ΔS°/R) - (ΔH°/RT) allows determination of enthalpy (ΔH°) from the slope and entropy (ΔS°) from the intercept, with Gibbs free energy determined via ΔG° = -RT ln(KL)."
         }
       }
     ]
@@ -79,12 +80,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             Adsorption Isotherm Studio
           </h1>
           <p style="color: #64748b; font-size: 0.95rem; margin-top: 0.25rem; margin-bottom: 0;">
-            Simultaneous multi-model fitting: Langmuir (q<sub>max</sub>, K<sub>L</sub>, R<sub>L</sub>), Freundlich (K<sub>F</sub>, 1/n), Temkin (b<sub>T</sub>, A<sub>T</sub>), and Dubinin-Radushkevich (E in kJ/mol) with interactive SVG visualizer.
+            Multi-model fitting: Langmuir (q<sub>max</sub>, K<sub>L</sub>, R<sub>L</sub>), Freundlich (K<sub>F</sub>, 1/n), Temkin (b<sub>T</sub>, A<sub>T</sub>), Dubinin-Radushkevich (E), and Van 't Hoff thermodynamics (&Delta;H&deg;, &Delta;S&deg;, &Delta;G&deg;).
           </p>
         </div>
       </div>
 
-      <!-- Quick Preset & Citation / Copy Bar -->
+      <!-- Quick Preset & Citation / Action Bar -->
       <div style="margin-top: 1.25rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
           <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Load Benchmark:</span>
@@ -94,10 +95,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
 
         <div style="display: flex; gap: 0.45rem; flex-wrap: wrap;">
+          <button id="btnCopyShareUrl" type="button" style="background: #0284c7; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff; display: inline-flex; align-items: center; gap: 0.3rem;">🔗 Share Link</button>
           <button id="btnCopySummary" type="button" style="background: #10b981; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff; display: inline-flex; align-items: center; gap: 0.3rem;">📋 Copy Results</button>
           <button id="btnCopyMethods" type="button" style="background: #6366f1; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff; display: inline-flex; align-items: center; gap: 0.3rem;">📝 Methods Text</button>
-          <button id="btnExportCsv" type="button" style="background: #0284c7; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff;">📥 CSV</button>
-          <button id="btnCopyLatex" type="button" style="background: #0f172a; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff;">LaTeX</button>
+          <button id="btnExportCsv" type="button" style="background: #0f172a; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff;">📥 CSV</button>
+          <button id="btnCopyLatex" type="button" style="background: #475569; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff;">LaTeX</button>
           <button id="toggleCiteBtn" type="button" style="background: #e0f2fe; border: 1px solid #bae6fd; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #0369a1;">📖 Cite</button>
         </div>
       </div>
@@ -116,14 +118,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <button id="inlineCopyCiteBtn" type="button" style="padding: 0.25rem 0.65rem; font-size: 0.75rem; font-weight: 700; border-radius: 5px; background: #0284c7; color: #fff; border: none; cursor: pointer;">📋 Copy</button>
         </div>
         <pre id="inlineCiteOutput" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.75rem; font-size: 0.75rem; font-family: ui-monospace, monospace; color: #0f172a; white-space: pre-wrap; word-break: break-all; margin: 0; line-height: 1.45;"></pre>
-        <div style="margin-top: 0.5rem; text-align: right;">
-          <a href="https://doi.org/10.5281/zenodo.23059466" target="_blank" rel="noopener noreferrer" style="font-size: 0.72rem; color: #0284c7; text-decoration: none; font-weight: 600;">Indexed via CERN Zenodo (DOI: 10.5281/zenodo.23059466) &rarr;</a>
-        </div>
       </div>
     </div>
 
     <!-- MAIN INTERACTIVE STUDIO WORKSPACE -->
-    <div style="display: grid; grid-template-columns: 1fr; gap: 2rem; margin-bottom: 3rem;">
+    <div style="display: grid; grid-template-columns: 1fr; gap: 2rem; margin-bottom: 2.5rem;">
       
       <!-- CONTROLS & SPREADSHEET TABLE CARD -->
       <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
@@ -131,7 +130,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <!-- Regime & Unit Selectors Bar -->
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 1rem;">
           
-          <!-- Mode Switcher -->
           <div style="background: #f1f5f9; padding: 3px; border-radius: 8px; display: inline-flex;">
             <button id="btnModeBatch" type="button" style="background: #0284c7; color: #ffffff; border: none; padding: 0.45rem 0.9rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer;">
               🧪 Raw Batch Mode (C₀, Cₑ, V, m)
@@ -141,7 +139,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             </button>
           </div>
 
-          <!-- Unit Pickers & Temperature Input -->
           <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
             <div>
               <label style="font-size: 0.72rem; font-weight: 700; color: #64748b; display: block;">Temp (T):</label>
@@ -215,7 +212,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       </div>
 
-      <!-- DUAL-PANEL RESULTS: TOURNAMENT SUMMARY + DYNAMIC SVG PLOT -->
+      <!-- DUAL-PANEL RESULTS: TOURNAMENT SUMMARY + DYNAMIC SVG PLOT WITH TOGGLES -->
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 2rem;">
         
         <!-- 4-Model Tournament & Mechanism Verdict -->
@@ -264,37 +261,108 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
         </div>
 
-        <!-- Dynamic Responsive SVG Isotherm Plot -->
+        <!-- Dynamic SVG Visualizer with Plot Mode Toggles & Save Graph -->
         <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; flex-direction: column;">
           
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-            <h3 style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #475569; margin: 0;">
-              Equilibrium Isotherm Visualizer
-            </h3>
-            <span style="font-size: 0.75rem; color: #64748b;">qe vs Ce</span>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
+            <!-- Plot View Toggles -->
+            <div style="background: #f1f5f9; padding: 2px; border-radius: 6px; display: inline-flex; gap: 2px;">
+              <button type="button" class="plot-view-btn" data-view="equilibrium" style="background: #0284c7; color: #fff; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.72rem; font-weight: 700; cursor: pointer;">qₑ vs Cₑ</button>
+              <button type="button" class="plot-view-btn" data-view="langmuir" style="background: transparent; color: #64748b; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.72rem; font-weight: 700; cursor: pointer;">Cₑ/qₑ vs Cₑ</button>
+              <button type="button" class="plot-view-btn" data-view="freundlich" style="background: transparent; color: #64748b; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.72rem; font-weight: 700; cursor: pointer;">ln(qₑ) vs ln(Cₑ)</button>
+              <button type="button" class="plot-view-btn" data-view="dr" style="background: transparent; color: #64748b; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.72rem; font-weight: 700; cursor: pointer;">ln(qₑ) vs ε²</button>
+            </div>
+
+            <!-- Download Vector Graph Button -->
+            <button id="btnDownloadSvg" type="button" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0.25rem 0.6rem; font-size: 0.72rem; font-weight: 700; cursor: pointer; color: #334155; display: inline-flex; align-items: center; gap: 0.25rem;">
+              <span>💾</span> Save Graph (SVG)
+            </button>
           </div>
 
           <div id="plotContainer" style="flex: 1; min-height: 280px; position: relative; border: 1px solid #f1f5f9; border-radius: 8px; background: #fafafa; display: flex; align-items: center; justify-content: center;">
             <svg id="isothermSvg" viewBox="0 0 500 320" style="width: 100%; height: 100%; display: block;"></svg>
           </div>
 
-          <div style="margin-top: 0.75rem; display: flex; gap: 1rem; justify-content: center; font-size: 0.75rem; flex-wrap: wrap;">
+          <div id="plotLegendContainer" style="margin-top: 0.75rem; display: flex; gap: 1rem; justify-content: center; font-size: 0.75rem; flex-wrap: wrap;">
             <div style="display: flex; align-items: center; gap: 0.35rem;">
               <span style="width: 10px; height: 10px; border-radius: 50%; background: #0f172a; display: inline-block;"></span>
               <span style="font-weight: 600;">Experimental Data</span>
             </div>
             <div style="display: flex; align-items: center; gap: 0.35rem;">
               <span style="width: 16px; height: 3px; background: #0284c7; display: inline-block;"></span>
-              <span style="font-weight: 600;">Langmuir Fit</span>
-            </div>
-            <div style="display: flex; align-items: center; gap: 0.35rem;">
-              <span style="width: 16px; height: 3px; background: #10b981; display: inline-block; border-top: 2px dashed #10b981;"></span>
-              <span style="font-weight: 600;">Freundlich Fit</span>
+              <span style="font-weight: 600;">Fitted Curve</span>
             </div>
           </div>
 
         </div>
 
+      </div>
+
+      <!-- VAN 'T HOFF THERMODYNAMICS MODULE -->
+      <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+        <details style="cursor: pointer;">
+          <summary style="font-size: 1.05rem; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 0.5rem; user-select: none;">
+            <span>🌡️</span> Multi-Temperature Van 't Hoff Adsorption Thermodynamics (&Delta;H&deg;, &Delta;S&deg;, &Delta;G&deg;)
+          </summary>
+          
+          <div style="margin-top: 1.25rem; border-top: 1px solid #f1f5f9; padding-top: 1rem;">
+            <p style="font-size: 0.85rem; color: #64748b; margin-top: 0; margin-bottom: 1rem;">
+              Enter the Langmuir affinity constant (K<sub>L</sub>) obtained from isotherms measured at different temperatures to determine spontaneity, enthalpy of adsorption, and entropy.
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 1.25rem;">
+              
+              <!-- Inputs Grid -->
+              <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; font-size: 0.75rem; font-weight: 700; color: #475569;">
+                  <span>Temperature (Kelvin)</span>
+                  <span>Langmuir K<sub>L</sub> (L/mg)</span>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                  <input type="text" inputmode="decimal" id="thermoT1" value="298.15" placeholder="T1 (K)" style="padding: 0.4rem; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.85rem; font-weight: 600;" />
+                  <input type="text" inputmode="decimal" id="thermoK1" value="0.045" placeholder="KL at T1" style="padding: 0.4rem; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.85rem; font-weight: 600;" />
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                  <input type="text" inputmode="decimal" id="thermoT2" value="308.15" placeholder="T2 (K)" style="padding: 0.4rem; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.85rem; font-weight: 600;" />
+                  <input type="text" inputmode="decimal" id="thermoK2" value="0.062" placeholder="KL at T2" style="padding: 0.4rem; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.85rem; font-weight: 600;" />
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                  <input type="text" inputmode="decimal" id="thermoT3" value="318.15" placeholder="T3 (K)" style="padding: 0.4rem; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.85rem; font-weight: 600;" />
+                  <input type="text" inputmode="decimal" id="thermoK3" value="0.081" placeholder="KL at T3" style="padding: 0.4rem; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.85rem; font-weight: 600;" />
+                </div>
+              </div>
+
+              <!-- Output Cards -->
+              <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 1rem; display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                  <span style="font-size: 0.72rem; font-weight: 800; color: #475569; text-transform: uppercase;">Van 't Hoff Thermodynamic Outputs:</span>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 0.5rem;">
+                    <div>
+                      <div style="font-size: 0.7rem; color: #64748b;">Enthalpy (&Delta;H&deg;):</div>
+                      <div id="outDeltaH" style="font-size: 1.05rem; font-weight: 800; color: #0f172a;">-- kJ/mol</div>
+                    </div>
+                    <div>
+                      <div style="font-size: 0.7rem; color: #64748b;">Entropy (&Delta;S&deg;):</div>
+                      <div id="outDeltaS" style="font-size: 1.05rem; font-weight: 800; color: #0f172a;">-- J/(mol&middot;K)</div>
+                    </div>
+                  </div>
+                  <div style="margin-top: 0.5rem;">
+                    <div style="font-size: 0.7rem; color: #64748b;">Gibbs Free Energy (&Delta;G&deg; at 298 K):</div>
+                    <div id="outDeltaG" style="font-size: 1.05rem; font-weight: 800; color: #0284c7;">-- kJ/mol</div>
+                  </div>
+                </div>
+
+                <div id="thermoVerdictText" style="margin-top: 0.75rem; font-size: 0.78rem; font-weight: 700; color: #10b981; background: #ecfdf5; padding: 0.4rem 0.6rem; border-radius: 4px;">
+                  Endothermic &amp; Spontaneous Adsorption Process
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </details>
       </div>
 
     </div>
@@ -399,7 +467,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       type IsothermPoint
     } from '../utils/isothermMath';
 
-    // Benchmark Presets (Stored with explicit mL and g to match default units)
     const PRESETS: Record<string, Array<{ c0: number; ce: number; v: number; m: number; qe: number }>> = {
       mb: [
         { c0: 25, ce: 1.2, v: 100, m: 0.05, qe: 47.6 },
@@ -428,7 +495,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     };
 
     let isBatchMode = true;
+    let currentPlotView = 'equilibrium';
     let dataPoints: IsothermPoint[] = [];
+    let lastTournamentResult: any = null;
 
     const btnModeBatch = document.getElementById('btnModeBatch')!;
     const btnModeDirect = document.getElementById('btnModeDirect')!;
@@ -441,7 +510,28 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     const selVolUnit = document.getElementById('selVolUnit') as HTMLSelectElement;
     const selMassUnit = document.getElementById('selMassUnit') as HTMLSelectElement;
 
+    // URL State Loading & LocalStorage Fallback
     function initializeData() {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has('ce') && urlParams.has('qe')) {
+        const ces = urlParams.get('ce')!.split(',').map(parseCleanNumber);
+        const qes = urlParams.get('qe')!.split(',').map(parseCleanNumber);
+        const c0s = urlParams.get('c0') ? urlParams.get('c0')!.split(',').map(parseCleanNumber) : [];
+        
+        dataPoints = ces.map((ceVal, idx) => ({
+          id: 'url_' + idx,
+          c0: c0s[idx] ?? ceVal * 1.5,
+          ce: ceVal,
+          v: 100,
+          m: 0.05,
+          qe: qes[idx] ?? 0
+        }));
+        if (urlParams.has('t')) inpTempK.value = urlParams.get('t')!;
+        renderTable();
+        recalculate();
+        return;
+      }
+
       const saved = localStorage.getItem('cd_isotherm_points');
       if (saved) {
         try {
@@ -452,6 +542,19 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       } else {
         loadPreset('mb');
       }
+    }
+
+    function syncUrlState() {
+      const valid = dataPoints.filter(p => p.ce > 0 && p.qe > 0);
+      if (!valid.length) return;
+      const params = new URLSearchParams();
+      params.set('ce', valid.map(p => p.ce).join(','));
+      params.set('qe', valid.map(p => p.qe.toFixed(2)).join(','));
+      if (valid[0].c0) params.set('c0', valid.map(p => p.c0 ?? 0).join(','));
+      params.set('t', inpTempK.value);
+
+      const newUrl = `${window.location.pathname}?${params.toString()}`;
+      window.history.replaceState({}, '', newUrl);
     }
 
     function loadPreset(key: string) {
@@ -565,6 +668,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       }
 
       saveData();
+      syncUrlState();
       renderTableValuesOnly();
       recalculate();
     }
@@ -596,7 +700,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     }
 
     btnAddRowBtn.addEventListener('click', addRow);
-
     btnClearTableBtn.addEventListener('click', () => {
       dataPoints = [];
       renderTable();
@@ -644,8 +747,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     }
 
     // Recalculate & Multi-Model Tournament
-    let lastTournamentResult: any = null;
-
     function recalculate() {
       const tempK = parseCleanNumber(inpTempK.value) || 298.15;
       const validPoints = dataPoints.filter(p => p.ce > 0 && p.qe > 0);
@@ -712,18 +813,111 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         pGrid.appendChild(div);
       });
 
-      renderSvgChart(validPoints, res);
+      renderActivePlotView();
+      solveVanTHoff();
+      syncUrlState();
     }
 
-    // Dynamic SVG Chart Engine
-    function renderSvgChart(points: IsothermPoint[], res: any) {
+    // Linear vs Equilibrium Plot View Switcher
+    document.querySelectorAll('.plot-view-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const t = e.currentTarget as HTMLElement;
+        currentPlotView = t.dataset.view || 'equilibrium';
+        document.querySelectorAll('.plot-view-btn').forEach(b => {
+          (b as HTMLElement).style.background = 'transparent';
+          (b as HTMLElement).style.color = '#64748b';
+        });
+        t.style.background = '#0284c7';
+        t.style.color = '#fff';
+        renderActivePlotView();
+      });
+    });
+
+    function renderActivePlotView() {
+      const valid = dataPoints.filter(p => p.ce > 0 && p.qe > 0);
+      if (valid.length < 2 || !lastTournamentResult) return;
+
       const svg = document.getElementById('isothermSvg')!;
-      const w = 500;
-      const h = 320;
-      const padL = 55;
-      const padR = 25;
-      const padT = 25;
-      const padB = 40;
+      const w = 500, h = 320, padL = 55, padR = 25, padT = 25, padB = 40;
+
+      let xVals: number[] = [];
+      let yVals: number[] = [];
+      let xLabel = 'Equilibrium Concentration Ce (mg/L)';
+      let yLabel = 'Adsorption Uptake qe (mg/g)';
+
+      if (currentPlotView === 'equilibrium') {
+        renderEquilibriumPlot(valid, lastTournamentResult);
+        return;
+      } else if (currentPlotView === 'langmuir') {
+        xVals = valid.map(p => p.ce);
+        yVals = valid.map(p => p.ce / p.qe);
+        xLabel = 'Ce (mg/L)';
+        yLabel = 'Ce / qe (g/L)';
+      } else if (currentPlotView === 'freundlich') {
+        xVals = valid.map(p => Math.log(p.ce));
+        yVals = valid.map(p => Math.log(p.qe));
+        xLabel = 'ln(Ce)';
+        yLabel = 'ln(qe)';
+      } else if (currentPlotView === 'dr') {
+        const tempK = parseCleanNumber(inpTempK.value) || 298.15;
+        const R = 8.31446;
+        xVals = valid.map(p => Math.pow(R * tempK * Math.log(1 + 1 / p.ce), 2));
+        yVals = valid.map(p => Math.log(p.qe));
+        xLabel = 'ε² (J²/mol²)';
+        yLabel = 'ln(qe)';
+      }
+
+      // Linear Render Engine
+      const minX = Math.min(...xVals) * (minX => minX < 0 ? 1.1 : 0.9)(minX);
+      const maxX = Math.max(...xVals) * 1.15;
+      const minY = Math.min(...yVals) * (minY => minY < 0 ? 1.1 : 0.9)(minY);
+      const maxY = Math.max(...yVals) * 1.15;
+
+      const scaleX = (val: number) => padL + ((val - minX) / (maxX - minX || 1)) * (w - padL - padR);
+      const scaleY = (val: number) => h - padB - ((val - minY) / (maxY - minY || 1)) * (h - padT - padB);
+
+      let svgHtml = `
+        <line x1="${padL}" y1="${h - padB}" x2="${w - padR}" y2="${h - padB}" stroke="#cbd5e1" stroke-width="2"/>
+        <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${h - padB}" stroke="#cbd5e1" stroke-width="2"/>
+        <text x="${w / 2}" y="${h - 8}" text-anchor="middle" font-size="11" fill="#475569" font-weight="bold">${xLabel}</text>
+        <text x="14" y="${h / 2}" text-anchor="middle" font-size="11" fill="#475569" font-weight="bold" transform="rotate(-90 14 ${h / 2})">${yLabel}</text>
+      `;
+
+      // Draw Ticks
+      for (let i = 0; i <= 4; i++) {
+        const xV = minX + ((maxX - minX) / 4) * i;
+        const yV = minY + ((maxY - minY) / 4) * i;
+        svgHtml += `
+          <text x="${scaleX(xV)}" y="${h - padB + 14}" text-anchor="middle" font-size="9" fill="#94a3b8">${xV.toFixed(1)}</text>
+          <text x="${padL - 6}" y="${scaleY(yV) + 3}" text-anchor="end" font-size="9" fill="#94a3b8">${yV.toFixed(1)}</text>
+          <line x1="${padL}" y1="${scaleY(yV)}" x2="${w - padR}" y2="${scaleY(yV)}" stroke="#f1f5f9" stroke-width="1"/>
+        `;
+      }
+
+      // Linear Regression Line
+      const n = xVals.length;
+      let sX = 0, sY = 0, sXY = 0, sX2 = 0;
+      for (let i = 0; i < n; i++) {
+        sX += xVals[i]; sY += yVals[i]; sXY += xVals[i] * yVals[i]; sX2 += xVals[i] * xVals[i];
+      }
+      const slope = (n * sXY - sX * sY) / (n * sX2 - sX * sX || 1);
+      const intercept = (sY - slope * sX) / n;
+
+      const p1x = scaleX(minX), p1y = scaleY(slope * minX + intercept);
+      const p2x = scaleX(maxX), p2y = scaleY(slope * maxX + intercept);
+      svgHtml += `<line x1="${p1x}" y1="${p1y}" x2="${p2x}" y2="${p2y}" stroke="#0284c7" stroke-width="2.5" />`;
+
+      // Plot Points
+      for (let i = 0; i < n; i++) {
+        svgHtml += `<circle cx="${scaleX(xVals[i])}" cy="${scaleY(yVals[i])}" r="4.5" fill="#0f172a" stroke="#fff" stroke-width="1.5"/>`;
+      }
+
+      svg.innerHTML = svgHtml;
+    }
+
+    function renderEquilibriumPlot(points: IsothermPoint[], res: any) {
+      const svg = document.getElementById('isothermSvg')!;
+      const w = 500, h = 320, padL = 55, padR = 25, padT = 25, padB = 40;
 
       const maxCe = Math.max(...points.map(p => p.ce)) * 1.15 || 10;
       const maxQe = Math.max(...points.map(p => p.qe)) * 1.2 || 10;
@@ -741,40 +935,32 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       for (let i = 0; i <= 4; i++) {
         const xVal = (maxCe / 4) * i;
         const yVal = (maxQe / 4) * i;
-        const xPos = scaleX(xVal);
-        const yPos = scaleY(yVal);
-
         svgHtml += `
-          <text x="${xPos}" y="${h - padB + 14}" text-anchor="middle" font-size="9" fill="#94a3b8">${xVal.toFixed(0)}</text>
-          <text x="${padL - 6}" y="${yPos + 3}" text-anchor="end" font-size="9" fill="#94a3b8">${yVal.toFixed(0)}</text>
-          <line x1="${padL}" y1="${yPos}" x2="${w - padR}" y2="${yPos}" stroke="#f1f5f9" stroke-width="1"/>
+          <text x="${scaleX(xVal)}" y="${h - padB + 14}" text-anchor="middle" font-size="9" fill="#94a3b8">${xVal.toFixed(0)}</text>
+          <text x="${padL - 6}" y="${scaleY(yVal) + 3}" text-anchor="end" font-size="9" fill="#94a3b8">${yVal.toFixed(0)}</text>
+          <line x1="${padL}" y1="${scaleY(yVal)}" x2="${w - padR}" y2="${scaleY(yVal)}" stroke="#f1f5f9" stroke-width="1"/>
         `;
       }
 
+      // Langmuir Curve
       let langD = '';
       for (let cx = 0; cx <= maxCe; cx += maxCe / 40) {
         const qPred = res.langmuir.predictQe(cx);
-        const px = scaleX(cx);
-        const py = scaleY(qPred);
-        langD += (cx === 0 ? `M ${px} ${py}` : ` L ${px} ${py}`);
+        langD += (cx === 0 ? `M ${scaleX(cx)} ${scaleY(qPred)}` : ` L ${scaleX(cx)} ${scaleY(qPred)}`);
       }
       svgHtml += `<path d="${langD}" fill="none" stroke="#0284c7" stroke-width="2.5" />`;
 
+      // Freundlich Curve
       let freundD = '';
       for (let cx = maxCe / 40; cx <= maxCe; cx += maxCe / 40) {
         const qPred = res.freundlich.predictQe(cx);
-        const px = scaleX(cx);
-        const py = scaleY(qPred);
-        freundD += (freundD === '' ? `M ${px} ${py}` : ` L ${px} ${py}`);
+        freundD += (freundD === '' ? `M ${scaleX(cx)} ${scaleY(qPred)}` : ` L ${scaleX(cx)} ${scaleY(qPred)}`);
       }
       svgHtml += `<path d="${freundD}" fill="none" stroke="#10b981" stroke-width="2" stroke-dasharray="4,3" />`;
 
+      // Experimental Points
       points.forEach(p => {
-        const cx = scaleX(p.ce);
-        const cy = scaleY(p.qe);
-        svgHtml += `
-          <circle cx="${cx}" cy="${cy}" r="4.5" fill="#0f172a" stroke="#ffffff" stroke-width="1.5"/>
-        `;
+        svgHtml += `<circle cx="${scaleX(p.ce)}" cy="${scaleY(p.qe)}" r="4.5" fill="#0f172a" stroke="#fff" stroke-width="1.5"/>`;
       });
 
       svg.innerHTML = svgHtml;
@@ -785,44 +971,104 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       svg.innerHTML = '<text x="250" y="160" text-anchor="middle" fill="#94a3b8" font-size="12">Enter at least 2 points to generate isotherm curve</text>';
     }
 
-    // Copy Full Results Summary
-    document.getElementById('btnCopySummary')?.addEventListener('click', async () => {
-      if (!lastTournamentResult) {
-        alert('Please enter or load data first.');
-        return;
+    // 1-Click SVG Image Exporter
+    document.getElementById('btnDownloadSvg')?.addEventListener('click', () => {
+      const svg = document.getElementById('isothermSvg');
+      if (!svg) return;
+      const serializer = new XMLSerializer();
+      const source = '<?xml version="1.0" standalone="no"?>\r\n' + serializer.serializeToString(svg);
+      const url = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(source);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `isotherm_plot_${Date.now()}.svg`;
+      a.click();
+    });
+
+    // Shareable URL Copy Button
+    document.getElementById('btnCopyShareUrl')?.addEventListener('click', async () => {
+      syncUrlState();
+      await navigator.clipboard.writeText(window.location.href);
+      const btn = document.getElementById('btnCopyShareUrl')!;
+      const oldTxt = btn.textContent;
+      btn.textContent = '✅ Link Copied!';
+      setTimeout(() => { btn.textContent = oldTxt; }, 1800);
+    });
+
+    // Van 't Hoff Thermodynamics Solver
+    function solveVanTHoff() {
+      const t1 = parseCleanNumber((document.getElementById('thermoT1') as HTMLInputElement).value);
+      const k1 = parseCleanNumber((document.getElementById('thermoK1') as HTMLInputElement).value);
+      const t2 = parseCleanNumber((document.getElementById('thermoT2') as HTMLInputElement).value);
+      const k2 = parseCleanNumber((document.getElementById('thermoK2') as HTMLInputElement).value);
+      const t3 = parseCleanNumber((document.getElementById('thermoT3') as HTMLInputElement).value);
+      const k3 = parseCleanNumber((document.getElementById('thermoK3') as HTMLInputElement).value);
+
+      const temps = [t1, t2, t3].filter((t, i) => t > 0 && [k1, k2, k3][i] > 0);
+      const ks = [k1, k2, k3].filter((k, i) => k > 0 && [t1, t2, t3][i] > 0);
+
+      if (temps.length < 2) return;
+
+      const R = 8.31446;
+      const x = temps.map(t => 1 / t);
+      const y = ks.map(k => Math.log(k * 55.5 * 1000)); // Standard dimensionless equilibrium constant
+
+      let sX = 0, sY = 0, sXY = 0, sX2 = 0;
+      const n = x.length;
+      for (let i = 0; i < n; i++) {
+        sX += x[i]; sY += y[i]; sXY += x[i] * y[i]; sX2 += x[i] * x[i];
       }
+      const slope = (n * sXY - sX * sY) / (n * sX2 - sX * sX || 1);
+      const intercept = (sY - slope * sX) / n;
+
+      const deltaH = (-slope * R) / 1000; // kJ/mol
+      const deltaS = intercept * R;       // J/(mol·K)
+      const deltaG298 = deltaH - (298.15 * deltaS) / 1000; // kJ/mol
+
+      document.getElementById('outDeltaH')!.textContent = `${deltaH.toFixed(2)} kJ/mol`;
+      document.getElementById('outDeltaS')!.textContent = `${deltaS.toFixed(2)} J/(mol·K)`;
+      document.getElementById('outDeltaG')!.textContent = `${deltaG298.toFixed(2)} kJ/mol`;
+
+      const verdict = document.getElementById('thermoVerdictText')!;
+      const isEndo = deltaH > 0;
+      const isSpon = deltaG298 < 0;
+      verdict.textContent = `${isEndo ? 'Endothermic (ΔH° > 0)' : 'Exothermic (ΔH° < 0)'} & ${isSpon ? 'Spontaneous (ΔG° < 0)' : 'Non-Spontaneous'} Adsorption`;
+      verdict.style.color = isSpon ? '#10b981' : '#dc2626';
+      verdict.style.background = isSpon ? '#ecfdf5' : '#fef2f2';
+    }
+
+    ['thermoT1', 'thermoK1', 'thermoT2', 'thermoK2', 'thermoT3', 'thermoK3'].forEach(id => {
+      document.getElementById(id)?.addEventListener('input', solveVanTHoff);
+    });
+
+    // Copy Results & Methods Handlers
+    document.getElementById('btnCopySummary')?.addEventListener('click', async () => {
+      if (!lastTournamentResult) return;
       const pL = lastTournamentResult.langmuir.parameters;
       const pF = lastTournamentResult.freundlich.parameters;
       const pD = lastTournamentResult.dubininRadushkevich.parameters;
 
       const summary = `================================================
 CHEMISTRYDESK ADSORPTION ISOTHERM REPORT
-URL: https://chemistrydesk.vercel.app/isotherm
+URL: ${window.location.href}
 ================================================
 Best-Fit Model: ${lastTournamentResult.bestModel} (R² = ${lastTournamentResult.bestR2.toFixed(4)})
 Mechanism Verdict: ${lastTournamentResult.adsorptionMechanism}
 
 1. LANGMUIR ISOTHERM:
-   - Monolayer Capacity (qmax): ${pL.qmax?.value.toFixed(2)} mg/g
-   - Affinity Constant (KL): ${pL.kL?.value.toFixed(4)} L/mg
-   - Separation Factor (RL): ${lastTournamentResult.rlCurve[0] ? lastTournamentResult.rlCurve[0].rl.toFixed(3) + ' (' + lastTournamentResult.rlCurve[0].status + ')' : 'N/A'}
+   - qmax: ${pL.qmax?.value.toFixed(2)} mg/g
+   - KL: ${pL.kL?.value.toFixed(4)} L/mg
+   - RL: ${lastTournamentResult.rlCurve[0] ? lastTournamentResult.rlCurve[0].rl.toFixed(3) + ' (' + lastTournamentResult.rlCurve[0].status + ')' : 'N/A'}
    - R²: ${lastTournamentResult.langmuir.r2.toFixed(4)} | RMSE: ${lastTournamentResult.langmuir.rmse.toFixed(3)} | Chi-Sq: ${lastTournamentResult.langmuir.chiSquare.toFixed(3)}
 
 2. FREUNDLICH ISOTHERM:
-   - Capacity Factor (KF): ${pF.kF?.value.toFixed(2)}
-   - Heterogeneity Factor (1/n): ${pF.invN?.value.toFixed(3)}
-   - Adsorption Intensity (n): ${pF.n?.value.toFixed(2)}
-   - R²: ${lastTournamentResult.freundlich.r2.toFixed(4)} | RMSE: ${lastTournamentResult.freundlich.rmse.toFixed(3)} | Chi-Sq: ${lastTournamentResult.freundlich.chiSquare.toFixed(3)}
+   - KF: ${pF.kF?.value.toFixed(2)}
+   - 1/n: ${pF.invN?.value.toFixed(3)} | n: ${pF.n?.value.toFixed(2)}
+   - R²: ${lastTournamentResult.freundlich.r2.toFixed(4)} | RMSE: ${lastTournamentResult.freundlich.rmse.toFixed(3)}
 
-3. DUBININ-RADUSHKEVICH (D-R):
+3. DUBININ-RADUSHKEVICH:
    - Mean Free Energy (E): ${pD.E?.value.toFixed(2)} kJ/mol
-   - Theoretical Capacity (qD): ${pD.qD?.value.toFixed(2)} mg/g
+   - Saturation qD: ${pD.qD?.value.toFixed(2)} mg/g
    - R²: ${lastTournamentResult.dubininRadushkevich.r2.toFixed(4)}
-
-4. TEMKIN ISOTHERM:
-   - Heat of Sorption (B): ${lastTournamentResult.temkin.parameters.B?.value.toFixed(2)} J/mol
-   - Binding Constant (AT): ${lastTournamentResult.temkin.parameters.aT?.value.toFixed(3)} L/mg
-   - R²: ${lastTournamentResult.temkin.r2.toFixed(4)}
 ================================================`;
 
       await navigator.clipboard.writeText(summary);
@@ -832,12 +1078,8 @@ Mechanism Verdict: ${lastTournamentResult.adsorptionMechanism}
       setTimeout(() => { btn.textContent = oldTxt; }, 1800);
     });
 
-    // Copy Materials & Methods Text Snippet
     document.getElementById('btnCopyMethods')?.addEventListener('click', async () => {
-      if (!lastTournamentResult) {
-        alert('Please enter or load data first.');
-        return;
-      }
+      if (!lastTournamentResult) return;
       const pL = lastTournamentResult.langmuir.parameters;
       const pD = lastTournamentResult.dubininRadushkevich.parameters;
       const best = lastTournamentResult.bestModel;
@@ -856,7 +1098,6 @@ Mechanism Verdict: ${lastTournamentResult.adsorptionMechanism}
       setTimeout(() => { btn.textContent = oldTxt; }, 1800);
     });
 
-    // CSV Export
     document.getElementById('btnExportCsv')?.addEventListener('click', () => {
       if (!dataPoints.length) return;
       let csv = 'Initial_C0,Equilibrium_Ce,Volume,Mass,Uptake_qe_mg_g\n';
@@ -871,7 +1112,6 @@ Mechanism Verdict: ${lastTournamentResult.adsorptionMechanism}
       a.click();
     });
 
-    // Copy Overleaf / LaTeX Equation Block
     document.getElementById('btnCopyLatex')?.addEventListener('click', async () => {
       if (!lastTournamentResult) return;
       const qmax = lastTournamentResult.langmuir.parameters.qmax?.value.toFixed(2);
@@ -889,7 +1129,7 @@ Mechanism Verdict: ${lastTournamentResult.adsorptionMechanism}
       setTimeout(() => { btn.textContent = oldTxt; }, 1800);
     });
 
-    // Academic Citation System
+    // Academic Citation
     const citeDrawer = document.getElementById('citeDrawer');
     const toggleCiteBtn = document.getElementById('toggleCiteBtn');
     const inlineCiteOutput = document.getElementById('inlineCiteOutput');
@@ -958,25 +1198,17 @@ Mechanism Verdict: ${lastTournamentResult.adsorptionMechanism}
     if (inlineCopyBtn) {
       inlineCopyBtn.addEventListener('click', async (e) => {
         e.preventDefault();
-        try {
-          await navigator.clipboard.writeText(citations[currentInlineFormat]);
-          inlineCopyBtn.textContent = '✅ Copied!';
-          setTimeout(() => {
-            inlineCopyBtn.textContent = '📋 Copy';
-          }, 1800);
-        } catch (err) {
-          console.error('Failed to copy citation:', err);
-        }
+        await navigator.clipboard.writeText(citations[currentInlineFormat]);
+        inlineCopyBtn.textContent = '✅ Copied!';
+        setTimeout(() => { inlineCopyBtn.textContent = '📋 Copy'; }, 1800);
       });
     }
 
     updateInlineCite();
-
-    // Initial Execution
     initializeData();
   </script>
 
-  <!-- Related Workflows Navigation Hub -->
+  <!-- Related Analytical Studios -->
   <section style="max-width: 900px; margin: 3rem auto 1.5rem; padding: 1.25rem 1.5rem; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; box-sizing: border-box;">
     <h3 style="margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 0.5rem;">
       <span>🔗</span> Complementary Analytical Studios
