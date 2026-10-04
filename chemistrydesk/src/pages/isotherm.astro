@@ -84,19 +84,21 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
       </div>
 
-      <!-- Quick Preset & Citation Bar -->
+      <!-- Quick Preset & Citation / Copy Bar -->
       <div style="margin-top: 1.25rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
-          <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Load Benchmark Data:</span>
+          <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Load Benchmark:</span>
           <button type="button" class="preset-btn" data-preset="mb" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0.35rem 0.65rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #0284c7;">Methylene Blue / Biochar</button>
           <button type="button" class="preset-btn" data-preset="paraquat" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0.35rem 0.65rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #0284c7;">Paraquat / HKUST-1 MOF</button>
           <button type="button" class="preset-btn" data-preset="lead" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0.35rem 0.65rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #0284c7;">Pb(II) / α-ZrP</button>
         </div>
 
-        <div style="display: flex; gap: 0.5rem;">
-          <button id="toggleCiteBtn" type="button" style="background: #e0f2fe; border: 1px solid #bae6fd; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #0369a1; display: inline-flex; align-items: center; gap: 0.35rem;"><span>📖</span> Cite</button>
-          <button id="btnExportCsv" type="button" style="background: #0284c7; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff;">📥 Export CSV</button>
-          <button id="btnCopyLatex" type="button" style="background: #0f172a; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff;">📋 Overleaf / LaTeX</button>
+        <div style="display: flex; gap: 0.45rem; flex-wrap: wrap;">
+          <button id="btnCopySummary" type="button" style="background: #10b981; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff; display: inline-flex; align-items: center; gap: 0.3rem;">📋 Copy Results</button>
+          <button id="btnCopyMethods" type="button" style="background: #6366f1; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff; display: inline-flex; align-items: center; gap: 0.3rem;">📝 Methods Text</button>
+          <button id="btnExportCsv" type="button" style="background: #0284c7; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff;">📥 CSV</button>
+          <button id="btnCopyLatex" type="button" style="background: #0f172a; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff;">LaTeX</button>
+          <button id="toggleCiteBtn" type="button" style="background: #e0f2fe; border: 1px solid #bae6fd; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #0369a1;">📖 Cite</button>
         </div>
       </div>
 
@@ -162,8 +164,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
               <div>
                 <label style="font-size: 0.72rem; font-weight: 700; color: #64748b; display: block;">Flask Vol (V):</label>
                 <select id="selVolUnit" style="padding: 0.35rem 0.5rem; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.82rem; font-weight: 600; background: #fff;">
-                  <option value="L">Liters (L)</option>
                   <option value="mL" selected>Milliliters (mL)</option>
+                  <option value="L">Liters (L)</option>
                 </select>
               </div>
 
@@ -397,39 +399,37 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       type IsothermPoint
     } from '../utils/isothermMath';
 
-    // Benchmark Presets
+    // Benchmark Presets (Stored with explicit mL and g to match default units)
     const PRESETS: Record<string, Array<{ c0: number; ce: number; v: number; m: number; qe: number }>> = {
       mb: [
-        { c0: 25, ce: 1.2, v: 0.1, m: 0.05, qe: 47.6 },
-        { c0: 50, ce: 4.8, v: 0.1, m: 0.05, qe: 90.4 },
-        { c0: 100, ce: 14.5, v: 0.1, m: 0.05, qe: 171.0 },
-        { c0: 150, ce: 32.0, v: 0.1, m: 0.05, qe: 236.0 },
-        { c0: 200, ce: 58.2, v: 0.1, m: 0.05, qe: 283.6 },
-        { c0: 250, ce: 94.0, v: 0.1, m: 0.05, qe: 312.0 }
+        { c0: 25, ce: 1.2, v: 100, m: 0.05, qe: 47.6 },
+        { c0: 50, ce: 4.8, v: 100, m: 0.05, qe: 90.4 },
+        { c0: 100, ce: 14.5, v: 100, m: 0.05, qe: 171.0 },
+        { c0: 150, ce: 32.0, v: 100, m: 0.05, qe: 236.0 },
+        { c0: 200, ce: 58.2, v: 100, m: 0.05, qe: 283.6 },
+        { c0: 250, ce: 94.0, v: 100, m: 0.05, qe: 312.0 }
       ],
       paraquat: [
-        { c0: 10, ce: 0.8, v: 0.05, m: 0.02, qe: 23.0 },
-        { c0: 25, ce: 3.2, v: 0.05, m: 0.02, qe: 54.5 },
-        { c0: 50, ce: 9.5, v: 0.05, m: 0.02, qe: 101.25 },
-        { c0: 75, ce: 18.0, v: 0.05, m: 0.02, qe: 142.5 },
-        { c0: 100, ce: 31.0, v: 0.05, m: 0.02, qe: 172.5 },
-        { c0: 150, ce: 64.0, v: 0.05, m: 0.02, qe: 215.0 }
+        { c0: 10, ce: 0.8, v: 50, m: 0.02, qe: 23.0 },
+        { c0: 25, ce: 3.2, v: 50, m: 0.02, qe: 54.5 },
+        { c0: 50, ce: 9.5, v: 50, m: 0.02, qe: 101.25 },
+        { c0: 75, ce: 18.0, v: 50, m: 0.02, qe: 142.5 },
+        { c0: 100, ce: 31.0, v: 50, m: 0.02, qe: 172.5 },
+        { c0: 150, ce: 64.0, v: 50, m: 0.02, qe: 215.0 }
       ],
       lead: [
-        { c0: 20, ce: 0.5, v: 0.05, m: 0.025, qe: 39.0 },
-        { c0: 50, ce: 2.1, v: 0.05, m: 0.025, qe: 95.8 },
-        { c0: 100, ce: 8.4, v: 0.05, m: 0.025, qe: 183.2 },
-        { c0: 200, ce: 28.0, v: 0.05, m: 0.025, qe: 344.0 },
-        { c0: 300, ce: 62.0, v: 0.05, m: 0.025, qe: 476.0 },
-        { c0: 400, ce: 115.0, v: 0.05, m: 0.025, qe: 570.0 }
+        { c0: 20, ce: 0.5, v: 50, m: 0.025, qe: 39.0 },
+        { c0: 50, ce: 2.1, v: 50, m: 0.025, qe: 95.8 },
+        { c0: 100, ce: 8.4, v: 50, m: 0.025, qe: 183.2 },
+        { c0: 200, ce: 28.0, v: 50, m: 0.025, qe: 344.0 },
+        { c0: 300, ce: 62.0, v: 50, m: 0.025, qe: 476.0 },
+        { c0: 400, ce: 115.0, v: 50, m: 0.025, qe: 570.0 }
       ]
     };
 
-    // State Variables
     let isBatchMode = true;
     let dataPoints: IsothermPoint[] = [];
 
-    // DOM Elements
     const btnModeBatch = document.getElementById('btnModeBatch')!;
     const btnModeDirect = document.getElementById('btnModeDirect')!;
     const batchVolMassSelectors = document.getElementById('batchVolMassSelectors')!;
@@ -468,7 +468,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       recalculate();
     }
 
-    // Toggle Modes
     btnModeBatch.addEventListener('click', () => {
       isBatchMode = true;
       btnModeBatch.style.background = '#0284c7';
@@ -497,7 +496,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       recalculate();
     });
 
-    // Preset button events
     document.querySelectorAll('.preset-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         const pKey = (e.currentTarget as HTMLElement).dataset.preset || 'mb';
@@ -505,7 +503,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       });
     });
 
-    // Render Table Rows
     function renderTable() {
       isothermTableBody.innerHTML = '';
       dataPoints.forEach((p, idx) => {
@@ -517,7 +514,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             <td style="padding: 0.45rem 0.75rem; text-align: center; color: #94a3b8; font-weight: bold;">${idx + 1}</td>
             <td style="padding: 0.45rem 0.75rem;"><input type="text" inputmode="decimal" class="grid-input" data-idx="${idx}" data-field="c0" value="${p.c0 ?? ''}" style="width: 85px; padding: 0.35rem 0.5rem; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.85rem; font-weight: bold;" /></td>
             <td style="padding: 0.45rem 0.75rem;"><input type="text" inputmode="decimal" class="grid-input" data-idx="${idx}" data-field="ce" value="${p.ce ?? ''}" style="width: 85px; padding: 0.35rem 0.5rem; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.85rem; font-weight: bold;" /></td>
-            <td style="padding: 0.45rem 0.75rem;"><input type="text" inputmode="decimal" class="grid-input" data-idx="${idx}" data-field="v" value="${p.v ?? 0.1}" style="width: 75px; padding: 0.35rem 0.5rem; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.85rem;" /></td>
+            <td style="padding: 0.45rem 0.75rem;"><input type="text" inputmode="decimal" class="grid-input" data-idx="${idx}" data-field="v" value="${p.v ?? 100}" style="width: 75px; padding: 0.35rem 0.5rem; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.85rem;" /></td>
             <td style="padding: 0.45rem 0.75rem;"><input type="text" inputmode="decimal" class="grid-input" data-idx="${idx}" data-field="m" value="${p.m ?? 0.05}" style="width: 75px; padding: 0.35rem 0.5rem; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.85rem;" /></td>
             <td style="padding: 0.45rem 0.75rem; font-weight: 800; color: #0284c7; background: #f0f9ff; font-family: monospace;">${p.qe.toFixed(2)}</td>
             <td style="padding: 0.45rem 0.75rem; text-align: center;"><button type="button" class="del-row-btn" data-idx="${idx}" style="background: none; border: none; cursor: pointer; color: #ef4444; font-weight: bold;">✕</button></td>
@@ -533,7 +530,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         isothermTableBody.appendChild(tr);
       });
 
-      // Attach row change events
       document.querySelectorAll('.grid-input').forEach(inp => {
         inp.addEventListener('input', handleCellEdit);
       });
@@ -563,7 +559,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       if (field === 'qe') dataPoints[idx].qe = val;
 
       if (isBatchMode) {
-        const vLit = convertVolumeToLiters(dataPoints[idx].v || 0.1, selVolUnit.value as any);
+        const vLit = convertVolumeToLiters(dataPoints[idx].v || 100, selVolUnit.value as any);
         const mG = convertMassToGrams(dataPoints[idx].m || 0.05, selMassUnit.value as any);
         dataPoints[idx].qe = calculateBatchQe(dataPoints[idx].c0 || 0, dataPoints[idx].ce || 0, vLit, mG);
       }
@@ -586,12 +582,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     }
 
     function addRow() {
-      const last = dataPoints[dataPoints.length - 1] || { c0: 50, ce: 10, v: 0.1, m: 0.05, qe: 80 };
+      const last = dataPoints[dataPoints.length - 1] || { c0: 50, ce: 10, v: 100, m: 0.05, qe: 80 };
       dataPoints.push({
         id: 'pt_' + Date.now(),
         c0: (last.c0 || 50) + 25,
         ce: (last.ce || 10) + 15,
-        v: last.v || 0.1,
+        v: last.v || 100,
         m: last.m || 0.05,
         qe: (last.qe || 80) + 40
       });
@@ -607,7 +603,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       recalculate();
     });
 
-    // File Upload
     fileUploadInput.addEventListener('change', (e) => {
       const file = (e.target as HTMLInputElement).files?.[0];
       if (!file) return;
@@ -626,7 +621,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           if (parts.length >= 2) {
             if (parts.length >= 4) {
               const c0 = parts[0], ce = parts[1], v = parts[2], m = parts[3];
-              newPts.push({ id: 'csv_' + idx, c0, ce, v, m, qe: calculateBatchQe(c0, ce, v, m) });
+              const vLit = convertVolumeToLiters(v, selVolUnit.value as any);
+              const mG = convertMassToGrams(m, selMassUnit.value as any);
+              newPts.push({ id: 'csv_' + idx, c0, ce, v, m, qe: calculateBatchQe(c0, ce, vLit, mG) });
             } else {
               newPts.push({ id: 'csv_' + idx, ce: parts[0], qe: parts[1] });
             }
@@ -666,12 +663,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       const res = solveAdsorptionTournament(validPoints, tempK);
       lastTournamentResult = res;
 
-      // Update Best Model Header
       document.getElementById('bestModelTitle')!.textContent = res.bestModel + ' Model';
       document.getElementById('bestModelR2Badge')!.textContent = `R² = ${res.bestR2.toFixed(4)}`;
       document.getElementById('mechanismVerdictText')!.textContent = res.adsorptionMechanism;
 
-      // Render Tournament Table
       const tBody = document.getElementById('tournamentTableBody')!;
       tBody.innerHTML = '';
       const models = [res.langmuir, res.freundlich, res.temkin, res.dubininRadushkevich];
@@ -692,7 +687,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         tBody.appendChild(tr);
       });
 
-      // Render Key Extracted Parameters
       const pGrid = document.getElementById('extractedParamsGrid')!;
       pGrid.innerHTML = '';
       const pL = res.langmuir.parameters;
@@ -718,7 +712,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         pGrid.appendChild(div);
       });
 
-      // Render SVG Chart
       renderSvgChart(validPoints, res);
     }
 
@@ -745,7 +738,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <text x="14" y="${h / 2}" text-anchor="middle" font-size="11" fill="#475569" font-weight="bold" transform="rotate(-90 14 ${h / 2})">Adsorption Uptake qe (mg/g)</text>
       `;
 
-      // Draw Grid Ticks
       for (let i = 0; i <= 4; i++) {
         const xVal = (maxCe / 4) * i;
         const yVal = (maxQe / 4) * i;
@@ -759,7 +751,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         `;
       }
 
-      // Draw Langmuir Curve
       let langD = '';
       for (let cx = 0; cx <= maxCe; cx += maxCe / 40) {
         const qPred = res.langmuir.predictQe(cx);
@@ -769,7 +760,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       }
       svgHtml += `<path d="${langD}" fill="none" stroke="#0284c7" stroke-width="2.5" />`;
 
-      // Draw Freundlich Curve
       let freundD = '';
       for (let cx = maxCe / 40; cx <= maxCe; cx += maxCe / 40) {
         const qPred = res.freundlich.predictQe(cx);
@@ -779,7 +769,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       }
       svgHtml += `<path d="${freundD}" fill="none" stroke="#10b981" stroke-width="2" stroke-dasharray="4,3" />`;
 
-      // Draw Experimental Points
       points.forEach(p => {
         const cx = scaleX(p.ce);
         const cy = scaleY(p.qe);
@@ -796,10 +785,81 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       svg.innerHTML = '<text x="250" y="160" text-anchor="middle" fill="#94a3b8" font-size="12">Enter at least 2 points to generate isotherm curve</text>';
     }
 
+    // Copy Full Results Summary
+    document.getElementById('btnCopySummary')?.addEventListener('click', async () => {
+      if (!lastTournamentResult) {
+        alert('Please enter or load data first.');
+        return;
+      }
+      const pL = lastTournamentResult.langmuir.parameters;
+      const pF = lastTournamentResult.freundlich.parameters;
+      const pD = lastTournamentResult.dubininRadushkevich.parameters;
+
+      const summary = `================================================
+CHEMISTRYDESK ADSORPTION ISOTHERM REPORT
+URL: https://chemistrydesk.vercel.app/isotherm
+================================================
+Best-Fit Model: ${lastTournamentResult.bestModel} (R² = ${lastTournamentResult.bestR2.toFixed(4)})
+Mechanism Verdict: ${lastTournamentResult.adsorptionMechanism}
+
+1. LANGMUIR ISOTHERM:
+   - Monolayer Capacity (qmax): ${pL.qmax?.value.toFixed(2)} mg/g
+   - Affinity Constant (KL): ${pL.kL?.value.toFixed(4)} L/mg
+   - Separation Factor (RL): ${lastTournamentResult.rlCurve[0] ? lastTournamentResult.rlCurve[0].rl.toFixed(3) + ' (' + lastTournamentResult.rlCurve[0].status + ')' : 'N/A'}
+   - R²: ${lastTournamentResult.langmuir.r2.toFixed(4)} | RMSE: ${lastTournamentResult.langmuir.rmse.toFixed(3)} | Chi-Sq: ${lastTournamentResult.langmuir.chiSquare.toFixed(3)}
+
+2. FREUNDLICH ISOTHERM:
+   - Capacity Factor (KF): ${pF.kF?.value.toFixed(2)}
+   - Heterogeneity Factor (1/n): ${pF.invN?.value.toFixed(3)}
+   - Adsorption Intensity (n): ${pF.n?.value.toFixed(2)}
+   - R²: ${lastTournamentResult.freundlich.r2.toFixed(4)} | RMSE: ${lastTournamentResult.freundlich.rmse.toFixed(3)} | Chi-Sq: ${lastTournamentResult.freundlich.chiSquare.toFixed(3)}
+
+3. DUBININ-RADUSHKEVICH (D-R):
+   - Mean Free Energy (E): ${pD.E?.value.toFixed(2)} kJ/mol
+   - Theoretical Capacity (qD): ${pD.qD?.value.toFixed(2)} mg/g
+   - R²: ${lastTournamentResult.dubininRadushkevich.r2.toFixed(4)}
+
+4. TEMKIN ISOTHERM:
+   - Heat of Sorption (B): ${lastTournamentResult.temkin.parameters.B?.value.toFixed(2)} J/mol
+   - Binding Constant (AT): ${lastTournamentResult.temkin.parameters.aT?.value.toFixed(3)} L/mg
+   - R²: ${lastTournamentResult.temkin.r2.toFixed(4)}
+================================================`;
+
+      await navigator.clipboard.writeText(summary);
+      const btn = document.getElementById('btnCopySummary')!;
+      const oldTxt = btn.textContent;
+      btn.textContent = '✅ Copied!';
+      setTimeout(() => { btn.textContent = oldTxt; }, 1800);
+    });
+
+    // Copy Materials & Methods Text Snippet
+    document.getElementById('btnCopyMethods')?.addEventListener('click', async () => {
+      if (!lastTournamentResult) {
+        alert('Please enter or load data first.');
+        return;
+      }
+      const pL = lastTournamentResult.langmuir.parameters;
+      const pD = lastTournamentResult.dubininRadushkevich.parameters;
+      const best = lastTournamentResult.bestModel;
+      const bestR2 = lastTournamentResult.bestR2.toFixed(4);
+      const qmax = pL.qmax?.value.toFixed(2);
+      const kL = pL.kL?.value.toFixed(4);
+      const EkJ = pD.E?.value.toFixed(2);
+      const rlStatus = lastTournamentResult.rlCurve[0] ? lastTournamentResult.rlCurve[0].status.toLowerCase() : 'favorable';
+
+      const paragraph = `Equilibrium adsorption data were modeled using linear and non-linear regressions across the Langmuir, Freundlich, Temkin, and Dubinin-Radushkevich isotherm equations. The experimental equilibrium was best described by the ${best} isotherm model (R² = ${bestR2}), yielding a maximum monolayer adsorption capacity (q_max) of ${qmax} mg/g and a Langmuir affinity constant (K_L) of ${kL} L/mg. The dimensionless separation factor (R_L) confirmed ${rlStatus} sorption across the investigated concentration domain. Furthermore, the mean free energy of adsorption estimated via the Dubinin-Radushkevich model was E = ${EkJ} kJ/mol, indicating that the uptake process is predominantly governed by ${EkJ < 8 ? 'physisorption through weak physical interactions' : EkJ <= 16 ? 'ion-exchange and electrostatic coordination' : 'chemisorption via chemical bonding'}.`;
+
+      await navigator.clipboard.writeText(paragraph);
+      const btn = document.getElementById('btnCopyMethods')!;
+      const oldTxt = btn.textContent;
+      btn.textContent = '✅ Copied!';
+      setTimeout(() => { btn.textContent = oldTxt; }, 1800);
+    });
+
     // CSV Export
     document.getElementById('btnExportCsv')?.addEventListener('click', () => {
       if (!dataPoints.length) return;
-      let csv = 'Initial_C0,Equilibrium_Ce,Volume_L,Mass_g,Uptake_qe_mg_g\n';
+      let csv = 'Initial_C0,Equilibrium_Ce,Volume,Mass,Uptake_qe_mg_g\n';
       dataPoints.forEach(p => {
         csv += `${p.c0 ?? ''},${p.ce},${p.v ?? ''},${p.m ?? ''},${p.qe.toFixed(4)}\n`;
       });
@@ -812,7 +872,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     });
 
     // Copy Overleaf / LaTeX Equation Block
-    document.getElementById('btnCopyLatex')?.addEventListener('click', () => {
+    document.getElementById('btnCopyLatex')?.addEventListener('click', async () => {
       if (!lastTournamentResult) return;
       const qmax = lastTournamentResult.langmuir.parameters.qmax?.value.toFixed(2);
       const kL = lastTournamentResult.langmuir.parameters.kL?.value.toFixed(4);
@@ -822,8 +882,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 \\begin{equation}
   q_e = \\frac{q_{\\max} K_L C_e}{1 + K_L C_e} = \\frac{${qmax} \\times ${kL} \\times C_e}{1 + ${kL} C_e} \\quad (R^2 = ${r2L})
 \\end{equation}`;
-      navigator.clipboard.writeText(latex);
-      alert('LaTeX equation block copied to clipboard for Overleaf.');
+      await navigator.clipboard.writeText(latex);
+      const btn = document.getElementById('btnCopyLatex')!;
+      const oldTxt = btn.textContent;
+      btn.textContent = '✅ Copied!';
+      setTimeout(() => { btn.textContent = oldTxt; }, 1800);
     });
 
     // Academic Citation System
