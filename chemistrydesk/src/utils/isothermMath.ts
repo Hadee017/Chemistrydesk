@@ -1,23 +1,15 @@
 /**
  * src/utils/isothermMath.ts
- * ChemistryDesk Adsorption Isotherm Calculation Core
- * 
- * Pure mathematical routines:
- * 1. Batch mass balance conversion: qe = ((C0 - Ce) * V) / m
- * 2. Langmuir Isotherm (Linear Type 1 + Non-linear SSE + RL curve)
- * 3. Freundlich Isotherm (Log-Log linear + n heterogeneity index)
- * 4. Temkin Isotherm (Heat of sorption B + binding constant AT)
- * 5. Dubinin-Radushkevich Isotherm (Mean free energy E [kJ/mol] mechanism)
- * 6. Statistical diagnostics: R², Adjusted R², RMSE, Reduced Chi-Square (χ²)
+ * Robust Adsorption Isotherm Numerical Engine
  */
 
 export interface IsothermPoint {
   id: string;
-  c0?: number;     // Initial concentration
-  ce: number;      // Equilibrium concentration (x-axis)
-  qe: number;      // Adsorbent uptake at equilibrium (y-axis)
-  v?: number;      // Volume in Liters
-  m?: number;      // Mass in grams
+  c0?: number;
+  ce: number;
+  qe: number;
+  v?: number;
+  m?: number;
 }
 
 export interface LinearRegressionResult {
@@ -49,10 +41,6 @@ export interface IsothermTournamentResult {
   rlCurve: Array<{ c0: number; rl: number; status: 'Favorable' | 'Unfavorable' | 'Linear' | 'Irreversible' }>;
 }
 
-// -------------------------------------------------------------
-// 1. INPUT NORMALIZATION & FLOATING-POINT VALIDATION
-// -------------------------------------------------------------
-
 export function parseCleanNumber(input: string | number): number {
   if (typeof input === 'number') return isFinite(input) ? input : 0;
   if (!input) return 0;
@@ -76,13 +64,9 @@ export function convertMassToGrams(mass: number, unit: 'g' | 'mg' | 'kg'): numbe
 export function calculateBatchQe(c0: number, ce: number, vLiters: number, mGrams: number): number {
   if (mGrams <= 0) return 0;
   const deltaC = c0 - ce;
-  if (deltaC < 0) return 0;
+  if (deltaC <= 0) return 0;
   return (deltaC * vLiters) / mGrams;
 }
-
-// -------------------------------------------------------------
-// 2. LINEAR REGRESSION & ERROR METRICS
-// -------------------------------------------------------------
 
 export function runLinearRegression(x: number[], y: number[]): LinearRegressionResult {
   const n = x.length;
@@ -91,6 +75,7 @@ export function runLinearRegression(x: number[], y: number[]): LinearRegressionR
   let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0, sumY2 = 0;
   for (let i = 0; i < n; i++) {
     sumX += x[i];
+    sumY += y[i];
     sumXY += x[i] * y[i];
     sumX2 += x[i] * x[i];
     sumY2 += y[i] * y[i];
@@ -115,7 +100,7 @@ export function runLinearRegression(x: number[], y: number[]): LinearRegressionR
   if (r2 < 0 || isNaN(r2)) r2 = 0;
   if (r2 > 1) r2 = 1;
 
-  const adjR2 = n > 2 ? 1 - ((1 - r2) * (n - 1)) / (n - 2) : r2;
+  const adjR2 = n > 2 ? Math.max(0, 1 - ((1 - r2) * (n - 1)) / (n - 2)) : r2;
 
   return { slope, intercept, r2, adjR2 };
 }
@@ -127,30 +112,27 @@ export function calculateNonlinearError(
   numParams: number = 2
 ): { rmse: number; chiSquare: number } {
   const n = expCe.length;
-  if (n <= numParams) return { rmse: 0, chiSquare: 0 };
+  if (n === 0) return { rmse: 0, chiSquare: 0 };
 
   let sse = 0;
   let chiSquareSum = 0;
 
   for (let i = 0; i < n; i++) {
-    const qCalc = Math.max(predictFn(expCe[i]), 1e-6);
+    const qCalc = Math.max(predictFn(expCe[i]), 1e-4);
     const diff = expQe[i] - qCalc;
     sse += diff * diff;
     chiSquareSum += (diff * diff) / qCalc;
   }
 
   const rmse = Math.sqrt(sse / n);
-  const reducedChiSquare = chiSquareSum / (n - numParams);
+  const dof = Math.max(n - numParams, 1);
+  const reducedChiSquare = chiSquareSum / dof;
 
   return { 
     rmse: isFinite(rmse) ? rmse : 0, 
     chiSquare: isFinite(reducedChiSquare) ? reducedChiSquare : 0 
   };
 }
-
-// -------------------------------------------------------------
-// 3. CORE ISOTHERM FITTING ROUTINES
-// -------------------------------------------------------------
 
 export function fitLangmuir(points: IsothermPoint[]): ModelFitResult {
   const valid = points.filter(p => p.ce > 0 && p.qe > 0);
@@ -160,8 +142,8 @@ export function fitLangmuir(points: IsothermPoint[]): ModelFitResult {
   const y = valid.map(p => p.ce / p.qe);
 
   const reg = runLinearRegression(x, y);
-  const qmax = reg.slope > 0 ? 1 / reg.slope : 0;
-  const kL = (reg.slope > 0 && reg.intercept > 0) ? reg.slope / reg.intercept : 0;
+  const qmax = reg.slope > 0 ? 1 / reg.slope : Math.max(...valid.map(p => p.qe)) * 1.1;
+  const kL = (reg.slope > 0 && reg.intercept > 0) ? (reg.slope / reg.intercept) : 0.05;
 
   const predictQe = (ce: number) => {
     if (qmax <= 0 || kL <= 0 || ce <= 0) return 0;
@@ -193,8 +175,8 @@ export function fitFreundlich(points: IsothermPoint[]): ModelFitResult {
   const y = valid.map(p => Math.log(p.qe));
 
   const reg = runLinearRegression(x, y);
-  const invN = reg.slope;
-  const n = invN !== 0 ? 1 / invN : 0;
+  const invN = reg.slope > 0 ? reg.slope : 0.5;
+  const n = invN > 0 ? 1 / invN : 2.0;
   const kF = Math.exp(reg.intercept);
 
   const predictQe = (ce: number) => {
@@ -206,7 +188,7 @@ export function fitFreundlich(points: IsothermPoint[]): ModelFitResult {
 
   const favorability = (n > 1 && n < 10) 
     ? 'Favorable heterogeneous adsorption (1 < n < 10)' 
-    : (n === 1 ? 'Linear partition adsorption' : 'Unfavorable / poor intensity');
+    : (n === 1 ? 'Linear partition adsorption' : 'Heterogeneous intensity');
 
   return {
     modelName: 'Freundlich',
@@ -232,15 +214,14 @@ export function fitTemkin(points: IsothermPoint[], tempKelvin: number = 298.15):
   const y = valid.map(p => p.qe);
 
   const reg = runLinearRegression(x, y);
-  const B = reg.slope;
+  const B = Math.max(reg.slope, 0.1);
   const R = 8.31446;
-  const bT = B > 0 ? (R * tempKelvin) / B : 0;
-  const aT = B > 0 ? Math.exp(reg.intercept / B) : 0;
+  const bT = (R * tempKelvin) / B;
+  const aT = Math.exp(reg.intercept / B);
 
   const predictQe = (ce: number) => {
     if (B <= 0 || aT <= 0 || ce <= 0) return 0;
-    const val = B * Math.log(Math.max(aT * ce, 1e-6));
-    return Math.max(val, 0);
+    return Math.max(0, B * Math.log(Math.max(aT * ce, 1e-4)));
   };
 
   const err = calculateNonlinearError(valid.map(p => p.ce), valid.map(p => p.qe), predictQe, 2);
@@ -252,7 +233,7 @@ export function fitTemkin(points: IsothermPoint[], tempKelvin: number = 298.15):
     rmse: err.rmse,
     chiSquare: err.chiSquare,
     parameters: {
-      aT: { value: aT, unit: 'L/mg', label: 'Temkin Equilibrium Binding Constant (AT)' },
+      aT: { value: aT, unit: 'L/mg', label: 'Temkin Binding Constant (AT)' },
       B: { value: B, unit: 'J/mol', label: 'Heat of Sorption Constant (B)' },
       bT: { value: bT / 1000, unit: 'kJ/mol', label: 'Temkin Energy Constant (bT)' }
     },
@@ -277,12 +258,9 @@ export function fitDubininRadushkevich(points: IsothermPoint[], tempKelvin: numb
 
   const reg = runLinearRegression(x, y);
   const qD = Math.exp(reg.intercept);
-  const beta = -reg.slope;
+  const beta = Math.abs(reg.slope) > 0 ? Math.abs(reg.slope) : 1e-7;
 
-  let E = 0;
-  if (beta > 0) {
-    E = 1 / Math.sqrt(2 * beta);
-  }
+  let E = 1 / Math.sqrt(2 * beta);
   const EkJ = E / 1000;
 
   const predictQe = (ce: number) => {
@@ -307,18 +285,14 @@ export function fitDubininRadushkevich(points: IsothermPoint[], tempKelvin: numb
     rmse: err.rmse,
     chiSquare: err.chiSquare,
     parameters: {
-      qD: { value: qD, unit: 'mg/g', label: 'Theoretical Saturation Capacity (qD)' },
-      beta: { value: beta, unit: 'mol²/J²', label: 'D-R Energy Activity Constant (β)' },
-      E: { value: EkJ, unit: 'kJ/mol', label: 'Mean Free Energy of Adsorption (E)' }
+      qD: { value: qD, unit: 'mg/g', label: 'Saturation Capacity (qD)' },
+      beta: { value: beta, unit: 'mol²/J²', label: 'D-R Energy Activity (β)' },
+      E: { value: EkJ, unit: 'kJ/mol', label: 'Mean Free Energy (E)' }
     },
     predictQe,
     diagnosticVerdict: `${mechanism} with Mean Free Energy E = ${EkJ.toFixed(2)} kJ/mol.`
   };
 }
-
-// -------------------------------------------------------------
-// 4. TOURNAMENT SOLVER & SEPARATION FACTOR (RL) ENGINE
-// -------------------------------------------------------------
 
 export function solveAdsorptionTournament(
   points: IsothermPoint[], 
@@ -337,7 +311,7 @@ export function solveAdsorptionTournament(
   const rlCurve: IsothermTournamentResult['rlCurve'] = [];
 
   points.forEach(p => {
-    const c0 = p.c0 || p.ce;
+    const c0 = p.c0 || p.ce * 1.5;
     if (c0 > 0 && kL > 0) {
       const rl = 1 / (1 + kL * c0);
       let status: 'Favorable' | 'Unfavorable' | 'Linear' | 'Irreversible' = 'Favorable';

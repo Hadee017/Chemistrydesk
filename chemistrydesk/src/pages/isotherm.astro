@@ -85,7 +85,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
       </div>
 
-      <!-- Quick Preset & Citation / Action Bar -->
+      <!-- Quick Preset & Action Bar -->
       <div style="margin-top: 1.25rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
           <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Load Benchmark:</span>
@@ -265,7 +265,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; flex-direction: column;">
           
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
-            <!-- Plot View Toggles -->
             <div style="background: #f1f5f9; padding: 2px; border-radius: 6px; display: inline-flex; gap: 2px;">
               <button type="button" class="plot-view-btn" data-view="equilibrium" style="background: #0284c7; color: #fff; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.72rem; font-weight: 700; cursor: pointer;">qₑ vs Cₑ</button>
               <button type="button" class="plot-view-btn" data-view="langmuir" style="background: transparent; color: #64748b; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.72rem; font-weight: 700; cursor: pointer;">Cₑ/qₑ vs Cₑ</button>
@@ -273,7 +272,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
               <button type="button" class="plot-view-btn" data-view="dr" style="background: transparent; color: #64748b; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.72rem; font-weight: 700; cursor: pointer;">ln(qₑ) vs ε²</button>
             </div>
 
-            <!-- Download Vector Graph Button -->
             <button id="btnDownloadSvg" type="button" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0.25rem 0.6rem; font-size: 0.72rem; font-weight: 700; cursor: pointer; color: #334155; display: inline-flex; align-items: center; gap: 0.25rem;">
               <span>💾</span> Save Graph (SVG)
             </button>
@@ -290,7 +288,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             </div>
             <div style="display: flex; align-items: center; gap: 0.35rem;">
               <span style="width: 16px; height: 3px; background: #0284c7; display: inline-block;"></span>
-              <span style="font-weight: 600;">Fitted Curve</span>
+              <span style="font-weight: 600;">Langmuir Fit</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.35rem;">
+              <span style="width: 16px; height: 3px; background: #10b981; display: inline-block; border-top: 2px dashed #10b981;"></span>
+              <span style="font-weight: 600;">Freundlich Fit</span>
             </div>
           </div>
 
@@ -312,7 +314,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 1.25rem;">
               
-              <!-- Inputs Grid -->
               <div style="display: flex; flex-direction: column; gap: 0.5rem;">
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; font-size: 0.75rem; font-weight: 700; color: #475569;">
                   <span>Temperature (Kelvin)</span>
@@ -335,7 +336,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                 </div>
               </div>
 
-              <!-- Output Cards -->
               <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 1rem; display: flex; flex-direction: column; justify-content: space-between;">
                 <div>
                   <span style="font-size: 0.72rem; font-weight: 800; color: #475569; text-transform: uppercase;">Van 't Hoff Thermodynamic Outputs:</span>
@@ -510,7 +510,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     const selVolUnit = document.getElementById('selVolUnit') as HTMLSelectElement;
     const selMassUnit = document.getElementById('selMassUnit') as HTMLSelectElement;
 
-    // URL State Loading & LocalStorage Fallback
     function initializeData() {
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.has('ce') && urlParams.has('qe')) {
@@ -532,16 +531,28 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         return;
       }
 
+      // If invalid/empty storage, reset to clean benchmark
       const saved = localStorage.getItem('cd_isotherm_points');
       if (saved) {
         try {
-          dataPoints = JSON.parse(saved);
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length >= 2 && parsed[0].qe > 0) {
+            dataPoints = parsed;
+          } else {
+            loadPreset('mb');
+            return;
+          }
         } catch {
           loadPreset('mb');
+          return;
         }
       } else {
         loadPreset('mb');
+        return;
       }
+
+      renderTable();
+      recalculate();
     }
 
     function syncUrlState() {
@@ -746,7 +757,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       localStorage.setItem('cd_isotherm_points', JSON.stringify(dataPoints));
     }
 
-    // Recalculate & Multi-Model Tournament
     function recalculate() {
       const tempK = parseCleanNumber(inpTempK.value) || 298.15;
       const validPoints = dataPoints.filter(p => p.ce > 0 && p.qe > 0);
@@ -818,7 +828,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       syncUrlState();
     }
 
-    // Linear vs Equilibrium Plot View Switcher
+    // Plot View Toggles
     document.querySelectorAll('.plot-view-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         const t = e.currentTarget as HTMLElement;
@@ -840,15 +850,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       const svg = document.getElementById('isothermSvg')!;
       const w = 500, h = 320, padL = 55, padR = 25, padT = 25, padB = 40;
 
+      if (currentPlotView === 'equilibrium') {
+        renderEquilibriumPlot(valid, lastTournamentResult);
+        return;
+      }
+
       let xVals: number[] = [];
       let yVals: number[] = [];
       let xLabel = 'Equilibrium Concentration Ce (mg/L)';
       let yLabel = 'Adsorption Uptake qe (mg/g)';
 
-      if (currentPlotView === 'equilibrium') {
-        renderEquilibriumPlot(valid, lastTournamentResult);
-        return;
-      } else if (currentPlotView === 'langmuir') {
+      if (currentPlotView === 'langmuir') {
         xVals = valid.map(p => p.ce);
         yVals = valid.map(p => p.ce / p.qe);
         xLabel = 'Ce (mg/L)';
@@ -867,14 +879,21 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         yLabel = 'ln(qe)';
       }
 
-      // Linear Render Engine
-      const minX = Math.min(...xVals) * (minX => minX < 0 ? 1.1 : 0.9)(minX);
-      const maxX = Math.max(...xVals) * 1.15;
-      const minY = Math.min(...yVals) * (minY => minY < 0 ? 1.1 : 0.9)(minY);
-      const maxY = Math.max(...yVals) * 1.15;
+      const rawMinX = Math.min(...xVals);
+      const rawMaxX = Math.max(...xVals);
+      const rawMinY = Math.min(...yVals);
+      const rawMaxY = Math.max(...yVals);
 
-      const scaleX = (val: number) => padL + ((val - minX) / (maxX - minX || 1)) * (w - padL - padR);
-      const scaleY = (val: number) => h - padB - ((val - minY) / (maxY - minY || 1)) * (h - padT - padB);
+      const spanX = rawMaxX - rawMinX || 1;
+      const spanY = rawMaxY - rawMinY || 1;
+
+      const minX = rawMinX - spanX * 0.05;
+      const maxX = rawMaxX + spanX * 0.1;
+      const minY = rawMinY - spanY * 0.05;
+      const maxY = rawMaxY + spanY * 0.1;
+
+      const scaleX = (val: number) => padL + ((val - minX) / (maxX - minX)) * (w - padL - padR);
+      const scaleY = (val: number) => h - padB - ((val - minY) / (maxY - minY)) * (h - padT - padB);
 
       let svgHtml = `
         <line x1="${padL}" y1="${h - padB}" x2="${w - padR}" y2="${h - padB}" stroke="#cbd5e1" stroke-width="2"/>
@@ -883,7 +902,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <text x="14" y="${h / 2}" text-anchor="middle" font-size="11" fill="#475569" font-weight="bold" transform="rotate(-90 14 ${h / 2})">${yLabel}</text>
       `;
 
-      // Draw Ticks
       for (let i = 0; i <= 4; i++) {
         const xV = minX + ((maxX - minX) / 4) * i;
         const yV = minY + ((maxY - minY) / 4) * i;
@@ -894,7 +912,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         `;
       }
 
-      // Linear Regression Line
       const n = xVals.length;
       let sX = 0, sY = 0, sXY = 0, sX2 = 0;
       for (let i = 0; i < n; i++) {
@@ -903,11 +920,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       const slope = (n * sXY - sX * sY) / (n * sX2 - sX * sX || 1);
       const intercept = (sY - slope * sX) / n;
 
-      const p1x = scaleX(minX), p1y = scaleY(slope * minX + intercept);
-      const p2x = scaleX(maxX), p2y = scaleY(slope * maxX + intercept);
+      const p1x = scaleX(minX);
+      const p1y = scaleY(slope * minX + intercept);
+      const p2x = scaleX(maxX);
+      const p2y = scaleY(slope * maxX + intercept);
       svgHtml += `<line x1="${p1x}" y1="${p1y}" x2="${p2x}" y2="${p2y}" stroke="#0284c7" stroke-width="2.5" />`;
 
-      // Plot Points
       for (let i = 0; i < n; i++) {
         svgHtml += `<circle cx="${scaleX(xVals[i])}" cy="${scaleY(yVals[i])}" r="4.5" fill="#0f172a" stroke="#fff" stroke-width="1.5"/>`;
       }
@@ -942,7 +960,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         `;
       }
 
-      // Langmuir Curve
       let langD = '';
       for (let cx = 0; cx <= maxCe; cx += maxCe / 40) {
         const qPred = res.langmuir.predictQe(cx);
@@ -950,7 +967,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       }
       svgHtml += `<path d="${langD}" fill="none" stroke="#0284c7" stroke-width="2.5" />`;
 
-      // Freundlich Curve
       let freundD = '';
       for (let cx = maxCe / 40; cx <= maxCe; cx += maxCe / 40) {
         const qPred = res.freundlich.predictQe(cx);
@@ -958,7 +974,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       }
       svgHtml += `<path d="${freundD}" fill="none" stroke="#10b981" stroke-width="2" stroke-dasharray="4,3" />`;
 
-      // Experimental Points
       points.forEach(p => {
         svgHtml += `<circle cx="${scaleX(p.ce)}" cy="${scaleY(p.qe)}" r="4.5" fill="#0f172a" stroke="#fff" stroke-width="1.5"/>`;
       });
@@ -971,7 +986,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       svg.innerHTML = '<text x="250" y="160" text-anchor="middle" fill="#94a3b8" font-size="12">Enter at least 2 points to generate isotherm curve</text>';
     }
 
-    // 1-Click SVG Image Exporter
     document.getElementById('btnDownloadSvg')?.addEventListener('click', () => {
       const svg = document.getElementById('isothermSvg');
       if (!svg) return;
@@ -984,7 +998,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       a.click();
     });
 
-    // Shareable URL Copy Button
     document.getElementById('btnCopyShareUrl')?.addEventListener('click', async () => {
       syncUrlState();
       await navigator.clipboard.writeText(window.location.href);
@@ -994,7 +1007,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       setTimeout(() => { btn.textContent = oldTxt; }, 1800);
     });
 
-    // Van 't Hoff Thermodynamics Solver
     function solveVanTHoff() {
       const t1 = parseCleanNumber((document.getElementById('thermoT1') as HTMLInputElement).value);
       const k1 = parseCleanNumber((document.getElementById('thermoK1') as HTMLInputElement).value);
@@ -1010,7 +1022,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       const R = 8.31446;
       const x = temps.map(t => 1 / t);
-      const y = ks.map(k => Math.log(k * 55.5 * 1000)); // Standard dimensionless equilibrium constant
+      const y = ks.map(k => Math.log(k * 55.5 * 1000));
 
       let sX = 0, sY = 0, sXY = 0, sX2 = 0;
       const n = x.length;
@@ -1020,9 +1032,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       const slope = (n * sXY - sX * sY) / (n * sX2 - sX * sX || 1);
       const intercept = (sY - slope * sX) / n;
 
-      const deltaH = (-slope * R) / 1000; // kJ/mol
-      const deltaS = intercept * R;       // J/(mol·K)
-      const deltaG298 = deltaH - (298.15 * deltaS) / 1000; // kJ/mol
+      const deltaH = (-slope * R) / 1000;
+      const deltaS = intercept * R;
+      const deltaG298 = deltaH - (298.15 * deltaS) / 1000;
 
       document.getElementById('outDeltaH')!.textContent = `${deltaH.toFixed(2)} kJ/mol`;
       document.getElementById('outDeltaS')!.textContent = `${deltaS.toFixed(2)} J/(mol·K)`;
@@ -1040,7 +1052,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       document.getElementById(id)?.addEventListener('input', solveVanTHoff);
     });
 
-    // Copy Results & Methods Handlers
     document.getElementById('btnCopySummary')?.addEventListener('click', async () => {
       if (!lastTournamentResult) return;
       const pL = lastTournamentResult.langmuir.parameters;
@@ -1129,7 +1140,6 @@ Mechanism Verdict: ${lastTournamentResult.adsorptionMechanism}
       setTimeout(() => { btn.textContent = oldTxt; }, 1800);
     });
 
-    // Academic Citation
     const citeDrawer = document.getElementById('citeDrawer');
     const toggleCiteBtn = document.getElementById('toggleCiteBtn');
     const inlineCiteOutput = document.getElementById('inlineCiteOutput');
