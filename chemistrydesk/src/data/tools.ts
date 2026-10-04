@@ -84,12 +84,24 @@ export const toolsCatalog: ToolMeta[] = [
     id: 'ghs',
     title: 'GHS Hazard & Chemical Safety Studio',
     path: '/ghs',
-    icon: '⚠️️',
+    icon: '⚠',
     badge: 'Safety Core',
     badgeColor: '#dc2626',
     description: 'Universal chemical entity lookup (110M+ compounds), GHS hazard & precautionary H/P code index, mixture cut-off calculators, and printable OSHA secondary container labels.',
     priority: '0.9',
     changefreq: 'weekly',
     lastmod: '2026-10-03'
+  },
+  {
+    id: 'isotherm',
+    title: 'Adsorption Isotherm Studio',
+    path: '/isotherm',
+    icon: '🧲',
+    badge: 'Materials Core',
+    badgeColor: '#0284c7',
+    description: 'Fit Langmuir, Freundlich, Temkin, and Dubinin-Radushkevich models from liquid-phase adsorption data. Extract qmax, KL, RL, KF, 1/n, and mean sorption energy E with error analysis.',
+    priority: '0.9',
+    changefreq: 'weekly',
+    lastmod: '2026-10-04'
   }
 ];
