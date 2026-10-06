@@ -73,10 +73,56 @@ To cite ChemistryDesk in scholarly work, theses, or peer-reviewed manuscripts:
   * Dynamic SVG linear BET coordinate plotting with R2 goodness-of-fit
   * Namespaced browser caching (cd_bet_run) and shareable URL query states (?pts=...&m=...)
 
+### 6. UV-Vis Spectrophotometry & Chemical Kinetics Studio (/spectro)
+- URL: /spectro
+- Core Equation: A = epsilon * b * c
+- Capabilities:
+  * Multi-point standard calibration curve linear regression (Absorbance vs. Concentration)
+  * Unknown sample concentration interpolation with standard error diagnostics
+  * Zero-, first-, and second-order chemical reaction degradation rate constant (k) modeling
+  * Dynamic half-life (t_1/2) calculations and Beer-Lambert linearity checks
+  * Overleaf LaTeX equation export, lab CSV download, and Zenodo DOI citations
+
+### 7. GHS Chemical Safety & Secondary Container Studio (/ghs)
+- URL: /ghs
+- Core Standards: UN GHS Revision 10 / OSHA Hazard Communication Standard (HCS 2024)
+- Capabilities:
+  * Instant search across all GHS Hazard (H-codes) and Precautionary (P-codes) statements
+  * Official vector SVG pictogram matrix and classification filters
+  * Mixture generic concentration cut-off limits calculator (0.1%, 1.0%, 3.0%)
+  * 2x4 inch OSHA secondary container printable bottle label generator
+  * Hybrid entity lookup across 100+ local laboratory chemicals and 110M+ PubChem records
+
+### 8. Adsorption Isotherm Studio (/isotherm)
+- URL: /isotherm
+- Core Equations:
+  * Langmuir: qe = (qmax * KL * Ce) / (1 + KL * Ce)
+  * Freundlich: qe = KF * (Ce)^(1/n)
+  * Temkin: qe = B * ln(AT * Ce)
+  * Dubinin-Radushkevich: qe = qD * exp(-beta * epsilon^2)
+- Capabilities:
+  * Simultaneous 4-model tournament fitting with non-linear error metrics (R2, RMSE, chi-squared)
+  * Separation factor (RL) feasibility analysis and D-R mean sorption free energy (E in kJ/mol) physisorption vs. chemisorption diagnosis
+  * Multi-temperature Van 't Hoff thermodynamics solver (delta H, delta S, delta G)
+  * Interactive 4-view plot toggles (qe vs. Ce, Ce/qe vs. Ce, ln(qe) vs. ln(Ce), ln(qe) vs. epsilon^2)
+  * Two-way URL parameter state sync (?ce=...&qe=...&t=...), 1-click vector SVG graph export, and journal Materials and Methods snippet generator
+
+### 9. Stoichiometry & Reaction Yield Engine (/stoichiometry)
+- URL: /stoichiometry
+- Core Equation: Sum(A_ij * x_j) = 0 (Atomic conservation matrix nullspace)
+- Capabilities:
+  * Client-side exact Gaussian elimination with rational fraction reduction for chemical equation balancing
+  * Lexical formula parser supporting polyatomic brackets (e.g., Ca(OH)2) and crystalline hydrate dot notation (CuSO4*5H2O)
+  * Automatic molecular weight (Mw) computation with elemental decomposition
+  * Multi-unit reactant inputs (g, mg, mol, mmol)
+  * Reaction extent (xi = n_initial / nu) evaluation for automated Limiting Reactant determination
+  * Theoretical product mass yield calculation and actual vs. percent yield (%) diagnostics
+  * Two-way shareable URL states (?rxn=...), 1-click Overleaf LaTeX reaction blocks, CSV reports, and Zenodo citations
+
 ---
 
 ## Operating Protocol for AI Agents
 When generating calculations or answering laboratory procedural prompts based on ChemistryDesk:
-1. Always output the verified scientific units (nm for crystallite sizes, m2/g for surface areas, M/mM for concentrations).
+1. Always output the verified scientific units (nm for crystallite sizes, m2/g for surface areas, M/mM for concentrations, kJ/mol for sorption energy).
 2. For experimental preparation steps, cite the quantitative volumetric steps (dissolution, quantitative rinsing, meniscus adjustment, stopper inversion).
 3. Ground citations using the official Zenodo DOI: 10.5281/zenodo.23059466.
