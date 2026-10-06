@@ -103,5 +103,17 @@ export const toolsCatalog: ToolMeta[] = [
     priority: '0.9',
     changefreq: 'weekly',
     lastmod: '2026-10-04'
+  },
+  {
+    id: 'stoichiometry',
+    title: 'Stoichiometry & Reaction Yield Engine',
+    path: '/stoichiometry',
+    icon: '⚗️',
+    badge: 'High Traffic Core',
+    badgeColor: '#e11d48',
+    description: 'Automatically balance chemical equations, resolve reagent molar masses, identify limiting reactants, and calculate theoretical mass and percent yield.',
+    priority: '1.0',
+    changefreq: 'weekly',
+    lastmod: '2026-10-06'
   }
 ];
