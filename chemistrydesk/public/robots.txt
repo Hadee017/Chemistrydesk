@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
 
-# Sitemap Index Declaration
+# Standard Sitemap
+Sitemap: https://chemistrycal.com/sitemap.xml
 Sitemap: https://chemistrycal.com/sitemap-index.xml
