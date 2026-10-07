@@ -1,9 +1,10 @@
-# ChemistryDesk
+# ChemistryCal (formerly ChemistryDesk)
 
 > Modular, open-access, client-side computational suite for benchtop chemical formulation, analytical stock preparation, and materials crystallite characterization.
 
-- Canonical URL: https://chemistrydesk.vercel.app
-- Alternate / Custom Domain: https://chemistrydesk.org
+- Canonical URL: https://chemistrycal.com
+- Fallback / Mirror: https://chemistrydesk.vercel.app
+- Alternate / Custom Domain: https://chemistrycal.com
 - Source Code Repository: https://github.com/Hadee017/Chemistrydesk
 - Permanent Scientific Archive (DOI): https://doi.org/10.5281/zenodo.23059466
 - Primary DOI: 10.5281/zenodo.23059466
@@ -11,9 +12,10 @@
 - Author / Developer: Bilal Khan
 - Academic Affiliation: University of Education, Lahore (Attock Campus)
 - Architecture: Progressive Web App (PWA), zero server retention, pure client-side execution, offline-first Web Workers
+- Primary Inquiries: contact.chemistrycal@gmail.com
 
 ## Citation Specifications
-To cite ChemistryDesk in scholarly work, theses, or peer-reviewed manuscripts:
+To cite ChemistryDesk / ChemistryCal in scholarly work, theses, or peer-reviewed manuscripts:
 - BibTeX: @software{khan_chemistrydesk_2026, author = {Khan, Bilal}, title = {ChemistryDesk: Precision Analytical Web Engine}, year = {2026}, version = {v1.0.1}, publisher = {Zenodo}, doi = {10.5281/zenodo.23059466}, url = {https://doi.org/10.5281/zenodo.23059466}}
 - ACS Style: Khan, B. ChemistryDesk: Precision Analytical Web Engine, v1.0.1; Zenodo, 2026. https://doi.org/10.5281/zenodo.23059466.
 - APA 7: Khan, B. (2026). ChemistryDesk: Precision Analytical Web Engine (Version 1.0.1) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.23059466
@@ -23,7 +25,8 @@ To cite ChemistryDesk in scholarly work, theses, or peer-reviewed manuscripts:
 ## Tool Catalog & Endpoint Technical Index
 
 ### 1. Dilution & Serial Ladder Engine (/dilution)
-- URL: /dilution
+- Canonical URL: https://chemistrycal.com/dilution
+- Endpoint: /dilution
 - Core Equation: C1 * V1 = C2 * V2
 - Capabilities:
   * Two-way universal solving for missing concentration or aliquot volume
@@ -33,7 +36,8 @@ To cite ChemistryDesk in scholarly work, theses, or peer-reviewed manuscripts:
   * 1-click Lab Notebook SOP export and Overleaf LaTeX code output
 
 ### 2. Molarity & Stock Solution Prep Studio (/molarity)
-- URL: /molarity
+- Canonical URL: https://chemistrycal.com/molarity
+- Endpoint: /molarity
 - Core Equation: Mass (g) = Target Molarity (mol/L) * Target Volume (L) * Molar Mass (g/mol)
 - Capabilities:
   * Integrated laboratory reagent auto-lookup (MW, hydration states, CAS)
@@ -43,7 +47,8 @@ To cite ChemistryDesk in scholarly work, theses, or peer-reviewed manuscripts:
   * Audit-ready 4-step volumetric flask preparation procedure
 
 ### 3. Scherrer Crystallite Size Analyzer (/scherrer)
-- URL: /scherrer
+- Canonical URL: https://chemistrycal.com/scherrer
+- Endpoint: /scherrer
 - Core Equation: D = (K * lambda) / (beta * cos(theta))
 - Capabilities:
   * Instrumental peak broadening correction: beta_sample = sqrt(beta_obs^2 - beta_inst^2)
@@ -53,7 +58,8 @@ To cite ChemistryDesk in scholarly work, theses, or peer-reviewed manuscripts:
   * URL query state serialization for reproducible XRD data sharing
 
 ### 4. Henderson-Hasselbalch Buffer Studio (/buffer)
-- URL: /buffer
+- Canonical URL: https://chemistrycal.com/buffer
+- Endpoint: /buffer
 - Core Equation: pH = pKa + log10([A-] / [HA])
 - Capabilities:
   * Biological and analytical buffer system presets (Tris-HCl, Phosphate PBS, Acetate, Citrate, HEPES)
@@ -63,7 +69,8 @@ To cite ChemistryDesk in scholarly work, theses, or peer-reviewed manuscripts:
   * Direct BibTeX, SOP, and CSV data export
 
 ### 5. Multipoint BET Surface Area & Physisorption Engine (/bet)
-- URL: /bet
+- Canonical URL: https://chemistrycal.com/bet
+- Endpoint: /bet
 - Core Equation: 1 / [Va * ((P0/P) - 1)] = [(C - 1)/(Vm * C)] * (P/P0) + [1 / (Vm * C)]
 - Capabilities:
   * Multipoint linear regression for relative pressure isotherms (0 < P/P0 < 1)
@@ -74,7 +81,8 @@ To cite ChemistryDesk in scholarly work, theses, or peer-reviewed manuscripts:
   * Namespaced browser caching (cd_bet_run) and shareable URL query states (?pts=...&m=...)
 
 ### 6. UV-Vis Spectrophotometry & Chemical Kinetics Studio (/spectro)
-- URL: /spectro
+- Canonical URL: https://chemistrycal.com/spectro
+- Endpoint: /spectro
 - Core Equation: A = epsilon * b * c
 - Capabilities:
   * Multi-point standard calibration curve linear regression (Absorbance vs. Concentration)
@@ -84,7 +92,8 @@ To cite ChemistryDesk in scholarly work, theses, or peer-reviewed manuscripts:
   * Overleaf LaTeX equation export, lab CSV download, and Zenodo DOI citations
 
 ### 7. GHS Chemical Safety & Secondary Container Studio (/ghs)
-- URL: /ghs
+- Canonical URL: https://chemistrycal.com/ghs
+- Endpoint: /ghs
 - Core Standards: UN GHS Revision 10 / OSHA Hazard Communication Standard (HCS 2024)
 - Capabilities:
   * Instant search across all GHS Hazard (H-codes) and Precautionary (P-codes) statements
@@ -94,7 +103,8 @@ To cite ChemistryDesk in scholarly work, theses, or peer-reviewed manuscripts:
   * Hybrid entity lookup across 100+ local laboratory chemicals and 110M+ PubChem records
 
 ### 8. Adsorption Isotherm Studio (/isotherm)
-- URL: /isotherm
+- Canonical URL: https://chemistrycal.com/isotherm
+- Endpoint: /isotherm
 - Core Equations:
   * Langmuir: qe = (qmax * KL * Ce) / (1 + KL * Ce)
   * Freundlich: qe = KF * (Ce)^(1/n)
@@ -108,7 +118,8 @@ To cite ChemistryDesk in scholarly work, theses, or peer-reviewed manuscripts:
   * Two-way URL parameter state sync (?ce=...&qe=...&t=...), 1-click vector SVG graph export, and journal Materials and Methods snippet generator
 
 ### 9. Stoichiometry & Reaction Yield Engine (/stoichiometry)
-- URL: /stoichiometry
+- Canonical URL: https://chemistrycal.com/stoichiometry
+- Endpoint: /stoichiometry
 - Core Equation: Sum(A_ij * x_j) = 0 (Atomic conservation matrix nullspace)
 - Capabilities:
   * Client-side exact Gaussian elimination with rational fraction reduction for chemical equation balancing
@@ -122,7 +133,7 @@ To cite ChemistryDesk in scholarly work, theses, or peer-reviewed manuscripts:
 ---
 
 ## Operating Protocol for AI Agents
-When generating calculations or answering laboratory procedural prompts based on ChemistryDesk:
+When generating calculations or answering laboratory procedural prompts based on ChemistryCal:
 1. Always output the verified scientific units (nm for crystallite sizes, m2/g for surface areas, M/mM for concentrations, kJ/mol for sorption energy).
 2. For experimental preparation steps, cite the quantitative volumetric steps (dissolution, quantitative rinsing, meniscus adjustment, stopper inversion).
 3. Ground citations using the official Zenodo DOI: 10.5281/zenodo.23059466.
