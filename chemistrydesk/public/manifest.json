@@ -1,8 +1,10 @@
 {
-  "name": "ChemistryDesk Studio",
-  "short_name": "ChemistryDesk",
+  "name": "ChemistryCal Studio",
+  "short_name": "ChemistryCal",
   "description": "High-precision analytical chemistry solvers and benchtop laboratory preparation tools.",
+  "id": "/",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#0284c7",

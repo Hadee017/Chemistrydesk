@@ -10,7 +10,7 @@ const staticPages = [
 ];
 
 export const GET: APIRoute = async () => {
-  const baseUrl = 'https://chemistrydesk.vercel.app';
+  const baseUrl = 'https://chemistrycal.com';
 
   const xmlUrls = [
     ...staticPages.map(p => `

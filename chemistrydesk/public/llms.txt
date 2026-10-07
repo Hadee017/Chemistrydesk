@@ -3,7 +3,7 @@
 > Modular, open-access, client-side computational suite for benchtop chemical formulation, analytical stock preparation, and materials crystallite characterization.
 
 - Canonical URL: https://chemistrycal.com
-- Fallback / Mirror: https://chemistrydesk.vercel.app
+- Fallback / Mirror: https://chemistrycal.com
 - Alternate / Custom Domain: https://chemistrycal.com
 - Source Code Repository: https://github.com/Hadee017/Chemistrydesk
 - Permanent Scientific Archive (DOI): https://doi.org/10.5281/zenodo.23059466

@@ -14,7 +14,7 @@ const {
 } = Astro.props;
 
 // Ensure search engines always index the root URL without query string pollution
-const siteOrigin = "https://chemistrydesk.vercel.app";
+const siteOrigin = "https://chemistrycal.com";
 const cleanPath = canonicalPath.split('?')[0];
 const fullCanonicalUrl = new URL(cleanPath, siteOrigin).href;
 ---
@@ -38,17 +38,19 @@ const fullCanonicalUrl = new URL(cleanPath, siteOrigin).href;
   <meta name="theme-color" content="#0284c7" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="ChemistryDesk" />
+  <meta name="apple-mobile-web-app-title" content="ChemistryCal" />
 
   <!-- OpenGraph / Social Media Cards -->
   <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="ChemistryDesk" />
+  <meta property="og:site_name" content="ChemistryCal" />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:url" content={fullCanonicalUrl} />
 
   <!-- Twitter / X Summary Cards -->
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:domain" content="chemistrycal.com" />
+  <meta name="twitter:url" content={fullCanonicalUrl} />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
 </head>
