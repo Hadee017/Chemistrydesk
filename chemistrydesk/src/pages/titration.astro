@@ -1,0 +1,1160 @@
+---
+// src/pages/titration.astro
+import titrationPresets from '../data/titrationPairs.json';
+import { COMMON_INDICATORS, calculateTitration } from '../lib/calculations/titration';
+
+// Default initial simulation (Acetic acid vs. NaOH)
+const defaultPreset = titrationPresets[0];
+const initialResult = calculateTitration({
+  systemType: defaultPreset.systemType as any,
+  analyteConcentration: defaultPreset.defaultAnalyteConc,
+  analyteVolume: defaultPreset.defaultAnalyteVol,
+  titrantConcentration: defaultPreset.defaultTitrantConc,
+  pKa: defaultPreset.pKa,
+  analyteName: defaultPreset.analyteName,
+  titrantName: defaultPreset.titrantName,
+  selectedIndicator: defaultPreset.recommendedIndicator
+});
+
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://chemistrycal.com';
+const canonicalUrl = `${siteUrl}/titration`;
+
+const pageTitle = "Acid-Base Titration Studio | pH Curve & 1st Derivative Generator";
+const pageDescription = "Simulate acid-base titration curves, compute equivalence points, buffer capacities, and numerical first derivatives (dpH/dV) with indicator transition zones and Overleaf LaTeX exports.";
+
+// Structured Schema Markup
+const schemaData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "@id": `${canonicalUrl}#software`,
+      "name": "Acid-Base Titration & Inflection Studio",
+      "url": canonicalUrl,
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires JavaScript. Runs 100% offline via local client-side execution.",
+      "description": pageDescription,
+      "featureList": [
+        "Dynamic pH Sigmoidal Curve Visualizer",
+        "Numerical First Derivative (dpH/dV) Peak Detection",
+        "Weak Acid & Weak Base Buffer Capacity Modeling (Henderson-Hasselbalch)",
+        "Indicator Transition Band Evaluator (Phenolphthalein, Bromothymol Blue, Methyl Orange)",
+        "1-Click Overleaf LaTeX Export and BibTeX Academic Citation",
+        "1-Click Electronic Lab Notebook (ELN) Benchtop SOP Recipe",
+        "CSV Numerical Data Export",
+        "Experimental Lab Data Scatter Point Overlay",
+        "Printable Secondary Container Benchtop Label Generator"
+      ]
+    },
+    {
+      "@type": "HowTo",
+      "@id": `${canonicalUrl}#howto`,
+      "name": "How to Determine the Equivalence Point and Titration Curve of an Acid-Base Reaction",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "name": "Select System and Enter Concentrations",
+          "text": "Select your chemical system (Strong/Strong, Weak Acid/Strong Base, or Weak Base/Strong Acid) and input the analyte volume, molarity, and titrant molarity."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Inspect Inflection and Equivalence Points",
+          "text": "Identify the equivalence volume (Veq) and pH where stoichiometric neutralization occurs using the sigmoidal curve or the peak of the 1st derivative."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Verify Chemical Indicator Compatibility",
+          "text": "Select an indicator to check that its pH transition range brackets the steep vertical inflection zone."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Export Data and Protocol",
+          "text": "Download numerical curve data as a CSV file, export high-res vector graphics, or copy the formatted benchtop SOP into your laboratory notebook."
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${canonicalUrl}#faq`,
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Why is the equivalence point pH greater than 7 for a weak acid titrated with a strong base?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "At the equivalence point, all weak acid has reacted to form its conjugate base (A-). This conjugate base hydrolyzes in water: A- + H2O <=> HA + OH-, producing hydroxide ions and resulting in an alkaline equivalence pH (typically between 8.0 and 9.5)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the physical significance of the half-equivalence point?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "At half-equivalence (V = Veq / 2), exactly half of the original weak acid has been converted to its conjugate base, making [HA] equal to [A-]. Under the Henderson-Hasselbalch equation, log([A-]/[HA]) becomes log(1) = 0, meaning pH = pKa."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does the first derivative (dpH/dV) pinpoint the equivalence volume?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The titration curve experiences its steepest slope at the equivalence point where buffer capacity reaches a minimum. The numerical first derivative dpH/dV converts this steep slope into a sharp peak, locating the exact stoichiometric inflection volume."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why does this titration simulator work offline?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The calculation engine runs entirely within your browser using client-side JavaScript. No data is sent to external servers, allowing full functionality in laboratory basements or without internet connectivity."
+          }
+        }
+      ]
+    }
+  ]
+};
+---
+
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{pageTitle}</title>
+  <meta name="description" content={pageDescription} />
+  <link rel="canonical" href={canonicalUrl} />
+  
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={pageTitle} />
+  <meta property="og:description" content={pageDescription} />
+  <meta property="og:url" content={canonicalUrl} />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(schemaData)}></script>
+</head>
+
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased selection:bg-cyan-500 selection:text-slate-950">
+
+  <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2 group">
+        <div class="w-8 h-8 rounded-lg bg-cyan-500 flex items-center justify-center font-bold text-slate-950 text-lg shadow-lg group-hover:scale-105 transition-transform">
+          C
+        </div>
+        <span class="text-xl font-bold tracking-tight text-white group-hover:text-cyan-400 transition-colors">
+          Chemistry<span class="text-cyan-400">Cal</span>
+        </span>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-1 text-sm font-medium text-slate-300">
+        <a href="/molarity" class="px-3 py-1.5 rounded-md hover:text-white hover:bg-slate-800 transition">Molarity</a>
+        <a href="/dilution" class="px-3 py-1.5 rounded-md hover:text-white hover:bg-slate-800 transition">Dilution</a>
+        <a href="/buffer" class="px-3 py-1.5 rounded-md hover:text-white hover:bg-slate-800 transition">Buffer</a>
+        <a href="/titration" class="px-3 py-1.5 rounded-md text-cyan-400 bg-cyan-950/50 border border-cyan-800/40">Titration</a>
+        <a href="/spectro" class="px-3 py-1.5 rounded-md hover:text-white hover:bg-slate-800 transition">Beer-Lambert</a>
+        <a href="/scherrer" class="px-3 py-1.5 rounded-md hover:text-white hover:bg-slate-800 transition">Scherrer XRD</a>
+        <a href="/ghs" class="px-3 py-1.5 rounded-md hover:text-white hover:bg-slate-800 transition">GHS Safety</a>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-950/80 text-emerald-400 border border-emerald-800/50">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          Offline Ready
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
+
+    <div class="space-y-2">
+      <nav class="text-xs text-slate-400 flex items-center gap-2">
+        <a href="/" class="hover:text-cyan-400 transition">Home</a>
+        <span>/</span>
+        <a href="/tools" class="hover:text-cyan-400 transition">Analytical Tools</a>
+        <span>/</span>
+        <span class="text-slate-200">Titration Studio</span>
+      </nav>
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
+            Acid-Base Titration &amp; Inflection Studio
+          </h1>
+          <p class="text-base text-slate-400 mt-1 max-w-3xl">
+            Simulate real-time neutralization curves, Henderson-Hasselbalch buffer capacities, and first-derivative (<span class="font-mono text-cyan-300">dpH/dV</span>) inflection peaks with indicator transition zones.
+          </p>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button id="btn-share-link" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 border border-slate-700 transition shadow-sm active:scale-95">
+            <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
+            Share URL State
+          </button>
+          <button id="btn-reset-defaults" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-300 border border-slate-700 transition shadow-sm active:scale-95">
+            Reset
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="ghs-alert-box" class="p-3.5 rounded-xl bg-amber-950/40 border border-amber-800/50 flex items-start gap-3 text-xs text-amber-200">
+      <div class="w-5 h-5 rounded bg-amber-500/20 text-amber-400 flex items-center justify-center flex-shrink-0 font-bold">!</div>
+      <div class="space-y-0.5">
+        <span class="font-semibold text-amber-300" id="ghs-alert-title">Chemical Safety Advisory:</span>
+        <p id="ghs-alert-text">{defaultPreset.ghsAlert}</p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <div class="lg:col-span-5 space-y-6">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-5">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h2 class="text-sm font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+              Experimental Setup
+            </h2>
+            <span class="text-xs text-slate-400">Pure Client-Side Math</span>
+          </div>
+
+          <div class="space-y-1.5">
+            <label for="select-preset" class="text-xs font-medium text-slate-300 flex items-center justify-between">
+              <span>Standard Laboratory System</span>
+              <span class="text-[10px] text-cyan-400">Auto-fills constants</span>
+            </label>
+            <select id="select-preset" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-cyan-500 transition">
+              {titrationPresets.map((p) => (
+                <option value={p.id}>{p.name} ({p.analyteFormula})</option>
+              ))}
+              <option value="custom">Custom System Entry...</option>
+            </select>
+          </div>
+
+          <div class="space-y-1.5">
+            <label for="select-system-type" class="text-xs font-medium text-slate-300">System Chemistry Model</label>
+            <select id="select-system-type" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-cyan-500 transition">
+              <option value="weak_acid_strong_base">Weak Acid vs. Strong Base (CH₃COOH / NaOH)</option>
+              <option value="strong_acid_strong_base">Strong Acid vs. Strong Base (HCl / NaOH)</option>
+              <option value="weak_base_strong_acid">Weak Base vs. Strong Acid (NH₃ / HCl)</option>
+            </select>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div class="space-y-1">
+              <label for="input-analyte-name" class="text-xs text-slate-400">Analyte In Flask</label>
+              <input type="text" id="input-analyte-name" value={defaultPreset.analyteName} class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:border-cyan-500 focus:outline-none" />
+            </div>
+            <div class="space-y-1">
+              <label for="input-titrant-name" class="text-xs text-slate-400">Titrant In Burette</label>
+              <input type="text" id="input-titrant-name" value={defaultPreset.titrantName} class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:border-cyan-500 focus:outline-none" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 pt-2">
+            <div class="space-y-1">
+              <label for="input-ca" class="text-xs font-medium text-slate-300 flex items-center justify-between">
+                <span>Analyte Conc. (C<sub>a</sub>)</span>
+              </label>
+              <div class="relative">
+                <input
+                  type="text"
+                  inputmode="decimal"
+                  id="input-ca"
+                  value={defaultPreset.defaultAnalyteConc}
+                  class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white font-mono focus:border-cyan-500 focus:outline-none"
+                />
+                <span class="absolute right-3 top-2 text-xs text-slate-500 font-mono">M</span>
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <label for="input-va" class="text-xs font-medium text-slate-300 flex items-center justify-between">
+                <span>Analyte Vol. (V<sub>a</sub>)</span>
+              </label>
+              <div class="relative">
+                <input
+                  type="text"
+                  inputmode="decimal"
+                  id="input-va"
+                  value={defaultPreset.defaultAnalyteVol}
+                  class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white font-mono focus:border-cyan-500 focus:outline-none"
+                />
+                <span class="absolute right-3 top-2 text-xs text-slate-500 font-mono">mL</span>
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <label for="input-cb" class="text-xs font-medium text-slate-300 flex items-center justify-between">
+                <span>Titrant Conc. (C<sub>b</sub>)</span>
+              </label>
+              <div class="relative">
+                <input
+                  type="text"
+                  inputmode="decimal"
+                  id="input-cb"
+                  value={defaultPreset.defaultTitrantConc}
+                  class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white font-mono focus:border-cyan-500 focus:outline-none"
+                />
+                <span class="absolute right-3 top-2 text-xs text-slate-500 font-mono">M</span>
+              </div>
+            </div>
+
+            <div class="space-y-1" id="wrap-pk">
+              <label for="input-pk" id="label-pk" class="text-xs font-medium text-slate-300 flex items-center justify-between">
+                <span>Dissociation (pK<sub>a</sub>)</span>
+              </label>
+              <input
+                type="text"
+                inputmode="decimal"
+                id="input-pk"
+                value={defaultPreset.pKa}
+                class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white font-mono focus:border-cyan-500 focus:outline-none"
+              />
+            </div>
+          </div>
+
+          <div class="space-y-2 pt-2 border-t border-slate-800">
+            <label for="select-indicator" class="text-xs font-medium text-slate-300 flex items-center justify-between">
+              <span>Colorimetric Indicator Overlay</span>
+              <span id="indicator-range-tag" class="text-[11px] text-pink-400 font-mono">pH 8.2 - 10.0</span>
+            </label>
+            <select id="select-indicator" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-cyan-500 transition">
+              {COMMON_INDICATORS.map((ind) => (
+                <option value={ind.name} selected={ind.name === defaultPreset.recommendedIndicator}>
+                  {ind.name} ({ind.colorChange})
+                </option>
+              ))}
+            </select>
+
+            <div class="flex items-center gap-3 p-2.5 rounded-lg bg-slate-950 border border-slate-800 text-xs">
+              <div id="flask-preview-dot" class="w-6 h-6 rounded-full border border-slate-600 transition-colors duration-500 shadow-inner flex items-center justify-center font-bold text-[9px]">
+                pH
+              </div>
+              <div class="space-y-0.5">
+                <span class="font-semibold text-slate-300">Flask Visual State at Equivalence:</span>
+                <p id="flask-color-desc" class="text-[11px] text-slate-400">Loading transition color...</p>
+              </div>
+            </div>
+
+            <p id="indicator-status-msg" class="text-[11px] text-slate-400 leading-relaxed pt-0.5">
+              {initialResult.indicator.statusNote}
+            </p>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 pt-3">
+            <button id="btn-export-csv" class="w-full py-2.5 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-white border border-slate-700 flex items-center justify-center gap-2 transition active:scale-95 shadow">
+              <svg class="w-3.5 h-3.5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+              Export CSV Points
+            </button>
+            <button id="btn-copy-sop" class="w-full py-2.5 px-3 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-xs font-bold text-slate-950 flex items-center justify-center gap-1.5 transition active:scale-95 shadow-lg shadow-cyan-950">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+              Copy Lab SOP
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-3">
+          <div class="bg-slate-900 border border-slate-800 rounded-xl p-3.5">
+            <span class="text-[11px] font-medium text-slate-400">Equivalence Vol (V<sub>eq</sub>)</span>
+            <div class="text-xl font-bold font-mono text-cyan-400 mt-0.5">
+              <span id="metric-veq">{initialResult.equivalenceVolume}</span> <span class="text-xs text-slate-400">mL</span>
+            </div>
+            <span class="text-[10px] text-slate-500">Stoichiometric endpoint</span>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-xl p-3.5">
+            <span class="text-[11px] font-medium text-slate-400">Equivalence pH</span>
+            <div class="text-xl font-bold font-mono text-pink-400 mt-0.5">
+              <span id="metric-eqph">{initialResult.equivalencePH}</span>
+            </div>
+            <span class="text-[10px] text-slate-500">Neutralization point</span>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-xl p-3.5">
+            <span class="text-[11px] font-medium text-slate-400">Half-Eq Vol (V<sub>½</sub>)</span>
+            <div class="text-xl font-bold font-mono text-amber-400 mt-0.5">
+              <span id="metric-halfv">{initialResult.halfEquivalenceVolume}</span> <span class="text-xs text-slate-400">mL</span>
+            </div>
+            <span class="text-[10px] text-slate-500">Buffer midpoint</span>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-xl p-3.5">
+            <span class="text-[11px] font-medium text-slate-400">Half-Eq pH (pK<sub>a</sub>)</span>
+            <div class="text-xl font-bold font-mono text-emerald-400 mt-0.5">
+              <span id="metric-halfph">{initialResult.halfEquivalencePH}</span>
+            </div>
+            <span class="text-[10px] text-slate-500">pH = pK<sub>a</sub></span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="lg:col-span-7 space-y-4">
+        
+        <div class="flex flex-wrap items-center justify-between gap-2.5 bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs shadow-md">
+          <div class="flex flex-wrap items-center gap-2">
+            <button id="btn-toggle-lab-mode" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-medium transition active:scale-95 flex items-center gap-1.5">
+              🧪 Overlay Lab Data
+            </button>
+            <button id="btn-print-titration-label" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-medium transition active:scale-95 flex items-center gap-1.5">
+              🏷️ Print Flask Label
+            </button>
+          </div>
+          <button id="btn-download-svg" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700 font-semibold transition active:scale-95 flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            Download SVG
+          </button>
+        </div>
+
+        <div id="drawer-lab-mode" class="hidden bg-slate-900 border border-cyan-800/50 rounded-xl p-4 space-y-3 text-xs shadow-xl">
+          <div class="flex justify-between items-center">
+            <span class="font-bold text-slate-200 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-yellow-400"></span>
+              Paste Experimental Burette Readings
+            </span>
+            <span class="text-slate-400 text-[11px]">Format: Volume &lt;space&gt; pH per line</span>
+          </div>
+          <textarea id="input-raw-lab-data" rows="4" placeholder="0.0  2.88&#10;5.0  4.12&#10;12.5 4.76&#10;25.0 8.72&#10;30.0 12.05" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 font-mono text-cyan-300 focus:outline-none focus:border-cyan-500"></textarea>
+          <div class="flex justify-end gap-2">
+            <button id="btn-clear-lab-data" class="px-3 py-1 rounded bg-slate-800 text-slate-400 hover:text-white">Clear Points</button>
+            <button id="btn-apply-lab-data" class="px-3 py-1 rounded bg-cyan-600 font-bold text-slate-950 hover:bg-cyan-500">Plot Points Over Curve</button>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-2xl space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
+            <div class="flex items-center gap-2">
+              <div class="w-3 h-3 rounded-full bg-cyan-400"></div>
+              <h3 class="text-base font-bold text-white tracking-wide">Dynamic Titration Curve</h3>
+            </div>
+            <div class="flex flex-wrap items-center gap-3 text-xs">
+              <span class="flex items-center gap-1.5 text-cyan-300">
+                <span class="w-3 h-0.5 bg-cyan-400 inline-block"></span> pH Curve
+              </span>
+              <span class="flex items-center gap-1.5 text-violet-400">
+                <span class="w-3 h-0.5 border-t border-dashed border-violet-400 inline-block"></span> 1st Deriv
+              </span>
+              <span class="flex items-center gap-1.5 text-pink-400">
+                <span class="w-2.5 h-2 rounded bg-pink-500/30 inline-block"></span> Indicator
+              </span>
+              <span class="flex items-center gap-1.5 text-yellow-400">
+                <span class="w-2 h-2 rounded-full bg-yellow-400 inline-block"></span> Lab Data
+              </span>
+            </div>
+          </div>
+
+          <div id="svg-chart-container" class="w-full overflow-hidden"></div>
+
+          <div class="flex flex-wrap items-center justify-between text-xs text-slate-400 pt-1 border-t border-slate-800/80">
+            <div>Inflection Max Slope: <span id="metric-max-deriv" class="font-mono text-violet-300">{initialResult.maxDerivativeValue}</span> dpH/mL</div>
+            <div id="metric-buffer-range-note" class="text-amber-300 font-mono">
+              Buffer Capacity Zone: [3.76 - 5.76]
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h3 class="text-sm font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              Academic Citation &amp; Overleaf Exporters
+            </h3>
+            <span class="text-xs text-slate-400">ELN / Manuscript Ready</span>
+          </div>
+
+          <div class="flex gap-2 border-b border-slate-800 text-xs">
+            <button id="tab-btn-sop" class="pb-2 font-bold text-cyan-400 border-b-2 border-cyan-400 transition">Lab Notebook SOP</button>
+            <button id="tab-btn-latex" class="pb-2 font-medium text-slate-400 hover:text-slate-200 transition">Overleaf / LaTeX</button>
+            <button id="tab-btn-bibtex" class="pb-2 font-medium text-slate-400 hover:text-slate-200 transition">BibTeX Citation</button>
+          </div>
+
+          <div class="relative">
+            <pre id="export-text-display" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-4 text-xs font-mono text-slate-300 overflow-x-auto whitespace-pre-wrap leading-relaxed max-h-48"></pre>
+            <button id="btn-copy-tab-content" class="absolute top-3 right-3 px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] font-semibold text-cyan-300 border border-slate-700 transition active:scale-95 shadow">
+              Copy Content
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <article class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-8 shadow-xl mt-12 text-slate-300 leading-relaxed">
+      
+      <div class="border-b border-slate-800 pb-4">
+        <h2 class="text-2xl font-bold text-white tracking-tight">
+          Analytical Titration Theory, Henderson-Hasselbalch, and Equivalence Points
+        </h2>
+        <p class="text-sm text-slate-400 mt-1">
+          A rigorous physicochemical breakdown of stoichiometric neutralization, buffer capacities, and first-derivative peak inflection.
+        </p>
+      </div>
+
+      <section class="space-y-3">
+        <h3 class="text-lg font-semibold text-cyan-300">1. Mathematical Treatment of Titration Stages</h3>
+        <p class="text-sm">
+          A potentiometric acid-base titration is categorized into four distinct equilibrium zones as standard titrant volume (V) is systematically delivered from a calibrated burette into an analyte solution:
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-1.5">
+            <span class="font-bold text-white">Stage I: Initial Solution (V = 0 mL)</span>
+            <p class="text-slate-400">
+              For a strong monoprotic acid (HCl), [H+] = Ca. For a weak acid (HA), ionization equilibrium governs:
+            </p>
+            <p class="font-mono text-cyan-300">[H+] = sqrt(Ka * Ca)</p>
+          </div>
+
+          <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-1.5">
+            <span class="font-bold text-white">Stage II: The Buffer Plateau (0 &lt; V &lt; Veq)</span>
+            <p class="text-slate-400">
+              The addition of strong base converts weak acid (HA) into its conjugate base (A-). This creates a buffer system modeled by the Henderson-Hasselbalch equation:
+            </p>
+            <p class="font-mono text-cyan-300">pH = pKa + log10([A-] / [HA])</p>
+            <p class="text-[11px] text-amber-300/80">At V = Veq / 2, [A-] = [HA], meaning pH = pKa.</p>
+          </div>
+
+          <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-1.5">
+            <span class="font-bold text-white">Stage III: The Stoichiometric Equivalence Point (V = Veq)</span>
+            <p class="text-slate-400">
+              All initial analyte has undergone stoichiometric conversion: Veq = (Ca * Va) / Cb. For weak acids, the remaining conjugate base hydrolyzes water:
+            </p>
+            <p class="font-mono text-cyan-300">A- + H2O &lt;=&gt; HA + OH-</p>
+            <p class="text-[11px] text-pink-300/80">Consequently, equivalence pH for weak acids is alkaline (pH &gt; 7).</p>
+          </div>
+
+          <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-1.5">
+            <span class="font-bold text-white">Stage IV: Excess Titrant Post-Equivalence (V &gt; Veq)</span>
+            <p class="text-slate-400">
+              Conjugate base hydrolysis contribution becomes negligible compared to unreacted hydroxide ions added from the burette:
+            </p>
+            <p class="font-mono text-cyan-300">[OH-] = (Moles_titrant - Moles_analyte) / Total_Volume</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="space-y-3">
+        <h3 class="text-lg font-semibold text-cyan-300">2. First-Derivative Peak Analytics (dpH / dV)</h3>
+        <p class="text-sm">
+          In physical laboratories, experimental noise and weak buffer slopes can obscure the inflection point on a standard sigmoidal curve. Analytical chemists utilize the numerical central first derivative:
+        </p>
+        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs text-center text-cyan-300">
+          (dpH / dV)_i = (pH_(i+1) - pH_(i-1)) / (V_(i+1) - V_(i-1))
+        </div>
+        <p class="text-sm text-slate-400">
+          The point of maximum rate of pH change corresponds to the mathematical inflection point. The peak of this derivative plot marks the stoichiometric equivalence volume without relying on subjective color observations.
+        </p>
+      </section>
+
+      <section class="space-y-3">
+        <h3 class="text-lg font-semibold text-cyan-300">3. Scientific Indicator Selection Principles</h3>
+        <p class="text-sm">
+          A chemical acid-base indicator is itself a weak organic dye whose protonated and deprotonated forms display distinct optical absorption spectra. To avoid systemic titration error:
+        </p>
+        <ul class="list-disc list-inside text-xs space-y-1.5 text-slate-400">
+          <li>The indicator transition range must match the steep vertical inflection rise of the titration curve.</li>
+          <li>For weak acid vs. strong base titrations (equivalence pH 8.0 to 9.5), <strong>Phenolphthalein</strong> (8.2 to 10.0) is ideal. Indicators transitioning below pH 7 change color prematurely.</li>
+          <li>For weak base vs. strong acid titrations (equivalence pH 4.5 to 6.0), <strong>Methyl Orange</strong> (3.1 to 4.4) or <strong>Methyl Red</strong> (4.4 to 6.2) is appropriate.</li>
+        </ul>
+      </section>
+
+      <section class="space-y-4 pt-4 border-t border-slate-800">
+        <h3 class="text-lg font-semibold text-white">Frequently Asked Questions</h3>
+        <div class="space-y-3 text-xs">
+          <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-1">
+            <span class="font-bold text-slate-200">How do you prepare an accurate primary standard for titration?</span>
+            <p class="text-slate-400">
+              Primary standards such as Potassium Hydrogen Phthalate (KHP, MW 204.22 g/mol) or anhydrous Sodium Carbonate (Na2CO3) must be dried in a laboratory oven at 110 deg C for 2 hours, cooled inside a desiccator, and weighed on an analytical balance to 0.1 mg precision before dissolution.
+            </p>
+          </div>
+          <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-1">
+            <span class="font-bold text-slate-200">Why must dissolved CO2 be removed when titrating dilute weak acids?</span>
+            <p class="text-slate-400">
+              Atmospheric carbon dioxide dissolves in water to form carbonic acid (H2CO3), which consumes sodium hydroxide titrant and shifts the apparent endpoint. For analytical precision, deionized water should be boiled or purged with inert nitrogen.
+            </p>
+          </div>
+        </div>
+      </section>
+
+    </article>
+
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+      <h3 class="text-sm font-bold uppercase tracking-wider text-slate-300">
+        Connected Analytical Utilities
+      </h3>
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 text-xs">
+        <a href="/molarity" class="p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-cyan-500/50 transition group">
+          <span class="font-semibold text-slate-200 group-hover:text-cyan-400 block">Molarity Prep</span>
+          <span class="text-[10px] text-slate-500">Stock solutions &amp; masses</span>
+        </a>
+        <a href="/dilution" class="p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-cyan-500/50 transition group">
+          <span class="font-semibold text-slate-200 group-hover:text-cyan-400 block">Serial Dilution</span>
+          <span class="text-[10px] text-slate-500">C1V1 = C2V2 ladders</span>
+        </a>
+        <a href="/buffer" class="p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-cyan-500/50 transition group">
+          <span class="font-semibold text-slate-200 group-hover:text-cyan-400 block">Buffer Studio</span>
+          <span class="text-[10px] text-slate-500">pH &amp; ionic strength</span>
+        </a>
+        <a href="/spectro" class="p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-cyan-500/50 transition group">
+          <span class="font-semibold text-slate-200 group-hover:text-cyan-400 block">Beer-Lambert</span>
+          <span class="text-[10px] text-slate-500">A = ebc linear fit</span>
+        </a>
+        <a href="/scherrer" class="p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-cyan-500/50 transition group">
+          <span class="font-semibold text-slate-200 group-hover:text-cyan-400 block">Scherrer XRD</span>
+          <span class="text-[10px] text-slate-500">Crystallite sizing</span>
+        </a>
+        <a href="/ghs" class="p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-cyan-500/50 transition group">
+          <span class="font-semibold text-slate-200 group-hover:text-cyan-400 block">GHS Safety</span>
+          <span class="text-[10px] text-slate-500">H/P code search</span>
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="border-t border-slate-800 bg-slate-950 py-8 mt-16 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 space-y-2">
+      <p>&copy; 2026 ChemistryCal Benchtop Studio. Client-side analytical utilities for chemical education and research.</p>
+      <div class="flex justify-center gap-4 text-slate-400">
+        <a href="/about" class="hover:text-cyan-400 transition">About</a>
+        <a href="/contact" class="hover:text-cyan-400 transition">Contact</a>
+        <a href="/privacy" class="hover:text-cyan-400 transition">Privacy Policy</a>
+        <a href="/terms" class="hover:text-cyan-400 transition">Terms of Service</a>
+      </div>
+    </div>
+  </footer>
+
+  <script define:vars={{ presets: titrationPresets, indicators: COMMON_INDICATORS }}>
+    function parseSafe(val, fallback) {
+      if (typeof val === 'number') return isNaN(val) ? fallback : val;
+      if (!val) return fallback;
+      const clean = val.toString().trim().replace(',', '.');
+      const num = parseFloat(clean);
+      return isNaN(num) ? fallback : num;
+    }
+
+    const KW = 1.0e-14;
+    let userScatterPoints = [];
+
+    function runSimulation(systemType, Ca, Va_mL, Cb, pK) {
+      const Va_L = Va_mL / 1000.0;
+      const molesAnalyte = Ca * Va_L;
+      const Veq_mL = (molesAnalyte / Cb) * 1000.0;
+      const maxV_mL = Veq_mL * 2.0;
+      const steps = 160;
+      const dV = maxV_mL / steps;
+
+      const points = [];
+
+      function solvePH(V_mL) {
+        const V_L = V_mL / 1000.0;
+        const totalVol_L = Va_L + V_L;
+        const molesTitrant = Cb * V_L;
+
+        if (systemType === 'strong_acid_strong_base') {
+          if (V_mL < Veq_mL - 1e-5) {
+            const h = (molesAnalyte - molesTitrant) / totalVol_L;
+            return -Math.log10(Math.max(1e-14, h));
+          } else if (Math.abs(V_mL - Veq_mL) <= 1e-5) {
+            return 7.00;
+          } else {
+            const oh = (molesTitrant - molesAnalyte) / totalVol_L;
+            return 14.0 + Math.log10(Math.max(1e-14, oh));
+          }
+        }
+
+        if (systemType === 'weak_acid_strong_base') {
+          const Ka = Math.pow(10, -pK);
+          if (V_mL <= 0.001) {
+            return -Math.log10(Math.max(1e-14, Math.sqrt(Ka * Ca)));
+          } else if (V_mL < Veq_mL - 1e-5) {
+            const ratio = Math.max(1e-6, molesTitrant / (molesAnalyte - molesTitrant));
+            return Math.max(0, Math.min(14, pK + Math.log10(ratio)));
+          } else if (Math.abs(V_mL - Veq_mL) <= 1e-5) {
+            const cA = molesAnalyte / totalVol_L;
+            const oh = Math.sqrt((KW / Ka) * cA);
+            return 14.0 + Math.log10(Math.max(1e-14, oh));
+          } else {
+            const oh = (molesTitrant - molesAnalyte) / totalVol_L;
+            return 14.0 + Math.log10(Math.max(1e-14, oh));
+          }
+        }
+
+        if (systemType === 'weak_base_strong_acid') {
+          const Kb = Math.pow(10, -pK);
+          const pKa = 14.0 - pK;
+          if (V_mL <= 0.001) {
+            const oh = Math.sqrt(Kb * Ca);
+            return 14.0 + Math.log10(Math.max(1e-14, oh));
+          } else if (V_mL < Veq_mL - 1e-5) {
+            const ratio = Math.max(1e-6, (molesAnalyte - molesTitrant) / molesTitrant);
+            return Math.max(0, Math.min(14, pKa + Math.log10(ratio)));
+          } else if (Math.abs(V_mL - Veq_mL) <= 1e-5) {
+            const cBH = molesAnalyte / totalVol_L;
+            const h = Math.sqrt((KW / Kb) * cBH);
+            return -Math.log10(Math.max(1e-14, h));
+          } else {
+            const h = (molesTitrant - molesAnalyte) / totalVol_L;
+            return -Math.log10(Math.max(1e-14, h));
+          }
+        }
+
+        return 7.00;
+      }
+
+      for (let i = 0; i <= steps; i++) {
+        const v = i * dV;
+        points.push({ volumeAdded: Number(v.toFixed(3)), pH: solvePH(v), derivative: 0 });
+      }
+
+      let maxDerivVal = -1;
+      let maxDerivVol = Veq_mL;
+
+      for (let i = 1; i < points.length - 1; i++) {
+        const deltaV = points[i + 1].volumeAdded - points[i - 1].volumeAdded;
+        const deltaPH = Math.abs(points[i + 1].pH - points[i - 1].pH);
+        const deriv = deltaV > 0 ? deltaPH / deltaV : 0;
+        points[i].derivative = Number(deriv.toFixed(3));
+        if (deriv > maxDerivVal) {
+          maxDerivVal = deriv;
+          maxDerivVol = points[i].volumeAdded;
+        }
+      }
+
+      if (points.length > 1) {
+        points[0].derivative = points[1].derivative;
+        points[points.length - 1].derivative = points[points.length - 2].derivative;
+      }
+
+      const eqPH = solvePH(Veq_mL);
+      const halfV = Veq_mL / 2;
+      const halfPH = solvePH(halfV);
+
+      return {
+        Veq: Number(Veq_mL.toFixed(2)),
+        eqPH: Number(eqPH.toFixed(2)),
+        halfV: Number(halfV.toFixed(2)),
+        halfPH: Number(halfPH.toFixed(2)),
+        points: points,
+        maxDerivVal: Number(maxDerivVal.toFixed(2)),
+        maxDerivVol: Number(maxDerivVol.toFixed(2)),
+        maxV: maxV_mL
+      };
+    }
+
+    const selPreset = document.getElementById('select-preset');
+    const selSystem = document.getElementById('select-system-type');
+    const inAnalyteName = document.getElementById('input-analyte-name');
+    const inTitrantName = document.getElementById('input-titrant-name');
+    const inCa = document.getElementById('input-ca');
+    const inVa = document.getElementById('input-va');
+    const inCb = document.getElementById('input-cb');
+    const inPk = document.getElementById('input-pk');
+    const wrapPk = document.getElementById('wrap-pk');
+    const labelPk = document.getElementById('label-pk');
+    const selIndicator = document.getElementById('select-indicator');
+    const tagIndicatorRange = document.getElementById('indicator-range-tag');
+    const msgIndicatorStatus = document.getElementById('indicator-status-msg');
+
+    const flaskDot = document.getElementById('flask-preview-dot');
+    const flaskDesc = document.getElementById('flask-color-desc');
+
+    const outVeq = document.getElementById('metric-veq');
+    const outEqPH = document.getElementById('metric-eqph');
+    const outHalfV = document.getElementById('metric-halfv');
+    const outHalfPH = document.getElementById('metric-halfph');
+    const outMaxDeriv = document.getElementById('metric-max-deriv');
+    const outBufferNote = document.getElementById('metric-buffer-range-note');
+    const svgContainer = document.getElementById('svg-chart-container');
+
+    const ghsAlertText = document.getElementById('ghs-alert-text');
+    const ghsAlertBox = document.getElementById('ghs-alert-box');
+
+    const tabSop = document.getElementById('tab-btn-sop');
+    const tabLatex = document.getElementById('tab-btn-latex');
+    const tabBibtex = document.getElementById('tab-btn-bibtex');
+    const exportDisplay = document.getElementById('export-text-display');
+
+    let currentTab = 'sop';
+    let cachedOutputs = {};
+
+    function getIndicatorColor(indicatorName, currentPH) {
+      const name = indicatorName.toLowerCase();
+      if (name.indexOf('phenolphthalein') !== -1) {
+        if (currentPH < 8.2) return { bg: '#334155', border: '#64748b', text: 'Colorless (Acidic/Neutral)', color: '#94a3b8' };
+        if (currentPH >= 8.2 && currentPH <= 10.0) return { bg: '#f472b6', border: '#ec4899', text: 'Pink Transition', color: '#831843' };
+        return { bg: '#db2777', border: '#be185d', text: 'Magenta (Basic)', color: '#ffffff' };
+      }
+      if (name.indexOf('bromothymol') !== -1) {
+        if (currentPH < 6.0) return { bg: '#eab308', border: '#ca8a04', text: 'Yellow (Acidic)', color: '#713f12' };
+        if (currentPH >= 6.0 && currentPH <= 7.6) return { bg: '#22c55e', border: '#16a34a', text: 'Green (Neutral)', color: '#14532d' };
+        return { bg: '#3b82f6', border: '#2563eb', text: 'Blue (Alkaline)', color: '#ffffff' };
+      }
+      if (name.indexOf('methyl orange') !== -1) {
+        if (currentPH < 3.1) return { bg: '#ef4444', border: '#dc2626', text: 'Red (Acidic)', color: '#ffffff' };
+        if (currentPH >= 3.1 && currentPH <= 4.4) return { bg: '#f97316', border: '#ea580c', text: 'Orange Transition', color: '#ffffff' };
+        return { bg: '#eab308', border: '#ca8a04', text: 'Yellow (Neutral/Basic)', color: '#713f12' };
+      }
+      if (name.indexOf('methyl red') !== -1) {
+        if (currentPH < 4.4) return { bg: '#ef4444', border: '#dc2626', text: 'Red (Acidic)', color: '#ffffff' };
+        if (currentPH >= 4.4 && currentPH <= 6.2) return { bg: '#f97316', border: '#ea580c', text: 'Orange Transition', color: '#ffffff' };
+        return { bg: '#eab308', border: '#ca8a04', text: 'Yellow (Alkaline)', color: '#713f12' };
+      }
+      return { bg: '#334155', border: '#64748b', text: 'Standard Solution', color: '#94a3b8' };
+    }
+
+    function updateView() {
+      const sys = selSystem.value;
+      const Ca = Math.max(1e-5, parseSafe(inCa.value, 0.1));
+      const Va = Math.max(0.1, parseSafe(inVa.value, 25));
+      const Cb = Math.max(1e-5, parseSafe(inCb.value, 0.1));
+      const pK = parseSafe(inPk.value, 4.76);
+      const analyteName = inAnalyteName.value.trim() || 'Analyte';
+      const titrantName = inTitrantName.value.trim() || 'Titrant';
+      const indName = selIndicator.value;
+
+      if (sys === 'strong_acid_strong_base') {
+        wrapPk.classList.add('opacity-40', 'pointer-events-none');
+        labelPk.textContent = 'Dissociation (N/A)';
+      } else if (sys === 'weak_base_strong_acid') {
+        wrapPk.classList.remove('opacity-40', 'pointer-events-none');
+        labelPk.textContent = 'Dissociation (pKb)';
+      } else {
+        wrapPk.classList.remove('opacity-40', 'pointer-events-none');
+        labelPk.textContent = 'Dissociation (pKa)';
+      }
+
+      const indObj = indicators.find(function(i) { return i.name === indName; }) || indicators[0];
+      tagIndicatorRange.textContent = 'pH ' + indObj.pHRange[0] + ' - ' + indObj.pHRange[1];
+
+      const res = runSimulation(sys, Ca, Va, Cb, pK);
+
+      const isIndSuitable = res.eqPH >= (indObj.pHRange[0] - 0.5) && res.eqPH <= (indObj.pHRange[1] + 0.5);
+      msgIndicatorStatus.textContent = isIndSuitable
+        ? 'Indicator transition (' + indObj.pHRange[0] + ' to ' + indObj.pHRange[1] + ') cleanly brackets the inflection pH (' + res.eqPH + '). Minimal error.'
+        : 'Caution: Transition (' + indObj.pHRange[0] + ' to ' + indObj.pHRange[1] + ') departs from inflection pH (' + res.eqPH + '). End-point error likely.';
+      msgIndicatorStatus.className = isIndSuitable ? 'text-[11px] text-emerald-400 leading-relaxed pt-1' : 'text-[11px] text-amber-400 leading-relaxed pt-1';
+
+      const colState = getIndicatorColor(indName, res.eqPH);
+      flaskDot.style.backgroundColor = colState.bg;
+      flaskDot.style.borderColor = colState.border;
+      flaskDot.style.color = colState.color;
+      flaskDesc.textContent = colState.text + ' (pH ' + res.eqPH + ')';
+
+      outVeq.textContent = res.Veq.toFixed(2);
+      outEqPH.textContent = res.eqPH.toFixed(2);
+      outHalfV.textContent = res.halfV.toFixed(2);
+      outHalfPH.textContent = res.halfPH.toFixed(2);
+      outMaxDeriv.textContent = res.maxDerivVal.toFixed(2);
+
+      if (sys === 'strong_acid_strong_base') {
+        outBufferNote.textContent = 'No buffer plateau (Strong Electrolyte)';
+      } else if (sys === 'weak_acid_strong_base') {
+        outBufferNote.textContent = 'Buffer Zone [pKa +/- 1]: [' + (pK - 1).toFixed(2) + ' - ' + (pK + 1).toFixed(2) + ']';
+      } else {
+        const effPka = 14.0 - pK;
+        outBufferNote.textContent = 'Buffer Zone [pKa +/- 1]: [' + (effPka - 1).toFixed(2) + ' - ' + (effPka + 1).toFixed(2) + ']';
+      }
+
+      renderSVG(res, indObj, sys, pK);
+
+      // Safe LaTeX string building with double-escaped backslashes
+      const latex = '% Titration Run: ' + analyteName + ' vs ' + titrantName + '\n' +
+        '\\begin{align}\n' +
+        '  V_{\\text{eq}} &= \\frac{C_a \\times V_a}{C_b} = \\frac{' + Ca.toFixed(4) + '\\text{ M} \\times ' + Va.toFixed(2) + '\\text{ mL}}{' + Cb.toFixed(4) + '\\text{ M}} = ' + res.Veq.toFixed(2) + '\\text{ mL} \\\\[6pt]\n' +
+        '  \\text{pH}_{\\text{equivalence}} &= ' + res.eqPH.toFixed(2) + ', \\quad \\text{pH}_{\\text{half-eq}} = ' + res.halfPH.toFixed(2) + ' \\\\[6pt]\n' +
+        '  \\text{Max Derivative} &= \\left(\\frac{dpH}{dV}\\right)_{\\text{max}} = ' + res.maxDerivVal.toFixed(2) + '\\text{ mL}^{-1}\n' +
+        '\\end{align}';
+
+      const sop = 'Benchtop Protocol: Pipette ' + Va.toFixed(2) + ' mL of ' + analyteName + ' (' + Ca.toFixed(4) + ' M) into a clean 150 mL Erlenmeyer flask. Add 2 to 3 drops of ' + indObj.name + ' indicator (' + indObj.colorChange + '). Rinse and fill a 50 mL Class-A burette with ' + titrantName + ' (' + Cb.toFixed(4) + ' M). Titrate under magnetic stirring until the persistent end-point inflection is reached at ' + res.Veq.toFixed(2) + ' mL (equivalence pH: ' + res.eqPH.toFixed(2) + '). Buffer midpoint verified at ' + res.halfV.toFixed(2) + ' mL (pH: ' + res.halfPH.toFixed(2) + ').';
+
+      const bibtex = '@software{ChemistryCal_Titration_2026,\n' +
+        '  author = {Khan, Bilal},\n' +
+        '  title = {ChemistryCal Analytical Suite: Acid-Base Dynamic Inflection & Derivative Engine},\n' +
+        '  year = {2026},\n' +
+        '  url = {https://chemistrycal.com/titration},\n' +
+        '  note = {Client-side chemical equilibria simulator with numerical derivative detection}\n' +
+        '}';
+
+      cachedOutputs = { sop: sop, latex: latex, bibtex: bibtex, points: res.points, Veq: res.Veq };
+      renderTab();
+    }
+
+    function renderSVG(res, indObj, sys, pK) {
+      const width = 640;
+      const height = 380;
+      const pad = { top: 30, right: 30, bottom: 50, left: 55 };
+      const cW = width - pad.left - pad.right;
+      const cH = height - pad.top - pad.bottom;
+
+      const scaleX = function(v) { return pad.left + (v / res.maxV) * cW; };
+      const scaleY = function(ph) { return pad.top + cH - (ph / 14) * cH; };
+      const maxD = Math.max.apply(null, [1].concat(res.points.map(function(p) { return p.derivative; })));
+      const scaleYD = function(d) { return pad.top + cH - (d / maxD) * cH; };
+
+      let pathPH = '';
+      let pathDeriv = '';
+
+      res.points.forEach(function(p, idx) {
+        const x = scaleX(p.volumeAdded).toFixed(1);
+        const y = scaleY(p.pH).toFixed(1);
+        const yD = scaleYD(p.derivative).toFixed(1);
+        pathPH += (idx === 0 ? 'M ' : ' L ') + x + ' ' + y;
+        pathDeriv += (idx === 0 ? 'M ' : ' L ') + x + ' ' + yD;
+      });
+
+      const eqX = scaleX(res.Veq);
+      const eqY = scaleY(res.eqPH);
+      const halfX = scaleX(res.halfV);
+      const halfY = scaleY(res.halfPH);
+
+      const indTopY = scaleY(indObj.pHRange[1]);
+      const indBottomY = scaleY(indObj.pHRange[0]);
+      const indH = Math.abs(indBottomY - indTopY);
+
+      let bufferRect = '';
+      if (sys !== 'strong_acid_strong_base') {
+        const bTop = sys === 'weak_acid_strong_base' ? scaleY(pK + 1) : scaleY((14 - pK) + 1);
+        const bBot = sys === 'weak_acid_strong_base' ? scaleY(pK - 1) : scaleY((14 - pK) - 1);
+        const bH = Math.abs(bBot - bTop);
+        bufferRect = '<rect x="' + pad.left + '" y="' + bTop + '" width="' + cW + '" height="' + bH + '" fill="#f59e0b" fill-opacity="0.08" stroke="#f59e0b" stroke-dasharray="2 3" stroke-width="0.8"/>';
+      }
+
+      const xTicks = [0, 0.25, 0.5, 0.75, 1.0].map(function(r) { return (res.maxV * r).toFixed(1); });
+      const yTicks = [0, 2, 4, 6, 8, 10, 12, 14];
+
+      const scatterSVG = userScatterPoints.map(function(pt) {
+        const cx = scaleX(pt.v);
+        const cy = scaleY(pt.ph);
+        if (cx >= pad.left && cx <= (pad.left + cW)) {
+          return '<circle cx="' + cx.toFixed(1) + '" cy="' + cy.toFixed(1) + '" r="4" fill="#facc15" stroke="#020617" stroke-width="1.5" class="user-scatter-dot"><title>V: ' + pt.v + ' mL, pH: ' + pt.ph + '</title></circle>';
+        }
+        return '';
+      }).join('');
+
+      const svgHTML = '<svg id="titration-render-svg" viewBox="0 0 ' + width + ' ' + height + '" class="w-full h-auto select-none font-sans" role="img" aria-label="Titration Curve">' +
+        '<rect x="' + pad.left + '" y="' + pad.top + '" width="' + cW + '" height="' + cH + '" fill="#0b1120" stroke="#1e293b" stroke-width="1"/>' +
+        bufferRect +
+        '<rect x="' + pad.left + '" y="' + indTopY + '" width="' + cW + '" height="' + indH + '" fill="#ec4899" fill-opacity="0.12" stroke="#ec4899" stroke-dasharray="3 3" stroke-width="0.8"/>' +
+        '<line x1="' + pad.left + '" y1="' + (pad.top + cH) + '" x2="' + (pad.left + cW) + '" y2="' + (pad.top + cH) + '" stroke="#475569" stroke-width="1.2"/>' +
+        '<line x1="' + pad.left + '" y1="' + pad.top + '" x2="' + pad.left + '" y2="' + (pad.top + cH) + '" stroke="#475569" stroke-width="1.2"/>' +
+        yTicks.map(function(t) { return '<line x1="' + (pad.left - 4) + '" y1="' + scaleY(t) + '" x2="' + pad.left + '" y2="' + scaleY(t) + '" stroke="#64748b" stroke-width="1"/><text x="' + (pad.left - 8) + '" y="' + (scaleY(t) + 3) + '" fill="#94a3b8" font-size="10" text-anchor="end" font-family="monospace">' + t + '</text>'; }).join('') +
+        xTicks.map(function(val) { return '<line x1="' + scaleX(parseFloat(val)) + '" y1="' + (pad.top + cH) + '" x2="' + scaleX(parseFloat(val)) + '" y2="' + (pad.top + cH + 4) + '" stroke="#64748b" stroke-width="1"/><text x="' + scaleX(parseFloat(val)) + '" y="' + (pad.top + cH + 16) + '" fill="#94a3b8" font-size="10" text-anchor="middle" font-family="monospace">' + val + '</text>'; }).join('') +
+        '<text x="' + (pad.left + cW / 2) + '" y="' + (height - 10) + '" fill="#94a3b8" font-size="11" font-weight="600" text-anchor="middle">Titrant Volume Added (mL)</text>' +
+        '<text transform="rotate(-90)" x="' + (-(pad.top + cH / 2)) + '" y="16" fill="#94a3b8" font-size="11" font-weight="600" text-anchor="middle">pH</text>' +
+        '<path d="' + pathDeriv + '" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-dasharray="3 3" stroke-opacity="0.8"/>' +
+        '<path d="' + pathPH + '" fill="none" stroke="#22d3ee" stroke-width="2.6" stroke-linecap="round"/>' +
+        (sys !== 'strong_acid_strong_base' ? '<circle cx="' + halfX + '" cy="' + halfY + '" r="4.5" fill="#f59e0b" stroke="#0f172a" stroke-width="1.5"/><text x="' + (halfX + 6) + '" y="' + (halfY - 4) + '" fill="#fbbf24" font-size="10" font-weight="700" font-family="monospace">V 1/2 (' + res.halfV + ' mL, pH ' + res.halfPH + ')</text>' : '') +
+        '<line x1="' + eqX + '" y1="' + (pad.top + cH) + '" x2="' + eqX + '" y2="' + eqY + '" stroke="#ef4444" stroke-dasharray="2 2" stroke-width="1"/>' +
+        '<circle cx="' + eqX + '" cy="' + eqY + '" r="5.5" fill="#ef4444" stroke="#ffffff" stroke-width="1.5"/>' +
+        '<text x="' + (eqX + 7) + '" y="' + (eqY - 6) + '" fill="#fca5a5" font-size="11" font-weight="800" font-family="monospace">Veq (' + res.Veq + ' mL, pH ' + res.eqPH + ')</text>' +
+        scatterSVG +
+        '</svg>';
+
+      svgContainer.innerHTML = svgHTML;
+    }
+
+    function renderTab() {
+      if (currentTab === 'sop') exportDisplay.textContent = cachedOutputs.sop || '';
+      if (currentTab === 'latex') exportDisplay.textContent = cachedOutputs.latex || '';
+      if (currentTab === 'bibtex') exportDisplay.textContent = cachedOutputs.bibtex || '';
+    }
+
+    tabSop.addEventListener('click', function() {
+      currentTab = 'sop';
+      tabSop.className = 'pb-2 font-bold text-cyan-400 border-b-2 border-cyan-400 transition';
+      tabLatex.className = 'pb-2 font-medium text-slate-400 hover:text-slate-200 transition';
+      tabBibtex.className = 'pb-2 font-medium text-slate-400 hover:text-slate-200 transition';
+      renderTab();
+    });
+
+    tabLatex.addEventListener('click', function() {
+      currentTab = 'latex';
+      tabLatex.className = 'pb-2 font-bold text-cyan-400 border-b-2 border-cyan-400 transition';
+      tabSop.className = 'pb-2 font-medium text-slate-400 hover:text-slate-200 transition';
+      tabBibtex.className = 'pb-2 font-medium text-slate-400 hover:text-slate-200 transition';
+      renderTab();
+    });
+
+    tabBibtex.addEventListener('click', function() {
+      currentTab = 'bibtex';
+      tabBibtex.className = 'pb-2 font-bold text-cyan-400 border-b-2 border-cyan-400 transition';
+      tabSop.className = 'pb-2 font-medium text-slate-400 hover:text-slate-200 transition';
+      tabLatex.className = 'pb-2 font-medium text-slate-400 hover:text-slate-200 transition';
+      renderTab();
+    });
+
+    selPreset.addEventListener('change', function() {
+      const pid = selPreset.value;
+      if (pid === 'custom') return;
+      const found = presets.find(function(p) { return p.id === pid; });
+      if (found) {
+        selSystem.value = found.systemType;
+        inAnalyteName.value = found.analyteName;
+        inTitrantName.value = found.titrantName;
+        inCa.value = found.defaultAnalyteConc;
+        inVa.value = found.defaultAnalyteVol;
+        inCb.value = found.defaultTitrantConc;
+        inPk.value = found.pKa || found.pKb || '4.76';
+        selIndicator.value = found.recommendedIndicator || 'Phenolphthalein';
+        ghsAlertText.textContent = found.ghsAlert;
+        ghsAlertBox.classList.remove('hidden');
+        updateView();
+      }
+    });
+
+    [inCa, inVa, inCb, inPk, inAnalyteName, inTitrantName].forEach(function(el) {
+      el.addEventListener('input', function() {
+        selPreset.value = 'custom';
+        updateView();
+      });
+    });
+
+    [selSystem, selIndicator].forEach(function(el) {
+      el.addEventListener('change', function() {
+        selPreset.value = 'custom';
+        updateView();
+      });
+    });
+
+    document.getElementById('btn-copy-tab-content').addEventListener('click', function() {
+      navigator.clipboard.writeText(exportDisplay.textContent).then(function() {
+        const btn = document.getElementById('btn-copy-tab-content');
+        btn.textContent = 'Copied!';
+        setTimeout(function() { btn.textContent = 'Copy Content'; }, 1800);
+      });
+    });
+
+    document.getElementById('btn-copy-sop').addEventListener('click', function() {
+      navigator.clipboard.writeText(cachedOutputs.sop).then(function() {
+        const btn = document.getElementById('btn-copy-sop');
+        btn.textContent = 'SOP Copied!';
+        setTimeout(function() { btn.textContent = 'Copy Lab SOP'; }, 2000);
+      });
+    });
+
+    document.getElementById('btn-export-csv').addEventListener('click', function() {
+      if (!cachedOutputs.points) return;
+      let csv = 'VolumeAdded_mL,pH,FirstDerivative_dpH_dV\n';
+      cachedOutputs.points.forEach(function(p) {
+        csv += p.volumeAdded + ',' + p.pH + ',' + p.derivative + '\n';
+      });
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'titration_curve_' + Date.now() + '.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    document.getElementById('btn-download-svg').addEventListener('click', function() {
+      const svgEl = document.querySelector('#svg-chart-container svg');
+      if (!svgEl) return;
+      const serializer = new XMLSerializer();
+      const svgStr = serializer.serializeToString(svgEl);
+      const blob = new Blob([svgStr], { type: 'image/svg+xml;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'titration_plot_' + Date.now() + '.svg';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    const labDrawer = document.getElementById('drawer-lab-mode');
+    document.getElementById('btn-toggle-lab-mode').addEventListener('click', function() {
+      labDrawer.classList.toggle('hidden');
+    });
+
+    document.getElementById('btn-apply-lab-data').addEventListener('click', function() {
+      const rawText = document.getElementById('input-raw-lab-data').value.trim();
+      userScatterPoints = [];
+      if (rawText) {
+        const lines = rawText.split('\n');
+        lines.forEach(function(line) {
+          const parts = line.trim().split(/\s+/);
+          if (parts.length >= 2) {
+            const v = parseSafe(parts[0], -1);
+            const ph = parseSafe(parts[1], -1);
+            if (v >= 0 && ph >= 0 && ph <= 14) {
+              userScatterPoints.push({ v: v, ph: ph });
+            }
+          }
+        });
+      }
+      updateView();
+    });
+
+    document.getElementById('btn-clear-lab-data').addEventListener('click', function() {
+      document.getElementById('input-raw-lab-data').value = '';
+      userScatterPoints = [];
+      updateView();
+    });
+
+    document.getElementById('btn-print-titration-label').addEventListener('click', function() {
+      const analyte = inAnalyteName.value.trim() || 'Analyte';
+      const conc = inCa.value.trim();
+      const titrant = inTitrantName.value.trim() || 'Titrant';
+      const eqVol = outVeq.textContent;
+      const eqPH = outEqPH.textContent;
+      const safetyNote = ghsAlertText.textContent;
+
+      const printWin = window.open('', '', 'width=460,height=340');
+      if (!printWin) return;
+      
+      const labelHtml = '<html><head><title>Benchtop Titration Label</title>' +
+        '<style>body{font-family:monospace;padding:14px;border:2px dashed #000;width:340px;margin:auto;}h2{margin:0 0 6px 0;font-size:14px;text-transform:uppercase;border-bottom:1px solid #000;padding-bottom:4px;}p{margin:3px 0;font-size:11px;}.hazard{font-size:9px;margin-top:6px;padding:4px;border:1px solid #666;background:#f5f5f5;}.footer{margin-top:8px;border-top:1px solid #000;padding-top:4px;font-size:8px;display:flex;justify-content:space-between;}</style>' +
+        '</head><body>' +
+        '<h2>SECONDARY TITRATION VESSEL</h2>' +
+        '<p><strong>Solution:</strong> ' + analyte + ' (' + conc + ' M)</p>' +
+        '<p><strong>Titrant Counterpart:</strong> ' + titrant + '</p>' +
+        '<p><strong>Predicted Veq:</strong> ' + eqVol + ' mL (pH ' + eqPH + ')</p>' +
+        '<p><strong>Prepared:</strong> ' + (new Date().toLocaleDateString()) + ' | <strong>Prep By:</strong> ___________</p>' +
+        '<div class="hazard"><strong>SAFETY NOTE:</strong> ' + safetyNote + '</div>' +
+        '<div class="footer"><span>ChemistryCal Lab Suite</span><span>Class-A Precision</span></div>' +
+        '<' + 'script>window.print(); window.close();</' + 'script>' +
+        '</body></html>';
+
+      printWin.document.write(labelHtml);
+      printWin.document.close();
+    });
+
+    document.getElementById('btn-share-link').addEventListener('click', function() {
+      const params = new URLSearchParams({
+        sys: selSystem.value,
+        ca: inCa.value,
+        va: inVa.value,
+        cb: inCb.value,
+        pk: inPk.value,
+        ind: selIndicator.value
+      });
+      const shareUrl = window.location.origin + window.location.pathname + '?' + params.toString();
+      navigator.clipboard.writeText(shareUrl).then(function() {
+        const btn = document.getElementById('btn-share-link');
+        btn.textContent = 'Link Copied!';
+        setTimeout(function() {
+          btn.innerHTML = '<svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg> Share URL State';
+        }, 2000);
+      });
+    });
+
+    document.getElementById('btn-reset-defaults').addEventListener('click', function() {
+      window.location.href = window.location.pathname;
+    });
+
+    window.addEventListener('DOMContentLoaded', function() {
+      const q = new URLSearchParams(window.location.search);
+      if (q.has('sys')) selSystem.value = q.get('sys');
+      if (q.has('ca')) inCa.value = q.get('ca');
+      if (q.has('va')) inVa.value = q.get('va');
+      if (q.has('cb')) inCb.value = q.get('cb');
+      if (q.has('pk')) inPk.value = q.get('pk');
+      if (q.has('ind')) selIndicator.value = q.get('ind');
+      updateView();
+    });
+  </script>
+
+</body>
+</html>
