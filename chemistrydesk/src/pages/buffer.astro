@@ -122,7 +122,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <button id="saveCustomBufferBtn" type="button" style="background: #334155; border: 1px solid #475569; color: white; padding: 0.65rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700;">
             💾 Save Setup
           </button>
-          <button id="shareSetupBtn" type="button" style="background: #0284c7; border: none; color: white; padding: 0.65rem 125rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+          <button id="shareSetupBtn" type="button" style="background: #0284c7; border: none; color: white; padding: 0.65rem 1.25rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
             <span>🔗 Share Recipe URL</span>
           </button>
         </div>
@@ -201,7 +201,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </div>
         </div>
 
-        <!-- Concentration & Target Volume (Unclipped, zero-overflow design) -->
+        <!-- Concentration & Target Volume -->
         <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0.85rem; margin-bottom: 1.25rem;">
           <div style="min-width: 0;">
             <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
@@ -962,9 +962,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <span>🔗</span> Upstream &amp; Downstream Analytical Workflows
     </h3>
     <p style="margin: 0 0 1rem; font-size: 0.85rem; color: #64748b; line-height: 1.4;">
-      Connect your buffer formulations with upstream molarity preparation and serial dilution ladders:
+      Connect your buffer formulations with upstream molarity preparation, serial dilution ladders, and potentiometric titration curves:
     </p>
-    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1rem;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
       <a href="/molarity" style="display: block; padding: 1rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
         <div style="font-weight: 700; font-size: 0.92rem; color: #0284c7; margin-bottom: 0.35rem;">Solution Molarity Studio &rarr;</div>
         <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">
@@ -975,6 +975,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <div style="font-weight: 700; font-size: 0.92rem; color: #0284c7; margin-bottom: 0.35rem;">Stock Dilution &amp; Serial Ladder Studio &rarr;</div>
         <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">
           Dilute 10&times; buffer concentrates (like 10&times; PBS or TAE) into working 1&times; solutions with automated multi-tube serial ladders.
+        </div>
+      </a>
+      <a href="/titration" style="display: block; padding: 1rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
+        <div style="font-weight: 700; font-size: 0.92rem; color: #0284c7; margin-bottom: 0.35rem;">Acid-Base Titration Studio &rarr;</div>
+        <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">
+          Model Henderson-Hasselbalch buffer inflection zones, first-derivative (dpH/dV) peaks, and colorimetric indicators.
         </div>
       </a>
     </div>
