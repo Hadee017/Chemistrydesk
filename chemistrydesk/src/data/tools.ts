@@ -115,5 +115,17 @@ export const toolsCatalog: ToolMeta[] = [
     priority: '1.0',
     changefreq: 'weekly',
     lastmod: '2026-10-06'
+  },
+  {
+    id: 'titration',
+    title: 'Acid-Base Titration Studio',
+    path: '/titration',
+    icon: '🧪',
+    badge: 'Live Studio',
+    badgeColor: '#06b6d4',
+    description: 'Simulate dynamic pH neutralization curves, Henderson-Hasselbalch buffer capacities, first-derivative (dpH/dV) inflection detection, and experimental lab scatter overlays.',
+    priority: '0.9',
+    changefreq: 'weekly',
+    lastmod: '2026-10-08'
   }
 ];
