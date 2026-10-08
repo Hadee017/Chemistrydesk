@@ -1,5 +1,6 @@
 ---
 // src/pages/titration.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
 import titrationPresets from '../data/titrationPairs.json';
 import { COMMON_INDICATORS, calculateTitration } from '../lib/calculations/titration';
 
@@ -116,55 +117,9 @@ const schemaData = {
 };
 ---
 
-<!DOCTYPE html>
-<html lang="en" class="dark">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{pageTitle}</title>
-  <meta name="description" content={pageDescription} />
-  <link rel="canonical" href={canonicalUrl} />
-  
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content={pageTitle} />
-  <meta property="og:description" content={pageDescription} />
-  <meta property="og:url" content={canonicalUrl} />
-  <meta name="twitter:card" content="summary_large_image" />
-
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <!-- Schema Markup injected safely inside layout -->
   <script is:inline type="application/ld+json" set:html={JSON.stringify(schemaData)}></script>
-</head>
-
-<body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased selection:bg-cyan-500 selection:text-slate-950">
-
-  <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-      <a href="/" class="flex items-center gap-2 group">
-        <div class="w-8 h-8 rounded-lg bg-cyan-500 flex items-center justify-center font-bold text-slate-950 text-lg shadow-lg group-hover:scale-105 transition-transform">
-          C
-        </div>
-        <span class="text-xl font-bold tracking-tight text-white group-hover:text-cyan-400 transition-colors">
-          Chemistry<span class="text-cyan-400">Cal</span>
-        </span>
-      </a>
-
-      <nav class="hidden md:flex items-center gap-1 text-sm font-medium text-slate-300">
-        <a href="/molarity" class="px-3 py-1.5 rounded-md hover:text-white hover:bg-slate-800 transition">Molarity</a>
-        <a href="/dilution" class="px-3 py-1.5 rounded-md hover:text-white hover:bg-slate-800 transition">Dilution</a>
-        <a href="/buffer" class="px-3 py-1.5 rounded-md hover:text-white hover:bg-slate-800 transition">Buffer</a>
-        <a href="/titration" class="px-3 py-1.5 rounded-md text-cyan-400 bg-cyan-950/50 border border-cyan-800/40">Titration</a>
-        <a href="/spectro" class="px-3 py-1.5 rounded-md hover:text-white hover:bg-slate-800 transition">Beer-Lambert</a>
-        <a href="/scherrer" class="px-3 py-1.5 rounded-md hover:text-white hover:bg-slate-800 transition">Scherrer XRD</a>
-        <a href="/ghs" class="px-3 py-1.5 rounded-md hover:text-white hover:bg-slate-800 transition">GHS Safety</a>
-      </nav>
-
-      <div class="flex items-center gap-2">
-        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-950/80 text-emerald-400 border border-emerald-800/50">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-          Offline Ready
-        </span>
-      </div>
-    </div>
-  </header>
 
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
 
@@ -612,549 +567,534 @@ const schemaData = {
     </div>
 
   </main>
+</BaseLayout>
 
-  <footer class="border-t border-slate-800 bg-slate-950 py-8 mt-16 text-center text-xs text-slate-500">
-    <div class="max-w-7xl mx-auto px-4 space-y-2">
-      <p>&copy; 2026 ChemistryCal Benchtop Studio. Client-side analytical utilities for chemical education and research.</p>
-      <div class="flex justify-center gap-4 text-slate-400">
-        <a href="/about" class="hover:text-cyan-400 transition">About</a>
-        <a href="/contact" class="hover:text-cyan-400 transition">Contact</a>
-        <a href="/privacy" class="hover:text-cyan-400 transition">Privacy Policy</a>
-        <a href="/terms" class="hover:text-cyan-400 transition">Terms of Service</a>
-      </div>
-    </div>
-  </footer>
+<script define:vars={{ presets: titrationPresets, indicators: COMMON_INDICATORS }}>
+  function parseSafe(val, fallback) {
+    if (typeof val === 'number') return isNaN(val) ? fallback : val;
+    if (!val) return fallback;
+    const clean = val.toString().trim().replace(',', '.');
+    const num = parseFloat(clean);
+    return isNaN(num) ? fallback : num;
+  }
 
-  <script define:vars={{ presets: titrationPresets, indicators: COMMON_INDICATORS }}>
-    function parseSafe(val, fallback) {
-      if (typeof val === 'number') return isNaN(val) ? fallback : val;
-      if (!val) return fallback;
-      const clean = val.toString().trim().replace(',', '.');
-      const num = parseFloat(clean);
-      return isNaN(num) ? fallback : num;
-    }
+  const KW = 1.0e-14;
+  let userScatterPoints = [];
 
-    const KW = 1.0e-14;
-    let userScatterPoints = [];
+  function runSimulation(systemType, Ca, Va_mL, Cb, pK) {
+    const Va_L = Va_mL / 1000.0;
+    const molesAnalyte = Ca * Va_L;
+    const Veq_mL = (molesAnalyte / Cb) * 1000.0;
+    const maxV_mL = Veq_mL * 2.0;
+    const steps = 160;
+    const dV = maxV_mL / steps;
 
-    function runSimulation(systemType, Ca, Va_mL, Cb, pK) {
-      const Va_L = Va_mL / 1000.0;
-      const molesAnalyte = Ca * Va_L;
-      const Veq_mL = (molesAnalyte / Cb) * 1000.0;
-      const maxV_mL = Veq_mL * 2.0;
-      const steps = 160;
-      const dV = maxV_mL / steps;
+    const points = [];
 
-      const points = [];
+    function solvePH(V_mL) {
+      const V_L = V_mL / 1000.0;
+      const totalVol_L = Va_L + V_L;
+      const molesTitrant = Cb * V_L;
 
-      function solvePH(V_mL) {
-        const V_L = V_mL / 1000.0;
-        const totalVol_L = Va_L + V_L;
-        const molesTitrant = Cb * V_L;
-
-        if (systemType === 'strong_acid_strong_base') {
-          if (V_mL < Veq_mL - 1e-5) {
-            const h = (molesAnalyte - molesTitrant) / totalVol_L;
-            return -Math.log10(Math.max(1e-14, h));
-          } else if (Math.abs(V_mL - Veq_mL) <= 1e-5) {
-            return 7.00;
-          } else {
-            const oh = (molesTitrant - molesAnalyte) / totalVol_L;
-            return 14.0 + Math.log10(Math.max(1e-14, oh));
-          }
-        }
-
-        if (systemType === 'weak_acid_strong_base') {
-          const Ka = Math.pow(10, -pK);
-          if (V_mL <= 0.001) {
-            return -Math.log10(Math.max(1e-14, Math.sqrt(Ka * Ca)));
-          } else if (V_mL < Veq_mL - 1e-5) {
-            const ratio = Math.max(1e-6, molesTitrant / (molesAnalyte - molesTitrant));
-            return Math.max(0, Math.min(14, pK + Math.log10(ratio)));
-          } else if (Math.abs(V_mL - Veq_mL) <= 1e-5) {
-            const cA = molesAnalyte / totalVol_L;
-            const oh = Math.sqrt((KW / Ka) * cA);
-            return 14.0 + Math.log10(Math.max(1e-14, oh));
-          } else {
-            const oh = (molesTitrant - molesAnalyte) / totalVol_L;
-            return 14.0 + Math.log10(Math.max(1e-14, oh));
-          }
-        }
-
-        if (systemType === 'weak_base_strong_acid') {
-          const Kb = Math.pow(10, -pK);
-          const pKa = 14.0 - pK;
-          if (V_mL <= 0.001) {
-            const oh = Math.sqrt(Kb * Ca);
-            return 14.0 + Math.log10(Math.max(1e-14, oh));
-          } else if (V_mL < Veq_mL - 1e-5) {
-            const ratio = Math.max(1e-6, (molesAnalyte - molesTitrant) / molesTitrant);
-            return Math.max(0, Math.min(14, pKa + Math.log10(ratio)));
-          } else if (Math.abs(V_mL - Veq_mL) <= 1e-5) {
-            const cBH = molesAnalyte / totalVol_L;
-            const h = Math.sqrt((KW / Kb) * cBH);
-            return -Math.log10(Math.max(1e-14, h));
-          } else {
-            const h = (molesTitrant - molesAnalyte) / totalVol_L;
-            return -Math.log10(Math.max(1e-14, h));
-          }
-        }
-
-        return 7.00;
-      }
-
-      for (let i = 0; i <= steps; i++) {
-        const v = i * dV;
-        points.push({ volumeAdded: Number(v.toFixed(3)), pH: solvePH(v), derivative: 0 });
-      }
-
-      let maxDerivVal = -1;
-      let maxDerivVol = Veq_mL;
-
-      for (let i = 1; i < points.length - 1; i++) {
-        const deltaV = points[i + 1].volumeAdded - points[i - 1].volumeAdded;
-        const deltaPH = Math.abs(points[i + 1].pH - points[i - 1].pH);
-        const deriv = deltaV > 0 ? deltaPH / deltaV : 0;
-        points[i].derivative = Number(deriv.toFixed(3));
-        if (deriv > maxDerivVal) {
-          maxDerivVal = deriv;
-          maxDerivVol = points[i].volumeAdded;
+      if (systemType === 'strong_acid_strong_base') {
+        if (V_mL < Veq_mL - 1e-5) {
+          const h = (molesAnalyte - molesTitrant) / totalVol_L;
+          return -Math.log10(Math.max(1e-14, h));
+        } else if (Math.abs(V_mL - Veq_mL) <= 1e-5) {
+          return 7.00;
+        } else {
+          const oh = (molesTitrant - molesAnalyte) / totalVol_L;
+          return 14.0 + Math.log10(Math.max(1e-14, oh));
         }
       }
 
-      if (points.length > 1) {
-        points[0].derivative = points[1].derivative;
-        points[points.length - 1].derivative = points[points.length - 2].derivative;
-      }
-
-      const eqPH = solvePH(Veq_mL);
-      const halfV = Veq_mL / 2;
-      const halfPH = solvePH(halfV);
-
-      return {
-        Veq: Number(Veq_mL.toFixed(2)),
-        eqPH: Number(eqPH.toFixed(2)),
-        halfV: Number(halfV.toFixed(2)),
-        halfPH: Number(halfPH.toFixed(2)),
-        points: points,
-        maxDerivVal: Number(maxDerivVal.toFixed(2)),
-        maxDerivVol: Number(maxDerivVol.toFixed(2)),
-        maxV: maxV_mL
-      };
-    }
-
-    const selPreset = document.getElementById('select-preset');
-    const selSystem = document.getElementById('select-system-type');
-    const inAnalyteName = document.getElementById('input-analyte-name');
-    const inTitrantName = document.getElementById('input-titrant-name');
-    const inCa = document.getElementById('input-ca');
-    const inVa = document.getElementById('input-va');
-    const inCb = document.getElementById('input-cb');
-    const inPk = document.getElementById('input-pk');
-    const wrapPk = document.getElementById('wrap-pk');
-    const labelPk = document.getElementById('label-pk');
-    const selIndicator = document.getElementById('select-indicator');
-    const tagIndicatorRange = document.getElementById('indicator-range-tag');
-    const msgIndicatorStatus = document.getElementById('indicator-status-msg');
-
-    const flaskDot = document.getElementById('flask-preview-dot');
-    const flaskDesc = document.getElementById('flask-color-desc');
-
-    const outVeq = document.getElementById('metric-veq');
-    const outEqPH = document.getElementById('metric-eqph');
-    const outHalfV = document.getElementById('metric-halfv');
-    const outHalfPH = document.getElementById('metric-halfph');
-    const outMaxDeriv = document.getElementById('metric-max-deriv');
-    const outBufferNote = document.getElementById('metric-buffer-range-note');
-    const svgContainer = document.getElementById('svg-chart-container');
-
-    const ghsAlertText = document.getElementById('ghs-alert-text');
-    const ghsAlertBox = document.getElementById('ghs-alert-box');
-
-    const tabSop = document.getElementById('tab-btn-sop');
-    const tabLatex = document.getElementById('tab-btn-latex');
-    const tabBibtex = document.getElementById('tab-btn-bibtex');
-    const exportDisplay = document.getElementById('export-text-display');
-
-    let currentTab = 'sop';
-    let cachedOutputs = {};
-
-    function getIndicatorColor(indicatorName, currentPH) {
-      const name = indicatorName.toLowerCase();
-      if (name.indexOf('phenolphthalein') !== -1) {
-        if (currentPH < 8.2) return { bg: '#334155', border: '#64748b', text: 'Colorless (Acidic/Neutral)', color: '#94a3b8' };
-        if (currentPH >= 8.2 && currentPH <= 10.0) return { bg: '#f472b6', border: '#ec4899', text: 'Pink Transition', color: '#831843' };
-        return { bg: '#db2777', border: '#be185d', text: 'Magenta (Basic)', color: '#ffffff' };
-      }
-      if (name.indexOf('bromothymol') !== -1) {
-        if (currentPH < 6.0) return { bg: '#eab308', border: '#ca8a04', text: 'Yellow (Acidic)', color: '#713f12' };
-        if (currentPH >= 6.0 && currentPH <= 7.6) return { bg: '#22c55e', border: '#16a34a', text: 'Green (Neutral)', color: '#14532d' };
-        return { bg: '#3b82f6', border: '#2563eb', text: 'Blue (Alkaline)', color: '#ffffff' };
-      }
-      if (name.indexOf('methyl orange') !== -1) {
-        if (currentPH < 3.1) return { bg: '#ef4444', border: '#dc2626', text: 'Red (Acidic)', color: '#ffffff' };
-        if (currentPH >= 3.1 && currentPH <= 4.4) return { bg: '#f97316', border: '#ea580c', text: 'Orange Transition', color: '#ffffff' };
-        return { bg: '#eab308', border: '#ca8a04', text: 'Yellow (Neutral/Basic)', color: '#713f12' };
-      }
-      if (name.indexOf('methyl red') !== -1) {
-        if (currentPH < 4.4) return { bg: '#ef4444', border: '#dc2626', text: 'Red (Acidic)', color: '#ffffff' };
-        if (currentPH >= 4.4 && currentPH <= 6.2) return { bg: '#f97316', border: '#ea580c', text: 'Orange Transition', color: '#ffffff' };
-        return { bg: '#eab308', border: '#ca8a04', text: 'Yellow (Alkaline)', color: '#713f12' };
-      }
-      return { bg: '#334155', border: '#64748b', text: 'Standard Solution', color: '#94a3b8' };
-    }
-
-    function updateView() {
-      const sys = selSystem.value;
-      const Ca = Math.max(1e-5, parseSafe(inCa.value, 0.1));
-      const Va = Math.max(0.1, parseSafe(inVa.value, 25));
-      const Cb = Math.max(1e-5, parseSafe(inCb.value, 0.1));
-      const pK = parseSafe(inPk.value, 4.76);
-      const analyteName = inAnalyteName.value.trim() || 'Analyte';
-      const titrantName = inTitrantName.value.trim() || 'Titrant';
-      const indName = selIndicator.value;
-
-      if (sys === 'strong_acid_strong_base') {
-        wrapPk.classList.add('opacity-40', 'pointer-events-none');
-        labelPk.textContent = 'Dissociation (N/A)';
-      } else if (sys === 'weak_base_strong_acid') {
-        wrapPk.classList.remove('opacity-40', 'pointer-events-none');
-        labelPk.textContent = 'Dissociation (pKb)';
-      } else {
-        wrapPk.classList.remove('opacity-40', 'pointer-events-none');
-        labelPk.textContent = 'Dissociation (pKa)';
-      }
-
-      const indObj = indicators.find(function(i) { return i.name === indName; }) || indicators[0];
-      tagIndicatorRange.textContent = 'pH ' + indObj.pHRange[0] + ' - ' + indObj.pHRange[1];
-
-      const res = runSimulation(sys, Ca, Va, Cb, pK);
-
-      const isIndSuitable = res.eqPH >= (indObj.pHRange[0] - 0.5) && res.eqPH <= (indObj.pHRange[1] + 0.5);
-      msgIndicatorStatus.textContent = isIndSuitable
-        ? 'Indicator transition (' + indObj.pHRange[0] + ' to ' + indObj.pHRange[1] + ') cleanly brackets the inflection pH (' + res.eqPH + '). Minimal error.'
-        : 'Caution: Transition (' + indObj.pHRange[0] + ' to ' + indObj.pHRange[1] + ') departs from inflection pH (' + res.eqPH + '). End-point error likely.';
-      msgIndicatorStatus.className = isIndSuitable ? 'text-[11px] text-emerald-400 leading-relaxed pt-1' : 'text-[11px] text-amber-400 leading-relaxed pt-1';
-
-      const colState = getIndicatorColor(indName, res.eqPH);
-      flaskDot.style.backgroundColor = colState.bg;
-      flaskDot.style.borderColor = colState.border;
-      flaskDot.style.color = colState.color;
-      flaskDesc.textContent = colState.text + ' (pH ' + res.eqPH + ')';
-
-      outVeq.textContent = res.Veq.toFixed(2);
-      outEqPH.textContent = res.eqPH.toFixed(2);
-      outHalfV.textContent = res.halfV.toFixed(2);
-      outHalfPH.textContent = res.halfPH.toFixed(2);
-      outMaxDeriv.textContent = res.maxDerivVal.toFixed(2);
-
-      if (sys === 'strong_acid_strong_base') {
-        outBufferNote.textContent = 'No buffer plateau (Strong Electrolyte)';
-      } else if (sys === 'weak_acid_strong_base') {
-        outBufferNote.textContent = 'Buffer Zone [pKa +/- 1]: [' + (pK - 1).toFixed(2) + ' - ' + (pK + 1).toFixed(2) + ']';
-      } else {
-        const effPka = 14.0 - pK;
-        outBufferNote.textContent = 'Buffer Zone [pKa +/- 1]: [' + (effPka - 1).toFixed(2) + ' - ' + (effPka + 1).toFixed(2) + ']';
-      }
-
-      renderSVG(res, indObj, sys, pK);
-
-      // Safe LaTeX string building with double-escaped backslashes
-      const latex = '% Titration Run: ' + analyteName + ' vs ' + titrantName + '\n' +
-        '\\begin{align}\n' +
-        '  V_{\\text{eq}} &= \\frac{C_a \\times V_a}{C_b} = \\frac{' + Ca.toFixed(4) + '\\text{ M} \\times ' + Va.toFixed(2) + '\\text{ mL}}{' + Cb.toFixed(4) + '\\text{ M}} = ' + res.Veq.toFixed(2) + '\\text{ mL} \\\\[6pt]\n' +
-        '  \\text{pH}_{\\text{equivalence}} &= ' + res.eqPH.toFixed(2) + ', \\quad \\text{pH}_{\\text{half-eq}} = ' + res.halfPH.toFixed(2) + ' \\\\[6pt]\n' +
-        '  \\text{Max Derivative} &= \\left(\\frac{dpH}{dV}\\right)_{\\text{max}} = ' + res.maxDerivVal.toFixed(2) + '\\text{ mL}^{-1}\n' +
-        '\\end{align}';
-
-      const sop = 'Benchtop Protocol: Pipette ' + Va.toFixed(2) + ' mL of ' + analyteName + ' (' + Ca.toFixed(4) + ' M) into a clean 150 mL Erlenmeyer flask. Add 2 to 3 drops of ' + indObj.name + ' indicator (' + indObj.colorChange + '). Rinse and fill a 50 mL Class-A burette with ' + titrantName + ' (' + Cb.toFixed(4) + ' M). Titrate under magnetic stirring until the persistent end-point inflection is reached at ' + res.Veq.toFixed(2) + ' mL (equivalence pH: ' + res.eqPH.toFixed(2) + '). Buffer midpoint verified at ' + res.halfV.toFixed(2) + ' mL (pH: ' + res.halfPH.toFixed(2) + ').';
-
-      const bibtex = '@software{ChemistryCal_Titration_2026,\n' +
-        '  author = {Khan, Bilal},\n' +
-        '  title = {ChemistryCal Analytical Suite: Acid-Base Dynamic Inflection & Derivative Engine},\n' +
-        '  year = {2026},\n' +
-        '  url = {https://chemistrycal.com/titration},\n' +
-        '  note = {Client-side chemical equilibria simulator with numerical derivative detection}\n' +
-        '}';
-
-      cachedOutputs = { sop: sop, latex: latex, bibtex: bibtex, points: res.points, Veq: res.Veq };
-      renderTab();
-    }
-
-    function renderSVG(res, indObj, sys, pK) {
-      const width = 640;
-      const height = 380;
-      const pad = { top: 30, right: 30, bottom: 50, left: 55 };
-      const cW = width - pad.left - pad.right;
-      const cH = height - pad.top - pad.bottom;
-
-      const scaleX = function(v) { return pad.left + (v / res.maxV) * cW; };
-      const scaleY = function(ph) { return pad.top + cH - (ph / 14) * cH; };
-      const maxD = Math.max.apply(null, [1].concat(res.points.map(function(p) { return p.derivative; })));
-      const scaleYD = function(d) { return pad.top + cH - (d / maxD) * cH; };
-
-      let pathPH = '';
-      let pathDeriv = '';
-
-      res.points.forEach(function(p, idx) {
-        const x = scaleX(p.volumeAdded).toFixed(1);
-        const y = scaleY(p.pH).toFixed(1);
-        const yD = scaleYD(p.derivative).toFixed(1);
-        pathPH += (idx === 0 ? 'M ' : ' L ') + x + ' ' + y;
-        pathDeriv += (idx === 0 ? 'M ' : ' L ') + x + ' ' + yD;
-      });
-
-      const eqX = scaleX(res.Veq);
-      const eqY = scaleY(res.eqPH);
-      const halfX = scaleX(res.halfV);
-      const halfY = scaleY(res.halfPH);
-
-      const indTopY = scaleY(indObj.pHRange[1]);
-      const indBottomY = scaleY(indObj.pHRange[0]);
-      const indH = Math.abs(indBottomY - indTopY);
-
-      let bufferRect = '';
-      if (sys !== 'strong_acid_strong_base') {
-        const bTop = sys === 'weak_acid_strong_base' ? scaleY(pK + 1) : scaleY((14 - pK) + 1);
-        const bBot = sys === 'weak_acid_strong_base' ? scaleY(pK - 1) : scaleY((14 - pK) - 1);
-        const bH = Math.abs(bBot - bTop);
-        bufferRect = '<rect x="' + pad.left + '" y="' + bTop + '" width="' + cW + '" height="' + bH + '" fill="#f59e0b" fill-opacity="0.08" stroke="#f59e0b" stroke-dasharray="2 3" stroke-width="0.8"/>';
-      }
-
-      const xTicks = [0, 0.25, 0.5, 0.75, 1.0].map(function(r) { return (res.maxV * r).toFixed(1); });
-      const yTicks = [0, 2, 4, 6, 8, 10, 12, 14];
-
-      const scatterSVG = userScatterPoints.map(function(pt) {
-        const cx = scaleX(pt.v);
-        const cy = scaleY(pt.ph);
-        if (cx >= pad.left && cx <= (pad.left + cW)) {
-          return '<circle cx="' + cx.toFixed(1) + '" cy="' + cy.toFixed(1) + '" r="4" fill="#facc15" stroke="#020617" stroke-width="1.5" class="user-scatter-dot"><title>V: ' + pt.v + ' mL, pH: ' + pt.ph + '</title></circle>';
+      if (systemType === 'weak_acid_strong_base') {
+        const Ka = Math.pow(10, -pK);
+        if (V_mL <= 0.001) {
+          return -Math.log10(Math.max(1e-14, Math.sqrt(Ka * Ca)));
+        } else if (V_mL < Veq_mL - 1e-5) {
+          const ratio = Math.max(1e-6, molesTitrant / (molesAnalyte - molesTitrant));
+          return Math.max(0, Math.min(14, pK + Math.log10(ratio)));
+        } else if (Math.abs(V_mL - Veq_mL) <= 1e-5) {
+          const cA = molesAnalyte / totalVol_L;
+          const oh = Math.sqrt((KW / Ka) * cA);
+          return 14.0 + Math.log10(Math.max(1e-14, oh));
+        } else {
+          const oh = (molesTitrant - molesAnalyte) / totalVol_L;
+          return 14.0 + Math.log10(Math.max(1e-14, oh));
         }
-        return '';
-      }).join('');
+      }
 
-      const svgHTML = '<svg id="titration-render-svg" viewBox="0 0 ' + width + ' ' + height + '" class="w-full h-auto select-none font-sans" role="img" aria-label="Titration Curve">' +
-        '<rect x="' + pad.left + '" y="' + pad.top + '" width="' + cW + '" height="' + cH + '" fill="#0b1120" stroke="#1e293b" stroke-width="1"/>' +
-        bufferRect +
-        '<rect x="' + pad.left + '" y="' + indTopY + '" width="' + cW + '" height="' + indH + '" fill="#ec4899" fill-opacity="0.12" stroke="#ec4899" stroke-dasharray="3 3" stroke-width="0.8"/>' +
-        '<line x1="' + pad.left + '" y1="' + (pad.top + cH) + '" x2="' + (pad.left + cW) + '" y2="' + (pad.top + cH) + '" stroke="#475569" stroke-width="1.2"/>' +
-        '<line x1="' + pad.left + '" y1="' + pad.top + '" x2="' + pad.left + '" y2="' + (pad.top + cH) + '" stroke="#475569" stroke-width="1.2"/>' +
-        yTicks.map(function(t) { return '<line x1="' + (pad.left - 4) + '" y1="' + scaleY(t) + '" x2="' + pad.left + '" y2="' + scaleY(t) + '" stroke="#64748b" stroke-width="1"/><text x="' + (pad.left - 8) + '" y="' + (scaleY(t) + 3) + '" fill="#94a3b8" font-size="10" text-anchor="end" font-family="monospace">' + t + '</text>'; }).join('') +
-        xTicks.map(function(val) { return '<line x1="' + scaleX(parseFloat(val)) + '" y1="' + (pad.top + cH) + '" x2="' + scaleX(parseFloat(val)) + '" y2="' + (pad.top + cH + 4) + '" stroke="#64748b" stroke-width="1"/><text x="' + scaleX(parseFloat(val)) + '" y="' + (pad.top + cH + 16) + '" fill="#94a3b8" font-size="10" text-anchor="middle" font-family="monospace">' + val + '</text>'; }).join('') +
-        '<text x="' + (pad.left + cW / 2) + '" y="' + (height - 10) + '" fill="#94a3b8" font-size="11" font-weight="600" text-anchor="middle">Titrant Volume Added (mL)</text>' +
-        '<text transform="rotate(-90)" x="' + (-(pad.top + cH / 2)) + '" y="16" fill="#94a3b8" font-size="11" font-weight="600" text-anchor="middle">pH</text>' +
-        '<path d="' + pathDeriv + '" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-dasharray="3 3" stroke-opacity="0.8"/>' +
-        '<path d="' + pathPH + '" fill="none" stroke="#22d3ee" stroke-width="2.6" stroke-linecap="round"/>' +
-        (sys !== 'strong_acid_strong_base' ? '<circle cx="' + halfX + '" cy="' + halfY + '" r="4.5" fill="#f59e0b" stroke="#0f172a" stroke-width="1.5"/><text x="' + (halfX + 6) + '" y="' + (halfY - 4) + '" fill="#fbbf24" font-size="10" font-weight="700" font-family="monospace">V 1/2 (' + res.halfV + ' mL, pH ' + res.halfPH + ')</text>' : '') +
-        '<line x1="' + eqX + '" y1="' + (pad.top + cH) + '" x2="' + eqX + '" y2="' + eqY + '" stroke="#ef4444" stroke-dasharray="2 2" stroke-width="1"/>' +
-        '<circle cx="' + eqX + '" cy="' + eqY + '" r="5.5" fill="#ef4444" stroke="#ffffff" stroke-width="1.5"/>' +
-        '<text x="' + (eqX + 7) + '" y="' + (eqY - 6) + '" fill="#fca5a5" font-size="11" font-weight="800" font-family="monospace">Veq (' + res.Veq + ' mL, pH ' + res.eqPH + ')</text>' +
-        scatterSVG +
-        '</svg>';
+      if (systemType === 'weak_base_strong_acid') {
+        const Kb = Math.pow(10, -pK);
+        const pKa = 14.0 - pK;
+        if (V_mL <= 0.001) {
+          const oh = Math.sqrt(Kb * Ca);
+          return 14.0 + Math.log10(Math.max(1e-14, oh));
+        } else if (V_mL < Veq_mL - 1e-5) {
+          const ratio = Math.max(1e-6, (molesAnalyte - molesTitrant) / molesTitrant);
+          return Math.max(0, Math.min(14, pKa + Math.log10(ratio)));
+        } else if (Math.abs(V_mL - Veq_mL) <= 1e-5) {
+          const cBH = molesAnalyte / totalVol_L;
+          const h = Math.sqrt((KW / Kb) * cBH);
+          return -Math.log10(Math.max(1e-14, h));
+        } else {
+          const h = (molesTitrant - molesAnalyte) / totalVol_L;
+          return -Math.log10(Math.max(1e-14, h));
+        }
+      }
 
-      svgContainer.innerHTML = svgHTML;
+      return 7.00;
     }
 
-    function renderTab() {
-      if (currentTab === 'sop') exportDisplay.textContent = cachedOutputs.sop || '';
-      if (currentTab === 'latex') exportDisplay.textContent = cachedOutputs.latex || '';
-      if (currentTab === 'bibtex') exportDisplay.textContent = cachedOutputs.bibtex || '';
+    for (let i = 0; i <= steps; i++) {
+      const v = i * dV;
+      points.push({ volumeAdded: Number(v.toFixed(3)), pH: solvePH(v), derivative: 0 });
     }
 
-    tabSop.addEventListener('click', function() {
-      currentTab = 'sop';
-      tabSop.className = 'pb-2 font-bold text-cyan-400 border-b-2 border-cyan-400 transition';
-      tabLatex.className = 'pb-2 font-medium text-slate-400 hover:text-slate-200 transition';
-      tabBibtex.className = 'pb-2 font-medium text-slate-400 hover:text-slate-200 transition';
-      renderTab();
-    });
+    let maxDerivVal = -1;
+    let maxDerivVol = Veq_mL;
 
-    tabLatex.addEventListener('click', function() {
-      currentTab = 'latex';
-      tabLatex.className = 'pb-2 font-bold text-cyan-400 border-b-2 border-cyan-400 transition';
-      tabSop.className = 'pb-2 font-medium text-slate-400 hover:text-slate-200 transition';
-      tabBibtex.className = 'pb-2 font-medium text-slate-400 hover:text-slate-200 transition';
-      renderTab();
-    });
-
-    tabBibtex.addEventListener('click', function() {
-      currentTab = 'bibtex';
-      tabBibtex.className = 'pb-2 font-bold text-cyan-400 border-b-2 border-cyan-400 transition';
-      tabSop.className = 'pb-2 font-medium text-slate-400 hover:text-slate-200 transition';
-      tabLatex.className = 'pb-2 font-medium text-slate-400 hover:text-slate-200 transition';
-      renderTab();
-    });
-
-    selPreset.addEventListener('change', function() {
-      const pid = selPreset.value;
-      if (pid === 'custom') return;
-      const found = presets.find(function(p) { return p.id === pid; });
-      if (found) {
-        selSystem.value = found.systemType;
-        inAnalyteName.value = found.analyteName;
-        inTitrantName.value = found.titrantName;
-        inCa.value = found.defaultAnalyteConc;
-        inVa.value = found.defaultAnalyteVol;
-        inCb.value = found.defaultTitrantConc;
-        inPk.value = found.pKa || found.pKb || '4.76';
-        selIndicator.value = found.recommendedIndicator || 'Phenolphthalein';
-        ghsAlertText.textContent = found.ghsAlert;
-        ghsAlertBox.classList.remove('hidden');
-        updateView();
+    for (let i = 1; i < points.length - 1; i++) {
+      const deltaV = points[i + 1].volumeAdded - points[i - 1].volumeAdded;
+      const deltaPH = Math.abs(points[i + 1].pH - points[i - 1].pH);
+      const deriv = deltaV > 0 ? deltaPH / deltaV : 0;
+      points[i].derivative = Number(deriv.toFixed(3));
+      if (deriv > maxDerivVal) {
+        maxDerivVal = deriv;
+        maxDerivVol = points[i].volumeAdded;
       }
+    }
+
+    if (points.length > 1) {
+      points[0].derivative = points[1].derivative;
+      points[points.length - 1].derivative = points[points.length - 2].derivative;
+    }
+
+    const eqPH = solvePH(Veq_mL);
+    const halfV = Veq_mL / 2;
+    const halfPH = solvePH(halfV);
+
+    return {
+      Veq: Number(Veq_mL.toFixed(2)),
+      eqPH: Number(eqPH.toFixed(2)),
+      halfV: Number(halfV.toFixed(2)),
+      halfPH: Number(halfPH.toFixed(2)),
+      points: points,
+      maxDerivVal: Number(maxDerivVal.toFixed(2)),
+      maxDerivVol: Number(maxDerivVol.toFixed(2)),
+      maxV: maxV_mL
+    };
+  }
+
+  const selPreset = document.getElementById('select-preset');
+  const selSystem = document.getElementById('select-system-type');
+  const inAnalyteName = document.getElementById('input-analyte-name');
+  const inTitrantName = document.getElementById('input-titrant-name');
+  const inCa = document.getElementById('input-ca');
+  const inVa = document.getElementById('input-va');
+  const inCb = document.getElementById('input-cb');
+  const inPk = document.getElementById('input-pk');
+  const wrapPk = document.getElementById('wrap-pk');
+  const labelPk = document.getElementById('label-pk');
+  const selIndicator = document.getElementById('select-indicator');
+  const tagIndicatorRange = document.getElementById('indicator-range-tag');
+  const msgIndicatorStatus = document.getElementById('indicator-status-msg');
+
+  const flaskDot = document.getElementById('flask-preview-dot');
+  const flaskDesc = document.getElementById('flask-color-desc');
+
+  const outVeq = document.getElementById('metric-veq');
+  const outEqPH = document.getElementById('metric-eqph');
+  const outHalfV = document.getElementById('metric-halfv');
+  const outHalfPH = document.getElementById('metric-halfph');
+  const outMaxDeriv = document.getElementById('metric-max-deriv');
+  const outBufferNote = document.getElementById('metric-buffer-range-note');
+  const svgContainer = document.getElementById('svg-chart-container');
+
+  const ghsAlertText = document.getElementById('ghs-alert-text');
+  const ghsAlertBox = document.getElementById('ghs-alert-box');
+
+  const tabSop = document.getElementById('tab-btn-sop');
+  const tabLatex = document.getElementById('tab-btn-latex');
+  const tabBibtex = document.getElementById('tab-btn-bibtex');
+  const exportDisplay = document.getElementById('export-text-display');
+
+  let currentTab = 'sop';
+  let cachedOutputs = {};
+
+  function getIndicatorColor(indicatorName, currentPH) {
+    const name = indicatorName.toLowerCase();
+    if (name.indexOf('phenolphthalein') !== -1) {
+      if (currentPH < 8.2) return { bg: '#334155', border: '#64748b', text: 'Colorless (Acidic/Neutral)', color: '#94a3b8' };
+      if (currentPH >= 8.2 && currentPH <= 10.0) return { bg: '#f472b6', border: '#ec4899', text: 'Pink Transition', color: '#831843' };
+      return { bg: '#db2777', border: '#be185d', text: 'Magenta (Basic)', color: '#ffffff' };
+    }
+    if (name.indexOf('bromothymol') !== -1) {
+      if (currentPH < 6.0) return { bg: '#eab308', border: '#ca8a04', text: 'Yellow (Acidic)', color: '#713f12' };
+      if (currentPH >= 6.0 && currentPH <= 7.6) return { bg: '#22c55e', border: '#16a34a', text: 'Green (Neutral)', color: '#14532d' };
+      return { bg: '#3b82f6', border: '#2563eb', text: 'Blue (Alkaline)', color: '#ffffff' };
+    }
+    if (name.indexOf('methyl orange') !== -1) {
+      if (currentPH < 3.1) return { bg: '#ef4444', border: '#dc2626', text: 'Red (Acidic)', color: '#ffffff' };
+      if (currentPH >= 3.1 && currentPH <= 4.4) return { bg: '#f97316', border: '#ea580c', text: 'Orange Transition', color: '#ffffff' };
+      return { bg: '#eab308', border: '#ca8a04', text: 'Yellow (Neutral/Basic)', color: '#713f12' };
+    }
+    if (name.indexOf('methyl red') !== -1) {
+      if (currentPH < 4.4) return { bg: '#ef4444', border: '#dc2626', text: 'Red (Acidic)', color: '#ffffff' };
+      if (currentPH >= 4.4 && currentPH <= 6.2) return { bg: '#f97316', border: '#ea580c', text: 'Orange Transition', color: '#ffffff' };
+      return { bg: '#eab308', border: '#ca8a04', text: 'Yellow (Alkaline)', color: '#713f12' };
+    }
+    return { bg: '#334155', border: '#64748b', text: 'Standard Solution', color: '#94a3b8' };
+  }
+
+  function updateView() {
+    const sys = selSystem.value;
+    const Ca = Math.max(1e-5, parseSafe(inCa.value, 0.1));
+    const Va = Math.max(0.1, parseSafe(inVa.value, 25));
+    const Cb = Math.max(1e-5, parseSafe(inCb.value, 0.1));
+    const pK = parseSafe(inPk.value, 4.76);
+    const analyteName = inAnalyteName.value.trim() || 'Analyte';
+    const titrantName = inTitrantName.value.trim() || 'Titrant';
+    const indName = selIndicator.value;
+
+    if (sys === 'strong_acid_strong_base') {
+      wrapPk.classList.add('opacity-40', 'pointer-events-none');
+      labelPk.textContent = 'Dissociation (N/A)';
+    } else if (sys === 'weak_base_strong_acid') {
+      wrapPk.classList.remove('opacity-40', 'pointer-events-none');
+      labelPk.textContent = 'Dissociation (pKb)';
+    } else {
+      wrapPk.classList.remove('opacity-40', 'pointer-events-none');
+      labelPk.textContent = 'Dissociation (pKa)';
+    }
+
+    const indObj = indicators.find(function(i) { return i.name === indName; }) || indicators[0];
+    tagIndicatorRange.textContent = 'pH ' + indObj.pHRange[0] + ' - ' + indObj.pHRange[1];
+
+    const res = runSimulation(sys, Ca, Va, Cb, pK);
+
+    const isIndSuitable = res.eqPH >= (indObj.pHRange[0] - 0.5) && res.eqPH <= (indObj.pHRange[1] + 0.5);
+    msgIndicatorStatus.textContent = isIndSuitable
+      ? 'Indicator transition (' + indObj.pHRange[0] + ' to ' + indObj.pHRange[1] + ') cleanly brackets the inflection pH (' + res.eqPH + '). Minimal error.'
+      : 'Caution: Transition (' + indObj.pHRange[0] + ' to ' + indObj.pHRange[1] + ') departs from inflection pH (' + res.eqPH + '). End-point error likely.';
+    msgIndicatorStatus.className = isIndSuitable ? 'text-[11px] text-emerald-400 leading-relaxed pt-1' : 'text-[11px] text-amber-400 leading-relaxed pt-1';
+
+    const colState = getIndicatorColor(indName, res.eqPH);
+    flaskDot.style.backgroundColor = colState.bg;
+    flaskDot.style.borderColor = colState.border;
+    flaskDot.style.color = colState.color;
+    flaskDesc.textContent = colState.text + ' (pH ' + res.eqPH + ')';
+
+    outVeq.textContent = res.Veq.toFixed(2);
+    outEqPH.textContent = res.eqPH.toFixed(2);
+    outHalfV.textContent = res.halfV.toFixed(2);
+    outHalfPH.textContent = res.halfPH.toFixed(2);
+    outMaxDeriv.textContent = res.maxDerivVal.toFixed(2);
+
+    if (sys === 'strong_acid_strong_base') {
+      outBufferNote.textContent = 'No buffer plateau (Strong Electrolyte)';
+    } else if (sys === 'weak_acid_strong_base') {
+      outBufferNote.textContent = 'Buffer Zone [pKa +/- 1]: [' + (pK - 1).toFixed(2) + ' - ' + (pK + 1).toFixed(2) + ']';
+    } else {
+      const effPka = 14.0 - pK;
+      outBufferNote.textContent = 'Buffer Zone [pKa +/- 1]: [' + (effPka - 1).toFixed(2) + ' - ' + (effPka + 1).toFixed(2) + ']';
+    }
+
+    renderSVG(res, indObj, sys, pK);
+
+    const latex = '% Titration Run: ' + analyteName + ' vs ' + titrantName + '\n' +
+      '\\begin{align}\n' +
+      '  V_{\\text{eq}} &= \\frac{C_a \\times V_a}{C_b} = \\frac{' + Ca.toFixed(4) + '\\text{ M} \\times ' + Va.toFixed(2) + '\\text{ mL}}{' + Cb.toFixed(4) + '\\text{ M}} = ' + res.Veq.toFixed(2) + '\\text{ mL} \\\\[6pt]\n' +
+      '  \\text{pH}_{\\text{equivalence}} &= ' + res.eqPH.toFixed(2) + ', \\quad \\text{pH}_{\\text{half-eq}} = ' + res.halfPH.toFixed(2) + ' \\\\[6pt]\n' +
+      '  \\text{Max Derivative} &= \\left(\\frac{dpH}{dV}\\right)_{\\text{max}} = ' + res.maxDerivVal.toFixed(2) + '\\text{ mL}^{-1}\n' +
+      '\\end{align}';
+
+    const sop = 'Benchtop Protocol: Pipette ' + Va.toFixed(2) + ' mL of ' + analyteName + ' (' + Ca.toFixed(4) + ' M) into a clean 150 mL Erlenmeyer flask. Add 2 to 3 drops of ' + indObj.name + ' indicator (' + indObj.colorChange + '). Rinse and fill a 50 mL Class-A burette with ' + titrantName + ' (' + Cb.toFixed(4) + ' M). Titrate under magnetic stirring until the persistent end-point inflection is reached at ' + res.Veq.toFixed(2) + ' mL (equivalence pH: ' + res.eqPH.toFixed(2) + '). Buffer midpoint verified at ' + res.halfV.toFixed(2) + ' mL (pH: ' + res.halfPH.toFixed(2) + ').';
+
+    const bibtex = '@software{ChemistryCal_Titration_2026,\n' +
+      '  author = {Khan, Bilal},\n' +
+      '  title = {ChemistryCal Analytical Suite: Acid-Base Dynamic Inflection & Derivative Engine},\n' +
+      '  year = {2026},\n' +
+      '  url = {https://chemistrycal.com/titration},\n' +
+      '  note = {Client-side chemical equilibria simulator with numerical derivative detection}\n' +
+      '}';
+
+    cachedOutputs = { sop: sop, latex: latex, bibtex: bibtex, points: res.points, Veq: res.Veq };
+    renderTab();
+  }
+
+  function renderSVG(res, indObj, sys, pK) {
+    const width = 640;
+    const height = 380;
+    const pad = { top: 30, right: 30, bottom: 50, left: 55 };
+    const cW = width - pad.left - pad.right;
+    const cH = height - pad.top - pad.bottom;
+
+    const scaleX = function(v) { return pad.left + (v / res.maxV) * cW; };
+    const scaleY = function(ph) { return pad.top + cH - (ph / 14) * cH; };
+    const maxD = Math.max.apply(null, [1].concat(res.points.map(function(p) { return p.derivative; })));
+    const scaleYD = function(d) { return pad.top + cH - (d / maxD) * cH; };
+
+    let pathPH = '';
+    let pathDeriv = '';
+
+    res.points.forEach(function(p, idx) {
+      const x = scaleX(p.volumeAdded).toFixed(1);
+      const y = scaleY(p.pH).toFixed(1);
+      const yD = scaleYD(p.derivative).toFixed(1);
+      pathPH += (idx === 0 ? 'M ' : ' L ') + x + ' ' + y;
+      pathDeriv += (idx === 0 ? 'M ' : ' L ') + x + ' ' + yD;
     });
 
-    [inCa, inVa, inCb, inPk, inAnalyteName, inTitrantName].forEach(function(el) {
-      el.addEventListener('input', function() {
-        selPreset.value = 'custom';
-        updateView();
-      });
-    });
+    const eqX = scaleX(res.Veq);
+    const eqY = scaleY(res.eqPH);
+    const halfX = scaleX(res.halfV);
+    const halfY = scaleY(res.halfPH);
 
-    [selSystem, selIndicator].forEach(function(el) {
-      el.addEventListener('change', function() {
-        selPreset.value = 'custom';
-        updateView();
-      });
-    });
+    const indTopY = scaleY(indObj.pHRange[1]);
+    const indBottomY = scaleY(indObj.pHRange[0]);
+    const indH = Math.abs(indBottomY - indTopY);
 
-    document.getElementById('btn-copy-tab-content').addEventListener('click', function() {
-      navigator.clipboard.writeText(exportDisplay.textContent).then(function() {
-        const btn = document.getElementById('btn-copy-tab-content');
-        btn.textContent = 'Copied!';
-        setTimeout(function() { btn.textContent = 'Copy Content'; }, 1800);
-      });
-    });
+    let bufferRect = '';
+    if (sys !== 'strong_acid_strong_base') {
+      const bTop = sys === 'weak_acid_strong_base' ? scaleY(pK + 1) : scaleY((14 - pK) + 1);
+      const bBot = sys === 'weak_acid_strong_base' ? scaleY(pK - 1) : scaleY((14 - pK) - 1);
+      const bH = Math.abs(bBot - bTop);
+      bufferRect = '<rect x="' + pad.left + '" y="' + bTop + '" width="' + cW + '" height="' + bH + '" fill="#f59e0b" fill-opacity="0.08" stroke="#f59e0b" stroke-dasharray="2 3" stroke-width="0.8"/>';
+    }
 
-    document.getElementById('btn-copy-sop').addEventListener('click', function() {
-      navigator.clipboard.writeText(cachedOutputs.sop).then(function() {
-        const btn = document.getElementById('btn-copy-sop');
-        btn.textContent = 'SOP Copied!';
-        setTimeout(function() { btn.textContent = 'Copy Lab SOP'; }, 2000);
-      });
-    });
+    const xTicks = [0, 0.25, 0.5, 0.75, 1.0].map(function(r) { return (res.maxV * r).toFixed(1); });
+    const yTicks = [0, 2, 4, 6, 8, 10, 12, 14];
 
-    document.getElementById('btn-export-csv').addEventListener('click', function() {
-      if (!cachedOutputs.points) return;
-      let csv = 'VolumeAdded_mL,pH,FirstDerivative_dpH_dV\n';
-      cachedOutputs.points.forEach(function(p) {
-        csv += p.volumeAdded + ',' + p.pH + ',' + p.derivative + '\n';
-      });
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'titration_curve_' + Date.now() + '.csv';
-      a.click();
-      URL.revokeObjectURL(url);
-    });
-
-    document.getElementById('btn-download-svg').addEventListener('click', function() {
-      const svgEl = document.querySelector('#svg-chart-container svg');
-      if (!svgEl) return;
-      const serializer = new XMLSerializer();
-      const svgStr = serializer.serializeToString(svgEl);
-      const blob = new Blob([svgStr], { type: 'image/svg+xml;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'titration_plot_' + Date.now() + '.svg';
-      a.click();
-      URL.revokeObjectURL(url);
-    });
-
-    const labDrawer = document.getElementById('drawer-lab-mode');
-    document.getElementById('btn-toggle-lab-mode').addEventListener('click', function() {
-      labDrawer.classList.toggle('hidden');
-    });
-
-    document.getElementById('btn-apply-lab-data').addEventListener('click', function() {
-      const rawText = document.getElementById('input-raw-lab-data').value.trim();
-      userScatterPoints = [];
-      if (rawText) {
-        const lines = rawText.split('\n');
-        lines.forEach(function(line) {
-          const parts = line.trim().split(/\s+/);
-          if (parts.length >= 2) {
-            const v = parseSafe(parts[0], -1);
-            const ph = parseSafe(parts[1], -1);
-            if (v >= 0 && ph >= 0 && ph <= 14) {
-              userScatterPoints.push({ v: v, ph: ph });
-            }
-          }
-        });
+    const scatterSVG = userScatterPoints.map(function(pt) {
+      const cx = scaleX(pt.v);
+      const cy = scaleY(pt.ph);
+      if (cx >= pad.left && cx <= (pad.left + cW)) {
+        return '<circle cx="' + cx.toFixed(1) + '" cy="' + cy.toFixed(1) + '" r="4" fill="#facc15" stroke="#020617" stroke-width="1.5" class="user-scatter-dot"><title>V: ' + pt.v + ' mL, pH: ' + pt.ph + '</title></circle>';
       }
+      return '';
+    }).join('');
+
+    const svgHTML = '<svg id="titration-render-svg" viewBox="0 0 ' + width + ' ' + height + '" class="w-full h-auto select-none font-sans" role="img" aria-label="Titration Curve">' +
+      '<rect x="' + pad.left + '" y="' + pad.top + '" width="' + cW + '" height="' + cH + '" fill="#0b1120" stroke="#1e293b" stroke-width="1"/>' +
+      bufferRect +
+      '<rect x="' + pad.left + '" y="' + indTopY + '" width="' + cW + '" height="' + indH + '" fill="#ec4899" fill-opacity="0.12" stroke="#ec4899" stroke-dasharray="3 3" stroke-width="0.8"/>' +
+      '<line x1="' + pad.left + '" y1="' + (pad.top + cH) + '" x2="' + (pad.left + cW) + '" y2="' + (pad.top + cH) + '" stroke="#475569" stroke-width="1.2"/>' +
+      '<line x1="' + pad.left + '" y1="' + pad.top + '" x2="' + pad.left + '" y2="' + (pad.top + cH) + '" stroke="#475569" stroke-width="1.2"/>' +
+      yTicks.map(function(t) { return '<line x1="' + (pad.left - 4) + '" y1="' + scaleY(t) + '" x2="' + pad.left + '" y2="' + scaleY(t) + '" stroke="#64748b" stroke-width="1"/><text x="' + (pad.left - 8) + '" y="' + (scaleY(t) + 3) + '" fill="#94a3b8" font-size="10" text-anchor="end" font-family="monospace">' + t + '</text>'; }).join('') +
+      xTicks.map(function(val) { return '<line x1="' + scaleX(parseFloat(val)) + '" y1="' + (pad.top + cH) + '" x2="' + scaleX(parseFloat(val)) + '" y2="' + (pad.top + cH + 4) + '" stroke="#64748b" stroke-width="1"/><text x="' + scaleX(parseFloat(val)) + '" y="' + (pad.top + cH + 16) + '" fill="#94a3b8" font-size="10" text-anchor="middle" font-family="monospace">' + val + '</text>'; }).join('') +
+      '<text x="' + (pad.left + cW / 2) + '" y="' + (height - 10) + '" fill="#94a3b8" font-size="11" font-weight="600" text-anchor="middle">Titrant Volume Added (mL)</text>' +
+      '<text transform="rotate(-90)" x="' + (-(pad.top + cH / 2)) + '" y="16" fill="#94a3b8" font-size="11" font-weight="600" text-anchor="middle">pH</text>' +
+      '<path d="' + pathDeriv + '" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-dasharray="3 3" stroke-opacity="0.8"/>' +
+      '<path d="' + pathPH + '" fill="none" stroke="#22d3ee" stroke-width="2.6" stroke-linecap="round"/>' +
+      (sys !== 'strong_acid_strong_base' ? '<circle cx="' + halfX + '" cy="' + halfY + '" r="4.5" fill="#f59e0b" stroke="#0f172a" stroke-width="1.5"/><text x="' + (halfX + 6) + '" y="' + (halfY - 4) + '" fill="#fbbf24" font-size="10" font-weight="700" font-family="monospace">V 1/2 (' + res.halfV + ' mL, pH ' + res.halfPH + ')</text>' : '') +
+      '<line x1="' + eqX + '" y1="' + (pad.top + cH) + '" x2="' + eqX + '" y2="' + eqY + '" stroke="#ef4444" stroke-dasharray="2 2" stroke-width="1"/>' +
+      '<circle cx="' + eqX + '" cy="' + eqY + '" r="5.5" fill="#ef4444" stroke="#ffffff" stroke-width="1.5"/>' +
+      '<text x="' + (eqX + 7) + '" y="' + (eqY - 6) + '" fill="#fca5a5" font-size="11" font-weight="800" font-family="monospace">Veq (' + res.Veq + ' mL, pH ' + res.eqPH + ')</text>' +
+      scatterSVG +
+      '</svg>';
+
+    svgContainer.innerHTML = svgHTML;
+  }
+
+  function renderTab() {
+    if (currentTab === 'sop') exportDisplay.textContent = cachedOutputs.sop || '';
+    if (currentTab === 'latex') exportDisplay.textContent = cachedOutputs.latex || '';
+    if (currentTab === 'bibtex') exportDisplay.textContent = cachedOutputs.bibtex || '';
+  }
+
+  tabSop.addEventListener('click', function() {
+    currentTab = 'sop';
+    tabSop.className = 'pb-2 font-bold text-cyan-400 border-b-2 border-cyan-400 transition';
+    tabLatex.className = 'pb-2 font-medium text-slate-400 hover:text-slate-200 transition';
+    tabBibtex.className = 'pb-2 font-medium text-slate-400 hover:text-slate-200 transition';
+    renderTab();
+  });
+
+  tabLatex.addEventListener('click', function() {
+    currentTab = 'latex';
+    tabLatex.className = 'pb-2 font-bold text-cyan-400 border-b-2 border-cyan-400 transition';
+    tabSop.className = 'pb-2 font-medium text-slate-400 hover:text-slate-200 transition';
+    tabBibtex.className = 'pb-2 font-medium text-slate-400 hover:text-slate-200 transition';
+    renderTab();
+  });
+
+  tabBibtex.addEventListener('click', function() {
+    currentTab = 'bibtex';
+    tabBibtex.className = 'pb-2 font-bold text-cyan-400 border-b-2 border-cyan-400 transition';
+    tabSop.className = 'pb-2 font-medium text-slate-400 hover:text-slate-200 transition';
+    tabLatex.className = 'pb-2 font-medium text-slate-400 hover:text-slate-200 transition';
+    renderTab();
+  });
+
+  selPreset.addEventListener('change', function() {
+    const pid = selPreset.value;
+    if (pid === 'custom') return;
+    const found = presets.find(function(p) { return p.id === pid; });
+    if (found) {
+      selSystem.value = found.systemType;
+      inAnalyteName.value = found.analyteName;
+      inTitrantName.value = found.titrantName;
+      inCa.value = found.defaultAnalyteConc;
+      inVa.value = found.defaultAnalyteVol;
+      inCb.value = found.defaultTitrantConc;
+      inPk.value = found.pKa || found.pKb || '4.76';
+      selIndicator.value = found.recommendedIndicator || 'Phenolphthalein';
+      ghsAlertText.textContent = found.ghsAlert;
+      ghsAlertBox.classList.remove('hidden');
+      updateView();
+    }
+  });
+
+  [inCa, inVa, inCb, inPk, inAnalyteName, inTitrantName].forEach(function(el) {
+    el.addEventListener('input', function() {
+      selPreset.value = 'custom';
       updateView();
     });
+  });
 
-    document.getElementById('btn-clear-lab-data').addEventListener('click', function() {
-      document.getElementById('input-raw-lab-data').value = '';
-      userScatterPoints = [];
+  [selSystem, selIndicator].forEach(function(el) {
+    el.addEventListener('change', function() {
+      selPreset.value = 'custom';
       updateView();
     });
+  });
 
-    document.getElementById('btn-print-titration-label').addEventListener('click', function() {
-      const analyte = inAnalyteName.value.trim() || 'Analyte';
-      const conc = inCa.value.trim();
-      const titrant = inTitrantName.value.trim() || 'Titrant';
-      const eqVol = outVeq.textContent;
-      const eqPH = outEqPH.textContent;
-      const safetyNote = ghsAlertText.textContent;
-
-      const printWin = window.open('', '', 'width=460,height=340');
-      if (!printWin) return;
-      
-      const labelHtml = '<html><head><title>Benchtop Titration Label</title>' +
-        '<style>body{font-family:monospace;padding:14px;border:2px dashed #000;width:340px;margin:auto;}h2{margin:0 0 6px 0;font-size:14px;text-transform:uppercase;border-bottom:1px solid #000;padding-bottom:4px;}p{margin:3px 0;font-size:11px;}.hazard{font-size:9px;margin-top:6px;padding:4px;border:1px solid #666;background:#f5f5f5;}.footer{margin-top:8px;border-top:1px solid #000;padding-top:4px;font-size:8px;display:flex;justify-content:space-between;}</style>' +
-        '</head><body>' +
-        '<h2>SECONDARY TITRATION VESSEL</h2>' +
-        '<p><strong>Solution:</strong> ' + analyte + ' (' + conc + ' M)</p>' +
-        '<p><strong>Titrant Counterpart:</strong> ' + titrant + '</p>' +
-        '<p><strong>Predicted Veq:</strong> ' + eqVol + ' mL (pH ' + eqPH + ')</p>' +
-        '<p><strong>Prepared:</strong> ' + (new Date().toLocaleDateString()) + ' | <strong>Prep By:</strong> ___________</p>' +
-        '<div class="hazard"><strong>SAFETY NOTE:</strong> ' + safetyNote + '</div>' +
-        '<div class="footer"><span>ChemistryCal Lab Suite</span><span>Class-A Precision</span></div>' +
-        '<' + 'script>window.print(); window.close();</' + 'script>' +
-        '</body></html>';
-
-      printWin.document.write(labelHtml);
-      printWin.document.close();
+  document.getElementById('btn-copy-tab-content').addEventListener('click', function() {
+    navigator.clipboard.writeText(exportDisplay.textContent).then(function() {
+      const btn = document.getElementById('btn-copy-tab-content');
+      btn.textContent = 'Copied!';
+      setTimeout(function() { btn.textContent = 'Copy Content'; }, 1800);
     });
+  });
 
-    document.getElementById('btn-share-link').addEventListener('click', function() {
-      const params = new URLSearchParams({
-        sys: selSystem.value,
-        ca: inCa.value,
-        va: inVa.value,
-        cb: inCb.value,
-        pk: inPk.value,
-        ind: selIndicator.value
+  document.getElementById('btn-copy-sop').addEventListener('click', function() {
+    navigator.clipboard.writeText(cachedOutputs.sop).then(function() {
+      const btn = document.getElementById('btn-copy-sop');
+      btn.textContent = 'SOP Copied!';
+      setTimeout(function() { btn.textContent = 'Copy Lab SOP'; }, 2000);
+    });
+  });
+
+  document.getElementById('btn-export-csv').addEventListener('click', function() {
+    if (!cachedOutputs.points) return;
+    let csv = 'VolumeAdded_mL,pH,FirstDerivative_dpH_dV\n';
+    cachedOutputs.points.forEach(function(p) {
+      csv += p.volumeAdded + ',' + p.pH + ',' + p.derivative + '\n';
+    });
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'titration_curve_' + Date.now() + '.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  document.getElementById('btn-download-svg').addEventListener('click', function() {
+    const svgEl = document.querySelector('#svg-chart-container svg');
+    if (!svgEl) return;
+    const serializer = new XMLSerializer();
+    const svgStr = serializer.serializeToString(svgEl);
+    const blob = new Blob([svgStr], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'titration_plot_' + Date.now() + '.svg';
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  const labDrawer = document.getElementById('drawer-lab-mode');
+  document.getElementById('btn-toggle-lab-mode').addEventListener('click', function() {
+    labDrawer.classList.toggle('hidden');
+  });
+
+  document.getElementById('btn-apply-lab-data').addEventListener('click', function() {
+    const rawText = document.getElementById('input-raw-lab-data').value.trim();
+    userScatterPoints = [];
+    if (rawText) {
+      const lines = rawText.split('\n');
+      lines.forEach(function(line) {
+        const parts = line.trim().split(/\s+/);
+        if (parts.length >= 2) {
+          const v = parseSafe(parts[0], -1);
+          const ph = parseSafe(parts[1], -1);
+          if (v >= 0 && ph >= 0 && ph <= 14) {
+            userScatterPoints.push({ v: v, ph: ph });
+          }
+        }
       });
-      const shareUrl = window.location.origin + window.location.pathname + '?' + params.toString();
-      navigator.clipboard.writeText(shareUrl).then(function() {
-        const btn = document.getElementById('btn-share-link');
-        btn.textContent = 'Link Copied!';
-        setTimeout(function() {
-          btn.innerHTML = '<svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg> Share URL State';
-        }, 2000);
-      });
-    });
+    }
+    updateView();
+  });
 
-    document.getElementById('btn-reset-defaults').addEventListener('click', function() {
-      window.location.href = window.location.pathname;
-    });
+  document.getElementById('btn-clear-lab-data').addEventListener('click', function() {
+    document.getElementById('input-raw-lab-data').value = '';
+    userScatterPoints = [];
+    updateView();
+  });
 
-    window.addEventListener('DOMContentLoaded', function() {
-      const q = new URLSearchParams(window.location.search);
-      if (q.has('sys')) selSystem.value = q.get('sys');
-      if (q.has('ca')) inCa.value = q.get('ca');
-      if (q.has('va')) inVa.value = q.get('va');
-      if (q.has('cb')) inCb.value = q.get('cb');
-      if (q.has('pk')) inPk.value = q.get('pk');
-      if (q.has('ind')) selIndicator.value = q.get('ind');
-      updateView();
-    });
-  </script>
+  document.getElementById('btn-print-titration-label').addEventListener('click', function() {
+    const analyte = inAnalyteName.value.trim() || 'Analyte';
+    const conc = inCa.value.trim();
+    const titrant = inTitrantName.value.trim() || 'Titrant';
+    const eqVol = outVeq.textContent;
+    const eqPH = outEqPH.textContent;
+    const safetyNote = ghsAlertText.textContent;
 
-</body>
-</html>
+    const printWin = window.open('', '', 'width=460,height=340');
+    if (!printWin) return;
+    
+    const labelHtml = '<html><head><title>Benchtop Titration Label</title>' +
+      '<style>body{font-family:monospace;padding:14px;border:2px dashed #000;width:340px;margin:auto;}h2{margin:0 0 6px 0;font-size:14px;text-transform:uppercase;border-bottom:1px solid #000;padding-bottom:4px;}p{margin:3px 0;font-size:11px;}.hazard{font-size:9px;margin-top:6px;padding:4px;border:1px solid #666;background:#f5f5f5;}.footer{margin-top:8px;border-top:1px solid #000;padding-top:4px;font-size:8px;display:flex;justify-content:space-between;}</style>' +
+      '</head><body>' +
+      '<h2>SECONDARY TITRATION VESSEL</h2>' +
+      '<p><strong>Solution:</strong> ' + analyte + ' (' + conc + ' M)</p>' +
+      '<p><strong>Titrant Counterpart:</strong> ' + titrant + '</p>' +
+      '<p><strong>Predicted Veq:</strong> ' + eqVol + ' mL (pH ' + eqPH + ')</p>' +
+      '<p><strong>Prepared:</strong> ' + (new Date().toLocaleDateString()) + ' | <strong>Prep By:</strong> ___________</p>' +
+      '<div class="hazard"><strong>SAFETY NOTE:</strong> ' + safetyNote + '</div>' +
+      '<div class="footer"><span>ChemistryCal Lab Suite</span><span>Class-A Precision</span></div>' +
+      '<' + 'script>window.print(); window.close();</' + 'script>' +
+      '</body></html>';
+
+    printWin.document.write(labelHtml);
+    printWin.document.close();
+  });
+
+  document.getElementById('btn-share-link').addEventListener('click', function() {
+    const params = new URLSearchParams({
+      sys: selSystem.value,
+      ca: inCa.value,
+      va: inVa.value,
+      cb: inCb.value,
+      pk: inPk.value,
+      ind: selIndicator.value
+    });
+    const shareUrl = window.location.origin + window.location.pathname + '?' + params.toString();
+    navigator.clipboard.writeText(shareUrl).then(function() {
+      const btn = document.getElementById('btn-share-link');
+      btn.textContent = 'Link Copied!';
+      setTimeout(function() {
+        btn.innerHTML = '<svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg> Share URL State';
+      }, 2000);
+    });
+  });
+
+  document.getElementById('btn-reset-defaults').addEventListener('click', function() {
+    window.location.href = window.location.pathname;
+  });
+
+  window.addEventListener('DOMContentLoaded', function() {
+    const q = new URLSearchParams(window.location.search);
+    if (q.has('sys')) selSystem.value = q.get('sys');
+    if (q.has('ca')) inCa.value = q.get('ca');
+    if (q.has('va')) inVa.value = q.get('va');
+    if (q.has('cb')) inCb.value = q.get('cb');
+    if (q.has('pk')) inPk.value = q.get('pk');
+    if (q.has('ind')) selIndicator.value = q.get('ind');
+    updateView();
+  });
+</script>
