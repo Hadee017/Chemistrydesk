@@ -1,27 +1,11 @@
 ---
 // src/pages/titration.astro
 import BaseLayout from '../layouts/BaseLayout.astro';
-import titrationPresets from '../data/titrationPairs.json';
-import { COMMON_INDICATORS, calculateTitration } from '../lib/calculations/titration';
 
-// Default initial simulation (Acetic acid vs. NaOH)
-const defaultPreset = titrationPresets[0];
-const initialResult = calculateTitration({
-  systemType: defaultPreset.systemType as any,
-  analyteConcentration: defaultPreset.defaultAnalyteConc,
-  analyteVolume: defaultPreset.defaultAnalyteVol,
-  titrantConcentration: defaultPreset.defaultTitrantConc,
-  pKa: defaultPreset.pKa,
-  analyteName: defaultPreset.analyteName,
-  titrantName: defaultPreset.titrantName,
-  selectedIndicator: defaultPreset.recommendedIndicator
-});
-
+const pageTitle = "Acid-Base Titration Calculator & Curve Simulator | ChemistryDesk";
+const pageDescription = "Interactive titration curve generator and pH calculator for students. Compute equivalence points, buffer regions, pH at any added volume, and indicator color changes.";
 const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://chemistrycal.com';
 const canonicalUrl = `${siteUrl}/titration`;
-
-const pageTitle = "Acid-Base Titration Studio | pH Curve & 1st Derivative Generator";
-const pageDescription = "Simulate acid-base titration curves, compute equivalence points, buffer capacities, and numerical first derivatives (dpH/dV) with indicator transition zones and Overleaf LaTeX exports.";
 
 const schemaData = {
   "@context": "https://schema.org",
@@ -29,12 +13,77 @@ const schemaData = {
     {
       "@type": "WebApplication",
       "@id": `${canonicalUrl}#software`,
-      "name": "Acid-Base Titration & Inflection Studio",
+      "name": "ChemistryDesk Student Titration Curve Simulator",
       "url": canonicalUrl,
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "All",
-      "browserRequirements": "Requires JavaScript. Runs 100% offline via local client-side execution.",
+      "browserRequirements": "Requires JavaScript. Runs 100% offline.",
       "description": pageDescription
+    },
+    {
+      "@type": "HowTo",
+      "@id": `${canonicalUrl}#howto`,
+      "name": "How to Calculate the Equivalence Point and pH Curve of an Acid-Base Titration",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "name": "Identify the Analyte in the Flask and Titrant in the Burette",
+          "text": "Choose your acid or base pair. Determine initial analyte concentration and volume."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Calculate Equivalence Volume Using Stoichiometry",
+          "text": "Apply Ca * Va = Cb * Vb to find the exact burette volume needed to reach complete stoichiometric neutralization."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Locate the Half-Equivalence Point",
+          "text": "For weak acid titrations, find Veq / 2 where pH equals the pKa of the acid."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Select a Matching Visual Indicator",
+          "text": "Match the indicator's color transition pH range to the steepest vertical inflection rise of the curve."
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${canonicalUrl}#faq`,
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the difference between the equivalence point and the endpoint?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The equivalence point is the exact stoichiometric moment when moles of added base equal moles of initial acid. The endpoint is the physical observation when the chemical indicator changes color. A well-chosen indicator ensures the endpoint occurs right at the equivalence point."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why is the equivalence point pH not always 7.00?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The equivalence pH depends on the salt produced. In a strong acid-strong base titration, the salt ions do not hydrolyze water, giving pH 7.00. In a weak acid-strong base titration, the conjugate base hydrolyzes water to form OH-, producing an equivalence pH above 7 (typically 8.0 to 9.5)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What happens at the half-equivalence point?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "At half the equivalence volume (V = Veq / 2), half of the weak acid has converted to its conjugate base. Under the Henderson-Hasselbalch equation, log([A-]/[HA]) = log(1) = 0, so pH = pKa."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Which indicator should I use for vinegar (acetic acid) titrated with NaOH?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Phenolphthalein is standard. The equivalence point for acetic acid occurs at pH ~8.7, which sits within phenolphthalein's transition window (pH 8.2 to 10.0)."
+          }
+        }
+      ]
     }
   ]
 };
@@ -45,25 +94,23 @@ const schemaData = {
 
   <main style="max-width: 1140px; margin: 1.5rem auto 4rem auto; padding: 0 1.5rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #0f172a; box-sizing: border-box;">
     
-    <!-- Navigation Breadcrumbs -->
     <nav style="font-size: 0.85rem; color: #475569; margin-bottom: 1.25rem;">
       <a href="/" style="color: #0284c7; text-decoration: none; font-weight: 600;">Home</a> &rsaquo; 
       <span style="color: #64748b;"> Analytical Tools</span> &rsaquo; 
       <span style="color: #0f172a; font-weight: 700;">Titration Studio</span>
     </nav>
 
-    <!-- Header Hero Card -->
     <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 16px; padding: 2rem; margin-bottom: 2rem; color: #ffffff; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.15);">
       <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.5rem;">
-        <div style="max-width: 760px;">
+        <div style="max-width: 780px;">
           <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); padding: 0.3rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem;">
-            <span>Potentiometric &amp; Derivative Analytics Engine</span>
+            <span>Interactive Chemistry Lab Simulation</span>
           </div>
           <h1 style="font-size: 2.35rem; font-weight: 800; color: #ffffff; letter-spacing: -0.025em; margin: 0; line-height: 1.2;">
-            Acid-Base Titration &amp; Inflection Studio
+            Acid-Base Titration Calculator &amp; Curve Generator
           </h1>
           <p style="color: #cbd5e1; font-size: 1rem; margin-top: 0.65rem; margin-bottom: 0; line-height: 1.6;">
-            Simulate real-time neutralization curves, Henderson-Hasselbalch buffer capacities, and first-derivative (dpH/dV) inflection peaks with indicator transition zones.
+            Select your acid and base solutions to generate live neutralization curves, pinpoint stoichiometric equivalence points, explore Henderson-Hasselbalch buffer regions, and determine indicator color transitions.
           </p>
         </div>
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
@@ -77,304 +124,354 @@ const schemaData = {
       </div>
     </div>
 
-    <!-- Chemical Safety Advisory -->
-    <div id="ghs-alert-box" style="background: #fffbeb; border-left: 4px solid #f59e0b; padding: 0.85rem 1.25rem; margin-bottom: 2rem; border-radius: 0 8px 8px 0; font-size: 0.85rem; color: #92400e;">
-      <div style="font-weight: 800; text-transform: uppercase; margin-bottom: 0.2rem;">⚠️ Chemical Safety Advisory:</div>
-      <p id="ghs-alert-text" style="margin: 0; line-height: 1.5;">{defaultPreset.ghsAlert}</p>
+    <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1.25rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+      <div style="font-weight: 800; font-size: 0.85rem; color: #0f172a; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+        <span>Common Lab Experiment Presets:</span>
+        <span style="font-size: 0.75rem; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 9999px; font-weight: 800;">1-Click Setup</span>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+        <button class="preset-chip-btn" data-preset="hcl_naoh">🧪 Hydrochloric Acid vs. NaOH (Strong / Strong)</button>
+        <button class="preset-chip-btn" data-preset="vinegar_naoh">🥗 Acetic Acid / Vinegar vs. NaOH (Weak Acid / Strong Base)</button>
+        <button class="preset-chip-btn" data-preset="ammonia_hcl">🧼 Ammonia Cleaner vs. HCl (Weak Base / Strong Acid)</button>
+        <button class="preset-chip-btn" data-preset="formic_naoh">🐜 Formic Acid vs. NaOH (Weak Acid / Strong Base)</button>
+      </div>
     </div>
 
-    <!-- MAIN COMPUTATION WORKBENCH (Two-Column Layout) -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
       
-      <!-- LEFT COLUMN: Inputs Form -->
       <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 1.75rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); box-sizing: border-box;">
+        
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 0.75rem;">
           <h2 style="font-size: 0.95rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #0f172a; margin: 0;">
-            1. Experimental Parameters
+            1. Lab Setup: Flask &amp; Burette
           </h2>
-          <span style="font-size: 0.75rem; font-weight: 800; color: #0284c7; background: #f0f9ff; padding: 3px 10px; border-radius: 6px; border: 1px solid #bae6fd;">Client-Side Math</span>
+          <span id="activePresetBadge" style="font-size: 0.75rem; font-weight: 800; color: #0284c7; background: #f0f9ff; padding: 3px 10px; border-radius: 6px; border: 1px solid #bae6fd;">
+            Weak Acid vs. Strong Base
+          </span>
         </div>
 
-        <!-- Preset Selection -->
+        <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 1.15rem; margin-bottom: 1.25rem;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem;">
+            <label style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; color: #0f172a;">
+              🏺 SOLUTION IN THE FLASK (Analyte)
+            </label>
+            <span style="font-size: 0.72rem; color: #64748b; font-weight: 600;">Being Measured</span>
+          </div>
+
+          <div style="margin-bottom: 0.75rem;">
+            <select id="select-analyte-chemical" style="width: 100%; padding: 0.6rem 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.88rem; font-weight: 700; color: #0f172a; background: white; cursor: pointer; box-sizing: border-box;">
+              <option value="ch3cooh" selected>Acetic Acid (CH₃COOH) - pKa 4.76 [Weak Acid]</option>
+              <option value="hcl">Hydrochloric Acid (HCl) [Strong Acid]</option>
+              <option value="nh3">Ammonia (NH₃) - pKb 4.75 [Weak Base]</option>
+              <option value="hcooh">Formic Acid (HCOOH) - pKa 3.75 [Weak Acid]</option>
+              <option value="custom">-- Custom Solution / User Entry --</option>
+            </select>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+            <div>
+              <label for="input-ca" style="display: block; font-size: 0.75rem; font-weight: 700; color: #475569; margin-bottom: 0.25rem;">Concentration (M)</label>
+              <input type="text" inputmode="decimal" id="input-ca" value="0.100" style="width: 100%; padding: 0.55rem 0.65rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; font-weight: 700; font-family: monospace; box-sizing: border-box;" />
+            </div>
+            <div>
+              <label for="input-va" style="display: block; font-size: 0.75rem; font-weight: 700; color: #475569; margin-bottom: 0.25rem;">Flask Volume (mL)</label>
+              <input type="text" inputmode="decimal" id="input-va" value="25.0" style="width: 100%; padding: 0.55rem 0.65rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; font-weight: 700; font-family: monospace; box-sizing: border-box;" />
+            </div>
+          </div>
+        </div>
+
+        <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 1.15rem; margin-bottom: 1.25rem;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem;">
+            <label style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; color: #0f172a;">
+              🧪 SOLUTION IN THE BURETTE (Titrant)
+            </label>
+            <span style="font-size: 0.72rem; color: #64748b; font-weight: 600;">Standard Dispensed</span>
+          </div>
+
+          <div style="margin-bottom: 0.75rem;">
+            <select id="select-titrant-chemical" style="width: 100%; padding: 0.6rem 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.88rem; font-weight: 700; color: #0f172a; background: white; cursor: pointer; box-sizing: border-box;">
+              <option value="naoh" selected>Sodium Hydroxide (NaOH) [Strong Base]</option>
+              <option value="hcl_titrant">Hydrochloric Acid (HCl) [Strong Acid]</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="input-cb" style="display: block; font-size: 0.75rem; font-weight: 700; color: #475569; margin-bottom: 0.25rem;">Burette Concentration (M)</label>
+            <input type="text" inputmode="decimal" id="input-cb" value="0.100" style="width: 100%; padding: 0.55rem 0.65rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; font-weight: 700; font-family: monospace; box-sizing: border-box;" />
+          </div>
+        </div>
+
         <div style="margin-bottom: 1.25rem;">
-          <label for="select-preset" style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
-            <span>STANDARD LABORATORY SYSTEM</span>
-            <span style="color: #0284c7; font-size: 0.75rem;">Auto-fills constants</span>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+            <label for="select-indicator" style="font-size: 0.8rem; font-weight: 700; color: #334155;">
+              COLORIMETRIC INDICATOR
+            </label>
+            <span id="indicator-range-tag" style="font-size: 0.75rem; color: #ec4899; font-weight: 700; font-family: monospace;">pH 8.2 - 10.0</span>
+          </div>
+          <select id="select-indicator" style="width: 100%; padding: 0.65rem 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.88rem; font-weight: 600; color: #0f172a; background: white; cursor: pointer; box-sizing: border-box;">
+            <option value="Phenolphthalein" selected>Phenolphthalein (Colorless &rarr; Vivid Pink)</option>
+            <option value="Bromothymol Blue">Bromothymol Blue (Yellow &rarr; Green &rarr; Blue)</option>
+            <option value="Methyl Orange">Methyl Orange (Red &rarr; Orange &rarr; Yellow)</option>
+            <option value="Methyl Red">Methyl Red (Red &rarr; Yellow)</option>
+          </select>
+        </div>
+
+        <div style="background: #f0f9ff; border: 1.5px solid #bae6fd; border-radius: 10px; padding: 1rem; margin-bottom: 1.5rem;">
+          <label for="input-probe-vol" style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 800; color: #0369a1; margin-bottom: 0.35rem;">
+            <span>🔬 CHECK pH AT SPECIFIC ADDED VOLUME:</span>
+            <span id="probe-region-badge" style="font-size: 0.72rem; background: #0284c7; color: white; padding: 2px 8px; border-radius: 4px;">Buffer Region</span>
           </label>
-          <select id="select-preset" style="width: 100%; padding: 0.65rem 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; font-weight: 600; color: #0f172a; background: white; cursor: pointer; box-sizing: border-box;">
-            {titrationPresets.map((p) => (
-              <option value={p.id}>{p.name} ({p.analyteFormula})</option>
-            ))}
-            <option value="custom">-- Custom User System --</option>
-          </select>
-        </div>
-
-        <!-- System Chemistry Model -->
-        <div style="margin-bottom: 1.25rem;">
-          <label for="select-system-type" style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
-            SYSTEM CHEMISTRY MODEL
-          </label>
-          <select id="select-system-type" style="width: 100%; padding: 0.65rem 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; font-weight: 600; color: #0f172a; background: white; cursor: pointer; box-sizing: border-box;">
-            <option value="weak_acid_strong_base">Weak Acid vs. Strong Base (CH₃COOH / NaOH)</option>
-            <option value="strong_acid_strong_base">Strong Acid vs. Strong Base (HCl / NaOH)</option>
-            <option value="weak_base_strong_acid">Weak Base vs. Strong Acid (NH₃ / HCl)</option>
-          </select>
-        </div>
-
-        <!-- Analyte & Titrant Names -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
-          <div>
-            <label for="input-analyte-name" style="display: block; font-size: 0.75rem; font-weight: 700; color: #475569; margin-bottom: 0.25rem;">Analyte In Flask</label>
-            <input type="text" id="input-analyte-name" value={defaultPreset.analyteName} style="width: 100%; padding: 0.55rem 0.7rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem; font-weight: 600; box-sizing: border-box;" />
-          </div>
-          <div>
-            <label for="input-titrant-name" style="display: block; font-size: 0.75rem; font-weight: 700; color: #475569; margin-bottom: 0.25rem;">Titrant In Burette</label>
-            <input type="text" id="input-titrant-name" value={defaultPreset.titrantName} style="width: 100%; padding: 0.55rem 0.7rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem; font-weight: 600; box-sizing: border-box;" />
-          </div>
-        </div>
-
-        <!-- Concentrations and Volumes -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
-          <div>
-            <label for="input-ca" style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">Analyte Conc (Cₐ)</label>
-            <div style="display: flex; border: 1.5px solid #cbd5e1; border-radius: 6px; overflow: hidden;">
-              <input type="text" inputmode="decimal" id="input-ca" value={defaultPreset.defaultAnalyteConc} style="width: 100%; padding: 0.6rem 0.7rem; border: none; font-size: 0.95rem; font-weight: 700; outline: none;" />
-              <span style="background: #f8fafc; padding: 0 0.6rem; display: flex; align-items: center; font-size: 0.8rem; font-weight: 700; color: #64748b; border-left: 1px solid #cbd5e1;">M</span>
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <input type="text" inputmode="decimal" id="input-probe-vol" value="12.5" style="width: 110px; padding: 0.5rem 0.65rem; border: 1.5px solid #38bdf8; border-radius: 6px; font-size: 0.95rem; font-weight: 800; font-family: monospace; outline: none;" />
+            <span style="font-size: 0.85rem; font-weight: 700; color: #0369a1;">mL Added &rarr;</span>
+            <div style="flex: 1; background: white; border: 1.5px solid #bae6fd; border-radius: 6px; padding: 0.5rem 0.75rem; font-weight: 800; font-size: 0.95rem; color: #0f172a; display: flex; justify-content: space-between; align-items: center;">
+              <span>pH = <strong id="probe-ph-output" style="color: #0284c7;">4.76</strong></span>
+              <div id="probe-color-indicator" style="width: 18px; height: 18px; border-radius: 50%; border: 1px solid #cbd5e1; background: #334155;"></div>
             </div>
           </div>
-          <div>
-            <label for="input-va" style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">Analyte Vol (Vₐ)</label>
-            <div style="display: flex; border: 1.5px solid #cbd5e1; border-radius: 6px; overflow: hidden;">
-              <input type="text" inputmode="decimal" id="input-va" value={defaultPreset.defaultAnalyteVol} style="width: 100%; padding: 0.6rem 0.7rem; border: none; font-size: 0.95rem; font-weight: 700; outline: none;" />
-              <span style="background: #f8fafc; padding: 0 0.6rem; display: flex; align-items: center; font-size: 0.8rem; font-weight: 700; color: #64748b; border-left: 1px solid #cbd5e1;">mL</span>
-            </div>
-          </div>
+          <span style="display: block; font-size: 0.72rem; color: #64748b; margin-top: 0.35rem;">
+            Enter any burette reading to inspect the equilibrium pH at that stage.
+          </span>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
-          <div>
-            <label for="input-cb" style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">Titrant Conc (C_b)</label>
-            <div style="display: flex; border: 1.5px solid #cbd5e1; border-radius: 6px; overflow: hidden;">
-              <input type="text" inputmode="decimal" id="input-cb" value={defaultPreset.defaultTitrantConc} style="width: 100%; padding: 0.6rem 0.7rem; border: none; font-size: 0.95rem; font-weight: 700; outline: none;" />
-              <span style="background: #f8fafc; padding: 0 0.6rem; display: flex; align-items: center; font-size: 0.8rem; font-weight: 700; color: #64748b; border-left: 1px solid #cbd5e1;">M</span>
-            </div>
-          </div>
-          <div id="wrap-pk">
-            <label for="input-pk" id="label-pk" style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">Dissociation (pKₐ)</label>
-            <input type="text" inputmode="decimal" id="input-pk" value={defaultPreset.pKa} style="width: 100%; padding: 0.6rem 0.7rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem; font-weight: 700; box-sizing: border-box;" />
-          </div>
-        </div>
-
-        <!-- Indicator Selection & Color Dot -->
-        <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 1.15rem; margin-top: 1.25rem;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
-            <label for="select-indicator" style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: #0f172a;">Colorimetric Indicator</label>
-            <span id="indicator-range-tag" style="font-size: 0.72rem; color: #ec4899; font-weight: 700; font-family: monospace;">pH 8.2 - 10.0</span>
-          </div>
-          <select id="select-indicator" style="width: 100%; padding: 0.55rem 0.65rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem; font-weight: 600; color: #0f172a; background: white; margin-bottom: 0.75rem; box-sizing: border-box;">
-            {COMMON_INDICATORS.map((ind) => (
-              <option value={ind.name} selected={ind.name === defaultPreset.recommendedIndicator}>
-                {ind.name} ({ind.colorChange})
-              </option>
-            ))}
-          </select>
-
-          <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 0.75rem; background: white; border: 1px solid #cbd5e1; border-radius: 6px;">
-            <div id="flask-preview-dot" style="width: 24px; height: 24px; border-radius: 50%; border: 1.5px solid #64748b; background: #f472b6; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 800; color: white;">pH</div>
-            <div style="font-size: 0.8rem;">
-              <span style="font-weight: 700; color: #334155;">Flask State at Equivalence: </span>
-              <span id="flask-color-desc" style="color: #64748b;">Pink Transition (pH 8.73)</span>
-            </div>
-          </div>
-          <p id="indicator-status-msg" style="margin: 0.5rem 0 0; font-size: 0.75rem; color: #059669; line-height: 1.4;">
-            {initialResult.indicator.statusNote}
-          </p>
-        </div>
-
-        <!-- Action Buttons -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 1.25rem;">
-          <button id="btn-export-csv" type="button" style="padding: 0.65rem 1rem; border-radius: 6px; background: #0f172a; color: white; border: none; font-size: 0.8rem; font-weight: 700; cursor: pointer;">
-            📥 Export CSV Points
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+          <button id="btn-export-csv" type="button" style="padding: 0.7rem 1rem; border-radius: 6px; background: #0f172a; color: white; border: none; font-size: 0.8rem; font-weight: 700; cursor: pointer;">
+            📥 Export CSV Table
           </button>
-          <button id="btn-copy-sop" type="button" style="padding: 0.65rem 1rem; border-radius: 6px; background: #0284c7; color: white; border: none; font-size: 0.8rem; font-weight: 700; cursor: pointer;">
-            📋 Copy Lab SOP
+          <button id="btn-copy-sop" type="button" style="padding: 0.7rem 1rem; border-radius: 6px; background: #0284c7; color: white; border: none; font-size: 0.8rem; font-weight: 700; cursor: pointer;">
+            📋 Copy Lab Steps
           </button>
         </div>
 
       </div>
 
-      <!-- RIGHT COLUMN: Metrics & Graph -->
       <div style="display: flex; flex-direction: column; gap: 1.5rem;">
         
-        <!-- Metrics HUD -->
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-          <div style="background: #0f172a; border-radius: 12px; padding: 1.25rem; color: white;">
-            <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #38bdf8;">Equivalence Vol (V_eq)</span>
-            <div style="font-size: 1.85rem; font-weight: 900; font-family: monospace; color: #38bdf8; margin: 0.2rem 0;">
-              <span id="metric-veq">{initialResult.equivalenceVolume}</span> <span style="font-size: 0.9rem; color: #94a3b8;">mL</span>
+          <div style="background: #0f172a; border-radius: 12px; padding: 1.25rem; color: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+            <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #38bdf8;">Equivalence Volume (V_eq)</span>
+            <div style="font-size: 2rem; font-weight: 900; font-family: monospace; color: #38bdf8; margin: 0.2rem 0;">
+              <span id="metric-veq">25.00</span> <span style="font-size: 0.95rem; color: #94a3b8;">mL</span>
             </div>
-            <span style="font-size: 0.7rem; color: #64748b;">Stoichiometric endpoint</span>
+            <span style="font-size: 0.72rem; color: #94a3b8;">Burette delivery to neutralize</span>
           </div>
 
-          <div style="background: #0f172a; border-radius: 12px; padding: 1.25rem; color: white;">
+          <div style="background: #0f172a; border-radius: 12px; padding: 1.25rem; color: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
             <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #ec4899;">Equivalence pH</span>
-            <div style="font-size: 1.85rem; font-weight: 900; font-family: monospace; color: #ec4899; margin: 0.2rem 0;">
-              <span id="metric-eqph">{initialResult.equivalencePH}</span>
+            <div style="font-size: 2rem; font-weight: 900; font-family: monospace; color: #ec4899; margin: 0.2rem 0;">
+              <span id="metric-eqph">8.73</span>
             </div>
-            <span style="font-size: 0.7rem; color: #64748b;">Neutralization point</span>
+            <span id="eq-ph-nature" style="font-size: 0.72rem; color: #f472b6;">Basic (Salt Hydrolysis)</span>
           </div>
 
           <div style="background: white; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1rem;">
-            <span style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: #64748b;">Half-Eq Vol (V_1/2)</span>
+            <span style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: #64748b;">Half-Equivalence Vol (V_1/2)</span>
             <div style="font-size: 1.45rem; font-weight: 800; font-family: monospace; color: #d97706; margin: 0.2rem 0;">
-              <span id="metric-halfv">{initialResult.halfEquivalenceVolume}</span> <span style="font-size: 0.8rem; color: #94a3b8;">mL</span>
+              <span id="metric-halfv">12.50</span> <span style="font-size: 0.8rem; color: #94a3b8;">mL</span>
             </div>
-            <span style="font-size: 0.7rem; color: #64748b;">Buffer midpoint</span>
+            <span style="font-size: 0.7rem; color: #64748b;">Buffer center (V_eq / 2)</span>
           </div>
 
           <div style="background: white; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1rem;">
-            <span style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: #64748b;">Half-Eq pH (pK_a)</span>
+            <span style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: #64748b;">Half-Equivalence pH</span>
             <div style="font-size: 1.45rem; font-weight: 800; font-family: monospace; color: #059669; margin: 0.2rem 0;">
-              <span id="metric-halfph">{initialResult.halfEquivalencePH}</span>
+              <span id="metric-halfph">4.76</span>
             </div>
-            <span style="font-size: 0.7rem; color: #64748b;">pH = pKa</span>
+            <span style="font-size: 0.7rem; color: #059669; font-weight: 700;">pH = pKa directly</span>
           </div>
         </div>
 
-        <!-- Chart Top Toolbar -->
-        <div style="display: flex; justify-content: space-between; align-items: center; background: white; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 0.65rem 1rem;">
-          <div style="display: flex; gap: 0.5rem;">
-            <button id="btn-toggle-lab-mode" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.65rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #334155;">🧪 Overlay Lab Data</button>
-            <button id="btn-print-titration-label" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.65rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #334155;">🏷️ Print Bottle Label</button>
-          </div>
-          <button id="btn-download-svg" type="button" style="background: #0284c7; color: white; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer;">Download SVG</button>
-        </div>
-
-        <!-- Lab Data Input Drawer -->
-        <div id="drawer-lab-mode" style="display: none; background: #f8fafc; border: 1.5px solid #bae6fd; border-radius: 10px; padding: 1rem;">
-          <div style="font-weight: 700; font-size: 0.8rem; margin-bottom: 0.3rem;">Paste Experimental Burette Readings (Volume &lt;space&gt; pH per line):</div>
-          <textarea id="input-raw-lab-data" rows="3" placeholder="0.0  2.88&#10;12.5 4.76&#10;25.0 8.73" style="width: 100%; padding: 0.5rem; font-family: monospace; font-size: 0.8rem; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;"></textarea>
-          <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 0.5rem;">
-            <button id="btn-clear-lab-data" type="button" style="background: #e2e8f0; border: none; padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.75rem; cursor: pointer;">Clear</button>
-            <button id="btn-apply-lab-data" type="button" style="background: #0284c7; color: white; border: none; padding: 0.3rem 0.75rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; cursor: pointer;">Plot Points Over Curve</button>
-          </div>
-        </div>
-
-        <!-- Dynamic Titration Curve Graph -->
-        <div style="background: #0f172a; border: 1.5px solid #1e293b; border-radius: 14px; padding: 1.25rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+        <div style="background: #0f172a; border: 1.5px solid #1e293b; border-radius: 14px; padding: 1.25rem; box-shadow: 0 4px 10px rgba(0,0,0,0.15);">
           <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 0.6rem; margin-bottom: 0.85rem; color: white;">
-            <span style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #38bdf8;">Dynamic Titration Curve</span>
-            <div style="display: flex; gap: 0.75rem; font-size: 0.72rem; color: #94a3b8;">
+            <span style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #38bdf8;">Interactive Titration Curve</span>
+            <div style="display: flex; gap: 0.85rem; font-size: 0.72rem; color: #94a3b8;">
               <span style="color: #38bdf8;">━ pH Curve</span>
               <span style="color: #a78bfa;">┅ 1st Deriv</span>
               <span style="color: #ec4899;">░ Indicator</span>
-              <span style="color: #facc15;">● Lab Data</span>
+              <span style="color: #facc15;">● Probe</span>
             </div>
           </div>
 
-          <div id="svg-chart-container" style="width: 100%; overflow: hidden;"></div>
+          <div id="svg-chart-container" style="width: 100%; aspect-ratio: 640 / 380; overflow: hidden;"></div>
 
           <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #94a3b8; border-top: 1px solid #334155; padding-top: 0.6rem; margin-top: 0.6rem;">
-            <div>Inflection Max Slope: <strong id="metric-max-deriv" style="color: #a78bfa; font-family: monospace;">{initialResult.maxDerivativeValue}</strong> dpH/mL</div>
-            <div id="metric-buffer-range-note" style="color: #f59e0b; font-family: monospace;">Buffer Zone [pKa ± 1]: [3.76 - 5.76]</div>
+            <div>Steepest Slope: <strong id="metric-max-deriv" style="color: #a78bfa; font-family: monospace;">6.62</strong> dpH/mL</div>
+            <div id="metric-buffer-range-note" style="color: #f59e0b; font-family: monospace;">Buffer Shelf [pKa ± 1]: [3.76 - 5.76]</div>
           </div>
         </div>
 
-        <!-- Citation & LaTeX Tabs -->
         <div style="background: white; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1.25rem;">
-          <div style="display: flex; gap: 0.75rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem; margin-bottom: 0.75rem; font-size: 0.8rem;">
-            <button id="tab-btn-sop" type="button" style="font-weight: 700; color: #0284c7; background: none; border: none; cursor: pointer; border-bottom: 2px solid #0284c7; padding-bottom: 4px;">Lab SOP</button>
-            <button id="tab-btn-latex" type="button" style="font-weight: 600; color: #64748b; background: none; border: none; cursor: pointer; padding-bottom: 4px;">Overleaf / LaTeX</button>
-            <button id="tab-btn-bibtex" type="button" style="font-weight: 600; color: #64748b; background: none; border: none; cursor: pointer; padding-bottom: 4px;">BibTeX Citation</button>
-          </div>
-          <div style="position: relative;">
-            <pre id="export-text-display" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.85rem; font-family: monospace; font-size: 0.75rem; color: #0f172a; white-space: pre-wrap; word-break: break-all; margin: 0; max-height: 140px; overflow-y: auto;"></pre>
-            <button id="btn-copy-tab-content" type="button" style="position: absolute; top: 6px; right: 6px; background: #0284c7; color: white; border: none; padding: 0.25rem 0.55rem; border-radius: 4px; font-size: 0.7rem; font-weight: 700; cursor: pointer;">Copy</button>
-          </div>
+          <h3 style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #0f172a; margin: 0 0 0.6rem 0;">
+            Benchtop Laboratory Procedure (SOP)
+          </h3>
+          <p id="sop-recipe-text" style="margin: 0; font-size: 0.85rem; color: #334155; line-height: 1.65; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.85rem;">
+            Loading experimental protocol...
+          </p>
         </div>
 
       </div>
 
     </div>
 
-    <!-- Analytical Theory Article -->
     <article style="border-top: 2px solid #e2e8f0; padding-top: 3.5rem; line-height: 1.85; color: #1e293b;">
-      <h2 style="font-size: 1.85rem; font-weight: 800; color: #0f172a; margin-bottom: 1.25rem; letter-spacing: -0.02em;">
-        Analytical Titration Theory, Henderson-Hasselbalch, and Equivalence Points
+      
+      <h2 style="font-size: 2rem; font-weight: 800; color: #0f172a; margin-bottom: 1.25rem; letter-spacing: -0.02em;">
+        Acid-Base Titration Theory, Curve Shapes, and Equivalence Calculations
       </h2>
       <p style="font-size: 1rem; margin-bottom: 1.25rem;">
-        A potentiometric acid-base titration is categorized into four distinct equilibrium zones as standard titrant volume (V) is systematically delivered from a calibrated burette into an analyte solution:
+        An acid-base titration is a quantitative analytical technique used to determine the unknown concentration of an identified analyte. By systematically delivering a standard solution of known concentration (the <strong>titrant</strong>) from a graduated Class-A burette into a known volume of sample (the <strong>analyte</strong>) inside an Erlenmeyer flask, the stoichiometric point of complete chemical neutralization can be measured.
+      </p>
+
+      <h3 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin-top: 2.25rem; margin-bottom: 0.75rem;">
+        1. The Fundamental Stoichiometric Neutralization Formula
+      </h3>
+      <p style="font-size: 0.95rem;">
+        At the stoichiometric equivalence point, the chemical amount of hydronium ions (H⁺) delivered by the acid equals the amount of hydroxide ions (OH⁻) delivered by the base:
+      </p>
+      
+      <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1rem; font-family: monospace; font-size: 1.1rem; font-weight: 700; text-align: center; margin: 1.25rem 0; color: #0f172a;">
+        n<sub>acid</sub> = n<sub>base</sub> &emsp;&rArr;&emsp; C<sub>acid</sub> &times; V<sub>acid</sub> = C<sub>base</sub> &times; V<sub>base</sub>
+      </div>
+
+      <p style="font-size: 0.95rem;">
+        Solving for the unknown equivalence volume (V<sub>eq</sub>) delivered from the burette gives:
+      </p>
+
+      <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1rem; font-family: monospace; font-size: 1.1rem; font-weight: 700; text-align: center; margin: 1.25rem 0; color: #0284c7;">
+        V<sub>eq</sub> = (C<sub>analyte</sub> &times; V<sub>analyte</sub>) / C<sub>titrant</sub>
+      </div>
+
+      <h3 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin-top: 2.5rem; margin-bottom: 0.75rem;">
+        2. The Four Stages of an Acid-Base Titration Curve
+      </h3>
+      <p style="font-size: 0.95rem;">
+        When plotting pH on the y-axis against titrant volume added (V) on the x-axis, the curve transitions across four physicochemical equilibrium regions:
       </p>
 
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
-        <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 1.15rem;">
-          <strong style="color: #0f172a; font-size: 0.85rem; display: block; margin-bottom: 0.4rem;">Stage I: Initial Solution (V = 0 mL)</strong>
-          <p style="font-size: 0.8rem; color: #475569; margin: 0; line-height: 1.5;">Governed purely by initial weak acid ionization: [H⁺] = &radic;(Kₐ &middot; Cₐ).</p>
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.25rem;">
+          <strong style="color: #0284c7; font-size: 0.9rem; display: block; margin-bottom: 0.4rem;">Stage I: Initial Flask pH (V = 0 mL)</strong>
+          <p style="font-size: 0.82rem; color: #475569; margin: 0; line-height: 1.6;">
+            Before any titrant is added, the pH is determined solely by the ionization of the analyte. For a strong acid, pH = -log₁₀(Ca). For a weak acid, it is determined by ionization equilibrium: [H⁺] &approx; &radic;(Ka &middot; Ca).
+          </p>
         </div>
-        <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 1.15rem;">
-          <strong style="color: #0f172a; font-size: 0.85rem; display: block; margin-bottom: 0.4rem;">Stage II: The Buffer Plateau (0 &lt; V &lt; Veq)</strong>
-          <p style="font-size: 0.8rem; color: #475569; margin: 0; line-height: 1.5;">Modeled by Henderson-Hasselbalch: pH = pKₐ + log₁₀([A⁻] / [HA]). At V = Veq/2, pH = pKa.</p>
+
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.25rem;">
+          <strong style="color: #d97706; font-size: 0.9rem; display: block; margin-bottom: 0.4rem;">Stage II: Buffer Region (0 &lt; V &lt; Veq)</strong>
+          <p style="font-size: 0.82rem; color: #475569; margin: 0; line-height: 1.6;">
+            As strong base is added to a weak acid, unreacted weak acid (HA) and its newly formed conjugate base (A⁻) coexist, forming a buffer governed by the Henderson-Hasselbalch equation: pH = pKa + log₁₀([A⁻]/[HA]).
+          </p>
         </div>
-        <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 1.15rem;">
-          <strong style="color: #0f172a; font-size: 0.85rem; display: block; margin-bottom: 0.4rem;">Stage III: Equivalence Point (V = Veq)</strong>
-          <p style="font-size: 0.8rem; color: #475569; margin: 0; line-height: 1.5;">Stoichiometric conversion: conjugate base hydrolyzes water giving an alkaline pH (&gt; 7).</p>
+
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.25rem;">
+          <strong style="color: #ec4899; font-size: 0.9rem; display: block; margin-bottom: 0.4rem;">Stage III: Equivalence Point (V = Veq)</strong>
+          <p style="font-size: 0.82rem; color: #475569; margin: 0; line-height: 1.6;">
+            All initial acid has reacted. The solution contains only the conjugate base (A⁻), which hydrolyzes water: A⁻ + H₂O &hArr; HA + OH⁻, causing the equivalence pH to be basic (pH &gt; 7).
+          </p>
         </div>
-        <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 1.15rem;">
-          <strong style="color: #0f172a; font-size: 0.85rem; display: block; margin-bottom: 0.4rem;">Stage IV: Excess Titrant (V &gt; Veq)</strong>
-          <p style="font-size: 0.8rem; color: #475569; margin: 0; line-height: 1.5;">pH is governed by unreacted excess hydroxide [OH⁻] from the burette.</p>
+
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.25rem;">
+          <strong style="color: #7c3aed; font-size: 0.9rem; display: block; margin-bottom: 0.4rem;">Stage IV: Excess Titrant (V &gt; Veq)</strong>
+          <p style="font-size: 0.82rem; color: #475569; margin: 0; line-height: 1.6;">
+            Excess strong base titrant overwhelms conjugate base hydrolysis. The solution pH is determined directly by unreacted hydroxide ion concentration: [OH⁻] = (n<sub>base</sub> - n<sub>acid</sub>) / V<sub>total</sub>.
+          </p>
         </div>
       </div>
 
-      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
-        First-Derivative Peak Analytics (dpH / dV)
+      <h3 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin-top: 2.5rem; margin-bottom: 0.75rem;">
+        3. Physical Significance of the Half-Equivalence Point
       </h3>
       <p style="font-size: 0.95rem;">
-        In analytical laboratories, experimental noise can obscure inflection points. Numerical central first derivatives pinpoint the exact equivalence volume without subjective visual guesswork:
+        The half-equivalence point (V = V<sub>eq</sub> / 2) is an important diagnostic landmark in analytical chemistry. At this volume, half of the weak acid has converted to conjugate base:
       </p>
-      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.85rem; font-family: monospace; font-size: 0.9rem; text-align: center; margin: 1rem 0;">
-        (dpH / dV)ᵢ &approx; (pHᵢ₊₁ - pHᵢ₋₁) / (Vᵢ₊₁ - Vᵢ₋₁)
+      
+      <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1rem; font-family: monospace; font-size: 1rem; text-align: center; margin: 1rem 0;">
+        [HA] = [A⁻] &emsp;&rArr;&emsp; log₁₀([A⁻] / [HA]) = log₁₀(1) = 0 &emsp;&rArr;&emsp; <b>pH = pK<sub>a</sub></b>
       </div>
 
-      <!-- FAQ Section -->
+      <p style="font-size: 0.95rem;">
+        Reading the solution pH directly off the curve at half the equivalence volume provides an experimental measurement of the weak acid's dissociation constant (pK<sub>a</sub>) without requiring secondary equilibrium calculations.
+      </p>
+
+      <h3 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin-top: 2.5rem; margin-bottom: 0.75rem;">
+        4. Scientific Indicator Selection Principles
+      </h3>
+      <p style="font-size: 0.95rem;">
+        A colorimetric indicator is a weak organic acid (HIn &hArr; H⁺ + In⁻) whose protonated and deprotonated structures exhibit distinct optical absorption bands. For an indicator to signal the endpoint accurately, its transition range (pK<sub>In</sub> &plusmn; 1) must match the vertical inflection rise of the titration curve:
+      </p>
+
+      <div style="overflow-x: auto; margin: 1.5rem 0;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left;">
+          <thead>
+            <tr style="background: #0f172a; color: white;">
+              <th style="padding: 0.65rem 1rem; border: 1px solid #334155;">Titration System</th>
+              <th style="padding: 0.65rem 1rem; border: 1px solid #334155;">Typical Equivalence pH</th>
+              <th style="padding: 0.65rem 1rem; border: 1px solid #334155;">Optimal Indicator</th>
+              <th style="padding: 0.65rem 1rem; border: 1px solid #334155;">Color Change</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid #cbd5e1; background: #ffffff;">
+              <td style="padding: 0.65rem 1rem; font-weight: 700;">Strong Acid vs. Strong Base</td>
+              <td style="padding: 0.65rem 1rem; font-family: monospace;">pH = 7.00</td>
+              <td style="padding: 0.65rem 1rem;">Bromothymol Blue or Phenolphthalein</td>
+              <td style="padding: 0.65rem 1rem;">Yellow &rarr; Blue / Colorless &rarr; Pink</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #cbd5e1; background: #f8fafc;">
+              <td style="padding: 0.65rem 1rem; font-weight: 700;">Weak Acid vs. Strong Base</td>
+              <td style="padding: 0.65rem 1rem; font-family: monospace;">pH = 8.0 &ndash; 9.5</td>
+              <td style="padding: 0.65rem 1rem;">Phenolphthalein (8.2 &ndash; 10.0)</td>
+              <td style="padding: 0.65rem 1rem;">Colorless &rarr; Faint Pink</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #cbd5e1; background: #ffffff;">
+              <td style="padding: 0.65rem 1rem; font-weight: 700;">Weak Base vs. Strong Acid</td>
+              <td style="padding: 0.65rem 1rem; font-family: monospace;">pH = 4.5 &ndash; 6.0</td>
+              <td style="padding: 0.65rem 1rem;">Methyl Orange or Methyl Red</td>
+              <td style="padding: 0.65rem 1rem;">Yellow &rarr; Orange/Red</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
       <h3 style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-top: 2.5rem; margin-bottom: 1rem;">
-        Frequently Asked Questions
+        Frequently Asked Questions: College &amp; AP Chemistry Titrations
       </h3>
       <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 2rem;">
         <details style="background: white; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1rem;">
-          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.9rem;">Why is the equivalence pH greater than 7 for weak acids?</summary>
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.9rem;">What is the difference between equivalence point and endpoint?</summary>
           <p style="margin: 0.5rem 0 0; font-size: 0.85rem; color: #475569; line-height: 1.6;">
-            All weak acid is converted to its conjugate base (A⁻). This base undergoes hydrolysis in water: A⁻ + H₂O &hArr; HA + OH⁻, creating hydroxide ions and raising the pH above 7.
+            The <strong>equivalence point</strong> is a theoretical stoichiometric state where moles of titrant exactly equal moles of analyte. The <strong>endpoint</strong> is the experimental observation when the indicator changes color. Choosing an indicator whose transition brackets the equivalence pH keeps indicator error minimal.
           </p>
         </details>
         <details style="background: white; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1rem;">
-          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.9rem;">What is the significance of the half-equivalence point?</summary>
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.9rem;">Why does the titration curve flatten out in the buffer region?</summary>
           <p style="margin: 0.5rem 0 0; font-size: 0.85rem; color: #475569; line-height: 1.6;">
-            At V = Veq / 2, exactly half of the weak acid has been neutralized, meaning [HA] = [A⁻]. In the Henderson-Hasselbalch equation, log([A⁻]/[HA]) becomes 0, so pH = pKa.
+            In the buffer region, weak acid (HA) and conjugate base (A⁻) are both present in substantial quantities. When strong base is added, it is neutralized by HA, converting it to A⁻. Because the ratio [A⁻]/[HA] changes gradually under a logarithmic scale, the pH resists sudden swings.
           </p>
         </details>
       </div>
+
     </article>
 
-    <!-- Connected Analytical Utilities Hub -->
     <section style="max-width: 900px; margin: 3rem auto 1.5rem; padding: 1.25rem 1.5rem; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; box-sizing: border-box;">
       <h3 style="margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 0.5rem;">
-        <span>🔗</span> Connected Analytical Utilities
+        <span>🔗</span> Upstream &amp; Downstream Analytical Workflows
       </h3>
       <p style="margin: 0 0 1rem; font-size: 0.85rem; color: #64748b; line-height: 1.4;">
-        Access interconnected analytical tools for sample preparation and materials analysis:
+        Connect your titration results with buffer preparation, standard solution formulation, and dilution calculations:
       </p>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
         <a href="/buffer" style="display: block; padding: 1rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
-          <div style="font-weight: 700; font-size: 0.92rem; color: #0284c7; margin-bottom: 0.35rem;">Buffer Studio &rarr;</div>
-          <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">Henderson-Hasselbalch formulations, Van Slyke capacity (&beta;), and hydrate compensation.</div>
+          <div style="font-weight: 700; font-size: 0.92rem; color: #0284c7; margin-bottom: 0.35rem;">Buffer Preparation Studio &rarr;</div>
+          <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">Formulate conjugate acid-base buffer recipes with Van Slyke capacity (&beta;) analysis.</div>
         </a>
         <a href="/molarity" style="display: block; padding: 1rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
           <div style="font-weight: 700; font-size: 0.92rem; color: #0284c7; margin-bottom: 0.35rem;">Solution Molarity Studio &rarr;</div>
-          <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">Weighing calculations for stocks with purity assay and crystal water adjustment.</div>
+          <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">Prepare stock titrants and primary standard solutions with purity assay corrections.</div>
         </a>
         <a href="/dilution" style="display: block; padding: 1rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
-          <div style="font-weight: 700; font-size: 0.92rem; color: #0284c7; margin-bottom: 0.35rem;">Serial Dilution Studio &rarr;</div>
-          <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">C1V1 = C2V2 conservation ladders and multi-tube geometric decay series.</div>
+          <div style="font-weight: 700; font-size: 0.92rem; color: #0284c7; margin-bottom: 0.35rem;">Serial Dilution Calculator &rarr;</div>
+          <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">Perform C1V1 = C2V2 aliquot dilution calculations and generate multi-tube series.</div>
         </a>
       </div>
     </section>
@@ -382,544 +479,454 @@ const schemaData = {
   </main>
 </BaseLayout>
 
-<script define:vars={{ presets: titrationPresets, indicators: COMMON_INDICATORS }}>
-  function parseSafe(val, fallback) {
-    if (typeof val === 'number') return isNaN(val) ? fallback : val;
-    if (!val) return fallback;
-    const clean = val.toString().trim().replace(',', '.');
-    const num = parseFloat(clean);
-    return isNaN(num) ? fallback : num;
+<style>
+  .preset-chip-btn {
+    background: #f8fafc;
+    border: 1.5px solid #cbd5e1;
+    padding: 0.4rem 0.75rem;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #1e293b;
+    font-size: 0.8rem;
+    font-weight: 700;
+    transition: all 0.2s ease;
   }
+  .preset-chip-btn:hover {
+    background: #0284c7;
+    color: #ffffff;
+    border-color: #0284c7;
+    transform: translateY(-1px);
+  }
+</style>
 
-  const KW = 1.0e-14;
-  let userScatterPoints = [];
-
-  function runSimulation(systemType, Ca, Va_mL, Cb, pK) {
-    const Va_L = Va_mL / 1000.0;
-    const molesAnalyte = Ca * Va_L;
-    const Veq_mL = (molesAnalyte / Cb) * 1000.0;
-    const maxV_mL = Veq_mL * 2.0;
-    const steps = 160;
-    const dV = maxV_mL / steps;
-
-    const points = [];
-
-    function solvePH(V_mL) {
-      const V_L = V_mL / 1000.0;
-      const totalVol_L = Va_L + V_L;
-      const molesTitrant = Cb * V_L;
-
-      if (systemType === 'strong_acid_strong_base') {
-        if (V_mL < Veq_mL - 1e-5) {
-          const h = (molesAnalyte - molesTitrant) / totalVol_L;
-          return -Math.log10(Math.max(1e-14, h));
-        } else if (Math.abs(V_mL - Veq_mL) <= 1e-5) {
-          return 7.00;
-        } else {
-          const oh = (molesTitrant - molesAnalyte) / totalVol_L;
-          return 14.0 + Math.log10(Math.max(1e-14, oh));
-        }
+<script is:inline>
+  (function() {
+    var chemicalPresets = {
+      hcl_naoh: {
+        systemType: 'strong_acid_strong_base',
+        analyteName: 'Hydrochloric Acid (HCl)',
+        titrantName: 'Sodium Hydroxide (NaOH)',
+        defaultCa: 0.100,
+        defaultVa: 25.0,
+        defaultCb: 0.100,
+        pKa: 0,
+        indicator: 'Bromothymol Blue',
+        badge: 'Strong Acid vs. Strong Base'
+      },
+      vinegar_naoh: {
+        systemType: 'weak_acid_strong_base',
+        analyteName: 'Acetic Acid (CH₃COOH)',
+        titrantName: 'Sodium Hydroxide (NaOH)',
+        defaultCa: 0.100,
+        defaultVa: 25.0,
+        defaultCb: 0.100,
+        pKa: 4.76,
+        indicator: 'Phenolphthalein',
+        badge: 'Weak Acid vs. Strong Base'
+      },
+      ammonia_hcl: {
+        systemType: 'weak_base_strong_acid',
+        analyteName: 'Ammonia (NH₃)',
+        titrantName: 'Hydrochloric Acid (HCl)',
+        defaultCa: 0.100,
+        defaultVa: 25.0,
+        defaultCb: 0.100,
+        pKa: 4.75, // pKb
+        indicator: 'Methyl Orange',
+        badge: 'Weak Base vs. Strong Acid'
+      },
+      formic_naoh: {
+        systemType: 'weak_acid_strong_base',
+        analyteName: 'Formic Acid (HCOOH)',
+        titrantName: 'Sodium Hydroxide (NaOH)',
+        defaultCa: 0.100,
+        defaultVa: 25.0,
+        defaultCb: 0.100,
+        pKa: 3.75,
+        indicator: 'Phenolphthalein',
+        badge: 'Weak Acid vs. Strong Base'
       }
-
-      if (systemType === 'weak_acid_strong_base') {
-        const Ka = Math.pow(10, -pK);
-        if (V_mL <= 0.001) {
-          return -Math.log10(Math.max(1e-14, Math.sqrt(Ka * Ca)));
-        } else if (V_mL < Veq_mL - 1e-5) {
-          const ratio = Math.max(1e-6, molesTitrant / (molesAnalyte - molesTitrant));
-          return Math.max(0, Math.min(14, pK + Math.log10(ratio)));
-        } else if (Math.abs(V_mL - Veq_mL) <= 1e-5) {
-          const cA = molesAnalyte / totalVol_L;
-          const oh = Math.sqrt((KW / Ka) * cA);
-          return 14.0 + Math.log10(Math.max(1e-14, oh));
-        } else {
-          const oh = (molesTitrant - molesAnalyte) / totalVol_L;
-          return 14.0 + Math.log10(Math.max(1e-14, oh));
-        }
-      }
-
-      if (systemType === 'weak_base_strong_acid') {
-        const Kb = Math.pow(10, -pK);
-        const pKa = 14.0 - pK;
-        if (V_mL <= 0.001) {
-          const oh = Math.sqrt(Kb * Ca);
-          return 14.0 + Math.log10(Math.max(1e-14, oh));
-        } else if (V_mL < Veq_mL - 1e-5) {
-          const ratio = Math.max(1e-6, (molesAnalyte - molesTitrant) / molesTitrant);
-          return Math.max(0, Math.min(14, pKa + Math.log10(ratio)));
-        } else if (Math.abs(V_mL - Veq_mL) <= 1e-5) {
-          const cBH = molesAnalyte / totalVol_L;
-          const h = Math.sqrt((KW / Kb) * cBH);
-          return -Math.log10(Math.max(1e-14, h));
-        } else {
-          const h = (molesTitrant - molesAnalyte) / totalVol_L;
-          return -Math.log10(Math.max(1e-14, h));
-        }
-      }
-
-      return 7.00;
-    }
-
-    for (let i = 0; i <= steps; i++) {
-      const v = i * dV;
-      points.push({ volumeAdded: Number(v.toFixed(3)), pH: solvePH(v), derivative: 0 });
-    }
-
-    let maxDerivVal = -1;
-    let maxDerivVol = Veq_mL;
-
-    for (let i = 1; i < points.length - 1; i++) {
-      const deltaV = points[i + 1].volumeAdded - points[i - 1].volumeAdded;
-      const deltaPH = Math.abs(points[i + 1].pH - points[i - 1].pH);
-      const deriv = deltaV > 0 ? deltaPH / deltaV : 0;
-      points[i].derivative = Number(deriv.toFixed(3));
-      if (deriv > maxDerivVal) {
-        maxDerivVal = deriv;
-        maxDerivVol = points[i].volumeAdded;
-      }
-    }
-
-    if (points.length > 1) {
-      points[0].derivative = points[1].derivative;
-      points[points.length - 1].derivative = points[points.length - 2].derivative;
-    }
-
-    const eqPH = solvePH(Veq_mL);
-    const halfV = Veq_mL / 2;
-    const halfPH = solvePH(halfV);
-
-    return {
-      Veq: Number(Veq_mL.toFixed(2)),
-      eqPH: Number(eqPH.toFixed(2)),
-      halfV: Number(halfV.toFixed(2)),
-      halfPH: Number(halfPH.toFixed(2)),
-      points: points,
-      maxDerivVal: Number(maxDerivVal.toFixed(2)),
-      maxDerivVol: Number(maxDerivVol.toFixed(2)),
-      maxV: maxV_mL
     };
-  }
 
-  const selPreset = document.getElementById('select-preset');
-  const selSystem = document.getElementById('select-system-type');
-  const inAnalyteName = document.getElementById('input-analyte-name');
-  const inTitrantName = document.getElementById('input-titrant-name');
-  const inCa = document.getElementById('input-ca');
-  const inVa = document.getElementById('input-va');
-  const inCb = document.getElementById('input-cb');
-  const inPk = document.getElementById('input-pk');
-  const wrapPk = document.getElementById('wrap-pk');
-  const labelPk = document.getElementById('label-pk');
-  const selIndicator = document.getElementById('select-indicator');
-  const tagIndicatorRange = document.getElementById('indicator-range-tag');
-  const msgIndicatorStatus = document.getElementById('indicator-status-msg');
+    var currentSystemType = 'weak_acid_strong_base';
+    var currentPK = 4.76;
+    var currentAnalyteName = 'Acetic Acid (CH₃COOH)';
+    var currentTitrantName = 'Sodium Hydroxide (NaOH)';
 
-  const flaskDot = document.getElementById('flask-preview-dot');
-  const flaskDesc = document.getElementById('flask-color-desc');
+    var selAnalyte = document.getElementById('select-analyte-chemical');
+    var selTitrant = document.getElementById('select-titrant-chemical');
+    var inpCa = document.getElementById('input-ca');
+    var inpVa = document.getElementById('input-va');
+    var inpCb = document.getElementById('input-cb');
+    var selIndicator = document.getElementById('select-indicator');
+    var inpProbeVol = document.getElementById('input-probe-vol');
+    var probePhOutput = document.getElementById('probe-ph-output');
+    var probeRegionBadge = document.getElementById('probe-region-badge');
+    var probeColorDot = document.getElementById('probe-color-indicator');
+    var activeBadge = document.getElementById('activePresetBadge');
 
-  const outVeq = document.getElementById('metric-veq');
-  const outEqPH = document.getElementById('metric-eqph');
-  const outHalfV = document.getElementById('metric-halfv');
-  const outHalfPH = document.getElementById('metric-halfph');
-  const outMaxDeriv = document.getElementById('metric-max-deriv');
-  const outBufferNote = document.getElementById('metric-buffer-range-note');
-  const svgContainer = document.getElementById('svg-chart-container');
+    var outVeq = document.getElementById('metric-veq');
+    var outEqPH = document.getElementById('metric-eqph');
+    var outHalfV = document.getElementById('metric-halfv');
+    var outHalfPH = document.getElementById('metric-halfph');
+    var outMaxDeriv = document.getElementById('metric-max-deriv');
+    var outBufferNote = document.getElementById('metric-buffer-range-note');
+    var outEqNature = document.getElementById('eq-ph-nature');
+    var outSop = document.getElementById('sop-recipe-text');
+    var svgContainer = document.getElementById('svg-chart-container');
+    var indRangeTag = document.getElementById('indicator-range-tag');
 
-  const ghsAlertText = document.getElementById('ghs-alert-text');
-  const ghsAlertBox = document.getElementById('ghs-alert-box');
+    var KW = 1.0e-14;
 
-  const tabSop = document.getElementById('tab-btn-sop');
-  const tabLatex = document.getElementById('tab-btn-latex');
-  const tabBibtex = document.getElementById('tab-btn-bibtex');
-  const exportDisplay = document.getElementById('export-text-display');
-
-  let currentTab = 'sop';
-  let cachedOutputs = {};
-
-  function getIndicatorColor(indicatorName, currentPH) {
-    const name = indicatorName.toLowerCase();
-    if (name.indexOf('phenolphthalein') !== -1) {
-      if (currentPH < 8.2) return { bg: '#334155', border: '#64748b', text: 'Colorless (Acidic/Neutral)', color: '#94a3b8' };
-      if (currentPH >= 8.2 && currentPH <= 10.0) return { bg: '#f472b6', border: '#ec4899', text: 'Pink Transition', color: '#831843' };
-      return { bg: '#db2777', border: '#be185d', text: 'Magenta (Basic)', color: '#ffffff' };
-    }
-    if (name.indexOf('bromothymol') !== -1) {
-      if (currentPH < 6.0) return { bg: '#eab308', border: '#ca8a04', text: 'Yellow (Acidic)', color: '#713f12' };
-      if (currentPH >= 6.0 && currentPH <= 7.6) return { bg: '#22c55e', border: '#16a34a', text: 'Green (Neutral)', color: '#14532d' };
-      return { bg: '#3b82f6', border: '#2563eb', text: 'Blue (Alkaline)', color: '#ffffff' };
-    }
-    if (name.indexOf('methyl orange') !== -1) {
-      if (currentPH < 3.1) return { bg: '#ef4444', border: '#dc2626', text: 'Red (Acidic)', color: '#ffffff' };
-      if (currentPH >= 3.1 && currentPH <= 4.4) return { bg: '#f97316', border: '#ea580c', text: 'Orange Transition', color: '#ffffff' };
-      return { bg: '#eab308', border: '#ca8a04', text: 'Yellow (Neutral/Basic)', color: '#713f12' };
-    }
-    if (name.indexOf('methyl red') !== -1) {
-      if (currentPH < 4.4) return { bg: '#ef4444', border: '#dc2626', text: 'Red (Acidic)', color: '#ffffff' };
-      if (currentPH >= 4.4 && currentPH <= 6.2) return { bg: '#f97316', border: '#ea580c', text: 'Orange Transition', color: '#ffffff' };
-      return { bg: '#eab308', border: '#ca8a04', text: 'Yellow (Alkaline)', color: '#713f12' };
-    }
-    return { bg: '#334155', border: '#64748b', text: 'Standard Solution', color: '#94a3b8' };
-  }
-
-  function updateView() {
-    const sys = selSystem.value;
-    const Ca = Math.max(1e-5, parseSafe(inCa.value, 0.1));
-    const Va = Math.max(0.1, parseSafe(inVa.value, 25));
-    const Cb = Math.max(1e-5, parseSafe(inCb.value, 0.1));
-    const pK = parseSafe(inPk.value, 4.76);
-    const analyteName = inAnalyteName.value.trim() || 'Analyte';
-    const titrantName = inTitrantName.value.trim() || 'Titrant';
-    const indName = selIndicator.value;
-
-    if (sys === 'strong_acid_strong_base') {
-      wrapPk.style.opacity = '0.4';
-      wrapPk.style.pointerEvents = 'none';
-      labelPk.textContent = 'Dissociation (N/A)';
-    } else if (sys === 'weak_base_strong_acid') {
-      wrapPk.style.opacity = '1';
-      wrapPk.style.pointerEvents = 'auto';
-      labelPk.textContent = 'Dissociation (pKb)';
-    } else {
-      wrapPk.style.opacity = '1';
-      wrapPk.style.pointerEvents = 'auto';
-      labelPk.textContent = 'Dissociation (pKa)';
+    function sanitizeInput(val, fallback) {
+      if (typeof val === 'number') return isNaN(val) ? fallback : val;
+      if (!val) return fallback;
+      var clean = val.toString().trim().replace(',', '.');
+      var num = parseFloat(clean);
+      return isNaN(num) ? fallback : num;
     }
 
-    const indObj = indicators.find(function(i) { return i.name === indName; }) || indicators[0];
-    tagIndicatorRange.textContent = 'pH ' + indObj.pHRange[0] + ' - ' + indObj.pHRange[1];
+    function calculateCurvePoints(systemType, Ca, Va_mL, Cb, pK) {
+      var Va_L = Va_mL / 1000.0;
+      var molesAnalyte = Ca * Va_L;
+      var Veq_mL = (molesAnalyte / Cb) * 1000.0;
+      var maxV_mL = Veq_mL * 2.0;
+      var steps = 140;
+      var dV = maxV_mL / steps;
 
-    const res = runSimulation(sys, Ca, Va, Cb, pK);
+      function solveExactPH(V_mL) {
+        var V_L = V_mL / 1000.0;
+        var totalVol_L = Va_L + V_L;
+        var molesTitrant = Cb * V_L;
 
-    const isIndSuitable = res.eqPH >= (indObj.pHRange[0] - 0.5) && res.eqPH <= (indObj.pHRange[1] + 0.5);
-    msgIndicatorStatus.textContent = isIndSuitable
-      ? 'Indicator transition (' + indObj.pHRange[0] + ' to ' + indObj.pHRange[1] + ') cleanly brackets the inflection pH (' + res.eqPH + '). Minimal error.'
-      : 'Caution: Transition (' + indObj.pHRange[0] + ' to ' + indObj.pHRange[1] + ') departs from inflection pH (' + res.eqPH + '). End-point error likely.';
-    msgIndicatorStatus.style.color = isIndSuitable ? '#059669' : '#d97706';
-
-    const colState = getIndicatorColor(indName, res.eqPH);
-    flaskDot.style.backgroundColor = colState.bg;
-    flaskDot.style.borderColor = colState.border;
-    flaskDot.style.color = colState.color;
-    flaskDesc.textContent = colState.text + ' (pH ' + res.eqPH + ')';
-
-    outVeq.textContent = res.Veq.toFixed(2);
-    outEqPH.textContent = res.eqPH.toFixed(2);
-    outHalfV.textContent = res.halfV.toFixed(2);
-    outHalfPH.textContent = res.halfPH.toFixed(2);
-    outMaxDeriv.textContent = res.maxDerivVal.toFixed(2);
-
-    if (sys === 'strong_acid_strong_base') {
-      outBufferNote.textContent = 'No buffer plateau (Strong Electrolyte)';
-    } else if (sys === 'weak_acid_strong_base') {
-      outBufferNote.textContent = 'Buffer Zone [pKa +/- 1]: [' + (pK - 1).toFixed(2) + ' - ' + (pK + 1).toFixed(2) + ']';
-    } else {
-      const effPka = 14.0 - pK;
-      outBufferNote.textContent = 'Buffer Zone [pKa +/- 1]: [' + (effPka - 1).toFixed(2) + ' - ' + (effPka + 1).toFixed(2) + ']';
-    }
-
-    renderSVG(res, indObj, sys, pK);
-
-    const latex = '% Titration Run: ' + analyteName + ' vs ' + titrantName + '\n' +
-      '\\begin{align}\n' +
-      '  V_{\\text{eq}} &= \\frac{C_a \\times V_a}{C_b} = \\frac{' + Ca.toFixed(4) + '\\text{ M} \\times ' + Va.toFixed(2) + '\\text{ mL}}{' + Cb.toFixed(4) + '\\text{ M}} = ' + res.Veq.toFixed(2) + '\\text{ mL} \\\\[6pt]\n' +
-      '  \\text{pH}_{\\text{equivalence}} &= ' + res.eqPH.toFixed(2) + ', \\quad \\text{pH}_{\\text{half-eq}} = ' + res.halfPH.toFixed(2) + ' \\\\[6pt]\n' +
-      '  \\text{Max Derivative} &= \\left(\\frac{dpH}{dV}\\right)_{\\text{max}} = ' + res.maxDerivVal.toFixed(2) + '\\text{ mL}^{-1}\n' +
-      '\\end{align}';
-
-    const sop = 'Benchtop Protocol: Pipette ' + Va.toFixed(2) + ' mL of ' + analyteName + ' (' + Ca.toFixed(4) + ' M) into a clean 150 mL Erlenmeyer flask. Add 2 to 3 drops of ' + indObj.name + ' indicator (' + indObj.colorChange + '). Rinse and fill a 50 mL Class-A burette with ' + titrantName + ' (' + Cb.toFixed(4) + ' M). Titrate under magnetic stirring until the persistent end-point inflection is reached at ' + res.Veq.toFixed(2) + ' mL (equivalence pH: ' + res.eqPH.toFixed(2) + '). Buffer midpoint verified at ' + res.halfV.toFixed(2) + ' mL (pH: ' + res.halfPH.toFixed(2) + ').';
-
-    const bibtex = '@software{ChemistryCal_Titration_2026,\n' +
-      '  author = {Khan, Bilal},\n' +
-      '  title = {ChemistryCal Analytical Suite: Acid-Base Dynamic Inflection & Derivative Engine},\n' +
-      '  year = {2026},\n' +
-      '  url = {https://chemistrycal.com/titration},\n' +
-      '  note = {Client-side chemical equilibria simulator with numerical derivative detection}\n' +
-      '}';
-
-    cachedOutputs = { sop: sop, latex: latex, bibtex: bibtex, points: res.points, Veq: res.Veq };
-    renderTab();
-  }
-
-  function renderSVG(res, indObj, sys, pK) {
-    const width = 640;
-    const height = 380;
-    const pad = { top: 30, right: 30, bottom: 50, left: 55 };
-    const cW = width - pad.left - pad.right;
-    const cH = height - pad.top - pad.bottom;
-
-    const scaleX = function(v) { return pad.left + (v / res.maxV) * cW; };
-    const scaleY = function(ph) { return pad.top + cH - (ph / 14) * cH; };
-    const maxD = Math.max.apply(null, [1].concat(res.points.map(function(p) { return p.derivative; })));
-    const scaleYD = function(d) { return pad.top + cH - (d / maxD) * cH; };
-
-    let pathPH = '';
-    let pathDeriv = '';
-
-    res.points.forEach(function(p, idx) {
-      const x = scaleX(p.volumeAdded).toFixed(1);
-      const y = scaleY(p.pH).toFixed(1);
-      const yD = scaleYD(p.derivative).toFixed(1);
-      pathPH += (idx === 0 ? 'M ' : ' L ') + x + ' ' + y;
-      pathDeriv += (idx === 0 ? 'M ' : ' L ') + x + ' ' + yD;
-    });
-
-    const eqX = scaleX(res.Veq);
-    const eqY = scaleY(res.eqPH);
-    const halfX = scaleX(res.halfV);
-    const halfY = scaleY(res.halfPH);
-
-    const indTopY = scaleY(indObj.pHRange[1]);
-    const indBottomY = scaleY(indObj.pHRange[0]);
-    const indH = Math.abs(indBottomY - indTopY);
-
-    let bufferRect = '';
-    if (sys !== 'strong_acid_strong_base') {
-      const bTop = sys === 'weak_acid_strong_base' ? scaleY(pK + 1) : scaleY((14 - pK) + 1);
-      const bBot = sys === 'weak_acid_strong_base' ? scaleY(pK - 1) : scaleY((14 - pK) - 1);
-      const bH = Math.abs(bBot - bTop);
-      bufferRect = '<rect x="' + pad.left + '" y="' + bTop + '" width="' + cW + '" height="' + bH + '" fill="#f59e0b" fill-opacity="0.08" stroke="#f59e0b" stroke-dasharray="2 3" stroke-width="0.8"/>';
-    }
-
-    const xTicks = [0, 0.25, 0.5, 0.75, 1.0].map(function(r) { return (res.maxV * r).toFixed(1); });
-    const yTicks = [0, 2, 4, 6, 8, 10, 12, 14];
-
-    const scatterSVG = userScatterPoints.map(function(pt) {
-      const cx = scaleX(pt.v);
-      const cy = scaleY(pt.ph);
-      if (cx >= pad.left && cx <= (pad.left + cW)) {
-        return '<circle cx="' + cx.toFixed(1) + '" cy="' + cy.toFixed(1) + '" r="4" fill="#facc15" stroke="#020617" stroke-width="1.5" class="user-scatter-dot"><title>V: ' + pt.v + ' mL, pH: ' + pt.ph + '</title></circle>';
-      }
-      return '';
-    }).join('');
-
-    const svgHTML = '<svg id="titration-render-svg" viewBox="0 0 ' + width + ' ' + height + '" style="width: 100%; height: auto; user-select: none; font-family: monospace;" role="img" aria-label="Titration Curve">' +
-      '<rect x="' + pad.left + '" y="' + pad.top + '" width="' + cW + '" height="' + cH + '" fill="#0b1120" stroke="#1e293b" stroke-width="1"/>' +
-      bufferRect +
-      '<rect x="' + pad.left + '" y="' + indTopY + '" width="' + cW + '" height="' + indH + '" fill="#ec4899" fill-opacity="0.12" stroke="#ec4899" stroke-dasharray="3 3" stroke-width="0.8"/>' +
-      '<line x1="' + pad.left + '" y1="' + (pad.top + cH) + '" x2="' + (pad.left + cW) + '" y2="' + (pad.top + cH) + '" stroke="#475569" stroke-width="1.2"/>' +
-      '<line x1="' + pad.left + '" y1="' + pad.top + '" x2="' + pad.left + '" y2="' + (pad.top + cH) + '" stroke="#475569" stroke-width="1.2"/>' +
-      yTicks.map(function(t) { return '<line x1="' + (pad.left - 4) + '" y1="' + scaleY(t) + '" x2="' + pad.left + '" y2="' + scaleY(t) + '" stroke="#64748b" stroke-width="1"/><text x="' + (pad.left - 8) + '" y="' + (scaleY(t) + 3) + '" fill="#94a3b8" font-size="10" text-anchor="end">' + t + '</text>'; }).join('') +
-      xTicks.map(function(val) { return '<line x1="' + scaleX(parseFloat(val)) + '" y1="' + (pad.top + cH) + '" x2="' + scaleX(parseFloat(val)) + '" y2="' + (pad.top + cH + 4) + '" stroke="#64748b" stroke-width="1"/><text x="' + scaleX(parseFloat(val)) + '" y="' + (pad.top + cH + 16) + '" fill="#94a3b8" font-size="10" text-anchor="middle">' + val + '</text>'; }).join('') +
-      '<text x="' + (pad.left + cW / 2) + '" y="' + (height - 10) + '" fill="#94a3b8" font-size="11" font-weight="600" text-anchor="middle">Titrant Volume Added (mL)</text>' +
-      '<text transform="rotate(-90)" x="' + (-(pad.top + cH / 2)) + '" y="16" fill="#94a3b8" font-size="11" font-weight="600" text-anchor="middle">pH</text>' +
-      '<path d="' + pathDeriv + '" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-dasharray="3 3" stroke-opacity="0.8"/>' +
-      '<path d="' + pathPH + '" fill="none" stroke="#22d3ee" stroke-width="2.6" stroke-linecap="round"/>' +
-      (sys !== 'strong_acid_strong_base' ? '<circle cx="' + halfX + '" cy="' + halfY + '" r="4.5" fill="#f59e0b" stroke="#0f172a" stroke-width="1.5"/><text x="' + (halfX + 6) + '" y="' + (halfY - 4) + '" fill="#fbbf24" font-size="10" font-weight="700">V 1/2 (' + res.halfV + ' mL, pH ' + res.halfPH + ')</text>' : '') +
-      '<line x1="' + eqX + '" y1="' + (pad.top + cH) + '" x2="' + eqX + '" y2="' + eqY + '" stroke="#ef4444" stroke-dasharray="2 2" stroke-width="1"/>' +
-      '<circle cx="' + eqX + '" cy="' + eqY + '" r="5.5" fill="#ef4444" stroke="#ffffff" stroke-width="1.5"/>' +
-      '<text x="' + (eqX + 7) + '" y="' + (eqY - 6) + '" fill="#fca5a5" font-size="11" font-weight="800">Veq (' + res.Veq + ' mL, pH ' + res.eqPH + ')</text>' +
-      scatterSVG +
-      '</svg>';
-
-    svgContainer.innerHTML = svgHTML;
-  }
-
-  function renderTab() {
-    if (currentTab === 'sop') exportDisplay.textContent = cachedOutputs.sop || '';
-    if (currentTab === 'latex') exportDisplay.textContent = cachedOutputs.latex || '';
-    if (currentTab === 'bibtex') exportDisplay.textContent = cachedOutputs.bibtex || '';
-  }
-
-  tabSop.addEventListener('click', function() {
-    currentTab = 'sop';
-    tabSop.style.color = '#0284c7';
-    tabSop.style.borderBottom = '2px solid #0284c7';
-    tabLatex.style.color = '#64748b';
-    tabLatex.style.borderBottom = 'none';
-    tabBibtex.style.color = '#64748b';
-    tabBibtex.style.borderBottom = 'none';
-    renderTab();
-  });
-
-  tabLatex.addEventListener('click', function() {
-    currentTab = 'latex';
-    tabLatex.style.color = '#0284c7';
-    tabLatex.style.borderBottom = '2px solid #0284c7';
-    tabSop.style.color = '#64748b';
-    tabSop.style.borderBottom = 'none';
-    tabBibtex.style.color = '#64748b';
-    tabBibtex.style.borderBottom = 'none';
-    renderTab();
-  });
-
-  tabBibtex.addEventListener('click', function() {
-    currentTab = 'bibtex';
-    tabBibtex.style.color = '#0284c7';
-    tabBibtex.style.borderBottom = '2px solid #0284c7';
-    tabSop.style.color = '#64748b';
-    tabSop.style.borderBottom = 'none';
-    tabLatex.style.color = '#64748b';
-    tabLatex.style.borderBottom = 'none';
-    renderTab();
-  });
-
-  selPreset.addEventListener('change', function() {
-    const pid = selPreset.value;
-    if (pid === 'custom') return;
-    const found = presets.find(function(p) { return p.id === pid; });
-    if (found) {
-      selSystem.value = found.systemType;
-      inAnalyteName.value = found.analyteName;
-      inTitrantName.value = found.titrantName;
-      inCa.value = found.defaultAnalyteConc;
-      inVa.value = found.defaultAnalyteVol;
-      inCb.value = found.defaultTitrantConc;
-      inPk.value = found.pKa || found.pKb || '4.76';
-      selIndicator.value = found.recommendedIndicator || 'Phenolphthalein';
-      ghsAlertText.textContent = found.ghsAlert;
-      ghsAlertBox.style.display = 'block';
-      updateView();
-    }
-  });
-
-  [inCa, inVa, inCb, inPk, inAnalyteName, inTitrantName].forEach(function(el) {
-    el.addEventListener('input', function() {
-      selPreset.value = 'custom';
-      updateView();
-    });
-  });
-
-  [selSystem, selIndicator].forEach(function(el) {
-    el.addEventListener('change', function() {
-      selPreset.value = 'custom';
-      updateView();
-    });
-  });
-
-  document.getElementById('btn-copy-tab-content').addEventListener('click', function() {
-    navigator.clipboard.writeText(exportDisplay.textContent).then(function() {
-      const btn = document.getElementById('btn-copy-tab-content');
-      btn.textContent = 'Copied!';
-      setTimeout(function() { btn.textContent = 'Copy'; }, 1800);
-    });
-  });
-
-  document.getElementById('btn-copy-sop').addEventListener('click', function() {
-    navigator.clipboard.writeText(cachedOutputs.sop).then(function() {
-      const btn = document.getElementById('btn-copy-sop');
-      btn.textContent = 'Copied!';
-      setTimeout(function() { btn.textContent = '📋 Copy Lab SOP'; }, 2000);
-    });
-  });
-
-  document.getElementById('btn-export-csv').addEventListener('click', function() {
-    if (!cachedOutputs.points) return;
-    let csv = 'VolumeAdded_mL,pH,FirstDerivative_dpH_dV\n';
-    cachedOutputs.points.forEach(function(p) {
-      csv += p.volumeAdded + ',' + p.pH + ',' + p.derivative + '\n';
-    });
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'titration_curve_' + Date.now() + '.csv';
-    a.click();
-    URL.revokeObjectURL(url);
-  });
-
-  document.getElementById('btn-download-svg').addEventListener('click', function() {
-    const svgEl = document.querySelector('#svg-chart-container svg');
-    if (!svgEl) return;
-    const serializer = new XMLSerializer();
-    const svgStr = serializer.serializeToString(svgEl);
-    const blob = new Blob([svgStr], { type: 'image/svg+xml;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'titration_plot_' + Date.now() + '.svg';
-    a.click();
-    URL.revokeObjectURL(url);
-  });
-
-  const labDrawer = document.getElementById('drawer-lab-mode');
-  document.getElementById('btn-toggle-lab-mode').addEventListener('click', function() {
-    labDrawer.style.display = labDrawer.style.display === 'none' ? 'block' : 'none';
-  });
-
-  document.getElementById('btn-apply-lab-data').addEventListener('click', function() {
-    const rawText = document.getElementById('input-raw-lab-data').value.trim();
-    userScatterPoints = [];
-    if (rawText) {
-      const lines = rawText.split('\n');
-      lines.forEach(function(line) {
-        const parts = line.trim().split(/\s+/);
-        if (parts.length >= 2) {
-          const v = parseSafe(parts[0], -1);
-          const ph = parseSafe(parts[1], -1);
-          if (v >= 0 && ph >= 0 && ph <= 14) {
-            userScatterPoints.push({ v: v, ph: ph });
+        if (systemType === 'strong_acid_strong_base') {
+          if (V_mL < Veq_mL - 1e-5) {
+            var h = (molesAnalyte - molesTitrant) / totalVol_L;
+            return -Math.log10(Math.max(1e-14, h));
+          } else if (Math.abs(V_mL - Veq_mL) <= 1e-5) {
+            return 7.00;
+          } else {
+            var oh = (molesTitrant - molesAnalyte) / totalVol_L;
+            return 14.0 + Math.log10(Math.max(1e-14, oh));
           }
         }
+
+        if (systemType === 'weak_acid_strong_base') {
+          var Ka = Math.pow(10, -pK);
+          if (V_mL <= 0.001) {
+            return -Math.log10(Math.max(1e-14, Math.sqrt(Ka * Ca)));
+          } else if (V_mL < Veq_mL - 1e-5) {
+            var ratio = Math.max(1e-6, molesTitrant / (molesAnalyte - molesTitrant));
+            return Math.max(0, Math.min(14, pK + Math.log10(ratio)));
+          } else if (Math.abs(V_mL - Veq_mL) <= 1e-5) {
+            var cA = molesAnalyte / totalVol_L;
+            var oh_eq = Math.sqrt((KW / Ka) * cA);
+            return 14.0 + Math.log10(Math.max(1e-14, oh_eq));
+          } else {
+            var oh_excess = (molesTitrant - molesAnalyte) / totalVol_L;
+            return 14.0 + Math.log10(Math.max(1e-14, oh_excess));
+          }
+        }
+
+        if (systemType === 'weak_base_strong_acid') {
+          var Kb = Math.pow(10, -pK);
+          var pKa_conj = 14.0 - pK;
+          if (V_mL <= 0.001) {
+            var oh_init = Math.sqrt(Kb * Ca);
+            return 14.0 + Math.log10(Math.max(1e-14, oh_init));
+          } else if (V_mL < Veq_mL - 1e-5) {
+            var ratio_base = Math.max(1e-6, (molesAnalyte - molesTitrant) / molesTitrant);
+            return Math.max(0, Math.min(14, pKa_conj + Math.log10(ratio_base)));
+          } else if (Math.abs(V_mL - Veq_mL) <= 1e-5) {
+            var cBH = molesAnalyte / totalVol_L;
+            var h_eq = Math.sqrt((KW / Kb) * cBH);
+            return -Math.log10(Math.max(1e-14, h_eq));
+          } else {
+            var h_excess = (molesTitrant - molesAnalyte) / totalVol_L;
+            return -Math.log10(Math.max(1e-14, h_excess));
+          }
+        }
+        return 7.00;
+      }
+
+      var points = [];
+      for (var i = 0; i <= steps; i++) {
+        var v = i * dV;
+        points.push({ volumeAdded: Number(v.toFixed(3)), pH: solveExactPH(v), derivative: 0 });
+      }
+
+      var maxDeriv = 0;
+      for (var j = 1; j < points.length - 1; j++) {
+        var dVol = points[j + 1].volumeAdded - points[j - 1].volumeAdded;
+        var dpH = Math.abs(points[j + 1].pH - points[j - 1].pH);
+        var deriv = dVol > 0 ? dpH / dVol : 0;
+        points[j].derivative = Number(deriv.toFixed(3));
+        if (deriv > maxDeriv) maxDeriv = deriv;
+      }
+
+      return {
+        Veq: Number(Veq_mL.toFixed(2)),
+        eqPH: Number(solveExactPH(Veq_mL).toFixed(2)),
+        halfV: Number((Veq_mL / 2).toFixed(2)),
+        halfPH: Number(solveExactPH(Veq_mL / 2).toFixed(2)),
+        points: points,
+        maxDerivVal: Number(maxDeriv.toFixed(2)),
+        maxV: maxV_mL,
+        solveExactPH: solveExactPH
+      };
+    }
+
+    function getIndicatorColor(indicatorName, currentPH) {
+      if (indicatorName === 'Phenolphthalein') {
+        if (currentPH < 8.2) return { bg: '#e2e8f0', text: 'Colorless' };
+        if (currentPH <= 10.0) return { bg: '#f472b6', text: 'Faint Pink' };
+        return { bg: '#db2777', text: 'Vivid Magenta' };
+      }
+      if (indicatorName === 'Bromothymol Blue') {
+        if (currentPH < 6.0) return { bg: '#facc15', text: 'Yellow' };
+        if (currentPH <= 7.6) return { bg: '#22c55e', text: 'Green (Neutral)' };
+        return { bg: '#3b82f6', text: 'Blue' };
+      }
+      if (indicatorName === 'Methyl Orange') {
+        if (currentPH < 3.1) return { bg: '#ef4444', text: 'Red' };
+        if (currentPH <= 4.4) return { bg: '#f97316', text: 'Orange' };
+        return { bg: '#eab308', text: 'Yellow' };
+      }
+      if (indicatorName === 'Methyl Red') {
+        if (currentPH < 4.4) return { bg: '#ef4444', text: 'Red' };
+        if (currentPH <= 6.2) return { bg: '#f97316', text: 'Orange' };
+        return { bg: '#eab308', text: 'Yellow' };
+      }
+      return { bg: '#94a3b8', text: 'Neutral' };
+    }
+
+    function updateStudentDashboard() {
+      var Ca = Math.max(1e-4, sanitizeInput(inpCa.value, 0.1));
+      var Va = Math.max(0.1, sanitizeInput(inpVa.value, 25.0));
+      var Cb = Math.max(1e-4, sanitizeInput(inpCb.value, 0.1));
+      var indName = selIndicator.value;
+
+      if (indName === 'Phenolphthalein') indRangeTag.textContent = 'pH 8.2 - 10.0';
+      if (indName === 'Bromothymol Blue') indRangeTag.textContent = 'pH 6.0 - 7.6';
+      if (indName === 'Methyl Orange') indRangeTag.textContent = 'pH 3.1 - 4.4';
+      if (indName === 'Methyl Red') indRangeTag.textContent = 'pH 4.4 - 6.2';
+
+      var res = calculateCurvePoints(currentSystemType, Ca, Va, Cb, currentPK);
+
+      outVeq.textContent = res.Veq.toFixed(2);
+      outEqPH.textContent = res.eqPH.toFixed(2);
+      outHalfV.textContent = res.halfV.toFixed(2);
+      outHalfPH.textContent = res.halfPH.toFixed(2);
+      outMaxDeriv.textContent = res.maxDerivVal.toFixed(2);
+
+      if (currentSystemType === 'strong_acid_strong_base') {
+        outBufferNote.textContent = 'No buffer region (Strong Electrolyte)';
+        outEqNature.textContent = 'Neutral (pH = 7.00)';
+      } else if (currentSystemType === 'weak_acid_strong_base') {
+        outBufferNote.textContent = 'Buffer Shelf [pKa ± 1]: [' + (currentPK - 1).toFixed(2) + ' - ' + (currentPK + 1).toFixed(2) + ']';
+        outEqNature.textContent = 'Basic (Conjugate Base Hydrolysis)';
+      } else {
+        var effPka = 14.0 - currentPK;
+        outBufferNote.textContent = 'Buffer Shelf [pKa ± 1]: [' + (effPka - 1).toFixed(2) + ' - ' + (effPka + 1).toFixed(2) + ']';
+        outEqNature.textContent = 'Acidic (Conjugate Acid Hydrolysis)';
+      }
+
+      // Update Live Probe Tool
+      var probeVol = Math.max(0, sanitizeInput(inpProbeVol.value, 0));
+      var probePH = res.solveExactPH(probeVol);
+      probePhOutput.textContent = probePH.toFixed(2);
+
+      var probeColor = getIndicatorColor(indName, probePH);
+      probeColorDot.style.backgroundColor = probeColor.bg;
+
+      if (probeVol === 0) {
+        probeRegionBadge.textContent = 'Initial Solution';
+        probeRegionBadge.style.background = '#64748b';
+      } else if (probeVol < res.Veq - 0.2) {
+        probeRegionBadge.textContent = currentSystemType === 'strong_acid_strong_base' ? 'Pre-Equivalence' : 'Buffer Region';
+        probeRegionBadge.style.background = '#0284c7';
+      } else if (Math.abs(probeVol - res.Veq) <= 0.2) {
+        probeRegionBadge.textContent = 'Equivalence Point!';
+        probeRegionBadge.style.background = '#ec4899';
+      } else {
+        probeRegionBadge.textContent = 'Excess Titrant Zone';
+        probeRegionBadge.style.background = '#7c3aed';
+      }
+
+      // Render Dynamic SVG Curve
+      renderSvgChart(res, indName, probeVol, probePH);
+
+      // Student SOP Recipe Text
+      outSop.textContent = '1. Pipette exactly ' + Va.toFixed(2) + ' mL of ' + currentAnalyteName + ' (' + Ca.toFixed(4) + ' M) into a clean 150 mL Erlenmeyer flask.\n' +
+        '2. Add 2–3 drops of ' + indName + ' indicator.\n' +
+        '3. Fill a 50 mL Class-A burette with ' + currentTitrantName + ' (' + Cb.toFixed(4) + ' M).\n' +
+        '4. Titrate with continuous swirling until the persistent endpoint color change is observed at ' + res.Veq.toFixed(2) + ' mL (Equivalence pH: ' + res.eqPH.toFixed(2) + ').';
+    }
+
+    function renderSvgChart(res, indName, probeVol, probePH) {
+      var width = 640;
+      var height = 380;
+      var pad = { top: 30, right: 30, bottom: 50, left: 55 };
+      var cW = width - pad.left - pad.right;
+      var cH = height - pad.top - pad.bottom;
+
+      var scaleX = function(v) { return pad.left + (v / res.maxV) * cW; };
+      var scaleY = function(ph) { return pad.top + cH - (ph / 14) * cH; };
+      var maxD = Math.max.apply(null, [1].concat(res.points.map(function(p) { return p.derivative; })));
+      var scaleYD = function(d) { return pad.top + cH - (d / maxD) * cH; };
+
+      var pathPH = '';
+      var pathDeriv = '';
+
+      res.points.forEach(function(p, idx) {
+        var x = scaleX(p.volumeAdded).toFixed(1);
+        var y = scaleY(p.pH).toFixed(1);
+        var yD = scaleYD(p.derivative).toFixed(1);
+        pathPH += (idx === 0 ? 'M ' : ' L ') + x + ' ' + y;
+        pathDeriv += (idx === 0 ? 'M ' : ' L ') + x + ' ' + yD;
+      });
+
+      var eqX = scaleX(res.Veq);
+      var eqY = scaleY(res.eqPH);
+      var halfX = scaleX(res.halfV);
+      var halfY = scaleY(res.halfPH);
+      var probeX = scaleX(probeVol);
+      var probeY = scaleY(probePH);
+
+      // Indicator Region Highlight
+      var indMin = 8.2; var indMax = 10.0;
+      if (indName === 'Bromothymol Blue') { indMin = 6.0; indMax = 7.6; }
+      if (indName === 'Methyl Orange') { indMin = 3.1; indMax = 4.4; }
+      if (indName === 'Methyl Red') { indMin = 4.4; indMax = 6.2; }
+
+      var indTopY = scaleY(indMax);
+      var indBotY = scaleY(indMin);
+      var indH = Math.abs(indBotY - indTopY);
+
+      var xTicks = [0, 0.25, 0.5, 0.75, 1.0].map(function(r) { return (res.maxV * r).toFixed(1); });
+      var yTicks = [0, 2, 4, 6, 8, 10, 12, 14];
+
+      var svgHTML = '<svg viewBox="0 0 ' + width + ' ' + height + '" style="width: 100%; height: 100%; font-family: monospace;" role="img" aria-label="Titration Curve">' +
+        '<rect x="' + pad.left + '" y="' + pad.top + '" width="' + cW + '" height="' + cH + '" fill="#0b1120" stroke="#1e293b" stroke-width="1"/>' +
+        '<rect x="' + pad.left + '" y="' + indTopY + '" width="' + cW + '" height="' + indH + '" fill="#ec4899" fill-opacity="0.12" stroke="#ec4899" stroke-dasharray="3 3" stroke-width="0.8"/>' +
+        '<line x1="' + pad.left + '" y1="' + (pad.top + cH) + '" x2="' + (pad.left + cW) + '" y2="' + (pad.top + cH) + '" stroke="#475569" stroke-width="1.2"/>' +
+        '<line x1="' + pad.left + '" y1="' + pad.top + '" x2="' + pad.left + '" y2="' + (pad.top + cH) + '" stroke="#475569" stroke-width="1.2"/>' +
+        yTicks.map(function(t) { return '<line x1="' + (pad.left - 4) + '" y1="' + scaleY(t) + '" x2="' + pad.left + '" y2="' + scaleY(t) + '" stroke="#64748b" stroke-width="1"/><text x="' + (pad.left - 8) + '" y="' + (scaleY(t) + 3) + '" fill="#94a3b8" font-size="10" text-anchor="end">' + t + '</text>'; }).join('') +
+        xTicks.map(function(val) { return '<line x1="' + scaleX(parseFloat(val)) + '" y1="' + (pad.top + cH) + '" x2="' + scaleX(parseFloat(val)) + '" y2="' + (pad.top + cH + 4) + '" stroke="#64748b" stroke-width="1"/><text x="' + scaleX(parseFloat(val)) + '" y="' + (pad.top + cH + 16) + '" fill="#94a3b8" font-size="10" text-anchor="middle">' + val + '</text>'; }).join('') +
+        '<text x="' + (pad.left + cW / 2) + '" y="' + (height - 10) + '" fill="#94a3b8" font-size="11" font-weight="bold" text-anchor="middle">Burette Titrant Volume (mL)</text>' +
+        '<text transform="rotate(-90)" x="' + (-(pad.top + cH / 2)) + '" y="16" fill="#94a3b8" font-size="11" font-weight="bold" text-anchor="middle">pH</text>' +
+        '<path d="' + pathDeriv + '" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-dasharray="3 3" stroke-opacity="0.8"/>' +
+        '<path d="' + pathPH + '" fill="none" stroke="#22d3ee" stroke-width="2.6" stroke-linecap="round"/>' +
+        (currentSystemType !== 'strong_acid_strong_base' ? '<circle cx="' + halfX + '" cy="' + halfY + '" r="4.5" fill="#f59e0b" stroke="#0f172a" stroke-width="1.5"/><text x="' + (halfX + 6) + '" y="' + (halfY - 4) + '" fill="#fbbf24" font-size="10" font-weight="700">V 1/2 (' + res.halfV + ' mL, pH ' + res.halfPH + ')</text>' : '') +
+        '<line x1="' + eqX + '" y1="' + (pad.top + cH) + '" x2="' + eqX + '" y2="' + eqY + '" stroke="#ef4444" stroke-dasharray="2 2" stroke-width="1"/>' +
+        '<circle cx="' + eqX + '" cy="' + eqY + '" r="5.5" fill="#ef4444" stroke="#ffffff" stroke-width="1.5"/>' +
+        '<text x="' + (eqX + 7) + '" y="' + (eqY - 6) + '" fill="#fca5a5" font-size="11" font-weight="800">Veq (' + res.Veq + ' mL, pH ' + res.eqPH + ')</text>' +
+        '<circle cx="' + probeX + '" cy="' + probeY + '" r="5" fill="#facc15" stroke="#020617" stroke-width="1.5"/>' +
+        '</svg>';
+
+      svgContainer.innerHTML = svgHTML;
+    }
+
+    // Preset Button Click Handlers
+    document.querySelectorAll('.preset-chip-btn').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        var key = e.currentTarget.getAttribute('data-preset');
+        var p = chemicalPresets[key];
+        if (p) {
+          currentSystemType = p.systemType;
+          currentAnalyteName = p.analyteName;
+          currentTitrantName = p.titrantName;
+          currentPK = p.pKa;
+          inpCa.value = p.defaultCa.toFixed(3);
+          inpVa.value = p.defaultVa.toFixed(1);
+          inpCb.value = p.defaultCb.toFixed(3);
+          selIndicator.value = p.indicator;
+          activeBadge.textContent = p.badge;
+          updateStudentDashboard();
+        }
+      });
+    });
+
+    // Analyte Dropdown Change
+    if (selAnalyte) {
+      selAnalyte.addEventListener('change', function() {
+        var val = selAnalyte.value;
+        if (val === 'ch3cooh') {
+          currentSystemType = 'weak_acid_strong_base';
+          currentAnalyteName = 'Acetic Acid (CH₃COOH)';
+          currentPK = 4.76;
+          selIndicator.value = 'Phenolphthalein';
+          activeBadge.textContent = 'Weak Acid vs. Strong Base';
+        } else if (val === 'hcl') {
+          currentSystemType = 'strong_acid_strong_base';
+          currentAnalyteName = 'Hydrochloric Acid (HCl)';
+          currentPK = 0;
+          selIndicator.value = 'Bromothymol Blue';
+          activeBadge.textContent = 'Strong Acid vs. Strong Base';
+        } else if (val === 'nh3') {
+          currentSystemType = 'weak_base_strong_acid';
+          currentAnalyteName = 'Ammonia (NH₃)';
+          currentPK = 4.75;
+          selIndicator.value = 'Methyl Orange';
+          activeBadge.textContent = 'Weak Base vs. Strong Acid';
+        } else if (val === 'hcooh') {
+          currentSystemType = 'weak_acid_strong_base';
+          currentAnalyteName = 'Formic Acid (HCOOH)';
+          currentPK = 3.75;
+          selIndicator.value = 'Phenolphthalein';
+          activeBadge.textContent = 'Weak Acid vs. Strong Base';
+        }
+        updateStudentDashboard();
       });
     }
-    updateView();
-  });
 
-  document.getElementById('btn-clear-lab-data').addEventListener('click', function() {
-    document.getElementById('input-raw-lab-data').value = '';
-    userScatterPoints = [];
-    updateView();
-  });
-
-  document.getElementById('btn-print-titration-label').addEventListener('click', function() {
-    const analyte = inAnalyteName.value.trim() || 'Analyte';
-    const conc = inCa.value.trim();
-    const titrant = inTitrantName.value.trim() || 'Titrant';
-    const eqVol = outVeq.textContent;
-    const eqPH = outEqPH.textContent;
-    const safetyNote = ghsAlertText.textContent;
-
-    const printWin = window.open('', '', 'width=460,height=340');
-    if (!printWin) return;
-    
-    const labelHtml = '<html><head><title>Benchtop Titration Label</title>' +
-      '<style>body{font-family:monospace;padding:14px;border:2px dashed #000;width:340px;margin:auto;}h2{margin:0 0 6px 0;font-size:14px;text-transform:uppercase;border-bottom:1px solid #000;padding-bottom:4px;}p{margin:3px 0;font-size:11px;}.hazard{font-size:9px;margin-top:6px;padding:4px;border:1px solid #666;background:#f5f5f5;}.footer{margin-top:8px;border-top:1px solid #000;padding-top:4px;font-size:8px;display:flex;justify-content:space-between;}</style>' +
-      '</head><body>' +
-      '<h2>SECONDARY TITRATION VESSEL</h2>' +
-      '<p><strong>Solution:</strong> ' + analyte + ' (' + conc + ' M)</p>' +
-      '<p><strong>Titrant Counterpart:</strong> ' + titrant + '</p>' +
-      '<p><strong>Predicted Veq:</strong> ' + eqVol + ' mL (pH ' + eqPH + ')</p>' +
-      '<p><strong>Prepared:</strong> ' + (new Date().toLocaleDateString()) + ' | <strong>Prep By:</strong> ___________</p>' +
-      '<div class="hazard"><strong>SAFETY NOTE:</strong> ' + safetyNote + '</div>' +
-      '<div class="footer"><span>ChemistryDesk Lab Suite</span><span>Class-A Precision</span></div>' +
-      '<' + 'script>window.print(); window.close();</' + 'script>' +
-      '</body></html>';
-
-    printWin.document.write(labelHtml);
-    printWin.document.close();
-  });
-
-  document.getElementById('btn-share-link').addEventListener('click', function() {
-    const params = new URLSearchParams({
-      sys: selSystem.value,
-      ca: inCa.value,
-      va: inVa.value,
-      cb: inCb.value,
-      pk: inPk.value,
-      ind: selIndicator.value
+    // Input Listeners
+    [inpCa, inpVa, inpCb, selIndicator, inpProbeVol].forEach(function(el) {
+      if (el) {
+        el.addEventListener('input', updateStudentDashboard);
+        el.addEventListener('change', updateStudentDashboard);
+      }
     });
-    const shareUrl = window.location.origin + window.location.pathname + '?' + params.toString();
-    navigator.clipboard.writeText(shareUrl).then(function() {
-      const btn = document.getElementById('btn-share-link');
-      btn.textContent = 'Link Copied!';
-      setTimeout(function() {
-        btn.textContent = '🔗 Share Setup URL';
-      }, 2000);
+
+    // CSV Download
+    document.getElementById('btn-export-csv').addEventListener('click', function() {
+      var Ca = Math.max(1e-4, sanitizeInput(inpCa.value, 0.1));
+      var Va = Math.max(0.1, sanitizeInput(inpVa.value, 25.0));
+      var Cb = Math.max(1e-4, sanitizeInput(inpCb.value, 0.1));
+      var res = calculateCurvePoints(currentSystemType, Ca, Va, Cb, currentPK);
+
+      var csv = 'Volume_Added_mL,pH,First_Derivative\n';
+      res.points.forEach(function(p) {
+        csv += p.volumeAdded + ',' + p.pH + ',' + p.derivative + '\n';
+      });
+      var blob = new Blob([csv], { type: 'text/csv' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'titration_curve_data.csv';
+      a.click();
+      URL.revokeObjectURL(url);
     });
-  });
 
-  document.getElementById('btn-reset-defaults').addEventListener('click', function() {
-    window.location.href = window.location.pathname;
-  });
+    // Copy SOP
+    document.getElementById('btn-copy-sop').addEventListener('click', function() {
+      navigator.clipboard.writeText(outSop.textContent).then(function() {
+        alert('Lab procedure copied to clipboard!');
+      });
+    });
 
-  window.addEventListener('DOMContentLoaded', function() {
-    const q = new URLSearchParams(window.location.search);
-    if (q.has('sys')) selSystem.value = q.get('sys');
-    if (q.has('ca')) inCa.value = q.get('ca');
-    if (q.has('va')) inVa.value = q.get('va');
-    if (q.has('cb')) inCb.value = q.get('cb');
-    if (q.has('pk')) inPk.value = q.get('pk');
-    if (q.has('ind')) selIndicator.value = q.get('ind');
-    updateView();
-  });
+    // Share URL
+    document.getElementById('btn-share-link').addEventListener('click', function() {
+      navigator.clipboard.writeText(window.location.href).then(function() {
+        alert('Setup URL copied to clipboard!');
+      });
+    });
+
+    document.getElementById('btn-reset-defaults').addEventListener('click', function() {
+      window.location.href = window.location.pathname;
+    });
+
+    // Initial Load
+    updateStudentDashboard();
+  })();
 </script>
