@@ -146,12 +146,18 @@ export interface GasCalculationResult {
   V_m3: number;
   n_mol: number;
   T_K: number;
-  // Advanced Thermodynamic Diagnostics
+  // Target-aware Real Gas Output
+  realSolvedValue?: number;
+  realSolvedUnit: string;
+  realSolvedLabel: string;
   realP_Pa?: number;
   compressibilityFactor_Z: number;
   density_g_L: number;
+  densityFormatted: string;
   molarVolume_L_mol: number;
   percentNonIdeality: number;
+  // Multi-unit equivalent readout map
+  unitEquivalents: { label: string; val: string }[];
 }
 
 export function calculateGasSystem(inp: GasCalculationInput): GasCalculationResult {
@@ -163,16 +169,16 @@ export function calculateGasSystem(inp: GasCalculationInput): GasCalculationResu
 
   // Validation Checks
   if (inp.solveFor !== 'T' && T_K <= 0) {
-    return { isValid: false, errorMessage: 'Temperature must be above absolute zero (0 K).', solvedValue: 0, solvedUnit: '', P_Pa: 0, V_m3: 0, n_mol: 0, T_K: 0, compressibilityFactor_Z: 1, density_g_L: 0, molarVolume_L_mol: 0, percentNonIdeality: 0 };
+    return { isValid: false, errorMessage: 'Temperature must be above absolute zero (0 K).', solvedValue: 0, solvedUnit: '', P_Pa: 0, V_m3: 0, n_mol: 0, T_K: 0, realSolvedUnit: '', realSolvedLabel: '', compressibilityFactor_Z: 1, density_g_L: 0, densityFormatted: '0.000 g/L', molarVolume_L_mol: 0, percentNonIdeality: 0, unitEquivalents: [] };
   }
   if (inp.solveFor !== 'P' && P_Pa <= 0) {
-    return { isValid: false, errorMessage: 'Pressure must be greater than zero.', solvedValue: 0, solvedUnit: '', P_Pa: 0, V_m3: 0, n_mol: 0, T_K: 0, compressibilityFactor_Z: 1, density_g_L: 0, molarVolume_L_mol: 0, percentNonIdeality: 0 };
+    return { isValid: false, errorMessage: 'Pressure must be greater than zero.', solvedValue: 0, solvedUnit: '', P_Pa: 0, V_m3: 0, n_mol: 0, T_K: 0, realSolvedUnit: '', realSolvedLabel: '', compressibilityFactor_Z: 1, density_g_L: 0, densityFormatted: '0.000 g/L', molarVolume_L_mol: 0, percentNonIdeality: 0, unitEquivalents: [] };
   }
   if (inp.solveFor !== 'V' && V_m3 <= 0) {
-    return { isValid: false, errorMessage: 'Volume must be greater than zero.', solvedValue: 0, solvedUnit: '', P_Pa: 0, V_m3: 0, n_mol: 0, T_K: 0, compressibilityFactor_Z: 1, density_g_L: 0, molarVolume_L_mol: 0, percentNonIdeality: 0 };
+    return { isValid: false, errorMessage: 'Volume must be greater than zero.', solvedValue: 0, solvedUnit: '', P_Pa: 0, V_m3: 0, n_mol: 0, T_K: 0, realSolvedUnit: '', realSolvedLabel: '', compressibilityFactor_Z: 1, density_g_L: 0, densityFormatted: '0.000 g/L', molarVolume_L_mol: 0, percentNonIdeality: 0, unitEquivalents: [] };
   }
   if (inp.solveFor !== 'n' && inp.solveFor !== 'm' && n_mol <= 0) {
-    return { isValid: false, errorMessage: 'Quantity of gas must be greater than zero.', solvedValue: 0, solvedUnit: '', P_Pa: 0, V_m3: 0, n_mol: 0, T_K: 0, compressibilityFactor_Z: 1, density_g_L: 0, molarVolume_L_mol: 0, percentNonIdeality: 0 };
+    return { isValid: false, errorMessage: 'Quantity of gas must be greater than zero.', solvedValue: 0, solvedUnit: '', P_Pa: 0, V_m3: 0, n_mol: 0, T_K: 0, realSolvedUnit: '', realSolvedLabel: '', compressibilityFactor_Z: 1, density_g_L: 0, densityFormatted: '0.000 g/L', molarVolume_L_mol: 0, percentNonIdeality: 0, unitEquivalents: [] };
   }
 
   let solvedValue = 0;
@@ -213,16 +219,66 @@ export function calculateGasSystem(inp: GasCalculationInput): GasCalculationResu
 
   // Real Gas Van der Waals Calculation:
   // (P + a*(n/V)^2) * (V - n*b) = n * R * T
-  // a: bar * L^2 / mol^2 -> SI (Pa * m^6 / mol^2) = a * 1e5 * 1e-6 = a * 0.1
-  // b: L / mol -> SI (m^3 / mol) = b * 1e-3
-  const a_SI = inp.vdw_a * 0.1;
-  const b_SI = inp.vdw_b * 1e-3;
+  const a_SI = inp.vdw_a * 0.1; // bar*L^2/mol^2 -> Pa*m^6/mol^2
+  const b_SI = inp.vdw_b * 1e-3; // L/mol -> m^3/mol
 
   let realP_Pa: number | undefined = undefined;
-  if (V_m3 > n_mol * b_SI) {
-    const term1 = (n_mol * R_IDEAL_SI * T_K) / (V_m3 - n_mol * b_SI);
-    const term2 = (a_SI * Math.pow(n_mol, 2)) / Math.pow(V_m3, 2);
-    realP_Pa = term1 - term2;
+  let realSolvedValue: number | undefined = undefined;
+  let realSolvedUnit = solvedUnit;
+  let realSolvedLabel = 'Van der Waals Real Gas Output';
+  let percentNonIdeality = 0;
+
+  // Real Gas Target-Aware Resolution
+  if (inp.solveFor === 'P') {
+    if (V_m3 > n_mol * b_SI) {
+      const term1 = (n_mol * R_IDEAL_SI * T_K) / (V_m3 - n_mol * b_SI);
+      const term2 = (a_SI * Math.pow(n_mol, 2)) / Math.pow(V_m3, 2);
+      realP_Pa = term1 - term2;
+      realSolvedValue = fromPascals(realP_Pa, inp.P_unit);
+      percentNonIdeality = Math.abs((realP_Pa - P_Pa) / P_Pa) * 100;
+      realSolvedLabel = 'Van der Waals Real Pressure';
+    }
+  } else if (inp.solveFor === 'T') {
+    // T_real = [ (P + an^2/V^2) * (V - nb) ] / (n * R)
+    if (V_m3 > n_mol * b_SI) {
+      const pEffective = P_Pa + (a_SI * Math.pow(n_mol, 2)) / Math.pow(V_m3, 2);
+      const vEffective = V_m3 - n_mol * b_SI;
+      const realT_K = (pEffective * vEffective) / (n_mol * R_IDEAL_SI);
+      realSolvedValue = fromKelvin(realT_K, inp.T_unit);
+      percentNonIdeality = Math.abs((realT_K - T_K) / T_K) * 100;
+      realSolvedLabel = 'Van der Waals Real Temperature';
+    }
+  } else if (inp.solveFor === 'V') {
+    // Real Volume cubic solve: V^3 - (nb + nRT/P)V^2 + (an^2/P)V - (a*b*n^3/P) = 0
+    // Newton-Raphson approximation starting from ideal V
+    let vGuess = V_m3;
+    const RT_P = (R_IDEAL_SI * T_K) / P_Pa;
+    const aP = a_SI / P_Pa;
+    const n = n_mol;
+    for (let iter = 0; iter < 12; iter++) {
+      const f = Math.pow(vGuess, 3) - (n * b_SI + n * RT_P) * Math.pow(vGuess, 2) + (aP * Math.pow(n, 2)) * vGuess - (aP * b_SI * Math.pow(n, 3));
+      const df = 3 * Math.pow(vGuess, 2) - 2 * (n * b_SI + n * RT_P) * vGuess + (aP * Math.pow(n, 2));
+      if (Math.abs(df) < 1e-15) break;
+      const vNext = vGuess - f / df;
+      if (Math.abs(vNext - vGuess) < 1e-9) { vGuess = vNext; break; }
+      vGuess = vNext;
+    }
+    if (vGuess > n_mol * b_SI) {
+      realSolvedValue = fromCubicMeters(vGuess, inp.V_unit);
+      percentNonIdeality = Math.abs((vGuess - V_m3) / V_m3) * 100;
+      realSolvedLabel = 'Van der Waals Real Volume';
+    }
+  } else {
+    // Moles / Mass target: provide real pressure deviation check
+    if (V_m3 > n_mol * b_SI) {
+      const term1 = (n_mol * R_IDEAL_SI * T_K) / (V_m3 - n_mol * b_SI);
+      const term2 = (a_SI * Math.pow(n_mol, 2)) / Math.pow(V_m3, 2);
+      realP_Pa = term1 - term2;
+      percentNonIdeality = Math.abs((realP_Pa - P_Pa) / P_Pa) * 100;
+      realSolvedLabel = 'Van der Waals Pressure Shift';
+      realSolvedValue = fromPascals(realP_Pa, inp.P_unit);
+      realSolvedUnit = inp.P_unit;
+    }
   }
 
   // Diagnostics
@@ -231,7 +287,38 @@ export function calculateGasSystem(inp: GasCalculationInput): GasCalculationResu
   const mass_g = n_mol * mm;
   const density_g_L = V_L > 0 ? mass_g / V_L : 0;
   const molarVolume_L_mol = n_mol > 0 ? V_L / n_mol : 0;
-  const percentNonIdeality = realP_Pa !== undefined ? Math.abs((realP_Pa - P_Pa) / P_Pa) * 100 : 0;
+
+  // Adaptive Non-Truncating Density String
+  let densityFormatted = '0.000 g/L';
+  if (density_g_L > 0 && density_g_L < 0.001) {
+    densityFormatted = density_g_L.toExponential(3) + ' g/L';
+  } else if (density_g_L >= 1000) {
+    densityFormatted = density_g_L.toFixed(1) + ' g/L';
+  } else {
+    densityFormatted = density_g_L.toFixed(3) + ' g/L';
+  }
+
+  // Multi-unit equivalent readouts
+  const unitEquivalents: { label: string; val: string }[] = [];
+  if (inp.solveFor === 'P') {
+    unitEquivalents.push({ label: 'atm', val: fromPascals(P_Pa, 'atm').toFixed(3) });
+    unitEquivalents.push({ label: 'bar', val: fromPascals(P_Pa, 'bar').toFixed(3) });
+    unitEquivalents.push({ label: 'kPa', val: fromPascals(P_Pa, 'kPa').toFixed(2) });
+    unitEquivalents.push({ label: 'Torr', val: fromPascals(P_Pa, 'torr').toFixed(1) });
+    unitEquivalents.push({ label: 'psi', val: fromPascals(P_Pa, 'psi').toFixed(2) });
+  } else if (inp.solveFor === 'T') {
+    unitEquivalents.push({ label: 'K', val: T_K.toFixed(2) });
+    unitEquivalents.push({ label: '°C', val: fromKelvin(T_K, 'C').toFixed(2) });
+    unitEquivalents.push({ label: '°F', val: fromKelvin(T_K, 'F').toFixed(2) });
+  } else if (inp.solveFor === 'V') {
+    unitEquivalents.push({ label: 'L', val: (V_m3 * 1000).toFixed(3) });
+    unitEquivalents.push({ label: 'mL', val: (V_m3 * 1e6).toFixed(1) });
+    unitEquivalents.push({ label: 'm³', val: V_m3.toExponential(4) });
+  } else if (inp.solveFor === 'n' || inp.solveFor === 'm') {
+    unitEquivalents.push({ label: 'mol', val: n_mol.toFixed(4) });
+    unitEquivalents.push({ label: 'mmol', val: (n_mol * 1000).toFixed(2) });
+    unitEquivalents.push({ label: 'grams (m)', val: (n_mol * mm).toFixed(3) });
+  }
 
   return {
     isValid: true,
@@ -241,12 +328,70 @@ export function calculateGasSystem(inp: GasCalculationInput): GasCalculationResu
     V_m3,
     n_mol,
     T_K,
+    realSolvedValue,
+    realSolvedUnit,
+    realSolvedLabel,
     realP_Pa,
     compressibilityFactor_Z: Z,
     density_g_L,
+    densityFormatted,
     molarVolume_L_mol,
     percentNonIdeality,
+    unitEquivalents
   };
+}
+
+/**
+ * Two-State Combined Gas Law Solver (P1*V1/T1 = P2*V2/T2)
+ * Supports Boyle's, Charles's, and Gay-Lussac's conditions.
+ */
+export type TwoStateTarget = 'P2' | 'V2' | 'T2';
+
+export interface TwoStateInput {
+  target: TwoStateTarget;
+  P1: number; P1_unit: PressureUnit;
+  V1: number; V1_unit: VolumeUnit;
+  T1: number; T1_unit: TempUnit;
+  P2?: number; P2_unit: PressureUnit;
+  V2?: number; V2_unit: VolumeUnit;
+  T2?: number; T2_unit: TempUnit;
+}
+
+export function solveTwoStateGas(inp: TwoStateInput): { val: number; unit: string; lawName: string } {
+  const p1 = toPascals(inp.P1, inp.P1_unit);
+  const v1 = toCubicMeters(inp.V1, inp.V1_unit);
+  const t1 = toKelvin(inp.T1, inp.T1_unit);
+
+  let p2 = inp.P2 !== undefined ? toPascals(inp.P2, inp.P2_unit) : 0;
+  let v2 = inp.V2 !== undefined ? toCubicMeters(inp.V2, inp.V2_unit) : 0;
+  let t2 = inp.T2 !== undefined ? toKelvin(inp.T2, inp.T2_unit) : 0;
+
+  let lawName = 'Combined Gas Law';
+  if (t1 === t2) lawName = "Boyle's Law (Isothermal: P₁V₁ = P₂V₂)";
+  else if (p1 === p2) lawName = "Charles's Law (Isobaric: V₁/T₁ = V₂/T₂)";
+  else if (v1 === v2) lawName = "Gay-Lussac's Law (Isochoric: P₁/T₁ = P₂/T₂)";
+
+  let solved = 0;
+  let unit = '';
+
+  if (inp.target === 'P2') {
+    // P2 = (P1 * V1 * T2) / (T1 * V2)
+    const p2_Pa = (p1 * v1 * t2) / (t1 * v2);
+    solved = fromPascals(p2_Pa, inp.P2_unit);
+    unit = inp.P2_unit;
+  } else if (inp.target === 'V2') {
+    // V2 = (P1 * V1 * T2) / (T1 * P2)
+    const v2_m3 = (p1 * v1 * t2) / (t1 * p2);
+    solved = fromCubicMeters(v2_m3, inp.V2_unit);
+    unit = inp.V2_unit;
+  } else if (inp.target === 'T2') {
+    // T2 = (P2 * V2 * T1) / (P1 * V1)
+    const t2_K = (p2 * v2 * t1) / (p1 * v1);
+    solved = fromKelvin(t2_K, inp.T2_unit);
+    unit = inp.T2_unit === 'C' ? '°C' : inp.T2_unit === 'F' ? '°F' : 'K';
+  }
+
+  return { val: solved, unit, lawName };
 }
 
 /**
