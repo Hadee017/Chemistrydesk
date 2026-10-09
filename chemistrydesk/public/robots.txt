@@ -1,6 +1,34 @@
+# -------------------------------------------------------------
+# 1. Universal Search Engine Crawlers (Standard SEO)
+# -------------------------------------------------------------
 User-agent: *
 Allow: /
 
-# Standard Sitemap
-Sitemap: https://chemistrycal.com/sitemap.xml
+# -------------------------------------------------------------
+# 2. Generative Engine & Answer Engine Crawlers (GEO & AEO)
+# Permits real-time search indexers to extract data & cite sources
+# -------------------------------------------------------------
+# OpenAI Search & Citations (ChatGPT Search)
+User-agent: OAI-SearchBot
+Allow: /
+
+# Perplexity AI Citation Indexer
+User-agent: PerplexityBot
+Allow: /
+
+# Anthropic Claude Search & Browsing
+User-agent: Claude-Web
+Allow: /
+
+# Google Gemini & Extended AI Retrieval
+User-agent: Google-Extended
+Allow: /
+
+# Meta AI Search Agent
+User-agent: FacebookBot
+Allow: /
+
+# -------------------------------------------------------------
+# 3. Canonical Sitemap Index Declaration
+# -------------------------------------------------------------
 Sitemap: https://chemistrycal.com/sitemap-index.xml

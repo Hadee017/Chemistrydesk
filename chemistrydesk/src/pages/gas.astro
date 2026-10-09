@@ -1,0 +1,882 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Ideal & Real Gas Law Engine | PV=nRT, Van der Waals & Density | ChemistryDesk"
+  description="Solve ideal and real gas equations (PV=nRT & Van der Waals). Compute pressure, volume, temperature, moles, density, and compressibility factor with interactive isotherm curves."
+>
+  <!-- Schema: WebApplication -->
+  <script is:inline type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "ChemistryDesk Ideal & Real Gas Thermodynamics Studio",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "All",
+    "browserRequirements": "Requires JavaScript",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "featureList": [
+      "Dynamic 5-Variable Solver (P, V, n, T, and Mass m)",
+      "Dual Engine: Ideal Gas Law (PV=nRT) and Van der Waals Real Gas Correction",
+      "Compressibility Factor (Z) and Real-Time Non-Ideality Deviation %",
+      "Multi-Unit Conversions (atm, bar, kPa, psi, torr, L, mL, m3, C, K, F, g, mol)",
+      "Live Dynamic P-V Isotherm SVG Visualizer",
+      "1-Click LaTeX Equation, CSV Export, and Academic Citation Drawer"
+    ]
+  })}></script>
+
+  <!-- Schema: FAQPage -->
+  <script is:inline type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the difference between an ideal gas and a real gas?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "An ideal gas assumes point-mass particles with zero finite volume and zero intermolecular attractive forces. Real gases possess finite molecular volumes and attractive forces, causing measurable deviations at high pressures and low temperatures."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does the Van der Waals equation account for non-ideal gas behavior?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The Van der Waals equation introduces two empirical correction parameters: 'a' compensates for intermolecular attractive forces (reducing effective pressure), while 'b' accounts for the finite physical co-volume occupied by one mole of gas particles."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What does a compressibility factor (Z) different from 1.0 indicate?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The compressibility factor Z = PV/(nRT). If Z = 1.0, the gas behaves ideally. If Z < 1.0, attractive intermolecular forces dominate. If Z > 1.0, repulsive forces and finite molecular volume dominate."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is modern IUPAC Standard Temperature and Pressure (STP)?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Since 1982, IUPAC defines standard temperature as 273.15 K (0 °C) and standard pressure as exactly 100 kPa (1 bar), resulting in an ideal molar volume of 22.711 L/mol rather than the older NIST/pre-1982 value of 22.414 L/mol (at 1 atm)."
+        }
+      }
+    ]
+  })}></script>
+
+  <main style="max-width: 1140px; margin: 1.5rem auto 4rem auto; padding: 0 1.5rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #0f172a;">
+    
+    <!-- Navigation Breadcrumbs -->
+    <nav style="font-size: 0.85rem; color: #475569; margin-bottom: 1.25rem;">
+      <a href="/" style="color: #0284c7; text-decoration: none; font-weight: 600;">Home</a> &rsaquo; 
+      <span style="color: #64748b;"> Physical Chemistry</span> &rsaquo; 
+      <span style="color: #0f172a; font-weight: 700;">Gas Thermodynamics Studio</span>
+    </nav>
+
+    <!-- Header Hero Card -->
+    <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 16px; padding: 2rem; margin-bottom: 2rem; color: #ffffff; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.15);">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.5rem;">
+        <div style="max-width: 760px;">
+          <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); padding: 0.3rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem;">
+            <span>Physical Chemistry &amp; Real Gas Solver</span>
+          </div>
+          <h1 style="font-size: 2.35rem; font-weight: 800; color: #ffffff; letter-spacing: -0.025em; margin: 0; line-height: 1.2;">
+            Ideal &amp; Real Gas Thermodynamics Studio
+          </h1>
+          <p style="color: #cbd5e1; font-size: 1rem; margin-top: 0.65rem; margin-bottom: 0; line-height: 1.6;">
+            Universal five-variable solver for <span style="color: #38bdf8; font-weight: 700;">PV = nRT</span> and <span style="color: #34d399; font-weight: 700;">Van der Waals Real Gas</span>, compressibility factor (Z), density, and dynamic isotherm curve.
+          </p>
+        </div>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+          <button id="btnShareUrl" type="button" style="background: #0284c7; border: none; color: white; padding: 0.65rem 1.15rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 0.4rem;">
+            <span>🔗 Share Setup</span>
+          </button>
+          <button id="btnExportCsv" type="button" style="background: #334155; border: 1px solid #475569; color: white; padding: 0.65rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700;">
+            📥 CSV
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRESET CONTROLS & GAS SELECTION BAR -->
+    <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
+        <span style="font-size: 0.8rem; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.05em;">
+          Select Benchmark Gas:
+        </span>
+        <div style="display: flex; gap: 0.4rem; flex-wrap: wrap; align-items: center;">
+          <span style="font-size: 0.75rem; font-weight: 700; color: #64748b;">STP Presets:</span>
+          <button type="button" class="cond-preset-btn" data-p="1.0" data-pu="bar" data-t="0.0" data-tu="C" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.25rem 0.6rem; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #0284c7;">IUPAC STP (1 bar, 0°C)</button>
+          <button type="button" class="cond-preset-btn" data-p="1.0" data-pu="bar" data-t="25.0" data-tu="C" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.25rem 0.6rem; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #0284c7;">SATP (1 bar, 25°C)</button>
+          <button type="button" class="cond-preset-btn" data-p="1.0" data-pu="atm" data-t="20.0" data-tu="C" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.25rem 0.6rem; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #0284c7;">NIST (1 atm, 20°C)</button>
+        </div>
+      </div>
+      <div id="gasPresetContainer" style="display: flex; flex-wrap: wrap; gap: 0.45rem;">
+        <button class="gas-preset-btn active" data-gas="ideal">Hypothetical Ideal Gas</button>
+        <button class="gas-preset-btn" data-gas="n2">Nitrogen (N₂)</button>
+        <button class="gas-preset-btn" data-gas="o2">Oxygen (O₂)</button>
+        <button class="gas-preset-btn" data-gas="co2">Carbon Dioxide (CO₂)</button>
+        <button class="gas-preset-btn" data-gas="ch4">Methane (CH₄)</button>
+        <button class="gas-preset-btn" data-gas="he">Helium (He)</button>
+        <button class="gas-preset-btn" data-gas="h2">Hydrogen (H₂)</button>
+        <button class="gas-preset-btn" data-gas="nh3">Ammonia (NH₃)</button>
+        <button class="gas-preset-btn" data-gas="cl2">Chlorine (Cl₂)</button>
+        <button class="gas-preset-btn" data-gas="h2o">Steam (H₂O)</button>
+      </div>
+    </div>
+
+    <!-- MAIN TWO-COLUMN WORKBENCH -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+      
+      <!-- LEFT COLUMN: Flexible Parameter Workbench -->
+      <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 1.75rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);">
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 0.75rem;">
+          <h2 style="font-size: 0.95rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #0f172a; margin: 0;">
+            1. Thermodynamic Parameters
+          </h2>
+          <span id="activeGasLabel" style="font-size: 0.75rem; font-weight: 800; color: #0284c7; background: #f0f9ff; padding: 3px 10px; border-radius: 6px; border: 1px solid #bae6fd;">
+            Ideal Gas
+          </span>
+        </div>
+
+        <!-- Variable to Solve For Selector -->
+        <div style="margin-bottom: 1.25rem;">
+          <label style="display: block; font-size: 0.8rem; font-weight: 800; color: #334155; margin-bottom: 0.4rem; text-transform: uppercase;">
+            Target Variable to Solve For:
+          </label>
+          <select id="selSolveFor" style="width: 100%; padding: 0.65rem 0.75rem; border: 2px solid #0284c7; border-radius: 8px; font-size: 0.95rem; font-weight: 800; color: #0284c7; background: #f0f9ff; cursor: pointer;">
+            <option value="P" selected>Pressure (P)</option>
+            <option value="V">Volume (V)</option>
+            <option value="n">Quantity of Gas in Moles (n)</option>
+            <option value="m">Mass of Gas in Grams (m)</option>
+            <option value="T">Temperature (T)</option>
+          </select>
+        </div>
+
+        <!-- Input Field: Pressure (P) -->
+        <div id="rowP" style="margin-bottom: 1.15rem;">
+          <label style="display: block; font-size: 0.78rem; font-weight: 700; color: #334155; margin-bottom: 0.25rem;">PRESSURE (P)</label>
+          <div style="display: flex; border: 1.5px solid #cbd5e1; border-radius: 6px; overflow: hidden;">
+            <input type="text" inputmode="decimal" id="inpP" value="1.000" style="flex: 1; min-width: 0; padding: 0.6rem 0.75rem; border: none; font-size: 0.95rem; font-weight: 700; color: #0f172a; outline: none;" />
+            <select id="unitP" style="background: #f8fafc; border: none; border-left: 1px solid #cbd5e1; padding: 0 0.6rem; font-size: 0.85rem; font-weight: 700; color: #475569; cursor: pointer;">
+              <option value="atm" selected>atm</option>
+              <option value="bar">bar</option>
+              <option value="kPa">kPa</option>
+              <option value="Pa">Pa</option>
+              <option value="psi">psi</option>
+              <option value="torr">Torr (mmHg)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Input Field: Volume (V) -->
+        <div id="rowV" style="margin-bottom: 1.15rem;">
+          <label style="display: block; font-size: 0.78rem; font-weight: 700; color: #334155; margin-bottom: 0.25rem;">VOLUME (V)</label>
+          <div style="display: flex; border: 1.5px solid #cbd5e1; border-radius: 6px; overflow: hidden;">
+            <input type="text" inputmode="decimal" id="inpV" value="22.414" style="flex: 1; min-width: 0; padding: 0.6rem 0.75rem; border: none; font-size: 0.95rem; font-weight: 700; color: #0f172a; outline: none;" />
+            <select id="unitV" style="background: #f8fafc; border: none; border-left: 1px solid #cbd5e1; padding: 0 0.6rem; font-size: 0.85rem; font-weight: 700; color: #475569; cursor: pointer;">
+              <option value="L" selected>L</option>
+              <option value="mL">mL</option>
+              <option value="m3">m³</option>
+              <option value="cm3">cm³</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Input Field: Quantity / Mass -->
+        <div id="rowN" style="margin-bottom: 1.15rem;">
+          <label id="lblN" style="display: block; font-size: 0.78rem; font-weight: 700; color: #334155; margin-bottom: 0.25rem;">QUANTITY OF SUBSTANCE (n / m)</label>
+          <div style="display: flex; border: 1.5px solid #cbd5e1; border-radius: 6px; overflow: hidden;">
+            <input type="text" inputmode="decimal" id="inpN" value="1.000" style="flex: 1; min-width: 0; padding: 0.6rem 0.75rem; border: none; font-size: 0.95rem; font-weight: 700; color: #0f172a; outline: none;" />
+            <select id="unitN" style="background: #f8fafc; border: none; border-left: 1px solid #cbd5e1; padding: 0 0.6rem; font-size: 0.85rem; font-weight: 700; color: #475569; cursor: pointer;">
+              <option value="mol" selected>mol</option>
+              <option value="mmol">mmol</option>
+              <option value="g">grams (g)</option>
+              <option value="mg">mg</option>
+              <option value="kg">kg</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Input Field: Temperature (T) -->
+        <div id="rowT" style="margin-bottom: 1.25rem;">
+          <label style="display: block; font-size: 0.78rem; font-weight: 700; color: #334155; margin-bottom: 0.25rem;">TEMPERATURE (T)</label>
+          <div style="display: flex; border: 1.5px solid #cbd5e1; border-radius: 6px; overflow: hidden;">
+            <input type="text" inputmode="decimal" id="inpT" value="0.00" style="flex: 1; min-width: 0; padding: 0.6rem 0.75rem; border: none; font-size: 0.95rem; font-weight: 700; color: #0f172a; outline: none;" />
+            <select id="unitT" style="background: #f8fafc; border: none; border-left: 1px solid #cbd5e1; padding: 0 0.6rem; font-size: 0.85rem; font-weight: 700; color: #475569; cursor: pointer;">
+              <option value="C" selected>°C</option>
+              <option value="K">Kelvin (K)</option>
+              <option value="F">°F</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Van der Waals Parameters Drawer -->
+        <details style="background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: 8px; padding: 0.85rem 1rem; margin-top: 1.5rem;">
+          <summary style="font-size: 0.8rem; font-weight: 800; color: #0284c7; cursor: pointer; text-transform: uppercase;">
+            ⚙️ Van der Waals Real Gas Constants &amp; Molar Mass
+          </summary>
+          <div style="margin-top: 0.85rem; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem; font-size: 0.8rem;">
+            <div>
+              <label style="display: block; font-weight: 700; color: #475569; margin-bottom: 0.2rem;">MW (g/mol)</label>
+              <input type="text" inputmode="decimal" id="inpMW" value="28.97" style="width: 100%; padding: 0.4rem 0.5rem; border: 1px solid #cbd5e1; border-radius: 4px; font-weight: 700;" />
+            </div>
+            <div>
+              <label style="display: block; font-weight: 700; color: #475569; margin-bottom: 0.2rem;">a (bar·L²/mol²)</label>
+              <input type="text" inputmode="decimal" id="inpVdwA" value="0.00" style="width: 100%; padding: 0.4rem 0.5rem; border: 1px solid #cbd5e1; border-radius: 4px; font-weight: 700;" />
+            </div>
+            <div>
+              <label style="display: block; font-weight: 700; color: #475569; margin-bottom: 0.2rem;">b (L/mol)</label>
+              <input type="text" inputmode="decimal" id="inpVdwB" value="0.00" style="width: 100%; padding: 0.4rem 0.5rem; border: 1px solid #cbd5e1; border-radius: 4px; font-weight: 700;" />
+            </div>
+          </div>
+          <p style="margin: 0.5rem 0 0; font-size: 0.72rem; color: #64748b;">
+            'a' accounts for intermolecular attractive forces; 'b' accounts for finite molecular exclusion co-volume.
+          </p>
+        </details>
+
+      </div>
+
+      <!-- RIGHT COLUMN: Output HUD & Dynamic Visuals -->
+      <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        
+        <!-- Primary Output HUD -->
+        <div style="background: #0f172a; border-radius: 14px; padding: 1.75rem 2rem; color: #ffffff; box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.3); border: 1px solid #334155;">
+          
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <span id="outputHeaderLabel" style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #38bdf8;">
+              Calculated Pressure (Ideal Gas)
+            </span>
+            <span id="nonIdealityBadge" style="font-size: 0.72rem; font-weight: 800; padding: 2px 8px; border-radius: 9999px; background: #0284c7; color: #ffffff;">
+              Ideal Behavior (0.00% dev)
+            </span>
+          </div>
+
+          <div id="primarySolvedDisplay" style="font-size: 2.75rem; font-weight: 900; color: #38bdf8; margin: 0.5rem 0; font-family: ui-monospace, monospace;">
+            1.000 atm
+          </div>
+
+          <!-- Real Gas Comparison Banner -->
+          <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; padding: 0.75rem 1rem; margin-top: 1rem; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <span style="font-size: 0.72rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; display: block;">Van der Waals Real Gas Output</span>
+              <div id="realGasOutputText" style="font-size: 1.15rem; font-weight: 800; color: #34d399; font-family: ui-monospace, monospace; margin-top: 0.15rem;">
+                1.000 atm
+              </div>
+            </div>
+            <div style="text-align: right;">
+              <span style="font-size: 0.72rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; display: block;">Compressibility (Z)</span>
+              <div id="dispZFactor" style="font-size: 1.15rem; font-weight: 800; color: #f8fafc; font-family: ui-monospace, monospace; margin-top: 0.15rem;">
+                1.0000
+              </div>
+            </div>
+          </div>
+
+          <!-- Secondary Physical Diagnostics -->
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-top: 1.25rem; border-top: 1px solid #334155; padding-top: 1rem; font-size: 0.85rem;">
+            <div>
+              <span style="color: #94a3b8; font-size: 0.75rem; text-transform: uppercase;">Gas Density (&rho;)</span>
+              <div id="dispDensity" style="color: #f8fafc; font-size: 1.1rem; font-weight: 800; font-family: monospace; margin-top: 0.2rem;">
+                1.293 g/L
+              </div>
+            </div>
+            <div>
+              <span style="color: #94a3b8; font-size: 0.75rem; text-transform: uppercase;">Molar Volume (V_m)</span>
+              <div id="dispMolarVol" style="color: #f8fafc; font-size: 1.1rem; font-weight: 800; font-family: monospace; margin-top: 0.2rem;">
+                22.414 L/mol
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Dynamic Real-Time P-V Isotherm SVG Plot -->
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <span style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; color: #1e293b;">
+              Boyle's Law Isotherm (P vs. V at Const T)
+            </span>
+            <span style="font-size: 0.72rem; color: #64748b; font-weight: 600;">P = nRT / V</span>
+          </div>
+
+          <div style="width: 100%; height: 160px; background: #0f172a; border-radius: 10px; position: relative; overflow: hidden; border: 1px solid #1e293b;">
+            <svg id="isothermSvg" viewBox="0 0 400 160" style="width: 100%; height: 100%;">
+              <line x1="40" y1="135" x2="380" y2="135" stroke="#334155" stroke-width="1.5" />
+              <line x1="40" y1="15" x2="40" y2="135" stroke="#334155" stroke-width="1.5" />
+              <path id="curvePath" d="" fill="none" stroke="#38bdf8" stroke-width="2.5" />
+              <circle id="stateDot" cx="200" cy="75" r="5" fill="#f43f5e" stroke="#ffffff" stroke-width="1.5" />
+              <text id="stateLabel" x="200" y="60" font-size="11" fill="#f43f5e" font-family="monospace" font-weight="700" text-anchor="middle">State</text>
+            </svg>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: #64748b; font-weight: 600; margin-top: 0.4rem;">
+            <span>High Compression (P &uarr;, V &darr;)</span>
+            <span>Expansion (P &darr;, V &uarr;)</span>
+          </div>
+        </div>
+
+        <!-- 1-Click Copy & Citation Action Bar -->
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+            <span style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; color: #475569;">Export &amp; Citations:</span>
+            <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+              <button id="btnCopyReport" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.3rem 0.6rem; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #334155;">📋 Copy Report</button>
+              <button id="btnCopyLatex" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.3rem 0.6rem; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #334155;">LaTeX</button>
+              <button id="toggleCiteBtn" type="button" style="background: #e0f2fe; border: 1px solid #7dd3fc; padding: 0.3rem 0.65rem; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #0369a1;">📖 Cite</button>
+            </div>
+          </div>
+
+          <!-- Citation Drawer -->
+          <div id="citeDrawer" style="display: none; margin-top: 1rem; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 0.85rem; background: #f8fafc;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.4rem;">
+              <div style="display: flex; gap: 0.3rem; flex-wrap: wrap;">
+                <button type="button" class="inline-cite-tab" data-format="bibtex" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 700; border-radius: 5px; border: 1px solid #0f172a; background: #0f172a; color: #fff; cursor: pointer;">BibTeX</button>
+                <button type="button" class="inline-cite-tab" data-format="acs" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">ACS</button>
+                <button type="button" class="inline-cite-tab" data-format="rsc" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">RSC</button>
+                <button type="button" class="inline-cite-tab" data-format="nature" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Nature</button>
+                <button type="button" class="inline-cite-tab" data-format="elsevier" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Elsevier</button>
+                <button type="button" class="inline-cite-tab" data-format="wiley" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Wiley</button>
+              </div>
+              <button id="inlineCopyCiteBtn" type="button" style="padding: 0.25rem 0.65rem; font-size: 0.75rem; font-weight: 700; border-radius: 5px; background: #0284c7; color: #fff; border: none; cursor: pointer;">📋 Copy</button>
+            </div>
+            <pre id="inlineCiteOutput" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.75rem; font-size: 0.75rem; font-family: ui-monospace, monospace; color: #0f172a; white-space: pre-wrap; word-break: break-all; margin: 0; line-height: 1.45;"></pre>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- EDITORIAL & METHODOLOGICAL KNOWLEDGE SECTION (E-E-A-T) -->
+    <article style="border-top: 1px solid #e2e8f0; padding-top: 3.5rem; line-height: 1.85; color: #334155;">
+      
+      <h2 style="font-size: 1.85rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem; letter-spacing: -0.02em;">
+        Theoretical Principles: Ideal Gas Law &amp; Van der Waals Real Gas Departures
+      </h2>
+      <p>
+        The physical state of any gaseous system is defined by four state variables: pressure (<span style="font-weight: 700;">P</span>), volume (<span style="font-weight: 700;">V</span>), quantity of substance in moles (<span style="font-weight: 700;">n</span>), and thermodynamic temperature (<span style="font-weight: 700;">T</span>). The classical <strong>Ideal Gas Law</strong> merges Boyle's Law ($V \propto 1/P$), Charles's Law ($V \propto T$), and Avogadro's Hypothesis ($V \propto n$):
+      </p>
+
+      <div style="background: #f8fafc; border-left: 4px solid #0284c7; padding: 1rem 1.25rem; margin: 1.25rem 0; font-family: ui-monospace, monospace; font-size: 1.15rem; font-weight: 800; color: #0f172a;">
+        P · V = n · R · T = (m / M) · R · T
+      </div>
+
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
+        1. The Universal Gas Constant (R) across Common Laboratory Units
+      </h3>
+      <div style="border: 1px solid #cbd5e1; border-radius: 8px; overflow-x: auto; margin-bottom: 2rem;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.88rem; text-align: left;">
+          <thead style="background: #f8fafc; border-bottom: 1.5px solid #cbd5e1;">
+            <tr>
+              <th style="padding: 0.6rem 0.75rem; color: #0f172a; font-weight: 700;">Numerical Value</th>
+              <th style="padding: 0.6rem 0.75rem; color: #0f172a; font-weight: 700;">Units</th>
+              <th style="padding: 0.6rem 0.75rem; color: #0f172a; font-weight: 700;">Standard Working Domain</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid #f1f5f9;">
+              <td style="padding: 0.6rem 0.75rem; font-family: monospace; font-weight: bold; color: #0284c7;">8.31446 J/(mol·K)</td>
+              <td style="padding: 0.6rem 0.75rem;">Pa·m³/(mol·K) or kg·m²/(s²·mol·K)</td>
+              <td style="padding: 0.6rem 0.75rem;">SI Thermodynamic Base Standard</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #f1f5f9; background: #fafafa;">
+              <td style="padding: 0.6rem 0.75rem; font-family: monospace; font-weight: bold; color: #0284c7;">0.082057 L·atm/(mol·K)</td>
+              <td style="padding: 0.6rem 0.75rem;">dm³·atm/(mol·K)</td>
+              <td style="padding: 0.6rem 0.75rem;">Benchtop Chemical Synthesis</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #f1f5f9;">
+              <td style="padding: 0.6rem 0.75rem; font-family: monospace; font-weight: bold; color: #0284c7;">0.083145 L·bar/(mol·K)</td>
+              <td style="padding: 0.6rem 0.75rem;">dm³·bar/(mol·K)</td>
+              <td style="padding: 0.6rem 0.75rem;">Modern IUPAC Standard Reference</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #f1f5f9; background: #fafafa;">
+              <td style="padding: 0.6rem 0.75rem; font-family: monospace; font-weight: bold; color: #0284c7;">62.3637 L·Torr/(mol·K)</td>
+              <td style="padding: 0.6rem 0.75rem;">L·mmHg/(mol·K)</td>
+              <td style="padding: 0.6rem 0.75rem;">Manometric / Vacuum Line Studies</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
+        2. Non-Ideal Departures: The Van der Waals Equation of State
+      </h3>
+      <p>
+        At elevated pressures or low temperatures, real gas molecules violate ideal gas assumptions. Molecules occupy finite physical exclusion volume (co-volume) and exert long-range attractive dispersion forces on each other. Johannes Diderik van der Waals introduced corrections for both phenomena:
+      </p>
+
+      <div style="background: #f8fafc; border-left: 4px solid #10b981; padding: 1rem 1.25rem; margin: 1.25rem 0; font-family: ui-monospace, monospace; font-size: 1.15rem; font-weight: 800; color: #0f172a;">
+        ( P + a · (n / V)² ) · ( V - n · b ) = n · R · T
+      </div>
+      <p>
+        Where parameter <span style="font-weight: 700; color: #0284c7;">a</span> quantifies the magnitude of intermolecular attraction (lowering the observed wall pressure), and parameter <span style="font-weight: 700; color: #0284c7;">b</span> accounts for the excluded co-volume per mole of gas particles.
+      </p>
+
+      <!-- Worked Step-by-Step Problem -->
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2.5rem; margin-bottom: 0.75rem;">
+        3. Worked Laboratory Example: High-Pressure Carbon Dioxide Cylinder
+      </h3>
+      <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1.25rem; margin: 1.25rem 0;">
+        <p style="margin: 0 0 0.5rem; font-weight: 700; color: #0f172a;">Problem Statement:</p>
+        <p style="margin: 0 0 0.75rem; font-size: 0.92rem; color: #475569;">
+          A researcher charges a 10.0 L autoclave with 20.0 moles of CO₂ gas at 300 K. Calculate the predicted pressure using the Ideal Gas Law versus the Van der Waals equation (<span style="font-family: monospace;">a = 3.658 bar·L²/mol²</span>, <span style="font-family: monospace;">b = 0.0429 L/mol</span>).
+        </p>
+
+        <p style="margin: 0 0 0.4rem; font-weight: 700; color: #0f172a;">Step 1: Ideal Gas Calculation</p>
+        <p style="margin: 0 0 0.75rem; font-size: 0.92rem; color: #475569; font-family: monospace;">
+          P_ideal = (n · R · T) / V = (20.0 mol · 0.083145 L·bar/(mol·K) · 300 K) / 10.0 L = <strong>49.89 bar</strong> (49.23 atm)
+        </p>
+
+        <p style="margin: 0 0 0.4rem; font-weight: 700; color: #0f172a;">Step 2: Van der Waals Real Gas Correction</p>
+        <p style="margin: 0 0 0.75rem; font-size: 0.92rem; color: #475569; font-family: monospace;">
+          V_eff = V - n·b = 10.0 L - (20.0 mol · 0.0429 L/mol) = 9.142 L<br />
+          P_thermal = (n · R · T) / V_eff = (20.0 · 0.083145 · 300) / 9.142 = 54.57 bar<br />
+          P_attraction = a · (n / V)² = 3.658 · (20.0 / 10.0)² = 14.63 bar<br />
+          P_real = 54.57 bar - 14.63 bar = <strong>39.94 bar</strong> (39.42 atm)
+        </p>
+        <p style="margin: 0; font-size: 0.92rem; color: #059669; font-weight: 700;">
+          Verdict: At 50 bar, CO₂ exhibits a ~20% deviation from ideality due to dominant intermolecular attraction forces.
+        </p>
+      </div>
+
+      <!-- FAQ Accordion -->
+      <h3 style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-top: 3rem; margin-bottom: 1.25rem;">
+        Frequently Asked Questions: Gas Thermodynamics
+      </h3>
+
+      <div style="display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 2rem;">
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Why is IUPAC STP defined at 1 bar rather than 1 atm?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            In 1982, IUPAC adopted 1 bar (100,000 Pa) as standard pressure to align gas thermodynamics directly with the coherent SI system of units (1 bar = exactly 10⁵ N/m²), whereas 1 atm (101,325 Pa) was an arbitrary barometric average at sea level.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">When is the compressibility factor Z less than or greater than 1?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            When Z &lt; 1, attractive intermolecular forces dominate, causing the gas to occupy less volume or exert less pressure than an ideal gas. When Z &gt; 1 (typically at ultra-high pressures exceeding 200–300 bar), the physical co-volume of molecules dominates, making the gas less compressible than an ideal gas.
+          </p>
+        </details>
+      </div>
+
+    </article>
+
+    <!-- Upstream & Downstream Studios Hub -->
+    <section style="max-width: 900px; margin: 3rem auto 1.5rem; padding: 1.25rem 1.5rem; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; box-sizing: border-box;">
+      <h3 style="margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 0.5rem;">
+        <span>🔗</span> Upstream &amp; Downstream Quantitative Studios
+      </h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
+        <a href="/stoichiometry" style="display: block; padding: 1rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
+          <div style="font-weight: 700; font-size: 0.92rem; color: #0284c7; margin-bottom: 0.35rem;">Stoichiometry &amp; Yield Engine &rarr;</div>
+          <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">
+            Balance gas-phase reactions and compute moles of generated products from limiting reactants.
+          </div>
+        </a>
+        <a href="/isotherm" style="display: block; padding: 1rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
+          <div style="font-weight: 700; font-size: 0.92rem; color: #7c3aed; margin-bottom: 0.35rem;">Adsorption Isotherm Studio &rarr;</div>
+          <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">
+            Model high-pressure gas adsorption isotherms on porous MOF and silica materials.
+          </div>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <style>
+    .gas-preset-btn {
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      padding: 0.35rem 0.65rem;
+      border-radius: 6px;
+      cursor: pointer;
+      color: #1e293b;
+      font-size: 0.78rem;
+      font-weight: 700;
+      transition: all 0.15s ease;
+    }
+    .gas-preset-btn:hover {
+      background: #e0f2fe;
+      border-color: #0284c7;
+      color: #0284c7;
+    }
+    .gas-preset-btn.active {
+      background: #0284c7;
+      color: #ffffff;
+      border-color: #0284c7;
+    }
+  </style>
+
+  <script>
+    import {
+      calculateGasSystem,
+      generateIsothermPoints,
+      COMMON_GASES,
+      type PressureUnit,
+      type VolumeUnit,
+      type TempUnit,
+      type AmountUnit,
+      type SolveTarget
+    } from '../utils/gasMath';
+
+    // DOM Elements
+    const selSolveFor = document.getElementById('selSolveFor') as HTMLSelectElement;
+    const inpP = document.getElementById('inpP') as HTMLInputElement;
+    const unitP = document.getElementById('unitP') as HTMLSelectElement;
+    const inpV = document.getElementById('inpV') as HTMLInputElement;
+    const unitV = document.getElementById('unitV') as HTMLSelectElement;
+    const inpN = document.getElementById('inpN') as HTMLInputElement;
+    const unitN = document.getElementById('unitN') as HTMLSelectElement;
+    const inpT = document.getElementById('inpT') as HTMLInputElement;
+    const unitT = document.getElementById('unitT') as HTMLSelectElement;
+
+    const inpMW = document.getElementById('inpMW') as HTMLInputElement;
+    const inpVdwA = document.getElementById('inpVdwA') as HTMLInputElement;
+    const inpVdwB = document.getElementById('inpVdwB') as HTMLInputElement;
+
+    const rowP = document.getElementById('rowP')!;
+    const rowV = document.getElementById('rowV')!;
+    const rowN = document.getElementById('rowN')!;
+    const rowT = document.getElementById('rowT')!;
+    const lblN = document.getElementById('lblN')!;
+
+    const outputHeaderLabel = document.getElementById('outputHeaderLabel')!;
+    const primarySolvedDisplay = document.getElementById('primarySolvedDisplay')!;
+    const nonIdealityBadge = document.getElementById('nonIdealityBadge')!;
+    const realGasOutputText = document.getElementById('realGasOutputText')!;
+    const dispZFactor = document.getElementById('dispZFactor')!;
+    const dispDensity = document.getElementById('dispDensity')!;
+    const dispMolarVol = document.getElementById('dispMolarVol')!;
+
+    const curvePath = document.getElementById('curvePath')!;
+    const stateDot = document.getElementById('stateDot')!;
+    const stateLabel = document.getElementById('stateLabel')!;
+    const activeGasLabel = document.getElementById('activeGasLabel')!;
+
+    function parseNum(val: string): number {
+      const clean = val.replace(',', '.').trim();
+      const n = parseFloat(clean);
+      return Number.isFinite(n) ? n : 0;
+    }
+
+    function syncTargetUi() {
+      const target = selSolveFor.value as SolveTarget;
+      // Reset displays
+      [rowP, rowV, rowN, rowT].forEach(r => r.style.opacity = '1');
+      inpP.disabled = false;
+      inpV.disabled = false;
+      inpN.disabled = false;
+      inpT.disabled = false;
+
+      if (target === 'P') {
+        rowP.style.opacity = '0.5';
+        inpP.disabled = true;
+        outputHeaderLabel.textContent = 'Calculated Pressure (Ideal Gas)';
+      } else if (target === 'V') {
+        rowV.style.opacity = '0.5';
+        inpV.disabled = true;
+        outputHeaderLabel.textContent = 'Calculated Volume (Ideal Gas)';
+      } else if (target === 'n') {
+        rowN.style.opacity = '0.5';
+        inpN.disabled = true;
+        lblN.textContent = 'QUANTITY OF SUBSTANCE (Molar)';
+        outputHeaderLabel.textContent = 'Calculated Moles of Gas';
+      } else if (target === 'm') {
+        rowN.style.opacity = '0.5';
+        inpN.disabled = true;
+        lblN.textContent = 'QUANTITY OF SUBSTANCE (Mass)';
+        outputHeaderLabel.textContent = 'Calculated Mass of Gas (g)';
+      } else if (target === 'T') {
+        rowT.style.opacity = '0.5';
+        inpT.disabled = true;
+        outputHeaderLabel.textContent = 'Calculated Temperature';
+      }
+    }
+
+    function runEngine() {
+      const solveFor = selSolveFor.value as SolveTarget;
+      const res = calculateGasSystem({
+        solveFor,
+        P_val: parseNum(inpP.value),
+        P_unit: unitP.value as PressureUnit,
+        V_val: parseNum(inpV.value),
+        V_unit: unitV.value as VolumeUnit,
+        n_val: parseNum(inpN.value),
+        n_unit: unitN.value as AmountUnit,
+        T_val: parseNum(inpT.value),
+        T_unit: unitT.value as TempUnit,
+        molarMass: parseNum(inpMW.value),
+        vdw_a: parseNum(inpVdwA.value),
+        vdw_b: parseNum(inpVdwB.value),
+      });
+
+      if (!res.isValid) {
+        primarySolvedDisplay.textContent = '--';
+        realGasOutputText.textContent = res.errorMessage || 'Invalid values';
+        return;
+      }
+
+      // Format Solved Value
+      const formatted = res.solvedValue >= 1000 || (res.solvedValue < 0.001 && res.solvedValue > 0)
+        ? res.solvedValue.toExponential(4)
+        : res.solvedValue.toFixed(res.solvedValue >= 10 ? 3 : 4);
+
+      primarySolvedDisplay.textContent = `${formatted} ${res.solvedUnit}`;
+
+      // Real Gas Comparison
+      if (res.realP_Pa !== undefined && solveFor === 'P') {
+        const pAtm = res.realP_Pa / 101325;
+        realGasOutputText.textContent = `${pAtm.toFixed(3)} atm (${res.percentNonIdeality.toFixed(2)}% dev)`;
+      } else if (res.realP_Pa !== undefined) {
+        realGasOutputText.textContent = `Real P: ${(res.realP_Pa / 101325).toFixed(3)} atm`;
+      } else {
+        realGasOutputText.textContent = 'V <= nb (Volume below molecular co-volume)';
+      }
+
+      // Non-ideality Badge
+      if (res.percentNonIdeality > 5) {
+        nonIdealityBadge.textContent = `High Non-Ideality (${res.percentNonIdeality.toFixed(1)}% dev)`;
+        nonIdealityBadge.style.background = '#e11d48';
+      } else if (res.percentNonIdeality > 1) {
+        nonIdealityBadge.textContent = `Noticeable Deviation (${res.percentNonIdeality.toFixed(1)}%)`;
+        nonIdealityBadge.style.background = '#f59e0b';
+      } else {
+        nonIdealityBadge.textContent = `Ideal Behavior (${res.percentNonIdeality.toFixed(2)}% dev)`;
+        nonIdealityBadge.style.background = '#0284c7';
+      }
+
+      // Diagnostics
+      dispZFactor.textContent = res.compressibilityFactor_Z.toFixed(4);
+      dispDensity.textContent = `${res.density_g_L.toFixed(3)} g/L`;
+      dispMolarVol.textContent = `${res.molarVolume_L_mol.toFixed(3)} L/mol`;
+
+      // Draw SVG Isotherm
+      renderSvgCurve(res.n_mol, res.T_K, res.V_m3 * 1000, res.P_Pa / 101325);
+    }
+
+    function renderSvgCurve(n_mol: number, T_K: number, v_L: number, p_atm: number) {
+      if (n_mol <= 0 || T_K <= 0 || v_L <= 0) return;
+      const pts = generateIsothermPoints(n_mol, T_K, v_L);
+      if (pts.length < 2) return;
+
+      const minV = pts[0].v;
+      const maxV = pts[pts.length - 1].v;
+      const maxP = Math.max(...pts.map(pt => pt.p_ideal)) * 1.1;
+
+      const svgW = 340;
+      const svgH = 120;
+
+      const d = pts.map((pt, idx) => {
+        const x = 40 + ((pt.v - minV) / (maxV - minV)) * svgW;
+        const y = 135 - (pt.p_ideal / maxP) * svgH;
+        return `${idx === 0 ? 'M' : 'L'} ${x.toFixed(1)} ${Math.max(15, y).toFixed(1)}`;
+      }).join(' ');
+
+      curvePath.setAttribute('d', d);
+
+      // Dot position
+      const dotX = 40 + (Math.min(Math.max(v_L, minV), maxV) - minV) / (maxV - minV) * svgW;
+      const dotY = 135 - (p_atm / maxP) * svgH;
+      stateDot.setAttribute('cx', dotX.toFixed(1));
+      stateDot.setAttribute('cy', Math.max(15, Math.min(135, dotY)).toFixed(1));
+      stateLabel.setAttribute('x', dotX.toFixed(1));
+      stateLabel.setAttribute('y', Math.max(25, dotY - 10).toFixed(1));
+      stateLabel.textContent = `${p_atm.toFixed(1)} atm, ${v_L.toFixed(1)} L`;
+    }
+
+    // Event Listeners
+    selSolveFor.addEventListener('change', () => {
+      syncTargetUi();
+      runEngine();
+    });
+
+    [inpP, inpV, inpN, inpT, inpMW, inpVdwA, inpVdwB].forEach(inp => {
+      inp.addEventListener('input', runEngine);
+    });
+
+    [unitP, unitV, unitN, unitT].forEach(sel => {
+      sel.addEventListener('change', runEngine);
+    });
+
+    // Preset Gases
+    document.querySelectorAll('.gas-preset-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const target = e.currentTarget as HTMLElement;
+        document.querySelectorAll('.gas-preset-btn').forEach(b => b.classList.remove('active'));
+        target.classList.add('active');
+
+        const gasKey = target.dataset.gas!;
+        const g = COMMON_GASES[gasKey];
+        if (g) {
+          inpMW.value = g.molarMass.toString();
+          inpVdwA.value = g.vdw_a.toString();
+          inpVdwB.value = g.vdw_b.toString();
+          activeGasLabel.textContent = g.name;
+          runEngine();
+        }
+      });
+    });
+
+    // STP Presets
+    document.querySelectorAll('.cond-preset-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const target = e.currentTarget as HTMLElement;
+        inpP.value = target.dataset.p!;
+        unitP.value = target.dataset.pu!;
+        inpT.value = target.dataset.t!;
+        unitT.value = target.dataset.tu!;
+        runEngine();
+      });
+    });
+
+    // Share URL
+    document.getElementById('btnShareUrl')?.addEventListener('click', async () => {
+      const p = new URLSearchParams();
+      p.set('solve', selSolveFor.value);
+      p.set('p', inpP.value);
+      p.set('pu', unitP.value);
+      p.set('v', inpV.value);
+      p.set('vu', unitV.value);
+      p.set('n', inpN.value);
+      p.set('nu', unitN.value);
+      p.set('t', inpT.value);
+      p.set('tu', unitT.value);
+      p.set('mw', inpMW.value);
+      window.history.replaceState({}, '', `${window.location.pathname}?${p.toString()}`);
+      await navigator.clipboard.writeText(window.location.href);
+      alert('Thermodynamic state URL copied to clipboard.');
+    });
+
+    // CSV Exporter
+    document.getElementById('btnExportCsv')?.addEventListener('click', () => {
+      let csv = 'Variable,Value,Unit\n';
+      csv += `SolveTarget,${selSolveFor.value},\n`;
+      csv += `Pressure,${inpP.value},${unitP.value}\n`;
+      csv += `Volume,${inpV.value},${unitV.value}\n`;
+      csv += `Quantity,${inpN.value},${unitN.value}\n`;
+      csv += `Temperature,${inpT.value},${unitT.value}\n`;
+      csv += `MolarMass,${inpMW.value},g/mol\n`;
+      csv += `Vdw_a,${inpVdwA.value},bar*L^2/mol^2\n`;
+      csv += `Vdw_b,${inpVdwB.value},L/mol\n`;
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `gas_thermodynamics_${Date.now()}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    // Copy Report
+    document.getElementById('btnCopyReport')?.addEventListener('click', async () => {
+      const report = `========================================
+CHEMISTRYDESK GAS THERMODYNAMICS REPORT
+Target: ${selSolveFor.value}
+Solved Result: ${primarySolvedDisplay.textContent}
+Real Gas Output: ${realGasOutputText.textContent}
+Compressibility (Z): ${dispZFactor.textContent}
+Gas Density: ${dispDensity.textContent}
+Molar Volume: ${dispMolarVol.textContent}
+========================================`;
+      await navigator.clipboard.writeText(report);
+      alert('Thermodynamic summary copied to clipboard.');
+    });
+
+    // Copy LaTeX
+    document.getElementById('btnCopyLatex')?.addEventListener('click', async () => {
+      const latex = `% Ideal Gas Law & Van der Waals (ChemistryDesk)
+\\begin{aligned}
+  PV &= nRT \\implies P = \\frac{nRT}{V} \\\\
+  \\left(P + a\\frac{n^2}{V^2}\\right)(V - nb) &= nRT
+\\end{aligned}`;
+      await navigator.clipboard.writeText(latex);
+      alert('LaTeX equations copied to clipboard.');
+    });
+
+    // Citation Drawer Logic
+    const citeDrawer = document.getElementById('citeDrawer')!;
+    const toggleCiteBtn = document.getElementById('toggleCiteBtn')!;
+    const inlineCiteOutput = document.getElementById('inlineCiteOutput')!;
+    const inlineTabs = document.querySelectorAll('.inline-cite-tab');
+    const inlineCopyBtn = document.getElementById('inlineCopyCiteBtn')!;
+    const doi = "10.5281/zenodo.23059466";
+    const year = new Date().getFullYear();
+
+    const citations: Record<string, string> = {
+      bibtex: `@software{khan_chemistrydesk_gas_${year},
+  author        = {Khan, Bilal},
+  title         = {ChemistryDesk: Ideal & Real Gas Thermodynamics Studio},
+  year          = {${year}},
+  version       = {v1.0.1},
+  publisher     = {Zenodo},
+  doi           = {${doi}},
+  url           = {https://chemistrycal.com/gas}
+}`,
+      acs: `Khan, B. ChemistryDesk: Ideal & Real Gas Thermodynamics Studio, version 1.0.1; Zenodo, ${year}. https://doi.org/${doi}.`,
+      rsc: `B. Khan, ChemistryDesk: Ideal & Real Gas Thermodynamics Studio, version 1.0.1, Zenodo, ${year}, DOI: ${doi}.`,
+      nature: `Khan, B. ChemistryDesk: Ideal & Real Gas Thermodynamics Studio. Zenodo https://doi.org/${doi} (${year}).`,
+      elsevier: `Khan, B., ${year}. ChemistryDesk: Ideal & Real Gas Thermodynamics Studio (Version 1.0.1). Zenodo. https://doi.org/${doi}.`,
+      wiley: `B. Khan, ChemistryDesk: Ideal & Real Gas Thermodynamics Studio, version 1.0.1, Zenodo, ${year}, DOI: ${doi}.`
+    };
+
+    let activeFormat = 'bibtex';
+    function updateCite() {
+      inlineCiteOutput.textContent = citations[activeFormat] || citations['bibtex'];
+    }
+
+    toggleCiteBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const isHidden = citeDrawer.style.display === 'none';
+      citeDrawer.style.display = isHidden ? 'block' : 'none';
+      if (isHidden) updateCite();
+    });
+
+    inlineTabs.forEach(tab => {
+      tab.addEventListener('click', (e) => {
+        e.preventDefault();
+        inlineTabs.forEach(t => {
+          (t as HTMLElement).style.background = '#fff';
+          (t as HTMLElement).style.color = '#334155';
+          (t as HTMLElement).style.borderColor = '#cbd5e1';
+          (t as HTMLElement).style.fontWeight = '600';
+        });
+        const el = tab as HTMLElement;
+        el.style.background = '#0f172a';
+        el.style.color = '#fff';
+        el.style.borderColor = '#0f172a';
+        el.style.fontWeight = '700';
+        activeFormat = el.dataset.format || 'bibtex';
+        updateCite();
+      });
+    });
+
+    inlineCopyBtn.addEventListener('click', async () => {
+      await navigator.clipboard.writeText(citations[activeFormat]);
+      alert('Academic citation copied.');
+    });
+
+    // Check URL state on load
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('solve')) selSolveFor.value = urlParams.get('solve')!;
+    if (urlParams.has('p')) inpP.value = urlParams.get('p')!;
+    if (urlParams.has('pu')) unitP.value = urlParams.get('pu')!;
+    if (urlParams.has('v')) inpV.value = urlParams.get('v')!;
+    if (urlParams.has('vu')) unitV.value = urlParams.get('vu')!;
+    if (urlParams.has('n')) inpN.value = urlParams.get('n')!;
+    if (urlParams.has('nu')) unitN.value = urlParams.get('nu')!;
+    if (urlParams.has('t')) inpT.value = urlParams.get('t')!;
+    if (urlParams.has('tu')) unitT.value = urlParams.get('tu')!;
+    if (urlParams.has('mw')) inpMW.value = urlParams.get('mw')!;
+
+    updateCite();
+    syncTargetUi();
+    runEngine();
+  </script>
+</BaseLayout>

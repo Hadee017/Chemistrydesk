@@ -127,5 +127,17 @@ export const toolsCatalog: ToolMeta[] = [
     priority: '0.9',
     changefreq: 'weekly',
     lastmod: '2026-10-08'
+  },
+  {
+    id: 'gas',
+    title: 'Ideal & Real Gas Thermodynamics Studio',
+    path: '/gas',
+    icon: '🎈',
+    badge: 'High Traffic Core',
+    badgeColor: '#0284c7',
+    description: 'Solve PV=nRT and Van der Waals real gas states. Compute pressure, volume, temperature, mass, compressibility factor (Z), and density with dynamic P-V isotherm plots.',
+    priority: '1.0',
+    changefreq: 'weekly',
+    lastmod: '2026-10-09'
   }
 ];
