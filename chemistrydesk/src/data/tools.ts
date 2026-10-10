@@ -151,5 +151,17 @@ export const toolsCatalog: ToolMeta[] = [
     priority: '1.0',
     changefreq: 'weekly',
     lastmod: '2026-10-10'
+  },
+  {
+    id: 'molar-mass',
+    title: 'Molar Mass & Elemental Composition Studio',
+    path: '/molar-mass',
+    icon: '⚖️',
+    badge: 'High Traffic Core',
+    badgeColor: '#f59e0b',
+    description: 'Universal chemical formula molar mass calculator. Computes IUPAC molecular weights, elemental mass percentage profiles, nested complexes, hydrates, and two-way grams to moles conversions.',
+    priority: '1.0',
+    changefreq: 'weekly',
+    lastmod: '2026-10-10'
   }
 ];
