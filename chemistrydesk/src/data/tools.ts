@@ -139,5 +139,17 @@ export const toolsCatalog: ToolMeta[] = [
     priority: '1.0',
     changefreq: 'weekly',
     lastmod: '2026-10-09'
+  },
+  {
+    id: 'ph',
+    title: 'Universal pH & Aqueous Equilibrium Studio',
+    path: '/ph',
+    icon: '📈',
+    badge: 'High Traffic Core',
+    badgeColor: '#38bdf8',
+    description: 'Circular 4-way solver for pH, pOH, [H⁺], and [OH⁻]. Features exact quadratic weak acid/base ICE equilibrium, temperature-dependent Kw compensation, and live indicator spectrum visualization.',
+    priority: '1.0',
+    changefreq: 'weekly',
+    lastmod: '2026-10-10'
   }
 ];
