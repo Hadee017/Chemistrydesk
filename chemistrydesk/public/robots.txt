@@ -29,6 +29,6 @@ User-agent: FacebookBot
 Allow: /
 
 # -------------------------------------------------------------
-# 3. Canonical Sitemap Index Declaration
+# 3. Canonical Sitemap Declaration
 # -------------------------------------------------------------
-Sitemap: https://chemistrycal.com/sitemap-index.xml
+Sitemap: https://chemistrycal.com/sitemap.xml
