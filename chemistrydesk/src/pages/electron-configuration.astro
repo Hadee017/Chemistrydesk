@@ -1,0 +1,970 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Electron Configuration Calculator | Orbital Notation, Quantum Numbers & Hund's Rule | ChemistryDesk"
+  description="Universal electron configuration studio. Generate full and noble gas configurations, interactive Hund's rule orbital box diagrams, quantum numbers, Slater's Zeff, and ionization energies."
+>
+  <!-- Schema: WebApplication -->
+  <script is:inline type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "ChemistryDesk Electron Configuration & Orbital Physics Studio",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "All",
+    "browserRequirements": "Requires JavaScript",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "featureList": [
+      "Dynamic SVG Hund's Rule Orbital Box Diagrams with Spin Arrows",
+      "Full and Noble Gas Condensed Shorthand Electron Configurations",
+      "Cation and Anion Ionization Engine with Outer-Shell-First Stripping",
+      "The 4 Quantum Numbers (n, l, ml, ms) for Differentiating Electrons",
+      "Slater's Rules Effective Nuclear Charge (Zeff) and Screening Constant (S)",
+      "Thermodynamic Periodic Trends: IE1-IE3, Electron Affinity, and Electronegativity",
+      "Ground-State Spectroscopic Term Symbols and Crystal Lattice Classifications",
+      "1-Click LaTeX Block, Plain-Text Homework Steps, and CSV Export"
+    ]
+  })}></script>
+
+  <!-- Schema: FAQPage -->
+  <script is:inline type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Why do transition metal cations lose 4s electrons before 3d electrons?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Although the 4s subshell is filled before 3d in neutral atoms according to the Aufbau principle, once the 3d orbitals contain electrons, interelectronic repulsion causes the 3d orbitals to drop lower in energy than 4s. Therefore, during ionization, electrons are always removed from the outermost principal quantum shell (n=4) first."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What causes Aufbau ground-state anomalies in Chromium and Copper?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Chromium ([Ar] 3d5 4s1) and Copper ([Ar] 3d10 4s1) promote an electron from 4s to 3d because exactly half-filled (d5) and completely filled (d10) subshells possess maximum quantum mechanical exchange energy and spherical electronic symmetry, which overcomes the energetic cost of promotion."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does Hund's Rule govern orbital filling?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Hund's Rule of Maximum Multiplicity dictates that when filling degenerate orbitals of equal energy (such as px, py, pz), electrons must occupy each orbital singly with parallel spins (+1/2) before pairing with opposite spins (-1/2) to minimize interelectronic electrostatic repulsion."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How is effective nuclear charge (Zeff) calculated using Slater's Rules?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Slater's Rules calculate the shielding constant (S) by grouping orbitals into (1s), (2s,2p), (3s,3p), (3d), etc. Electrons in the same group contribute 0.35 each, electrons in the (n-1) shell contribute 0.85 each, and electrons in deeper shells contribute 1.00 each. The effective nuclear charge is then determined by Zeff = Z - S."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the difference between paramagnetic and diamagnetic species?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A species is paramagnetic if it possesses one or more unpaired electrons, creating a net magnetic dipole moment that is weakly attracted into external magnetic fields. A species is diamagnetic if all electrons are completely paired in opposite spins, causing it to be weakly repelled by magnetic fields."
+        }
+      }
+    ]
+  })}></script>
+
+  <main style="max-width: 1140px; margin: 1.5rem auto 4rem auto; padding: 0 1.5rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #0f172a;">
+    
+    <!-- Navigation Breadcrumbs -->
+    <nav style="font-size: 0.85rem; color: #475569; margin-bottom: 1.25rem;">
+      <a href="/" style="color: #0284c7; text-decoration: none; font-weight: 600;">Home</a> &rsaquo; 
+      <span style="color: #64748b;"> Atomic &amp; Quantum Physics</span> &rsaquo; 
+      <span style="color: #0f172a; font-weight: 700;">Electron Configuration Studio</span>
+    </nav>
+
+    <!-- Header Hero Card -->
+    <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 16px; padding: 2rem; margin-bottom: 2rem; color: #ffffff; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.15);">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.5rem;">
+        <div style="max-width: 780px;">
+          <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); padding: 0.3rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem;">
+            <span>Quantum Mechanics &bull; IUPAC Aufbau Anomalies &bull; Slater's Z_eff</span>
+          </div>
+          <h1 style="font-size: 2.35rem; font-weight: 800; color: #ffffff; letter-spacing: -0.025em; margin: 0; line-height: 1.2;">
+            Electron Configuration Studio
+          </h1>
+          <p style="color: #cbd5e1; font-size: 1rem; margin-top: 0.65rem; margin-bottom: 0; line-height: 1.6;">
+            Interactive subshell orbital box diagrams, quantum numbers, noble gas shorthand, cation/anion ionization, and Slater's effective nuclear charge across all 118 elements.
+          </p>
+        </div>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+          <button id="btnResetDefault" type="button" style="background: #334155; border: 1px solid #475569; color: #f8fafc; padding: 0.65rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700;">
+            Reset
+          </button>
+          <button id="btnShareUrl" type="button" style="background: #0284c7; border: none; color: white; padding: 0.65rem 1.15rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 0.4rem;">
+            <span>Share Link</span>
+          </button>
+          <button id="btnExportCsv" type="button" style="background: #334155; border: 1px solid #475569; color: white; padding: 0.65rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700;">
+            CSV
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUICK PRESET PILLS CAROUSEL (HIGH-VOLUME EXAM & ANOMALOUS SPECIES) -->
+    <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+      <div style="font-size: 0.78rem; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.65rem;">
+        Exam Traps, Ground Anomalies &amp; Transition Cations:
+      </div>
+      <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;" id="presetPillsGroup">
+        <button type="button" class="preset-pill active" data-query="Fe" style="background: #0284c7; border: 1px solid #0284c7; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #ffffff;">Iron (Fe, Z=26)</button>
+        <button type="button" class="preset-pill" data-query="Fe+2" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Fe²⁺ (4s Outer Loss)</button>
+        <button type="button" class="preset-pill" data-query="Cr" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Chromium (Cr, 3d⁵ 4s¹)</button>
+        <button type="button" class="preset-pill" data-query="Cu" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Copper (Cu, 3d¹⁰ 4s¹)</button>
+        <button type="button" class="preset-pill" data-query="Pd" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Palladium (4d¹⁰ 5s⁰)</button>
+        <button type="button" class="preset-pill" data-query="O-2" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Oxide Ion (O²⁻, [Ne])</button>
+        <button type="button" class="preset-pill" data-query="Au" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Gold (Au, 5d¹⁰ 6s¹)</button>
+        <button type="button" class="preset-pill" data-query="U" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Uranium (5f³ 6d¹ 7s²)</button>
+      </div>
+    </div>
+
+    <!-- MAIN TWO-COLUMN WORKBENCH -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 2rem; margin-bottom: 2.5rem;">
+      
+      <!-- LEFT COLUMN: User Controls & Input Form -->
+      <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        
+        <!-- CARD: Input Entity & Charge Modifiers -->
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 1.75rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);">
+          
+          <div style="margin-bottom: 1.25rem;">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.4rem;">
+              <label for="inpElementQuery" style="font-size: 0.82rem; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.05em;">
+                Enter Chemical Symbol, Name, or Z:
+              </label>
+              <span style="font-size: 0.72rem; color: #0284c7; font-weight: 700;">118 Elements Supported</span>
+            </div>
+            <input 
+              type="text" 
+              id="inpElementQuery" 
+              value="Fe" 
+              placeholder="e.g. Fe, Fe+2, Cr, Cu, O-2, or 26" 
+              autocomplete="off" 
+              spellcheck="false"
+              style="width: 100%; box-sizing: border-box; padding: 0.85rem 1rem; border: 2px solid #bae6fd; border-radius: 8px; font-size: 1.45rem; font-weight: 800; color: #0369a1; font-family: ui-monospace, monospace; outline: none; background: #f0f9ff;"
+            />
+          </div>
+
+          <!-- Ionization Charge Slider & Stepper -->
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+              <span style="font-size: 0.78rem; font-weight: 800; color: #334155; text-transform: uppercase;">
+                Ionization Charge State:
+              </span>
+              <span id="lblActiveCharge" style="font-size: 1rem; font-weight: 800; color: #0284c7; font-family: monospace;">
+                0 (Neutral Atom)
+              </span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+              <button id="btnChargeMinus" type="button" style="width: 32px; height: 32px; border-radius: 6px; border: 1px solid #cbd5e1; background: #fff; font-size: 1.1rem; font-weight: 800; cursor: pointer; color: #334155;">&minus;</button>
+              <input type="range" id="rngCharge" min="-4" max="7" value="0" style="flex: 1; cursor: pointer;" />
+              <button id="btnChargePlus" type="button" style="width: 32px; height: 32px; border-radius: 6px; border: 1px solid #cbd5e1; background: #fff; font-size: 1.1rem; font-weight: 800; cursor: pointer; color: #334155;">+</button>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.68rem; color: #94a3b8; font-weight: 600; margin-top: 0.4rem;">
+              <span>-4 (Anion)</span>
+              <span>0 (Neutral)</span>
+              <span>+7 (High Cation)</span>
+            </div>
+          </div>
+
+          <div id="elementAlert" style="display: none; padding: 0.6rem 0.85rem; border-radius: 6px; background: #fef2f2; border: 1px solid #fecaca; color: #b91c1c; font-size: 0.8rem; font-weight: 600; margin-bottom: 1rem;"></div>
+
+          <!-- Quick Metadata Badges -->
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.65rem; font-size: 0.8rem;">
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.5rem 0.75rem;">
+              <span style="color: #64748b; font-size: 0.7rem; font-weight: 700; text-transform: uppercase;">Element Block</span>
+              <div id="dispMetaBlock" style="font-weight: 800; color: #0f172a;">d-block Transition</div>
+            </div>
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.5rem 0.75rem;">
+              <span style="color: #64748b; font-size: 0.7rem; font-weight: 700; text-transform: uppercase;">Period &amp; Group</span>
+              <div id="dispMetaPeriodGroup" style="font-weight: 800; color: #0f172a;">Period 4 &bull; Group 8</div>
+            </div>
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.5rem 0.75rem;">
+              <span style="color: #64748b; font-size: 0.7rem; font-weight: 700; text-transform: uppercase;">Core vs Valence e⁻</span>
+              <div id="dispMetaValenceCore" style="font-weight: 800; color: #0f172a;">18 Core / 8 Valence</div>
+            </div>
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.5rem 0.75rem;">
+              <span style="color: #64748b; font-size: 0.7rem; font-weight: 700; text-transform: uppercase;">Atomic Mass</span>
+              <div id="dispMetaMass" style="font-weight: 800; color: #0f172a;">55.845 u</div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- CARD: The 4 Quantum Numbers of Differentiating Electron -->
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 1.75rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);">
+          <div style="border-bottom: 2px solid #f1f5f9; padding-bottom: 0.65rem; margin-bottom: 1.25rem;">
+            <h2 style="font-size: 0.95rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #0f172a; margin: 0;">
+              Valence Differentiating Quantum Set
+            </h2>
+            <span style="font-size: 0.76rem; color: #64748b;">Quantum coordinates (n, l, m<sub>l</sub>, m<sub>s</sub>) for the last entered electron</span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; text-align: center;">
+            <div style="background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; padding: 0.75rem 0.25rem;">
+              <div style="font-size: 0.7rem; font-weight: 700; color: #0369a1;">Principal (n)</div>
+              <div id="qNumN" style="font-size: 1.45rem; font-weight: 900; color: #0284c7;">3</div>
+              <div style="font-size: 0.65rem; color: #64748b;">Energy Level</div>
+            </div>
+            <div style="background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; padding: 0.75rem 0.25rem;">
+              <div style="font-size: 0.7rem; font-weight: 700; color: #0369a1;">Azimuthal (l)</div>
+              <div id="qNumL" style="font-size: 1.45rem; font-weight: 900; color: #0284c7;">2</div>
+              <div id="qNumLSub" style="font-size: 0.65rem; color: #64748b;">d-subshell</div>
+            </div>
+            <div style="background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; padding: 0.75rem 0.25rem;">
+              <div style="font-size: 0.7rem; font-weight: 700; color: #0369a1;">Magnetic (m<sub>l</sub>)</div>
+              <div id="qNumMl" style="font-size: 1.45rem; font-weight: 900; color: #0284c7;">-2</div>
+              <div style="font-size: 0.65rem; color: #64748b;">Spatial Orbital</div>
+            </div>
+            <div style="background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; padding: 0.75rem 0.25rem;">
+              <div style="font-size: 0.7rem; font-weight: 700; color: #0369a1;">Spin (m<sub>s</sub>)</div>
+              <div id="qNumMs" style="font-size: 1.45rem; font-weight: 900; color: #0284c7;">-1/2</div>
+              <div style="font-size: 0.65rem; color: #64748b;">Spin Direction</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD: Slater's Effective Nuclear Charge & Solid State -->
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 1.75rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);">
+          <div style="border-bottom: 2px solid #f1f5f9; padding-bottom: 0.65rem; margin-bottom: 1.25rem;">
+            <h2 style="font-size: 0.95rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #0f172a; margin: 0;">
+              Slater's Rules &amp; Solid State Physics
+            </h2>
+            <span style="font-size: 0.76rem; color: #64748b;">Coulombic screening, term symbols, and crystal packing</span>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-size: 0.7rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Slater's Effective Charge (Z_eff)</div>
+                <div id="dispSlaterZeff" style="font-size: 1.15rem; font-weight: 800; color: #0f172a; font-family: monospace;">Z_eff = 6.25 (S = 19.75)</div>
+              </div>
+              <span style="font-size: 0.7rem; font-weight: 700; color: #0284c7; background: #e0f2fe; padding: 0.2rem 0.5rem; border-radius: 4px;">Z - S</span>
+            </div>
+
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-size: 0.7rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Ground Term Symbol</div>
+                <div id="dispTermSymbol" style="font-size: 1.15rem; font-weight: 800; color: #0f172a; font-family: monospace;">⁵D₄</div>
+              </div>
+              <span style="font-size: 0.7rem; font-weight: 700; color: #64748b;">²ˢ⁺¹L_J</span>
+            </div>
+
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-size: 0.7rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Elemental Crystal Lattice</div>
+                <div id="dispCrystalStructure" style="font-size: 0.9rem; font-weight: 800; color: #0f172a;">Body-Centered Cubic (BCC)</div>
+              </div>
+              <div id="dispCoordinationNumber" style="font-size: 0.75rem; font-weight: 700; color: #475569;">CN: 8</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN: HUD Configurations, Dynamic SVG Hund Orbital Boxes & Trends -->
+      <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        
+        <!-- Primary Output HUD Card -->
+        <div style="background: #0f172a; border-radius: 14px; padding: 1.75rem 2rem; color: #ffffff; box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.3); border: 1px solid #334155;">
+          
+          <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.5rem;">
+            <span style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #38bdf8;">
+              Determined Configuration
+            </span>
+            <div style="display: flex; gap: 0.4rem;">
+              <span id="badgeMagnetism" style="font-size: 0.72rem; font-weight: 800; padding: 2px 8px; border-radius: 9999px; background: #0284c7; color: #ffffff;">
+                Paramagnetic (4 Unpaired e⁻)
+              </span>
+              <span id="badgeTotalElectrons" style="font-size: 0.72rem; font-weight: 800; padding: 2px 8px; border-radius: 9999px; background: #334155; color: #ffffff;">
+                26 Electrons
+              </span>
+            </div>
+          </div>
+
+          <!-- Noble Gas Condensed Shorthand -->
+          <div style="margin-top: 1rem;">
+            <div style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: #94a3b8; margin-bottom: 0.2rem;">
+              Noble Gas Condensed Shorthand:
+            </div>
+            <div id="dispHudNoble" style="font-size: 1.85rem; font-weight: 900; color: #38bdf8; font-family: ui-monospace, monospace; line-height: 1.2;">
+              [Ar] 3d⁶ 4s²
+            </div>
+          </div>
+
+          <!-- Full Expanded Configuration -->
+          <div style="margin-top: 1rem;">
+            <div style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: #94a3b8; margin-bottom: 0.2rem;">
+              Full Expanded Configuration:
+            </div>
+            <div id="dispHudFull" style="font-size: 1.05rem; font-weight: 700; color: #f8fafc; font-family: ui-monospace, monospace; line-height: 1.5; word-break: break-all;">
+              1s² 2s² 2p⁶ 3s² 3p⁶ 3d⁶ 4s²
+            </div>
+          </div>
+
+          <!-- Magnetic Moment & Unpaired Summary -->
+          <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid #334155; display: flex; justify-content: space-between; font-size: 0.8rem; color: #94a3b8; font-family: monospace;">
+            <span>Spin-Only Moment: <strong id="dispMagneticMoment" style="color: #38bdf8;">4.90 BM</strong></span>
+            <span>Total Unpaired e⁻: <strong id="dispUnpairedCount" style="color: #f8fafc;">4</strong></span>
+          </div>
+
+        </div>
+
+        <!-- DYNAMIC SVG HUND'S RULE ORBITAL BOX DIAGRAM VIEWER -->
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem;">
+            <div>
+              <div style="font-size: 0.88rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #0f172a;">
+                Dynamic Hund's Rule Orbital Boxes
+              </div>
+              <span style="font-size: 0.75rem; color: #64748b;">Subshells populated by degenerate m<sub>l</sub> spin states (&uarr;&darr;)</span>
+            </div>
+            <button id="btnCopyOrbitalDiagram" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.65rem; border-radius: 5px; font-size: 0.72rem; font-weight: 700; cursor: pointer; color: #334155;">
+              Copy Diagram
+            </button>
+          </div>
+
+          <!-- Dynamic Orbital Container -->
+          <div id="orbitalDiagramContainer" style="display: flex; flex-direction: column; gap: 0.85rem; max-height: 420px; overflow-y: auto; padding: 0.5rem; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
+            <!-- Dynamically populated subshell box rows -->
+          </div>
+        </div>
+
+        <!-- CARD: Thermodynamic Ionization & Electron Affinity Trends -->
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);">
+          <div style="font-size: 0.88rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #0f172a; margin-bottom: 0.85rem;">
+            Thermodynamics &amp; Periodic Metrics
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.65rem; margin-bottom: 1rem;">
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.6rem 0.75rem;">
+              <span style="color: #64748b; font-size: 0.68rem; font-weight: 700; text-transform: uppercase;">1st IE (kJ/mol)</span>
+              <div id="dispIE1" style="font-weight: 800; color: #0f172a; font-family: monospace;">762.5</div>
+            </div>
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.6rem 0.75rem;">
+              <span style="color: #64748b; font-size: 0.68rem; font-weight: 700; text-transform: uppercase;">2nd IE (kJ/mol)</span>
+              <div id="dispIE2" style="font-weight: 800; color: #0f172a; font-family: monospace;">1561.9</div>
+            </div>
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.6rem 0.75rem;">
+              <span style="color: #64748b; font-size: 0.68rem; font-weight: 700; text-transform: uppercase;">3rd IE (kJ/mol)</span>
+              <div id="dispIE3" style="font-weight: 800; color: #0f172a; font-family: monospace;">2957.0</div>
+            </div>
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.6rem 0.75rem;">
+              <span style="color: #64748b; font-size: 0.68rem; font-weight: 700; text-transform: uppercase;">Electron Affinity</span>
+              <div id="dispEA" style="font-weight: 800; color: #0f172a; font-family: monospace;">15.7 kJ/mol</div>
+            </div>
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.6rem 0.75rem;">
+              <span style="color: #64748b; font-size: 0.68rem; font-weight: 700; text-transform: uppercase;">Electronegativity</span>
+              <div id="dispEN" style="font-weight: 800; color: #0f172a; font-family: monospace;">1.83 (Pauling)</div>
+            </div>
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.6rem 0.75rem;">
+              <span style="color: #64748b; font-size: 0.68rem; font-weight: 700; text-transform: uppercase;">Covalent Radius</span>
+              <div id="dispRadius" style="font-weight: 800; color: #0f172a; font-family: monospace;">132 pm</div>
+            </div>
+          </div>
+
+          <!-- Academic Action & Copy Bar -->
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; border-top: 1px solid #f1f5f9; padding-top: 0.85rem;">
+            <span style="font-size: 0.78rem; font-weight: 800; text-transform: uppercase; color: #475569;">Export Options:</span>
+            <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+              <button id="btnCopyResult" type="button" style="background: #0284c7; border: none; padding: 0.3rem 0.65rem; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff;">Copy Shorthand</button>
+              <button id="btnCopyHomework" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.3rem 0.6rem; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #334155;">Copy Steps</button>
+              <button id="btnCopyLatex" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.3rem 0.6rem; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #334155;">LaTeX</button>
+              <button id="toggleCiteBtn" type="button" style="background: #e0f2fe; border: 1px solid #7dd3fc; padding: 0.3rem 0.65rem; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #0369a1;">Cite</button>
+            </div>
+          </div>
+
+          <!-- Academic Citation Drawer -->
+          <div id="citeDrawer" style="display: none; margin-top: 1rem; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 0.85rem; background: #f8fafc;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.4rem;">
+              <div style="display: flex; gap: 0.3rem; flex-wrap: wrap;">
+                <button type="button" class="inline-cite-tab" data-format="bibtex" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 700; border-radius: 5px; border: 1px solid #0f172a; background: #0f172a; color: #fff; cursor: pointer;">BibTeX</button>
+                <button type="button" class="inline-cite-tab" data-format="acs" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">ACS</button>
+                <button type="button" class="inline-cite-tab" data-format="rsc" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">RSC</button>
+                <button type="button" class="inline-cite-tab" data-format="nature" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Nature</button>
+              </div>
+              <button id="inlineCopyCiteBtn" type="button" style="padding: 0.25rem 0.65rem; font-size: 0.75rem; font-weight: 700; border-radius: 5px; background: #0284c7; color: #fff; border: none; cursor: pointer;">Copy</button>
+            </div>
+            <pre id="inlineCiteOutput" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.75rem; font-size: 0.75rem; font-family: ui-monospace, monospace; color: #0f172a; white-space: pre-wrap; word-break: break-all; margin: 0; line-height: 1.45;"></pre>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- EDITORIAL & METHODOLOGICAL KNOWLEDGE SECTION (E-E-A-T) -->
+    <article style="border-top: 1px solid #e2e8f0; padding-top: 3.5rem; line-height: 1.85; color: #334155;">
+      
+      <h2 style="font-size: 1.85rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem; letter-spacing: -0.02em;">
+        Theoretical Foundations: Atomic Orbitals &amp; Quantum Physics
+      </h2>
+      <p>
+        The electronic structure of an isolated atom describes the spatial and energetic distribution of its electrons within the electrostatic potential generated by the atomic nucleus. This distribution is dictated by quantum mechanics through the Schrödinger equation, yielding discrete quantum states characterized by four quantum numbers ($n, l, m_l, m_s$).
+      </p>
+
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
+        1. The Three Fundamental Principles of Ground-State Orbital Filling
+      </h3>
+      <ul style="margin: 0.5rem 0 1.5rem 1.5rem;">
+        <li><strong>Aufbau Principle (Madelung Rule):</strong> Electrons occupy subshells in order of increasing $(n + l)$ energy values ($1s &lt; 2s &lt; 2p &lt; 3s &lt; 3p &lt; 4s &lt; 3d \dots$). When two subshells have the same $(n + l)$ sum, the orbital with the lower principal quantum number $n$ fills first.</li>
+        <li><strong>Pauli Exclusion Principle:</strong> No two electrons in an atom can share the identical set of all four quantum numbers. Since a single spatial orbital is defined by $(n, l, m_l)$, each orbital can hold a maximum of two electrons, which must have antiparallel spins ($m_s = +1/2$ and $-1/2$).</li>
+        <li><strong>Hund's Rule of Maximum Multiplicity:</strong> Within a set of degenerate orbitals (orbitals possessing the identical energy, such as the three $p$ orbitals or five $d$ orbitals), electrons occupy each orbital singly with parallel spins before any pairing occurs, thereby minimizing Coulombic electron-electron repulsion.</li>
+      </ul>
+
+      <!-- Worked Benchmark Scenario -->
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2.5rem; margin-bottom: 0.75rem;">
+        2. Worked Analytical Scenario: Transition Metal Ionization of Iron (Fe to Fe²⁺)
+      </h3>
+      <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1.25rem; margin: 1.25rem 0;">
+        <p style="margin: 0 0 0.5rem; font-weight: 700; color: #0f172a;">Problem Statement:</p>
+        <p style="margin: 0 0 0.75rem; font-size: 0.92rem; color: #475569;">
+          Write the ground-state electron configuration of neutral iron (Fe, Z = 26) and explain the formation of the ferrous ion (Fe²⁺) using the outer-shell-first ionization rule.
+        </p>
+
+        <p style="margin: 0 0 0.4rem; font-weight: 700; color: #0f172a;">Step 1: Neutral Ground State (Fe, Z = 26)</p>
+        <p style="margin: 0 0 0.75rem; font-size: 0.92rem; color: #475569; font-family: monospace;">
+          Aufbau sequence: 1s² 2s² 2p⁶ 3s² 3p⁶ 4s² 3d⁶<br />
+          Noble Gas Shorthand: [Ar] 3d⁶ 4s²
+        </p>
+
+        <p style="margin: 0 0 0.4rem; font-weight: 700; color: #0f172a;">Step 2: Ionization to Fe²⁺ (Removal of 2 Electrons)</p>
+        <p style="margin: 0 0 0.75rem; font-size: 0.92rem; color: #475569; font-family: monospace;">
+          Common student error: Stripping from 3d to give [Ar] 3d⁴ 4s² (INCORRECT).<br />
+          Correct Rule: Electrons are removed from the highest principal quantum shell (n = 4) first.<br />
+          Two electrons are lost from 4s: 4s² &rarr; 4s⁰.
+        </p>
+
+        <p style="margin: 0; font-size: 0.92rem; color: #059669; font-weight: 700;">
+          Final Configuration: Fe²⁺ = [Ar] 3d⁶ (Paramagnetic, 4 unpaired electrons).
+        </p>
+      </div>
+
+      <!-- FAQ Accordion -->
+      <h3 style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-top: 3rem; margin-bottom: 1.25rem;">
+        Frequently Asked Questions: Electron Configurations
+      </h3>
+
+      <div style="display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 2rem;">
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Why do transition metal cations lose 4s electrons before 3d electrons?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Although the 4s subshell is filled before 3d in neutral atoms according to the Aufbau principle, once the 3d orbitals contain electrons, interelectronic repulsion causes the 3d orbitals to drop lower in energy than 4s. Therefore, during ionization, electrons are always removed from the outermost principal quantum shell (n=4) first.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What causes Aufbau ground-state anomalies in Chromium and Copper?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Chromium ([Ar] 3d5 4s1) and Copper ([Ar] 3d10 4s1) promote an electron from 4s to 3d because exactly half-filled (d5) and completely filled (d10) subshells possess maximum quantum mechanical exchange energy and spherical electronic symmetry, which overcomes the energetic cost of promotion.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How does Hund's Rule govern orbital filling?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Hund's Rule of Maximum Multiplicity dictates that when filling degenerate orbitals of equal energy (such as px, py, pz), electrons must occupy each orbital singly with parallel spins (+1/2) before pairing with opposite spins (-1/2) to minimize interelectronic electrostatic repulsion.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How is effective nuclear charge (Zeff) calculated using Slater's Rules?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Slater's Rules calculate the shielding constant (S) by grouping orbitals into (1s), (2s,2p), (3s,3p), (3d), etc. Electrons in the same group contribute 0.35 each, electrons in the (n-1) shell contribute 0.85 each, and electrons in deeper shells contribute 1.00 each. The effective nuclear charge is then determined by Zeff = Z - S.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What is the difference between paramagnetic and diamagnetic species?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            A species is paramagnetic if it possesses one or more unpaired electrons, creating a net magnetic dipole moment that is weakly attracted into external magnetic fields. A species is diamagnetic if all electrons are completely paired in opposite spins, causing it to be weakly repelled by magnetic fields.
+          </p>
+        </details>
+      </div>
+
+    </article>
+
+    <!-- Upstream & Downstream Studios Hub -->
+    <section style="max-width: 900px; margin: 3rem auto 1.5rem; padding: 1.25rem 1.5rem; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; box-sizing: border-box;">
+      <h3 style="margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 0.5rem;">
+        <span>🔗</span> Upstream &amp; Downstream Quantum &amp; Chemical Studios
+      </h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
+        <a href="/sig-figs" style="display: block; padding: 1rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
+          <div style="font-weight: 700; font-size: 0.92rem; color: #0ea5e9; margin-bottom: 0.35rem;">Significant Figures Studio &rarr;</div>
+          <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">
+            Count sig figs with visual digit anatomy, solve multi-step expressions, and round precision.
+          </div>
+        </a>
+        <a href="/molar-mass" style="display: block; padding: 1rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
+          <div style="font-weight: 700; font-size: 0.92rem; color: #f59e0b; margin-bottom: 0.35rem;">Molar Mass &amp; Elemental Studio &rarr;</div>
+          <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">
+            Universal molecular weights, mass percentages, and two-way grams to moles conversions.
+          </div>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <style>
+    .preset-pill {
+      transition: all 0.15s ease;
+    }
+    .preset-pill:hover {
+      background: #e0f2fe !important;
+      border-color: #0284c7 !important;
+      color: #0284c7 !important;
+    }
+    .preset-pill.active {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+      border-color: #0284c7 !important;
+    }
+  </style>
+
+  <script>
+    import {
+      solveElectronConfiguration,
+      ELEMENTS_DB,
+      type ConfigResult
+    } from '../utils/electronConfigMath';
+
+    let lastResult: ConfigResult | null = null;
+
+    // DOM Elements - Inputs
+    const inpElementQuery = document.getElementById('inpElementQuery') as HTMLInputElement;
+    const rngCharge = document.getElementById('rngCharge') as HTMLInputElement;
+    const lblActiveCharge = document.getElementById('lblActiveCharge')!;
+    const btnChargeMinus = document.getElementById('btnChargeMinus')!;
+    const btnChargePlus = document.getElementById('btnChargePlus')!;
+    const elementAlert = document.getElementById('elementAlert')!;
+
+    // DOM Elements - Metadata
+    const dispMetaBlock = document.getElementById('dispMetaBlock')!;
+    const dispMetaPeriodGroup = document.getElementById('dispMetaPeriodGroup')!;
+    const dispMetaValenceCore = document.getElementById('dispMetaValenceCore')!;
+    const dispMetaMass = document.getElementById('dispMetaMass')!;
+
+    // DOM Elements - HUD
+    const dispHudNoble = document.getElementById('dispHudNoble')!;
+    const dispHudFull = document.getElementById('dispHudFull')!;
+    const badgeMagnetism = document.getElementById('badgeMagnetism')!;
+    const badgeTotalElectrons = document.getElementById('badgeTotalElectrons')!;
+    const dispMagneticMoment = document.getElementById('dispMagneticMoment')!;
+    const dispUnpairedCount = document.getElementById('dispUnpairedCount')!;
+
+    // DOM Elements - Quantum
+    const qNumN = document.getElementById('qNumN')!;
+    const qNumL = document.getElementById('qNumL')!;
+    const qNumLSub = document.getElementById('qNumLSub')!;
+    const qNumMl = document.getElementById('qNumMl')!;
+    const qNumMs = document.getElementById('qNumMs')!;
+
+    // DOM Elements - Slater & Solid
+    const dispSlaterZeff = document.getElementById('dispSlaterZeff')!;
+    const dispTermSymbol = document.getElementById('dispTermSymbol')!;
+    const dispCrystalStructure = document.getElementById('dispCrystalStructure')!;
+    const dispCoordinationNumber = document.getElementById('dispCoordinationNumber')!;
+
+    // DOM Elements - Orbital Diagram & Trends
+    const orbitalDiagramContainer = document.getElementById('orbitalDiagramContainer')!;
+    const dispIE1 = document.getElementById('dispIE1')!;
+    const dispIE2 = document.getElementById('dispIE2')!;
+    const dispIE3 = document.getElementById('dispIE3')!;
+    const dispEA = document.getElementById('dispEA')!;
+    const dispEN = document.getElementById('dispEN')!;
+    const dispRadius = document.getElementById('dispRadius')!;
+
+    // Preset Pills
+    const presetPills = document.querySelectorAll('.preset-pill');
+
+    function updateWorkbench() {
+      elementAlert.style.display = 'none';
+      const rawQuery = inpElementQuery.value.trim();
+      const sliderCharge = parseInt(rngCharge.value, 10);
+
+      // Assemble query string honoring charge slider if user typed bare symbol
+      let fullQuery = rawQuery;
+      if (sliderCharge !== 0 && !/[+-]/.test(rawQuery)) {
+        fullQuery = `${rawQuery}${sliderCharge > 0 ? `+${sliderCharge}` : sliderCharge}`;
+      }
+
+      const res = solveElectronConfiguration(fullQuery);
+      lastResult = res;
+
+      if (!res.isValid) {
+        elementAlert.textContent = res.errorMessage || 'Unknown element or configuration.';
+        elementAlert.style.display = 'block';
+        return;
+      }
+
+      // Sync Charge UI
+      rngCharge.value = res.charge.toString();
+      if (res.charge === 0) {
+        lblActiveCharge.textContent = '0 (Neutral Atom)';
+      } else if (res.charge > 0) {
+        lblActiveCharge.textContent = `+${res.charge} (Cation)`;
+      } else {
+        lblActiveCharge.textContent = `${res.charge} (Anion)`;
+      }
+
+      // Metadata Display
+      const elemData = ELEMENTS_DB[res.symbol];
+      dispMetaBlock.textContent = `${elemData.block}-block (${elemData.block === 'd' ? 'Transition' : (elemData.block === 'f' ? 'Inner Transition' : 'Main Group')})`;
+      dispMetaPeriodGroup.textContent = `Period ${elemData.period} • Group ${elemData.group}`;
+      dispMetaValenceCore.textContent = `${res.coreElectrons} Core / ${res.valenceElectrons} Valence`;
+      dispMetaMass.textContent = `${elemData.atomicMass} u`;
+
+      // HUD Output
+      dispHudNoble.textContent = res.nobleConfigString;
+      dispHudFull.textContent = res.fullConfigString;
+      badgeMagnetism.textContent = `${res.magneticState} (${res.unpairedElectrons} Unpaired e⁻)`;
+      badgeMagnetism.style.backgroundColor = res.magneticState === 'Paramagnetic' ? '#0284c7' : '#059669';
+      badgeTotalElectrons.textContent = `${res.totalElectrons} Electrons`;
+      dispMagneticMoment.textContent = `${res.magneticMomentBM} BM`;
+      dispUnpairedCount.textContent = res.unpairedElectrons.toString();
+
+      // Quantum Numbers
+      if (res.differentiatingQuantumNumbers) {
+        const q = res.differentiatingQuantumNumbers;
+        qNumN.textContent = q.n.toString();
+        qNumL.textContent = q.l.toString();
+        qNumLSub.textContent = `${q.orbitalDesignation}-subshell`;
+        qNumMl.textContent = q.ml > 0 ? `+${q.ml}` : q.ml.toString();
+        qNumMs.textContent = q.ms;
+      } else {
+        qNumN.textContent = '-';
+        qNumL.textContent = '-';
+        qNumLSub.textContent = '-';
+        qNumMl.textContent = '-';
+        qNumMs.textContent = '-';
+      }
+
+      // Slater & Solid State
+      dispSlaterZeff.textContent = `Z_eff = ${res.effectiveNuclearChargeZeff} (S = ${res.slaterScreeningS})`;
+      dispTermSymbol.textContent = res.groundTermSymbol || 'N/A';
+      dispCrystalStructure.textContent = res.crystalStructure || 'N/A';
+      dispCoordinationNumber.textContent = res.coordinationNumber ? `CN: ${res.coordinationNumber}` : 'CN: N/A';
+
+      // Periodic Trends
+      dispIE1.textContent = res.ionizationEnergies.ie1 ? `${res.ionizationEnergies.ie1}` : 'N/A';
+      dispIE2.textContent = res.ionizationEnergies.ie2 ? `${res.ionizationEnergies.ie2}` : 'N/A';
+      dispIE3.textContent = res.ionizationEnergies.ie3 ? `${res.ionizationEnergies.ie3}` : 'N/A';
+      dispEA.textContent = res.electronAffinity !== null ? `${res.electronAffinity} kJ/mol` : 'N/A';
+      dispEN.textContent = res.electronegativity !== null ? `${res.electronegativity}` : 'N/A';
+      dispRadius.textContent = res.covalentRadius ? `${res.covalentRadius} pm` : 'N/A';
+
+      // RENDER DYNAMIC SVG HUND'S RULE ORBITAL BOXES
+      orbitalDiagramContainer.innerHTML = '';
+      res.subshells.forEach(sub => {
+        const row = document.createElement('div');
+        row.style.display = 'flex';
+        row.style.alignItems = 'center';
+        row.style.gap = '0.75rem';
+        row.style.padding = '0.35rem 0.5rem';
+        row.style.background = '#ffffff';
+        row.style.borderRadius = '6px';
+        row.style.border = '1px solid #e2e8f0';
+
+        // Subshell Label
+        const label = document.createElement('div');
+        label.style.width = '38px';
+        label.style.fontWeight = '800';
+        label.style.fontFamily = 'monospace';
+        label.style.color = '#0284c7';
+        label.style.fontSize = '0.9rem';
+        label.textContent = sub.subshell;
+        row.appendChild(label);
+
+        // Boxes Row
+        const boxesRow = document.createElement('div');
+        boxesRow.style.display = 'flex';
+        boxesRow.style.gap = '4px';
+
+        sub.boxes.forEach(box => {
+          const svgBox = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+          svgBox.setAttribute('width', '28');
+          svgBox.setAttribute('height', '32');
+          svgBox.setAttribute('viewBox', '0 0 28 32');
+          svgBox.style.borderRadius = '3px';
+          svgBox.style.background = '#f8fafc';
+          svgBox.style.border = '1.5px solid #64748b';
+
+          // Spin-up arrow
+          if (box.up) {
+            const upPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            upPath.setAttribute('d', 'M 9 24 L 9 8 M 9 8 L 6 12');
+            upPath.setAttribute('stroke', '#0284c7');
+            upPath.setAttribute('stroke-width', '2');
+            upPath.setAttribute('stroke-linecap', 'round');
+            upPath.setAttribute('stroke-linejoin', 'round');
+            svgBox.appendChild(upPath);
+          }
+
+          // Spin-down arrow
+          if (box.down) {
+            const downPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            downPath.setAttribute('d', 'M 19 8 L 19 24 M 19 24 L 22 20');
+            downPath.setAttribute('stroke', '#dc2626');
+            downPath.setAttribute('stroke-width', '2');
+            downPath.setAttribute('stroke-linecap', 'round');
+            downPath.setAttribute('stroke-linejoin', 'round');
+            svgBox.appendChild(downPath);
+          }
+
+          boxesRow.appendChild(svgBox);
+        });
+
+        row.appendChild(boxesRow);
+
+        // Subshell Electrons Count
+        const countBadge = document.createElement('div');
+        countBadge.style.fontSize = '0.72rem';
+        countBadge.style.fontWeight = '700';
+        countBadge.style.color = '#64748b';
+        countBadge.textContent = `(${sub.electrons} e⁻)`;
+        row.appendChild(countBadge);
+
+        orbitalDiagramContainer.appendChild(row);
+      });
+    }
+
+    // Input Listeners
+    inpElementQuery.addEventListener('input', () => {
+      // If user typed a charge explicitly into text (e.g. Fe+2), sync slider
+      const match = inpElementQuery.value.trim().match(/[+-](\d+)?$/);
+      if (match) {
+        const sign = match[0][0];
+        const num = match[1] ? parseInt(match[1], 10) : 1;
+        rngCharge.value = (sign === '+' ? num : -num).toString();
+      }
+      updateWorkbench();
+    });
+
+    rngCharge.addEventListener('input', () => {
+      // Remove any explicit charge from text input when slider changes
+      inpElementQuery.value = inpElementQuery.value.replace(/([+-]\d*|\d+[+-])$/, '');
+      updateWorkbench();
+    });
+
+    btnChargeMinus.addEventListener('click', () => {
+      let val = parseInt(rngCharge.value, 10);
+      if (val > -4) {
+        rngCharge.value = (val - 1).toString();
+        inpElementQuery.value = inpElementQuery.value.replace(/([+-]\d*|\d+[+-])$/, '');
+        updateWorkbench();
+      }
+    });
+
+    btnChargePlus.addEventListener('click', () => {
+      let val = parseInt(rngCharge.value, 10);
+      if (val < 7) {
+        rngCharge.value = (val + 1).toString();
+        inpElementQuery.value = inpElementQuery.value.replace(/([+-]\d*|\d+[+-])$/, '');
+        updateWorkbench();
+      }
+    });
+
+    // Preset Pills
+    presetPills.forEach(pill => {
+      pill.addEventListener('click', (e) => {
+        const target = e.currentTarget as HTMLElement;
+        presetPills.forEach(p => p.classList.remove('active'));
+        target.classList.add('active');
+
+        const q = target.dataset.query || 'Fe';
+        inpElementQuery.value = q;
+        rngCharge.value = '0';
+        updateWorkbench();
+      });
+    });
+
+    // Reset Defaults
+    document.getElementById('btnResetDefault')?.addEventListener('click', () => {
+      inpElementQuery.value = 'Fe';
+      rngCharge.value = '0';
+      presetPills.forEach(p => p.classList.remove('active'));
+      presetPills[0]?.classList.add('active');
+      updateWorkbench();
+    });
+
+    // Share URL
+    document.getElementById('btnShareUrl')?.addEventListener('click', async () => {
+      const p = new URLSearchParams();
+      p.set('elem', inpElementQuery.value.trim());
+      if (rngCharge.value !== '0') p.set('charge', rngCharge.value);
+      window.history.replaceState({}, '', `${window.location.pathname}?${p.toString()}`);
+      await navigator.clipboard.writeText(window.location.href);
+      alert('Electron configuration calculation link copied to clipboard.');
+    });
+
+    // Copy Shorthand
+    document.getElementById('btnCopyResult')?.addEventListener('click', async () => {
+      if (lastResult) {
+        await navigator.clipboard.writeText(lastResult.nobleConfigString);
+        alert('Noble gas condensed configuration copied to clipboard.');
+      }
+    });
+
+    // Copy Homework Steps
+    document.getElementById('btnCopyHomework')?.addEventListener('click', async () => {
+      if (lastResult) {
+        const text = `Electron Configuration Analysis for: ${lastResult.name} (${lastResult.symbol})\n` +
+          `Atomic Number (Z): ${lastResult.z}\n` +
+          `Charge: ${lastResult.charge > 0 ? `+${lastResult.charge}` : lastResult.charge}\n` +
+          `Total Electrons: ${lastResult.totalElectrons}\n` +
+          `Noble Gas Form: ${lastResult.nobleConfigString}\n` +
+          `Full Expanded: ${lastResult.fullConfigString}\n\n` +
+          `Derivation Steps:\n` + lastResult.homeworkSteps.map(s => `• ${s}`).join('\n') +
+          `\nMagnetic State: ${lastResult.magneticState} (${lastResult.unpairedElectrons} unpaired electrons, ${lastResult.magneticMomentBM} BM)\n` +
+          `Slater's Effective Nuclear Charge Z_eff: ${lastResult.effectiveNuclearChargeZeff} (S = ${lastResult.slaterScreeningS})`;
+        await navigator.clipboard.writeText(text);
+        alert('Step-by-step homework derivation copied to clipboard.');
+      }
+    });
+
+    // Copy LaTeX
+    document.getElementById('btnCopyLatex')?.addEventListener('click', async () => {
+      if (lastResult) {
+        await navigator.clipboard.writeText(lastResult.latexBlock);
+        alert('LaTeX derivation block copied to clipboard.');
+      }
+    });
+
+    // Copy Orbital Diagram (Unicode Text)
+    document.getElementById('btnCopyOrbitalDiagram')?.addEventListener('click', async () => {
+      if (lastResult) {
+        let diagramText = `Orbital Box Diagram for ${lastResult.symbol} (${lastResult.nobleConfigString}):\n`;
+        lastResult.subshells.forEach(s => {
+          diagramText += `${s.subshell}: `;
+          s.boxes.forEach(b => {
+            if (b.up && b.down) diagramText += '[⥮] ';
+            else if (b.up) diagramText += '[↿ ] ';
+            else if (b.down) diagramText += '[ ⇂] ';
+            else diagramText += '[  ] ';
+          });
+          diagramText += `\n`;
+        });
+        await navigator.clipboard.writeText(diagramText);
+        alert('Unicode orbital box diagram copied to clipboard.');
+      }
+    });
+
+    // CSV Exporter
+    document.getElementById('btnExportCsv')?.addEventListener('click', () => {
+      if (!lastResult) return;
+      let csv = 'Property,Value\n';
+      csv += `"Element","${lastResult.name} (${lastResult.symbol})"\n`;
+      csv += `"AtomicNumber",${lastResult.z}\n`;
+      csv += `"Charge",${lastResult.charge}\n`;
+      csv += `"TotalElectrons",${lastResult.totalElectrons}\n`;
+      csv += `"NobleGasForm","${lastResult.nobleConfigString}"\n`;
+      csv += `"FullExpandedForm","${lastResult.fullConfigString}"\n`;
+      csv += `"MagneticState","${lastResult.magneticState}"\n`;
+      csv += `"UnpairedElectrons",${lastResult.unpairedElectrons}\n`;
+      csv += `"SpinOnlyMomentBM",${lastResult.magneticMomentBM}\n`;
+      csv += `"SlaterScreeningConstantS",${lastResult.slaterScreeningS}\n`;
+      csv += `"SlaterZeff",${lastResult.effectiveNuclearChargeZeff}\n`;
+      csv += `"FirstIE_kJ_mol",${lastResult.ionizationEnergies.ie1 || 'N/A'}\n`;
+      csv += `"ElectronAffinity_kJ_mol",${lastResult.electronAffinity || 'N/A'}\n`;
+      csv += `"Electronegativity",${lastResult.electronegativity || 'N/A'}\n`;
+
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${lastResult.symbol}_electron_config.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    // Citation Drawer
+    const citeDrawer = document.getElementById('citeDrawer')!;
+    const toggleCiteBtn = document.getElementById('toggleCiteBtn')!;
+    const inlineCiteOutput = document.getElementById('inlineCiteOutput')!;
+    const inlineTabs = document.querySelectorAll('.inline-cite-tab');
+    const inlineCopyBtn = document.getElementById('inlineCopyCiteBtn')!;
+    const doi = "10.5281/zenodo.23059466";
+    const year = new Date().getFullYear();
+
+    const citations: Record<string, string> = {
+      bibtex: `@software{khan_chemistrydesk_electron_config_${year},
+  author        = {Khan, Bilal},
+  title         = {ChemistryDesk: Electron Configuration & Orbital Physics Studio},
+  year          = {${year}},
+  version       = {v1.0.1},
+  publisher     = {Zenodo},
+  doi           = {${doi}},
+  url           = {https://chemistrycal.com/electron-configuration}
+}`,
+      acs: `Khan, B. ChemistryDesk: Electron Configuration & Orbital Physics Studio, version 1.0.1; Zenodo, ${year}. https://doi.org/${doi}.`,
+      rsc: `B. Khan, ChemistryDesk: Electron Configuration & Orbital Physics Studio, version 1.0.1, Zenodo, ${year}, DOI: ${doi}.`,
+      nature: `Khan, B. ChemistryDesk: Electron Configuration & Orbital Physics Studio. Zenodo https://doi.org/${doi} (${year}).`
+    };
+
+    let activeFormat = 'bibtex';
+    function updateCite() {
+      inlineCiteOutput.textContent = citations[activeFormat] || citations['bibtex'];
+    }
+
+    toggleCiteBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const isHidden = citeDrawer.style.display === 'none';
+      citeDrawer.style.display = isHidden ? 'block' : 'none';
+      if (isHidden) updateCite();
+    });
+
+    inlineTabs.forEach(tab => {
+      tab.addEventListener('click', (e) => {
+        e.preventDefault();
+        inlineTabs.forEach(t => {
+          (t as HTMLElement).style.background = '#fff';
+          (t as HTMLElement).style.color = '#334155';
+          (t as HTMLElement).style.borderColor = '#cbd5e1';
+          (t as HTMLElement).style.fontWeight = '600';
+        });
+        const el = tab as HTMLElement;
+        el.style.background = '#0f172a';
+        el.style.color = '#fff';
+        el.style.borderColor = '#0f172a';
+        el.style.fontWeight = '700';
+        activeFormat = el.dataset.format || 'bibtex';
+        updateCite();
+      });
+    });
+
+    inlineCopyBtn.addEventListener('click', async () => {
+      await navigator.clipboard.writeText(citations[activeFormat]);
+      alert('Academic citation copied.');
+    });
+
+    // Check URL State on Load
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('elem')) {
+      inpElementQuery.value = urlParams.get('elem')!;
+    }
+    if (urlParams.has('charge')) {
+      rngCharge.value = urlParams.get('charge')!;
+    }
+
+    updateCite();
+    updateWorkbench();
+  </script>
+</BaseLayout>

@@ -175,5 +175,17 @@ export const toolsCatalog: ToolMeta[] = [
     priority: '1.0',
     changefreq: 'weekly',
     lastmod: '2026-10-11'
+  },
+  {
+    id: 'electron-configuration',
+    title: 'Electron Configuration & Orbital Physics Studio',
+    path: '/electron-configuration',
+    icon: '⚛️',
+    badge: 'Gateway Core',
+    badgeColor: '#8b5cf6',
+    description: 'Interactive subshell orbital box diagrams, quantum numbers, noble gas shorthand, cation/anion ionization, and Slater\'s effective nuclear charge across all 118 elements.',
+    priority: '1.0',
+    changefreq: 'weekly',
+    lastmod: '2026-10-11'
   }
 ];
