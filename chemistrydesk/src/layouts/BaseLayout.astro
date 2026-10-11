@@ -18,6 +18,10 @@ const siteOrigin = "https://chemistrycal.com";
 const cleanPath = canonicalPath.split('?')[0];
 const fullCanonicalUrl = new URL(cleanPath, siteOrigin).href;
 
+// Detect tool pages dynamically via prop or route
+const toolRoutes = ['/molarity', '/dilution', '/scherrer'];
+const isToolPage = isTool || toolRoutes.some(route => cleanPath.startsWith(route));
+
 // Dynamic breadcrumb generation for search engines
 const pathSegments = cleanPath.split('/').filter(Boolean);
 const breadcrumbItems = [
@@ -42,39 +46,66 @@ const breadcrumbItems = [
   })
 ];
 
-// Global schema graph connecting site, author entity, and navigation
+// Global schema graph connecting site, author entity, navigation, and tools
+const graphNodes: any[] = [
+  {
+    "@type": "WebSite",
+    "@id": "https://chemistrycal.com/#website",
+    "url": "https://chemistrycal.com",
+    "name": "ChemistryDesk",
+    "description": "Research-grade benchtop computational suite and laboratory calculator.",
+    "publisher": {
+      "@id": "https://chemistrycal.com/#author"
+    }
+  },
+  {
+    "@type": "Person",
+    "@id": "https://chemistrycal.com/#author",
+    "name": "Bilal Khan",
+    "jobTitle": "Physical Chemistry Researcher",
+    "url": "https://chemistrycal.com/about",
+    "sameAs": [
+      "https://orcid.org/0009-0006-3082-7043",
+      "https://zenodo.org/records/23059466",
+      "https://github.com/Hadee017",
+      "https://www.wikidata.org/wiki/Q141699332"
+    ]
+  },
+  {
+    "@type": "BreadcrumbList",
+    "@id": `${fullCanonicalUrl}#breadcrumb`,
+    "itemListElement": breadcrumbItems
+  }
+];
+
+// Automatically inject WebApplication node for calculator/laboratory tools
+if (isToolPage) {
+  graphNodes.push({
+    "@type": "WebApplication",
+    "@id": `${fullCanonicalUrl}#app`,
+    "name": title,
+    "url": fullCanonicalUrl,
+    "description": description,
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "All",
+    "browserRequirements": "Requires JavaScript",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "creator": {
+      "@id": "https://chemistrycal.com/#author"
+    },
+    "isPartOf": {
+      "@id": "https://chemistrycal.com/#website"
+    }
+  });
+}
+
 const globalSchemaGraph = {
   "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "WebSite",
-      "@id": "https://chemistrycal.com/#website",
-      "url": "https://chemistrycal.com",
-      "name": "ChemistryDesk",
-      "description": "Research-grade benchtop computational suite and laboratory calculator.",
-      "publisher": {
-        "@id": "https://chemistrycal.com/#author"
-      }
-    },
-    {
-      "@type": "Person",
-      "@id": "https://chemistrycal.com/#author",
-      "name": "Bilal Khan",
-      "jobTitle": "Physical Chemistry Researcher",
-      "url": "https://chemistrycal.com/about",
-      "sameAs": [
-        "https://orcid.org/0009-0006-3082-7043",
-        "https://zenodo.org/records/23059466",
-        "https://github.com/Hadee017",
-        "https://www.wikidata.org/wiki/Q141699332"
-      ]
-    },
-    {
-      "@type": "BreadcrumbList",
-      "@id": `${fullCanonicalUrl}#breadcrumb`,
-      "itemListElement": breadcrumbItems
-    }
-  ]
+  "@graph": graphNodes
 };
 ---
 <!doctype html>
@@ -91,7 +122,7 @@ const globalSchemaGraph = {
   <meta name="description" content={description} />
   <link rel="canonical" href={fullCanonicalUrl} />
 
-  <!-- Global Semantic Structured Data Graph (Person, WebSite, Breadcrumbs) -->
+  <!-- Global Semantic Structured Data Graph (Person, WebSite, Breadcrumbs, WebApplication) -->
   <script type="application/ld+json" set:html={JSON.stringify(globalSchemaGraph)} />
 
   <!-- Favicon & PWA Web Manifest -->
