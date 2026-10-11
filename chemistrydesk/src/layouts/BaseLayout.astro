@@ -17,6 +17,64 @@ const {
 const siteOrigin = "https://chemistrycal.com";
 const cleanPath = canonicalPath.split('?')[0];
 const fullCanonicalUrl = new URL(cleanPath, siteOrigin).href;
+
+// Dynamic breadcrumb generation for search engines
+const pathSegments = cleanPath.split('/').filter(Boolean);
+const breadcrumbItems = [
+  {
+    "@type": "ListItem",
+    "position": 1,
+    "name": "Home",
+    "item": siteOrigin
+  },
+  ...pathSegments.map((segment, index) => {
+    const formattedName = segment
+      .replace(/-/g, ' ')
+      .replace(/\b\w/g, (char) => char.toUpperCase());
+    const itemUrl = new URL(pathSegments.slice(0, index + 1).join('/'), siteOrigin).href;
+
+    return {
+      "@type": "ListItem",
+      "position": index + 2,
+      "name": formattedName,
+      "item": itemUrl
+    };
+  })
+];
+
+// Global schema graph connecting site, author entity, and navigation
+const globalSchemaGraph = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://chemistrycal.com/#website",
+      "url": "https://chemistrycal.com",
+      "name": "ChemistryDesk",
+      "description": "Research-grade benchtop computational suite and laboratory calculator.",
+      "publisher": {
+        "@id": "https://chemistrycal.com/#author"
+      }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://chemistrycal.com/#author",
+      "name": "Bilal Khan",
+      "jobTitle": "Physical Chemistry Researcher",
+      "url": "https://chemistrycal.com/about",
+      "sameAs": [
+        "https://orcid.org/0009-0006-3082-7043",
+        "https://zenodo.org/records/23059466",
+        "https://github.com/Hadee017"
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${fullCanonicalUrl}#breadcrumb`,
+      "itemListElement": breadcrumbItems
+    }
+  ]
+};
 ---
 <!doctype html>
 <html lang="en">
@@ -31,6 +89,9 @@ const fullCanonicalUrl = new URL(cleanPath, siteOrigin).href;
   <title>{title}</title>
   <meta name="description" content={description} />
   <link rel="canonical" href={fullCanonicalUrl} />
+
+  <!-- Global Semantic Structured Data Graph (Person, WebSite, Breadcrumbs) -->
+  <script type="application/ld+json" set:html={JSON.stringify(globalSchemaGraph)} />
 
   <!-- Favicon & PWA Web Manifest -->
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -106,7 +167,7 @@ const fullCanonicalUrl = new URL(cleanPath, siteOrigin).href;
     <div>&copy; 2026 ChemistryDesk. Designed for benchtop precision and educational reference.</div>
   </footer>
 
- <script is:inline>
+  <script is:inline>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('/sw.js')
@@ -141,6 +202,6 @@ const fullCanonicalUrl = new URL(cleanPath, siteOrigin).href;
   window.addEventListener('appinstalled', () => {
     if (installBtn) installBtn.style.display = 'none';
   });
-</script>
+  </script>
 </body>
 </html>
