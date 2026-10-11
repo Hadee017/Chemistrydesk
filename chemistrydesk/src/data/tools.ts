@@ -163,5 +163,17 @@ export const toolsCatalog: ToolMeta[] = [
     priority: '1.0',
     changefreq: 'weekly',
     lastmod: '2026-10-10'
+  },
+  {
+    id: 'sig-figs',
+    title: 'Significant Figures & Scientific Precision Studio',
+    path: '/sig-figs',
+    icon: '🎯',
+    badge: 'Gateway Core',
+    badgeColor: '#0ea5e9',
+    description: 'Count sig figs with real-time visual digit anatomy, solve multi-step expressions with intermediate precision audits, and round raw measurements to target precision.',
+    priority: '1.0',
+    changefreq: 'weekly',
+    lastmod: '2026-10-11'
   }
 ];

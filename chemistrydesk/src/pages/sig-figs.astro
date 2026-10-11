@@ -1,0 +1,932 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Significant Figures Calculator | Sig Fig Counter, Rounder & Expression Solver | ChemistryDesk"
+  description="Universal significant figures studio. Count sig figs with dynamic visual digit anatomy, solve multi-step expressions with intermediate precision audits, and round to target scientific precision."
+>
+  <!-- Schema: WebApplication -->
+  <script is:inline type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "ChemistryDesk Significant Figures & Scientific Precision Studio",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "All",
+    "browserRequirements": "Requires JavaScript",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "featureList": [
+      "Dynamic Visual Digit Anatomy with Color-Coded Role Classification",
+      "3-in-1 Modes: Counter/Inspector, Expression Solver, and Precision Rounder",
+      "Intermediate Step Tracking for Mixed Operations (+, -, *, /)",
+      "Scientific, Engineering, and E-Notation Converters",
+      "1-Click Copy Results, Paste Input, Homework Derivation Steps, and LaTeX",
+      "URL State Sharing and CSV Export"
+    ]
+  })}></script>
+
+  <!-- Schema: FAQPage -->
+  <script is:inline type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What are the five golden rules of significant figures?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "1. All non-zero digits (1-9) are always significant. 2. Captive zeros trapped between non-zero digits are always significant. 3. Leading zeros preceding the first non-zero digit are never significant placeholders. 4. Trailing zeros are significant only if the number contains a decimal point. 5. In scientific notation (m x 10^n), all digits in the mantissa are significant while the power of 10 provides order of magnitude."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How many significant figures are in 100 versus 100.?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The number 100 has 1 significant figure because trailing zeros without an explicit decimal point are treated as ambiguous scale placeholders. In contrast, 100. (with a terminal decimal point) has 3 significant figures, indicating that the measurement is precise down to the units position."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why do addition and multiplication use different significant figure rules?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Addition and subtraction propagate absolute uncertainty, which means the final result is limited by the measurement with the fewest decimal places (least decimal precision). Multiplication and division propagate relative percentage uncertainty, meaning the final answer is limited by the measurement with the fewest total significant figures."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do you handle significant figures in mixed multi-step calculations?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "In mixed multi-step operations following PEMDAS, follow intermediate rules without rounding early to avoid rounding bias. Keep track of the limiting decimal places in addition/subtraction steps, and then use that intermediate precision count to determine the limiting significant figures in subsequent multiplication/division steps."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are exact numbers subject to significant figure rules?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Exact numbers derived from counting discrete objects (e.g., 12 test tubes) or defined unit conversions (e.g., exactly 1000 mL = 1 L, or 1 inch = 2.54 cm) possess an infinite number of significant figures and never limit the precision of a calculation."
+        }
+      }
+    ]
+  })}></script>
+
+  <main style="max-width: 1140px; margin: 1.5rem auto 4rem auto; padding: 0 1.5rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #0f172a;">
+    
+    <!-- Navigation Breadcrumbs -->
+    <nav style="font-size: 0.85rem; color: #475569; margin-bottom: 1.25rem;">
+      <a href="/" style="color: #0284c7; text-decoration: none; font-weight: 600;">Home</a> &rsaquo; 
+      <span style="color: #64748b;"> General &amp; Quantitative Chemistry</span> &rsaquo; 
+      <span style="color: #0f172a; font-weight: 700;">Significant Figures Studio</span>
+    </nav>
+
+    <!-- Header Hero Card -->
+    <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 16px; padding: 2rem; margin-bottom: 2rem; color: #ffffff; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.15);">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.5rem;">
+        <div style="max-width: 760px;">
+          <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); padding: 0.3rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem;">
+            <span>Precision &amp; Error Propagation Core &bull; ASTM / IUPAC Rules</span>
+          </div>
+          <h1 style="font-size: 2.35rem; font-weight: 800; color: #ffffff; letter-spacing: -0.025em; margin: 0; line-height: 1.2;">
+            Significant Figures Studio
+          </h1>
+          <p style="color: #cbd5e1; font-size: 1rem; margin-top: 0.65rem; margin-bottom: 0; line-height: 1.6;">
+            Count significant figures with real-time visual digit anatomy, evaluate mixed multi-step lab calculations with intermediate precision audits, and round raw measurements accurately.
+          </p>
+        </div>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+          <button id="btnResetDefault" type="button" style="background: #334155; border: 1px solid #475569; color: #f8fafc; padding: 0.65rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700;">
+            Reset
+          </button>
+          <button id="btnShareUrl" type="button" style="background: #0284c7; border: none; color: white; padding: 0.65rem 1.15rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 0.4rem;">
+            <span>Share Link</span>
+          </button>
+          <button id="btnExportCsv" type="button" style="background: #334155; border: 1px solid #475569; color: white; padding: 0.65rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700;">
+            CSV
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUICK PRESET PILLS CAROUSEL (HIGH-VOLUME EXAM & LAB BENCHMARKS) -->
+    <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+      <div style="font-size: 0.78rem; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.65rem;">
+        Exam Traps &amp; Benchmark Scenarios:
+      </div>
+      <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;" id="presetPillsGroup">
+        <button type="button" class="preset-pill active" data-mode="count" data-val="0.005020" style="background: #0284c7; border: 1px solid #0284c7; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #ffffff;">0.005020 (4 Sig Figs)</button>
+        <button type="button" class="preset-pill" data-mode="count" data-val="1200" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">1200 (Ambiguous 2)</button>
+        <button type="button" class="preset-pill" data-mode="count" data-val="1200." style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">1200. (Terminal Dot 4)</button>
+        <button type="button" class="preset-pill" data-mode="count" data-val="6.022e23" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">6.022 &times; 10²³ (Avogadro)</button>
+        <button type="button" class="preset-pill" data-mode="expr" data-val="(14.285 - 0.12) / 2.05" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">(14.285 - 0.12) / 2.05 (Mixed)</button>
+        <button type="button" class="preset-pill" data-mode="expr" data-val="4.56 * 1.4" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">4.56 &times; 1.4 (Multiplication)</button>
+        <button type="button" class="preset-pill" data-mode="round" data-val="149.528" data-target="3" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Round 149.528 to 3 SF</button>
+      </div>
+    </div>
+
+    <!-- 3-MODE TAB NAVIGATION BAR -->
+    <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; flex-wrap: wrap;">
+      <button id="tabBtnCount" type="button" class="mode-tab active" style="padding: 0.65rem 1.25rem; font-size: 0.9rem; font-weight: 800; border-radius: 8px; border: none; background: #0284c7; color: #ffffff; cursor: pointer;">
+        1. Count &amp; Rule Inspector
+      </button>
+      <button id="tabBtnExpr" type="button" class="mode-tab" style="padding: 0.65rem 1.25rem; font-size: 0.9rem; font-weight: 700; border-radius: 8px; border: 1px solid #cbd5e1; background: #ffffff; color: #475569; cursor: pointer;">
+        2. Arithmetic &amp; Lab Expressions
+      </button>
+      <button id="tabBtnRound" type="button" class="mode-tab" style="padding: 0.65rem 1.25rem; font-size: 0.9rem; font-weight: 700; border-radius: 8px; border: 1px solid #cbd5e1; background: #ffffff; color: #475569; cursor: pointer;">
+        3. Round to Target Precision
+      </button>
+    </div>
+
+    <!-- MAIN TWO-COLUMN WORKBENCH -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 2rem; margin-bottom: 2.5rem;">
+      
+      <!-- LEFT COLUMN: User Inputs & Interactive Controls -->
+      <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        
+        <!-- CARD: Input Workbench -->
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 1.75rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);">
+          
+          <!-- Mode 1: Counter / Inspector Input -->
+          <div id="panelCountInput">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.4rem;">
+              <label for="inpCountVal" style="font-size: 0.82rem; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.05em;">
+                Enter Any Real Number:
+              </label>
+              <button id="btnPasteCount" type="button" style="font-size: 0.72rem; color: #0284c7; font-weight: 700; background: none; border: none; cursor: pointer; text-decoration: underline;">
+                Paste Clipboard
+              </button>
+            </div>
+            <input 
+              type="text" 
+              inputmode="decimal"
+              id="inpCountVal" 
+              value="0.005020" 
+              placeholder="e.g. 0.005020, 1200, 4.50e-3" 
+              autocomplete="off" 
+              spellcheck="false"
+              style="width: 100%; box-sizing: border-box; padding: 0.85rem 1rem; border: 2px solid #bae6fd; border-radius: 8px; font-size: 1.45rem; font-weight: 800; color: #0369a1; font-family: ui-monospace, monospace; outline: none; background: #f0f9ff;"
+            />
+          </div>
+
+          <!-- Mode 2: Arithmetic Expression Input -->
+          <div id="panelExprInput" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.4rem;">
+              <label for="inpExprVal" style="font-size: 0.82rem; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.05em;">
+                Enter Chemical / Math Expression:
+              </label>
+              <span style="font-size: 0.72rem; color: #0284c7; font-weight: 700;">PEMDAS Enabled</span>
+            </div>
+            <input 
+              type="text" 
+              id="inpExprVal" 
+              value="(14.285 - 0.12) / 2.05" 
+              placeholder="e.g. 14.28 + 3.1 or (12.45 - 0.12) / 2.05" 
+              autocomplete="off" 
+              spellcheck="false"
+              style="width: 100%; box-sizing: border-box; padding: 0.85rem 1rem; border: 2px solid #bae6fd; border-radius: 8px; font-size: 1.3rem; font-weight: 800; color: #0369a1; font-family: ui-monospace, monospace; outline: none; background: #f0f9ff;"
+            />
+          </div>
+
+          <!-- Mode 3: Rounder Input -->
+          <div id="panelRoundInput" style="display: none;">
+            <div style="margin-bottom: 1.15rem;">
+              <label for="inpRoundVal" style="display: block; font-size: 0.78rem; font-weight: 700; color: #334155; margin-bottom: 0.3rem;">
+                RAW UNROUNDED NUMBER
+              </label>
+              <input 
+                type="text" 
+                inputmode="decimal"
+                id="inpRoundVal" 
+                value="149.528" 
+                style="width: 100%; box-sizing: border-box; padding: 0.65rem 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 1.15rem; font-weight: 800; color: #0f172a; font-family: monospace; outline: none;"
+              />
+            </div>
+            <div>
+              <label for="inpTargetSigFigs" style="display: block; font-size: 0.78rem; font-weight: 700; color: #334155; margin-bottom: 0.3rem;">
+                TARGET SIGNIFICANT FIGURES: <span id="lblTargetNum" style="color: #0284c7; font-weight: 800;">3</span>
+              </label>
+              <input 
+                type="range" 
+                id="inpTargetSigFigs" 
+                min="1" 
+                max="10" 
+                value="3" 
+                style="width: 100%; cursor: pointer;"
+              />
+            </div>
+          </div>
+
+          <div id="sigFigAlert" style="display: none; margin-top: 0.75rem; padding: 0.6rem 0.85rem; border-radius: 6px; background: #fef2f2; border: 1px solid #fecaca; color: #b91c1c; font-size: 0.8rem; font-weight: 600;"></div>
+
+          <!-- Quick Helpers -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.85rem; font-size: 0.78rem; color: #64748b; font-weight: 600;">
+            <span>Precision Mode: <strong id="lblPrecisionMode" style="color: #0f172a;">Direct Inspection</strong></span>
+            <span>Scientific Base: <strong style="color: #0284c7; font-family: monospace;">Base 10</strong></span>
+          </div>
+
+        </div>
+
+        <!-- CARD: Notations & Alternative Forms -->
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 1.75rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);">
+          <div style="border-bottom: 2px solid #f1f5f9; padding-bottom: 0.65rem; margin-bottom: 1.25rem;">
+            <h2 style="font-size: 0.95rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #0f172a; margin: 0;">
+              Precision &amp; Notation Transformers
+            </h2>
+            <span style="font-size: 0.76rem; color: #64748b;">Equivalent standard scientific representations</span>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-size: 0.7rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Scientific Notation</div>
+                <div id="dispSciNotation" style="font-size: 1.05rem; font-weight: 800; color: #0f172a; font-family: monospace;">5.020 &times; 10⁻³</div>
+              </div>
+              <button class="btn-copy-mini" data-target="dispSciNotation" style="padding: 0.3rem 0.6rem; font-size: 0.72rem; font-weight: 700; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; cursor: pointer;">Copy</button>
+            </div>
+
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-size: 0.7rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Engineering Notation (3k)</div>
+                <div id="dispEngNotation" style="font-size: 1.05rem; font-weight: 800; color: #0f172a; font-family: monospace;">5.020 &times; 10⁻³</div>
+              </div>
+              <button class="btn-copy-mini" data-target="dispEngNotation" style="padding: 0.3rem 0.6rem; font-size: 0.72rem; font-weight: 700; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; cursor: pointer;">Copy</button>
+            </div>
+
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-size: 0.7rem; font-weight: 700; color: #64748b; text-transform: uppercase;">E-Notation (Lab Instruments)</div>
+                <div id="dispENotation" style="font-size: 1.05rem; font-weight: 800; color: #0f172a; font-family: monospace;">5.020E-3</div>
+              </div>
+              <button class="btn-copy-mini" data-target="dispENotation" style="padding: 0.3rem 0.6rem; font-size: 0.72rem; font-weight: 700; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; cursor: pointer;">Copy</button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN: HUD Results, Visual Digit Anatomy & Step-by-Step Audit -->
+      <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        
+        <!-- Primary Output HUD Card -->
+        <div style="background: #0f172a; border-radius: 14px; padding: 1.75rem 2rem; color: #ffffff; box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.3); border: 1px solid #334155;">
+          
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <span style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #38bdf8;">
+              Determined Precision
+            </span>
+            <span id="badgeSigFigType" style="font-size: 0.72rem; font-weight: 800; padding: 2px 8px; border-radius: 9999px; background: #0284c7; color: #ffffff;">
+              4 Significant Figures
+            </span>
+          </div>
+
+          <div id="dispHudMain" style="font-size: 3rem; font-weight: 900; color: #38bdf8; margin: 0.5rem 0; font-family: ui-monospace, monospace; line-height: 1.1;">
+            4 <span style="font-size: 1.45rem; color: #94a3b8; font-weight: 700;">Sig Figs</span>
+          </div>
+
+          <div style="font-size: 0.85rem; color: #94a3b8; font-family: monospace;">
+            Decimal Places: <strong id="dispDecimalsCount" style="color: #f8fafc;">6</strong> | Decimals of Precision
+          </div>
+
+          <!-- Dynamic Visual Digit Anatomy Bar -->
+          <div style="margin-top: 1.5rem;">
+            <div style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: #94a3b8; margin-bottom: 0.45rem;">
+              Visual Digit Anatomy &amp; Significance:
+            </div>
+            <div id="visualDigitBar" style="display: flex; gap: 4px; padding: 0.5rem; background: #1e293b; border-radius: 8px; overflow-x: auto; align-items: center; min-height: 44px;">
+              <!-- Dynamically rendered color-coded digit chips -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Step-by-Step Intermediate Analysis & Applied Rules Card -->
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);">
+          <div style="font-size: 0.88rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #0f172a; margin-bottom: 0.85rem;">
+            Step-by-Step Rule Audit &amp; Derivations
+          </div>
+
+          <div id="containerRulesList" style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;">
+            <!-- Dynamically populated rule tags -->
+          </div>
+
+          <!-- Academic Action & Copy Bar -->
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.25rem; border-top: 1px solid #f1f5f9; padding-top: 1rem;">
+            <span style="font-size: 0.78rem; font-weight: 800; text-transform: uppercase; color: #475569;">Export Options:</span>
+            <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+              <button id="btnCopyResult" type="button" style="background: #0284c7; border: none; padding: 0.3rem 0.65rem; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff;">Copy Answer</button>
+              <button id="btnCopyHomework" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.3rem 0.6rem; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #334155;">Copy Steps</button>
+              <button id="btnCopyLatex" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.3rem 0.6rem; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #334155;">LaTeX</button>
+              <button id="toggleCiteBtn" type="button" style="background: #e0f2fe; border: 1px solid #7dd3fc; padding: 0.3rem 0.65rem; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #0369a1;">Cite</button>
+            </div>
+          </div>
+
+          <!-- Academic Citation Drawer -->
+          <div id="citeDrawer" style="display: none; margin-top: 1rem; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 0.85rem; background: #f8fafc;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.4rem;">
+              <div style="display: flex; gap: 0.3rem; flex-wrap: wrap;">
+                <button type="button" class="inline-cite-tab" data-format="bibtex" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 700; border-radius: 5px; border: 1px solid #0f172a; background: #0f172a; color: #fff; cursor: pointer;">BibTeX</button>
+                <button type="button" class="inline-cite-tab" data-format="acs" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">ACS</button>
+                <button type="button" class="inline-cite-tab" data-format="rsc" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">RSC</button>
+                <button type="button" class="inline-cite-tab" data-format="nature" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Nature</button>
+              </div>
+              <button id="inlineCopyCiteBtn" type="button" style="padding: 0.25rem 0.65rem; font-size: 0.75rem; font-weight: 700; border-radius: 5px; background: #0284c7; color: #fff; border: none; cursor: pointer;">Copy</button>
+            </div>
+            <pre id="inlineCiteOutput" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.75rem; font-size: 0.75rem; font-family: ui-monospace, monospace; color: #0f172a; white-space: pre-wrap; word-break: break-all; margin: 0; line-height: 1.45;"></pre>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- EDITORIAL & METHODOLOGICAL KNOWLEDGE SECTION (E-E-A-T) -->
+    <article style="border-top: 1px solid #e2e8f0; padding-top: 3.5rem; line-height: 1.85; color: #334155;">
+      
+      <h2 style="font-size: 1.85rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem; letter-spacing: -0.02em;">
+        Theoretical Foundations: Significant Figures &amp; Experimental Precision
+      </h2>
+      <p>
+        In physical and analytical sciences, numbers do not exist as abstract mathematical abstractions; they represent <strong>physical measurements</strong> obtained via laboratory balances, burettes, and spectrophotometers. Every experimental measurement carries intrinsic uncertainty governed by the precision limits of the measuring apparatus.
+      </p>
+
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
+        1. The Five Definitive Rules for Identifying Significant Digits
+      </h3>
+      <ul style="margin: 0.5rem 0 1.5rem 1.5rem;">
+        <li><strong>Rule 1 (Non-Zero Digits):</strong> All non-zero digits (1, 2, 3, 4, 5, 6, 7, 8, 9) are unconditionally significant. For example, 482 contains three significant figures.</li>
+        <li><strong>Rule 2 (Captive Zeros):</strong> Zeros situated between two non-zero digits are always significant because they cannot be removed without fundamentally altering the value. In 40.08, both zeros are significant (four sig figs total).</li>
+        <li><strong>Rule 3 (Leading Zeros):</strong> Zeros appearing before the first non-zero digit are <em>never</em> significant. They serve purely as decimal placeholders. In 0.0032, there are only two significant figures (3 and 2).</li>
+        <li><strong>Rule 4 (Trailing Zeros):</strong> Trailing zeros are significant <strong>only</strong> if the number contains a decimal point. For example, 2.50 contains three sig figs, whereas 2500 without a decimal is ambiguous (conventionally treated as two sig figs). Writing 2500. with a terminal decimal establishes four significant figures.</li>
+        <li><strong>Rule 5 (Scientific Notation):</strong> In standard exponential notation (m &times; 10^n), only the mantissa digits determine significance. The power of ten provides scale. Thus, 6.022 &times; 10²³ carries four significant figures.</li>
+      </ul>
+
+      <!-- Worked Benchmark Scenario -->
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2.5rem; margin-bottom: 0.75rem;">
+        2. Worked Analytical Scenario: Mixed Operations in Density Determination
+      </h3>
+      <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1.25rem; margin: 1.25rem 0;">
+        <p style="margin: 0 0 0.5rem; font-weight: 700; color: #0f172a;">Laboratory Problem Statement:</p>
+        <p style="margin: 0 0 0.75rem; font-size: 0.92rem; color: #475569;">
+          A student measures an empty pycnometer as 25.412 g and the filled pycnometer as 38.9 g. The volume is determined to be 10.05 mL. Calculate the sample density (&rho;) with strict compliance to significant figure rules.
+        </p>
+
+        <p style="margin: 0 0 0.4rem; font-weight: 700; color: #0f172a;">Step 1: Subtraction (Mass Difference)</p>
+        <p style="margin: 0 0 0.75rem; font-size: 0.92rem; color: #475569; font-family: monospace;">
+          m = 38.9 g - 25.412 g = 13.488 g<br />
+          Limiting term: 38.9 g has only 1 decimal place.<br />
+          Intermediate value: 13.5 g (3 significant figures).
+        </p>
+
+        <p style="margin: 0 0 0.4rem; font-weight: 700; color: #0f172a;">Step 2: Division (Density Calculation)</p>
+        <p style="margin: 0 0 0.75rem; font-size: 0.92rem; color: #475569; font-family: monospace;">
+          &rho; = 13.488 g / 10.05 mL = 1.34208955... g/mL<br />
+          Limiting precision: Mass numerator is constrained to 3 sig figs (13.5 g), Volume has 4 sig figs (10.05 mL).<br />
+          Lowest significant figures = 3.
+        </p>
+
+        <p style="margin: 0; font-size: 0.92rem; color: #059669; font-weight: 700;">
+          Final Reported Answer: &rho; = 1.34 g/mL (3 Significant Figures).
+        </p>
+      </div>
+
+      <!-- FAQ Accordion -->
+      <h3 style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-top: 3rem; margin-bottom: 1.25rem;">
+        Frequently Asked Questions: Significant Figures
+      </h3>
+
+      <div style="display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 2rem;">
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What are the five golden rules of significant figures?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            1. All non-zero digits are always significant. 2. Captive zeros trapped between non-zero digits are always significant. 3. Leading zeros before the first non-zero digit are never significant. 4. Trailing zeros after a decimal point are significant. 5. In scientific notation, only the mantissa digits determine significant figures.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How many significant figures are in 100 versus 100.?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            The number 100 has 1 significant figure because trailing zeros without an explicit decimal point are treated as ambiguous scale placeholders. In contrast, 100. (with a terminal decimal point) has 3 significant figures, indicating that the measurement is precise down to the units position.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Why do addition and multiplication use different significant figure rules?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Addition and subtraction propagate absolute uncertainty, which means the final result is limited by the measurement with the fewest decimal places (least decimal precision). Multiplication and division propagate relative percentage uncertainty, meaning the final answer is limited by the measurement with the fewest total significant figures.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How do you handle significant figures in mixed multi-step calculations?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            In mixed multi-step operations following PEMDAS, follow intermediate rules without rounding early to avoid rounding bias. Keep track of the limiting decimal places in addition/subtraction steps, and then use that intermediate precision count to determine the limiting significant figures in subsequent multiplication/division steps.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Are exact numbers subject to significant figure rules?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            No. Exact numbers derived from counting discrete objects (e.g., 12 test tubes) or defined unit conversions (e.g., exactly 1000 mL = 1 L, or 1 inch = 2.54 cm) possess an infinite number of significant figures and never limit the precision of a calculation.
+          </p>
+        </details>
+      </div>
+
+    </article>
+
+    <!-- Upstream & Downstream Studios Hub -->
+    <section style="max-width: 900px; margin: 3rem auto 1.5rem; padding: 1.25rem 1.5rem; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; box-sizing: border-box;">
+      <h3 style="margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 0.5rem;">
+        <span>🔗</span> Upstream &amp; Downstream Quantitative Studios
+      </h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
+        <a href="/molar-mass" style="display: block; padding: 1rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
+          <div style="font-weight: 700; font-size: 0.92rem; color: #f59e0b; margin-bottom: 0.35rem;">Molar Mass &amp; Elemental Studio &rarr;</div>
+          <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">
+            Universal molecular weights, mass percentages, and two-way grams to moles conversions.
+          </div>
+        </a>
+        <a href="/stoichiometry" style="display: block; padding: 1rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
+          <div style="font-weight: 700; font-size: 0.92rem; color: #e11d48; margin-bottom: 0.35rem;">Stoichiometry &amp; Reaction Yield &rarr;</div>
+          <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">
+            Balance chemical equations, identify limiting reagents, and calculate theoretical mass.
+          </div>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <style>
+    .preset-pill {
+      transition: all 0.15s ease;
+    }
+    .preset-pill:hover {
+      background: #e0f2fe !important;
+      border-color: #0284c7 !important;
+      color: #0284c7 !important;
+    }
+    .preset-pill.active {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+      border-color: #0284c7 !important;
+    }
+    .mode-tab.active {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+      border-color: #0284c7 !important;
+    }
+  </style>
+
+  <script>
+    import {
+      analyzeSigFigs,
+      evaluateSigFigExpression,
+      roundToSigFigs,
+      type SigFigCountResult,
+      type ArithmeticResult
+    } from '../utils/sigFigMath';
+
+    type ActiveMode = 'count' | 'expr' | 'round';
+    let currentMode: ActiveMode = 'count';
+
+    let lastCountResult: SigFigCountResult | null = null;
+    let lastExprResult: ArithmeticResult | null = null;
+    let lastRoundString: string = '';
+
+    // DOM Elements - Tabs
+    const tabBtnCount = document.getElementById('tabBtnCount')!;
+    const tabBtnExpr = document.getElementById('tabBtnExpr')!;
+    const tabBtnRound = document.getElementById('tabBtnRound')!;
+    const panelCountInput = document.getElementById('panelCountInput')!;
+    const panelExprInput = document.getElementById('panelExprInput')!;
+    const panelRoundInput = document.getElementById('panelRoundInput')!;
+    const lblPrecisionMode = document.getElementById('lblPrecisionMode')!;
+
+    // DOM Elements - Inputs
+    const inpCountVal = document.getElementById('inpCountVal') as HTMLInputElement;
+    const inpExprVal = document.getElementById('inpExprVal') as HTMLInputElement;
+    const inpRoundVal = document.getElementById('inpRoundVal') as HTMLInputElement;
+    const inpTargetSigFigs = document.getElementById('inpTargetSigFigs') as HTMLInputElement;
+    const lblTargetNum = document.getElementById('lblTargetNum')!;
+    const sigFigAlert = document.getElementById('sigFigAlert')!;
+
+    // DOM Elements - HUD
+    const dispHudMain = document.getElementById('dispHudMain')!;
+    const badgeSigFigType = document.getElementById('badgeSigFigType')!;
+    const dispDecimalsCount = document.getElementById('dispDecimalsCount')!;
+    const visualDigitBar = document.getElementById('visualDigitBar')!;
+    const dispSciNotation = document.getElementById('dispSciNotation')!;
+    const dispEngNotation = document.getElementById('dispEngNotation')!;
+    const dispENotation = document.getElementById('dispENotation')!;
+    const containerRulesList = document.getElementById('containerRulesList')!;
+
+    // Preset Pills
+    const presetPills = document.querySelectorAll('.preset-pill');
+
+    function switchMode(newMode: ActiveMode) {
+      currentMode = newMode;
+      [tabBtnCount, tabBtnExpr, tabBtnRound].forEach(b => b.classList.remove('active'));
+      panelCountInput.style.display = 'none';
+      panelExprInput.style.display = 'none';
+      panelRoundInput.style.display = 'none';
+
+      if (newMode === 'count') {
+        tabBtnCount.classList.add('active');
+        panelCountInput.style.display = 'block';
+        lblPrecisionMode.textContent = 'Direct Inspection';
+        runCalculation();
+      } else if (newMode === 'expr') {
+        tabBtnExpr.classList.add('active');
+        panelExprInput.style.display = 'block';
+        lblPrecisionMode.textContent = 'Multi-Step PEMDAS';
+        runCalculation();
+      } else {
+        tabBtnRound.classList.add('active');
+        panelRoundInput.style.display = 'block';
+        lblPrecisionMode.textContent = 'Target Sig Fig Rounding';
+        runCalculation();
+      }
+    }
+
+    function runCalculation() {
+      sigFigAlert.style.display = 'none';
+
+      if (currentMode === 'count') {
+        const val = inpCountVal.value.trim();
+        const res = analyzeSigFigs(val);
+        lastCountResult = res;
+
+        if (!res.isValid) {
+          sigFigAlert.textContent = res.errorMessage || 'Invalid number format.';
+          sigFigAlert.style.display = 'block';
+          return;
+        }
+
+        badgeSigFigType.textContent = `${res.totalSigFigs} Significant Figures`;
+        dispHudMain.innerHTML = `${res.totalSigFigs} <span style="font-size: 1.45rem; color: #94a3b8; font-weight: 700;">Sig Figs</span>`;
+        dispDecimalsCount.textContent = res.decimalsCount.toString();
+
+        dispSciNotation.textContent = res.scientificNotation;
+        dispEngNotation.textContent = res.engineeringNotation;
+        dispENotation.textContent = res.eNotation;
+
+        // Visual Digit Anatomy Bar
+        visualDigitBar.innerHTML = '';
+        res.digits.forEach(d => {
+          const chip = document.createElement('div');
+          chip.style.display = 'flex';
+          chip.style.flexDirection = 'column';
+          chip.style.alignItems = 'center';
+          chip.style.padding = '0.35rem 0.55rem';
+          chip.style.borderRadius = '6px';
+          chip.style.backgroundColor = d.colorHex;
+          chip.style.color = '#ffffff';
+          chip.style.fontWeight = '800';
+          chip.style.fontFamily = 'monospace';
+          chip.style.fontSize = '1.05rem';
+          chip.title = d.explanation;
+
+          const spanChar = document.createElement('span');
+          spanChar.textContent = d.char;
+          chip.appendChild(spanChar);
+
+          const spanTag = document.createElement('span');
+          spanTag.style.fontSize = '0.62rem';
+          spanTag.style.fontWeight = '600';
+          spanTag.style.textTransform = 'uppercase';
+          spanTag.style.opacity = '0.9';
+          spanTag.textContent = d.isSignificant ? 'Sig' : (d.role === 'decimal_point' ? 'Dec' : 'No');
+          chip.appendChild(spanTag);
+
+          visualDigitBar.appendChild(chip);
+        });
+
+        // Rules List
+        containerRulesList.innerHTML = '';
+        res.rulesApplied.forEach(rule => {
+          const div = document.createElement('div');
+          div.style.padding = '0.55rem 0.75rem';
+          div.style.borderRadius = '6px';
+          div.style.backgroundColor = '#f8fafc';
+          div.style.border = '1px solid #e2e8f0';
+          div.style.fontSize = '0.85rem';
+          div.style.fontWeight = '600';
+          div.style.color = '#334155';
+          div.textContent = `• ${rule}`;
+          containerRulesList.appendChild(div);
+        });
+
+      } else if (currentMode === 'expr') {
+        const expr = inpExprVal.value.trim();
+        const res = evaluateSigFigExpression(expr);
+        lastExprResult = res;
+
+        if (!res.isValid) {
+          sigFigAlert.textContent = res.errorMessage || 'Invalid arithmetic expression.';
+          sigFigAlert.style.display = 'block';
+          return;
+        }
+
+        badgeSigFigType.textContent = `Rounded Answer: ${res.roundedValue}`;
+        dispHudMain.innerHTML = `${res.roundedValue} <span style="font-size: 1.25rem; color: #94a3b8; font-weight: 700;">(${res.sigFigs} SF)</span>`;
+        dispDecimalsCount.textContent = res.decimalPlaces.toString();
+
+        dispSciNotation.textContent = res.scientificNotation;
+        dispEngNotation.textContent = res.scientificNotation;
+        dispENotation.textContent = parseFloat(res.roundedValue).toExponential().replace('e', 'E');
+
+        // Visual Bar for Expression
+        visualDigitBar.innerHTML = '';
+        const chip = document.createElement('div');
+        chip.style.padding = '0.4rem 0.85rem';
+        chip.style.borderRadius = '6px';
+        chip.style.backgroundColor = '#0284c7';
+        chip.style.color = '#ffffff';
+        chip.style.fontWeight = '800';
+        chip.style.fontFamily = 'monospace';
+        chip.textContent = `${res.expression} = ${res.roundedValue}`;
+        visualDigitBar.appendChild(chip);
+
+        // Rules & Steps Container
+        containerRulesList.innerHTML = '';
+        res.steps.forEach(s => {
+          const div = document.createElement('div');
+          div.style.padding = '0.65rem 0.85rem';
+          div.style.borderRadius = '6px';
+          div.style.backgroundColor = '#f8fafc';
+          div.style.border = '1px solid #cbd5e1';
+          div.style.fontSize = '0.85rem';
+          div.style.color = '#0f172a';
+          div.innerHTML = `<strong>${s.description}</strong><br /><span style="color: #64748b; font-size: 0.8rem;">${s.limitingFactor}</span><br /><span style="font-family: monospace; color: #0284c7; font-weight: 700;">Raw Intermediate: ${s.rawIntermediate} &rarr; Standard Round: ${s.intermediateRounded}</span>`;
+          containerRulesList.appendChild(div);
+        });
+
+      } else {
+        const raw = parseFloat(inpRoundVal.value) || 0;
+        const target = parseInt(inpTargetSigFigs.value, 10) || 3;
+        lblTargetNum.textContent = target.toString();
+
+        const rounded = roundToSigFigs(raw, target);
+        lastRoundString = rounded;
+
+        badgeSigFigType.textContent = `Rounded to ${target} Significant Figures`;
+        dispHudMain.innerHTML = `${rounded} <span style="font-size: 1.25rem; color: #94a3b8; font-weight: 700;">(${target} SF)</span>`;
+        dispDecimalsCount.textContent = rounded.includes('.') ? (rounded.split('.')[1].length).toString() : '0';
+
+        dispSciNotation.textContent = parseFloat(rounded).toExponential();
+        dispEngNotation.textContent = parseFloat(rounded).toExponential();
+        dispENotation.textContent = parseFloat(rounded).toExponential().replace('e', 'E');
+
+        // Visual Bar
+        visualDigitBar.innerHTML = '';
+        const chip = document.createElement('div');
+        chip.style.padding = '0.4rem 0.85rem';
+        chip.style.borderRadius = '6px';
+        chip.style.backgroundColor = '#10b981';
+        chip.style.color = '#ffffff';
+        chip.style.fontWeight = '800';
+        chip.style.fontFamily = 'monospace';
+        chip.textContent = `Raw: ${inpRoundVal.value} ➔ ${rounded} (${target} Sig Figs)`;
+        visualDigitBar.appendChild(chip);
+
+        containerRulesList.innerHTML = `
+          <div style="padding: 0.65rem 0.85rem; border-radius: 6px; background-color: #f8fafc; border: 1px solid #cbd5e1; font-size: 0.85rem; color: #0f172a;">
+            <strong>Target Precision Rounding:</strong><br />
+            Input: ${inpRoundVal.value}<br />
+            Target count: ${target} significant figures.<br />
+            Final exact format: <strong>${rounded}</strong>
+          </div>
+        `;
+      }
+    }
+
+    // Tab Listeners
+    tabBtnCount.addEventListener('click', () => switchMode('count'));
+    tabBtnExpr.addEventListener('click', () => switchMode('expr'));
+    tabBtnRound.addEventListener('click', () => switchMode('round'));
+
+    // Input Listeners
+    inpCountVal.addEventListener('input', runCalculation);
+    inpExprVal.addEventListener('input', runCalculation);
+    inpRoundVal.addEventListener('input', runCalculation);
+    inpTargetSigFigs.addEventListener('input', runCalculation);
+
+    // Paste from Clipboard
+    document.getElementById('btnPasteCount')?.addEventListener('click', async () => {
+      try {
+        const text = await navigator.clipboard.readText();
+        inpCountVal.value = text.trim();
+        runCalculation();
+      } catch {
+        alert('Please allow clipboard permissions or paste manually.');
+      }
+    });
+
+    // Preset Pills
+    presetPills.forEach(pill => {
+      pill.addEventListener('click', (e) => {
+        const target = e.currentTarget as HTMLElement;
+        presetPills.forEach(p => p.classList.remove('active'));
+        target.classList.add('active');
+
+        const mode = target.dataset.mode as ActiveMode;
+        const val = target.dataset.val || '';
+        if (mode === 'count') {
+          inpCountVal.value = val;
+          switchMode('count');
+        } else if (mode === 'expr') {
+          inpExprVal.value = val;
+          switchMode('expr');
+        } else {
+          inpRoundVal.value = val;
+          if (target.dataset.target) {
+            inpTargetSigFigs.value = target.dataset.target;
+          }
+          switchMode('round');
+        }
+      });
+    });
+
+    // Reset Defaults
+    document.getElementById('btnResetDefault')?.addEventListener('click', () => {
+      inpCountVal.value = '0.005020';
+      inpExprVal.value = '(14.285 - 0.12) / 2.05';
+      inpRoundVal.value = '149.528';
+      inpTargetSigFigs.value = '3';
+      switchMode('count');
+    });
+
+    // Share URL
+    document.getElementById('btnShareUrl')?.addEventListener('click', async () => {
+      const p = new URLSearchParams();
+      p.set('mode', currentMode);
+      if (currentMode === 'count') p.set('v', inpCountVal.value);
+      else if (currentMode === 'expr') p.set('e', inpExprVal.value);
+      else {
+        p.set('r', inpRoundVal.value);
+        p.set('t', inpTargetSigFigs.value);
+      }
+      window.history.replaceState({}, '', `${window.location.pathname}?${p.toString()}`);
+      await navigator.clipboard.writeText(window.location.href);
+      alert('Significant figures calculation link copied to clipboard.');
+    });
+
+    // Copy Answer
+    document.getElementById('btnCopyResult')?.addEventListener('click', async () => {
+      let copyText = '';
+      if (currentMode === 'count' && lastCountResult) {
+        copyText = `${lastCountResult.totalSigFigs} significant figures`;
+      } else if (currentMode === 'expr' && lastExprResult) {
+        copyText = lastExprResult.roundedValue;
+      } else {
+        copyText = lastRoundString;
+      }
+      await navigator.clipboard.writeText(copyText);
+      alert('Calculated precision value copied to clipboard.');
+    });
+
+    // Copy Homework Derivations
+    document.getElementById('btnCopyHomework')?.addEventListener('click', async () => {
+      let text = '';
+      if (currentMode === 'count' && lastCountResult) {
+        text = `Significant Figure Analysis for: ${lastCountResult.normalizedInput}\nTotal Sig Figs: ${lastCountResult.totalSigFigs}\nRules Applied:\n` +
+          lastCountResult.rulesApplied.map(r => `• ${r}`).join('\n') +
+          `\nScientific Notation: ${lastCountResult.scientificNotation}`;
+      } else if (currentMode === 'expr' && lastExprResult) {
+        text = lastExprResult.homeworkExplanation;
+      } else {
+        text = `Rounding ${inpRoundVal.value} to ${inpTargetSigFigs.value} significant figures:\nResult = ${lastRoundString}`;
+      }
+      await navigator.clipboard.writeText(text);
+      alert('Step-by-step homework derivation copied to clipboard.');
+    });
+
+    // Copy LaTeX
+    document.getElementById('btnCopyLatex')?.addEventListener('click', async () => {
+      let latex = '';
+      if (currentMode === 'count' && lastCountResult) {
+        latex = `\\text{Value: } ${lastCountResult.normalizedInput} \\quad \\implies \\quad \\mathbf{${lastCountResult.totalSigFigs}\\text{ Sig Figs}}`;
+      } else if (currentMode === 'expr' && lastExprResult) {
+        latex = lastExprResult.latexBlock;
+      } else {
+        latex = `\\operatorname{round}_{\\text{SF}}(${inpRoundVal.value}, ${inpTargetSigFigs.value}) = \\mathbf{${lastRoundString}}`;
+      }
+      await navigator.clipboard.writeText(latex);
+      alert('LaTeX derivation block copied to clipboard.');
+    });
+
+    // CSV Exporter
+    document.getElementById('btnExportCsv')?.addEventListener('click', () => {
+      let csv = 'Mode,Input,Result,SigFigs,Decimals,ScientificNotation\n';
+      if (currentMode === 'count' && lastCountResult) {
+        csv += `"Count","${lastCountResult.normalizedInput}",${lastCountResult.totalSigFigs},${lastCountResult.totalSigFigs},${lastCountResult.decimalsCount},"${lastCountResult.scientificNotation}"\n`;
+      } else if (currentMode === 'expr' && lastExprResult) {
+        csv += `"Expression","${lastExprResult.expression}","${lastExprResult.roundedValue}",${lastExprResult.sigFigs},${lastExprResult.decimalPlaces},"${lastExprResult.scientificNotation}"\n`;
+      } else {
+        csv += `"Round","${inpRoundVal.value}","${lastRoundString}",${inpTargetSigFigs.value},0,"${parseFloat(lastRoundString).toExponential()}"\n`;
+      }
+
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `sig_figs_${Date.now()}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    // Copy Mini Buttons
+    document.querySelectorAll('.btn-copy-mini').forEach(b => {
+      b.addEventListener('click', async (e) => {
+        const targetId = (e.currentTarget as HTMLElement).dataset.target;
+        if (targetId) {
+          const txt = document.getElementById(targetId)?.textContent || '';
+          await navigator.clipboard.writeText(txt);
+          alert('Copied to clipboard.');
+        }
+      });
+    });
+
+    // Citation Drawer
+    const citeDrawer = document.getElementById('citeDrawer')!;
+    const toggleCiteBtn = document.getElementById('toggleCiteBtn')!;
+    const inlineCiteOutput = document.getElementById('inlineCiteOutput')!;
+    const inlineTabs = document.querySelectorAll('.inline-cite-tab');
+    const inlineCopyBtn = document.getElementById('inlineCopyCiteBtn')!;
+    const doi = "10.5281/zenodo.23059466";
+    const year = new Date().getFullYear();
+
+    const citations: Record<string, string> = {
+      bibtex: `@software{khan_chemistrydesk_sigfigs_${year},
+  author        = {Khan, Bilal},
+  title         = {ChemistryDesk: Significant Figures & Scientific Precision Studio},
+  year          = {${year}},
+  version       = {v1.0.1},
+  publisher     = {Zenodo},
+  doi           = {${doi}},
+  url           = {https://chemistrycal.com/sig-figs}
+}`,
+      acs: `Khan, B. ChemistryDesk: Significant Figures & Scientific Precision Studio, version 1.0.1; Zenodo, ${year}. https://doi.org/${doi}.`,
+      rsc: `B. Khan, ChemistryDesk: Significant Figures & Scientific Precision Studio, version 1.0.1, Zenodo, ${year}, DOI: ${doi}.`,
+      nature: `Khan, B. ChemistryDesk: Significant Figures & Scientific Precision Studio. Zenodo https://doi.org/${doi} (${year}).`
+    };
+
+    let activeFormat = 'bibtex';
+    function updateCite() {
+      inlineCiteOutput.textContent = citations[activeFormat] || citations['bibtex'];
+    }
+
+    toggleCiteBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const isHidden = citeDrawer.style.display === 'none';
+      citeDrawer.style.display = isHidden ? 'block' : 'none';
+      if (isHidden) updateCite();
+    });
+
+    inlineTabs.forEach(tab => {
+      tab.addEventListener('click', (e) => {
+        e.preventDefault();
+        inlineTabs.forEach(t => {
+          (t as HTMLElement).style.background = '#fff';
+          (t as HTMLElement).style.color = '#334155';
+          (t as HTMLElement).style.borderColor = '#cbd5e1';
+          (t as HTMLElement).style.fontWeight = '600';
+        });
+        const el = tab as HTMLElement;
+        el.style.background = '#0f172a';
+        el.style.color = '#fff';
+        el.style.borderColor = '#0f172a';
+        el.style.fontWeight = '700';
+        activeFormat = el.dataset.format || 'bibtex';
+        updateCite();
+      });
+    });
+
+    inlineCopyBtn.addEventListener('click', async () => {
+      await navigator.clipboard.writeText(citations[activeFormat]);
+      alert('Academic citation copied.');
+    });
+
+    // Check URL State on Load
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('mode')) {
+      const m = urlParams.get('mode') as ActiveMode;
+      if (m === 'count' || m === 'expr' || m === 'round') currentMode = m;
+    }
+    if (urlParams.has('v')) inpCountVal.value = urlParams.get('v')!;
+    if (urlParams.has('e')) inpExprVal.value = urlParams.get('e')!;
+    if (urlParams.has('r')) inpRoundVal.value = urlParams.get('r')!;
+    if (urlParams.has('t')) inpTargetSigFigs.value = urlParams.get('t')!;
+
+    updateCite();
+    switchMode(currentMode);
+  </script>
+</BaseLayout>
