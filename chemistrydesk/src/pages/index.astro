@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { toolsCatalog } from '../data/tools';
+import AuthorCard from '../components/AuthorCard.astro';
 
 // Comprehensive metadata mapping to enrich all 13 calculators for semantic search & crawlability
 const toolMetaMap: Record<string, { formula: string; inputs: string; outputs: string; category: string }> = {
@@ -373,7 +374,7 @@ const toolMetaMap: Record<string, { formula: string; inputs: string; outputs: st
     </section>
 
     <!-- Offline Wet-Lab Utility Section for SEO (Preserved) -->
-    <section style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 2rem; box-sizing: border-box;">
+    <section style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 2rem; box-sizing: border-box; margin-bottom: 2.5rem;">
       <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.75rem;">
         <span style="font-size: 1.5rem;">📶</span>
         <h2 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin: 0;">
@@ -398,6 +399,9 @@ const toolMetaMap: Record<string, { formula: string; inputs: string; outputs: st
         </div>
       </div>
     </section>
+
+    <!-- Verified Chemistry Researcher & Author Card -->
+    <AuthorCard lastUpdated="October 2026" />
 
   </main>
 
