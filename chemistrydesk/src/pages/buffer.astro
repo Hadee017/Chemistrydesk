@@ -91,6 +91,22 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           "@type": "Answer",
           "text": "Tris has a steep negative temperature coefficient of approximately -0.028 pH units per degree Celsius. A Tris buffer titrated to pH 8.0 at 25°C will shift to approximately pH 8.4 when cooled to 4°C."
         }
+      },
+      {
+        "@type": "Question",
+        "name": "What are Good's biological buffers and why are they favored?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Good's buffers (such as HEPES, MES, MOPS, and PIPES) are zwitterionic N-substituted aminosulfonic acids developed by Norman Good. They are chemically stable, highly water soluble, exhibit low membrane permeability, and do not form insoluble complexes with critical divalent cations like Ca2+ or Mg2+."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why does diluting a 10x PBS concentrate shift the working pH?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Concentrated buffers have high ionic strength (μ), which suppresses the activity coefficients of multivalent phosphate ions (HPO4^2-). Diluting 10x to 1x lowers the ionic strength, causing the activity coefficient to rise and altering the apparent pKa upward by 0.2 to 0.3 units."
+        }
       }
     ]
   })} />
@@ -435,7 +451,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </div>
 
     <!-- ================================================================= -->
-    <!-- EXTENSIVE SCIENTIFIC REFERENCE (Theory, Derivation & FAQ) -->
+    <!-- EXTENSIVE SCIENTIFIC REFERENCE (Theory, Tables, SOPs & FAQ) -->
     <!-- ================================================================= -->
     <article style="border-top: 2px solid #e2e8f0; padding-top: 3.5rem; line-height: 1.85; color: #1e293b;">
       
@@ -481,6 +497,190 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         Maximum buffer capacity (&beta;<sub>max</sub> = 0.576 &times; <i>C</i><sub>total</sub>) is strictly achieved when pH = p<i>K</i><sub>a</sub>, at which point [A&minus;] = [HA]. When target pH deviates by more than &plusmn;1.0 pH units from p<i>K</i><sub>a</sub>, &beta; drops to less than 33% of maximum capacity, leaving the solution susceptible to sudden pH excursions.
       </p>
 
+      <!-- REFERENCE DATASET TABLE 1: Comprehensive Good's Biological & Chemical Buffers -->
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2.75rem; margin-bottom: 0.75rem;">
+        Comprehensive Biological &amp; Analytical Buffer Reference Table
+      </h3>
+      <p style="font-size: 0.9rem; color: #475569; margin-bottom: 1rem;">
+        Key dissociation constants, thermal coefficients, and functional working ranges for standard chemical standards and Good's zwitterionic buffers:
+      </p>
+
+      <div style="overflow-x: auto; margin-bottom: 2rem;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px;">
+          <thead>
+            <tr style="background: #f1f5f9; text-align: left; color: #334155; font-size: 0.8rem; border-bottom: 1.5px solid #cbd5e1;">
+              <th style="padding: 0.65rem 0.75rem;">Buffer System</th>
+              <th style="padding: 0.65rem 0.75rem;">CAS Number</th>
+              <th style="padding: 0.65rem 0.75rem;">p<i>K</i><sub>a</sub> (25&deg;C)</th>
+              <th style="padding: 0.65rem 0.75rem;">dp<i>K</i><sub>a</sub>/d<i>T</i> (/&deg;C)</th>
+              <th style="padding: 0.65rem 0.75rem;">Useful pH Range</th>
+              <th style="padding: 0.65rem 0.75rem;">Primary Analytical Domain</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Glycine-HCl</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">56-40-6</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">2.35</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">-0.0025</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">2.2 &ndash; 3.6</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">Antibody elution, low-pH HPLC mobile phases</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Sodium Citrate</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">77-92-9</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">4.76 (pK₂)*</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">-0.0024</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">3.0 &ndash; 6.2</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">Antigen retrieval, RNA purification, food chemistry</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Sodium Acetate</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">127-09-3</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">4.76</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">+0.0002</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">3.6 &ndash; 5.6</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">DNA precipitation, enzyme kinetics, chromatography</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">MES (Good's)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">4432-31-9</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">6.15</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">-0.0110</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">5.5 &ndash; 6.7</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">Plant cell culture, electrophoresis, bis-tris gels</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Phosphate (PBS)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">7558-79-4</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">7.20 (pK₂)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">-0.0028</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">5.8 &ndash; 8.0</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">Physiological saline, cell washing, immunoassay assays</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">HEPES (Good's)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">7365-45-9</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">7.50</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">-0.0140</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">6.8 &ndash; 8.2</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">Tissue culture, membrane transport, live cell microscopy</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Tris (THAM)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">77-86-1</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">8.06</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">-0.0280</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">7.0 &ndash; 9.0</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">DNA extraction, SDS-PAGE running buffer, TBS wash</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Sodium Bicarbonate</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">144-55-8</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">10.33 (pK₂)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">-0.0090</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">9.2 &ndash; 10.8</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">ELISA plate coating, amine-NHS ester coupling</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- REFERENCE DATASET TABLE 2: Concentrated Stock Formulation Recipes -->
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2.75rem; margin-bottom: 0.75rem;">
+        Common Laboratory 10&times; &amp; 50&times; Concentrated Stock Recipes
+      </h3>
+      <p style="font-size: 0.9rem; color: #475569; margin-bottom: 1rem;">
+        Standard operational masses per liter for concentrated stock solutions routinely utilized across biological research laboratories:
+      </p>
+
+      <div style="overflow-x: auto; margin-bottom: 2rem;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px;">
+          <thead>
+            <tr style="background: #f1f5f9; text-align: left; color: #334155; font-size: 0.8rem; border-bottom: 1.5px solid #cbd5e1;">
+              <th style="padding: 0.65rem 0.75rem;">Stock Solution</th>
+              <th style="padding: 0.65rem 0.75rem;">Reagents Required (per 1.0 Liter)</th>
+              <th style="padding: 0.65rem 0.75rem;">Target pH</th>
+              <th style="padding: 0.65rem 0.75rem;">Working Concentration (1&times;)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">10&times; PBS (Phosphate Buffered Saline)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; font-size: 0.8rem; color: #334155;">
+                80.0 g NaCl, 2.0 g KCl, 14.4 g Na₂HPO₄, 2.4 g KH₂PO₄
+              </td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">7.40 (&plusmn;0.05)</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">137 mM NaCl, 2.7 mM KCl, 10 mM Phosphate</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">10&times; TBS (Tris Buffered Saline)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; font-size: 0.8rem; color: #334155;">
+                24.2 g Tris Base, 80.0 g NaCl (titrate with concentrated HCl)
+              </td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">7.60 (&plusmn;0.05)</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">20 mM Tris, 150 mM NaCl</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">50&times; TAE (Tris-Acetate-EDTA)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; font-size: 0.8rem; color: #334155;">
+                242.0 g Tris Base, 57.1 mL Glacial Acetic Acid, 18.6 g Na₂EDTA·2H₂O
+              </td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">8.30 (&plusmn;0.10)</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">40 mM Tris, 20 mM Acetic Acid, 1 mM EDTA</td>
+            </tr>
+            <tr>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">10&times; TBE (Tris-Borate-EDTA)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; font-size: 0.8rem; color: #334155;">
+                108.0 g Tris Base, 55.0 g Boric Acid, 7.4 g Na₂EDTA·2H₂O
+              </td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">8.30 (&plusmn;0.10)</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">89 mM Tris, 89 mM Boric Acid, 2 mM EDTA</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- BENCHTOP TROUBLESHOOTING GUIDE -->
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2.75rem; margin-bottom: 0.75rem;">
+        Benchtop Analytical Troubleshooting Matrix
+      </h3>
+      <p style="font-size: 0.9rem; color: #475569; margin-bottom: 1rem;">
+        Common operational discrepancies encountered during buffer formulation and their analytical resolutions:
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-bottom: 2.5rem;">
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1.25rem;">
+          <h4 style="margin: 0 0 0.5rem 0; font-size: 0.95rem; color: #b91c1c; display: flex; align-items: center; gap: 0.4rem;">
+            <span>⚠️</span> Tris Cold Room Shift (pH Drift)
+          </h4>
+          <p style="font-size: 0.84rem; color: #475569; margin: 0; line-height: 1.6;">
+            <strong>Root Cause:</strong> Amine buffers exhibit an unusually large temperature coefficient (dp<i>K</i><sub>a</sub>/d<i>T</i> = &minus;0.028/&deg;C). Adjusting Tris to pH 7.50 at 25&deg;C causes the pH to rise to ~8.06 when transferred to a 4&deg;C cold room.<br />
+            <strong>Fix:</strong> Either calibrate your pH meter and adjust the buffer inside the 4&deg;C cold room, or titrate to a lower pH at 25&deg;C using the integrated temperature input field.
+          </p>
+        </div>
+
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1.25rem;">
+          <h4 style="margin: 0 0 0.5rem 0; font-size: 0.95rem; color: #d97706; display: flex; align-items: center; gap: 0.4rem;">
+            <span>⚠️</span> Phosphate Precipitation with Divalent Cations
+          </h4>
+          <p style="font-size: 0.84rem; color: #475569; margin: 0; line-height: 1.6;">
+            <strong>Root Cause:</strong> Insoluble salts (such as calcium phosphate Ca₃(PO₄)₂ or magnesium phosphate) readily form when millimolar concentrations of Ca²⁺ or Mg²⁺ are added to standard phosphate buffers at neutral or alkaline pH.<br />
+            <strong>Fix:</strong> Switch to a zwitterionic Good's buffer like HEPES or PIPES, which do not coordinate strongly with alkaline earth metals.
+          </p>
+        </div>
+
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1.25rem;">
+          <h4 style="margin: 0 0 0.5rem 0; font-size: 0.95rem; color: #0284c7; display: flex; align-items: center; gap: 0.4rem;">
+            <span>⚠️</span> 10&times; Stock Dilution pH Shift
+          </h4>
+          <p style="font-size: 0.84rem; color: #475569; margin: 0; line-height: 1.6;">
+            <strong>Root Cause:</strong> Diluting concentrated stocks (like 10&times; PBS) tenfold lowers the overall ionic strength (&mu;), which increases the activity coefficient of multivalent HPO₄²⁻ ions and shifts the apparent p<i>K</i><sub>a</sub>.<br />
+            <strong>Fix:</strong> Formulate the 10&times; concentrate slightly lower (e.g., pH 7.15 &ndash; 7.20) so that subsequent 1:10 dilution in water yields the desired 1&times; working pH of 7.40.
+          </p>
+        </div>
+      </div>
+
       <!-- FAQ ACCORDION -->
       <h3 style="font-size: 1.65rem; font-weight: 800; color: #0f172a; margin-top: 3.5rem; margin-bottom: 1.25rem;">
         Frequently Asked Questions: Analytical Buffer Formulation
@@ -505,6 +705,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Why does diluting concentrated 10x PBS shift the working pH?</summary>
           <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
             Phosphate dissociation involves multivalent ions whose activity coefficients are strongly sensitive to ionic strength. Diluting from 10x to 1x reduces ionic strength, shifting the apparent p<i>K</i><sub>a</sub> upward by 0.2 to 0.4 units. Always verify pH after diluting stock concentrates.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What are Good's biological buffers and why are they favored?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Good's buffers (such as HEPES, MES, MOPS, and PIPES) are zwitterionic N-substituted aminosulfonic acids developed by Norman Good. They are chemically stable, highly water soluble, exhibit low membrane permeability, and do not form insoluble complexes with critical divalent cations like Ca²⁺ or Mg²⁺.
           </p>
         </details>
       </div>
@@ -877,13 +1084,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     var bufferCitations = {
       bibtex: '@software{khan_chemistrydesk_buffer_' + currentYear + ',\n' +
-              '  author       = {Khan, Bilal},\n' +
-              '  title        = {ChemistryDesk: Laboratory Buffer Preparation & Henderson-Hasselbalch Studio},\n' +
-              '  year         = {' + currentYear + '},\n' +
-              '  version      = {v1.0.1},\n' +
-              '  publisher    = {Zenodo},\n' +
-              '  doi          = {' + zenodoDoi + '},\n' +
-              '  url          = {https://chemistrycal.com/buffer}\n' +
+              '  author        = {Khan, Bilal},\n' +
+              '  title         = {ChemistryDesk: Laboratory Buffer Preparation & Henderson-Hasselbalch Studio},\n' +
+              '  year          = {' + currentYear + '},\n' +
+              '  version       = {v1.0.1},\n' +
+              '  publisher     = {Zenodo},\n' +
+              '  doi           = {' + zenodoDoi + '},\n' +
+              '  url           = {https://chemistrycal.com/buffer}\n' +
               '}',
       acs: 'Khan, B. ChemistryDesk: Laboratory Buffer Preparation & Henderson-Hasselbalch Studio, version 1.0.1; Zenodo, ' + currentYear + '. https://doi.org/' + zenodoDoi + '.',
       rsc: 'B. Khan, ChemistryDesk: Laboratory Buffer Preparation & Henderson-Hasselbalch Studio, version 1.0.1, Zenodo, ' + currentYear + ', DOI: ' + zenodoDoi + '.',
@@ -968,7 +1175,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <a href="/molarity" style="display: block; padding: 1rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
         <div style="font-weight: 700; font-size: 0.92rem; color: #0284c7; margin-bottom: 0.35rem;">Solution Molarity Studio &rarr;</div>
         <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">
-          Formulate your primary concentrated stock solutions from dry powder, factoring in crystalline hydration (&middot;nH₂O) and chemical purity[cite: 5].
+          Formulate your primary concentrated stock solutions from dry powder, factoring in crystalline hydration (&middot;nH₂O) and chemical purity.
         </div>
       </a>
       <a href="/dilution" style="display: block; padding: 1rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
