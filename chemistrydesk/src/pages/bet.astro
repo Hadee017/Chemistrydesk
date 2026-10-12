@@ -1,104 +1,124 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import AuthorCard from '../components/AuthorCard.astro';
 ---
 
 <BaseLayout 
-  title="BET Surface Area Calculator & Multipoint Physisorption Studio | ChemistryDesk"
-  description="Free research-grade BET surface area calculator. Solve multipoint isotherms and single-point BET with Excel/CSV paste, Rouquerol criteria checks, dynamic SVG plots, and printable tube labels."
+  title="BET Surface Area Calculator — Multipoint Isotherm & Rouquerol Analysis | ChemistryDesk"
+  description="Research-grade BET surface area calculator. Solve multipoint isotherms, verify Rouquerol consistency criteria, and calibrate against certified NIST reference standards."
 >
-  <!-- Schema: WebApplication -->
+  <!-- UNIFIED SEMANTIC JSON-LD SCHEMA GRAPH (GEO & ADSENSE E-E-A-T) -->
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "ChemistryDesk BET Surface Area & Physisorption Engine",
-    "applicationCategory": "EducationalApplication",
-    "operatingSystem": "All",
-    "browserRequirements": "Requires JavaScript",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    }
-  })} />
-
-  <!-- Schema: HowTo -->
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "HowTo",
-    "name": "How to Calculate Multipoint BET Specific Surface Area",
-    "step": [
+    "@graph": [
       {
-        "@type": "HowToStep",
-        "name": "Degas Sample Under Vacuum",
-        "text": "Outgas the adsorbent material under high vacuum (< 10⁻³ Torr) at 120°C to 150°C for 6 to 12 hours to remove trapped moisture and volatile contaminants."
-      },
-      {
-        "@type": "HowToStep",
-        "name": "Acquire Nitrogen Physisorption Isotherm",
-        "text": "Record equilibrium adsorption volume (Va) across the linear relative pressure range (P/P0 = 0.05 to 0.30 for mesopores, or 0.005 to 0.08 for microporous MOFs) at 77.35 K."
-      },
-      {
-        "@type": "HowToStep",
-        "name": "Transform Linear BET Coordinates",
-        "text": "Calculate 1 / [Va * ((P0/P) - 1)] for each relative pressure point and plot against P/P0."
-      },
-      {
-        "@type": "HowToStep",
-        "name": "Derive Monolayer Capacity and Constant C",
-        "text": "Perform least-squares linear regression to determine slope s and intercept i. Calculate monolayer capacity Vm = 1 / (s + i) and constant C = 1 + (s / i)."
-      },
-      {
-        "@type": "HowToStep",
-        "name": "Compute Specific Surface Area (SBET)",
-        "text": "Multiply Vm by the cross-sectional area factor for liquid nitrogen (4.353 m²/cm³ at STP) to derive SBET in m²/g."
-      }
-    ]
-  })} />
-
-  <!-- Schema: FAQPage -->
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "What is the acceptable relative pressure (P/P0) range for BET calculations?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "For classic mesoporous materials (like MCM-41 or SBA-15), the linear BET range is typically between P/P0 = 0.05 and 0.30. For microporous MOFs and zeolites, pore filling occurs at much lower pressures, shifting the valid linear region down to P/P0 = 0.005 to 0.08."
+        "@type": "WebApplication",
+        "@id": "https://chemistrycal.com/bet#app",
+        "name": "ChemistryDesk BET Surface Area & Physisorption Engine",
+        "url": "https://chemistrycal.com/bet",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript",
+        "author": {
+          "@type": "Person",
+          "@id": "https://orcid.org/0009-0006-3082-7043",
+          "name": "Bilal Khan",
+          "jobTitle": "Materials Scientist & Physical Chemistry Researcher",
+          "sameAs": [
+            "https://orcid.org/0009-0006-3082-7043",
+            "https://www.linkedin.com/in/bilal-khan-bbb259248",
+            "https://www.wikidata.org/wiki/Q141699332",
+            "https://doi.org/10.5281/zenodo.23059466"
+          ]
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "ChemistryDesk",
+          "url": "https://chemistrycal.com"
+        },
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
         }
       },
       {
-        "@type": "Question",
-        "name": "Why is the calculated BET constant C sometimes negative?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "A negative C-constant is physically impossible. It occurs when relative pressure points beyond monolayer completion or into the micropore filling regime are evaluated. Rouquerol consistency criteria require removing higher pressure points until the intercept becomes positive."
-        }
+        "@type": "HowTo",
+        "@id": "https://chemistrycal.com/bet#howto",
+        "name": "How to Calculate Multipoint BET Specific Surface Area",
+        "step": [
+          {
+            "@type": "HowToStep",
+            "name": "Degas Sample Under Vacuum",
+            "text": "Outgas the adsorbent material under high vacuum (< 10⁻³ Torr) at 120°C to 150°C for 6 to 12 hours to remove trapped moisture and volatile contaminants."
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Acquire Nitrogen Physisorption Isotherm",
+            "text": "Record equilibrium adsorption volume (Va) across the linear relative pressure range (P/P0 = 0.05 to 0.30 for mesopores, or 0.005 to 0.08 for microporous MOFs) at 77.35 K."
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Transform Linear BET Coordinates",
+            "text": "Calculate 1 / [Va * ((P0/P) - 1)] for each relative pressure point and plot against P/P0."
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Derive Monolayer Capacity and Constant C",
+            "text": "Perform least-squares linear regression to determine slope s and intercept i. Calculate monolayer capacity Vm = 1 / (s + i) and constant C = 1 + (s / i)."
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Compute Specific Surface Area (SBET)",
+            "text": "Multiply Vm by the cross-sectional area factor for liquid nitrogen (4.353 m²/cm³ at STP) to derive SBET in m²/g."
+          }
+        ]
       },
       {
-        "@type": "Question",
-        "name": "How much sample mass is needed for an accurate BET analysis?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Instrument transducers typically require at least 2 to 5 m² of total surface area in the sample tube. For high-surface-area materials (1000 m²/g), 0.02–0.05 g suffices; for low-surface-area materials (1–5 m²/g), 1 to 2 g is recommended."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Why is Argon preferred over Nitrogen for microporous zeolites and MOFs?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Nitrogen has a permanent quadrupole moment that interacts specifically with exposed metal sites, cations, and polar functional groups, distorting the adsorption isotherm. Argon at 87.27 K is a spherical monoatomic noble gas without a quadrupole moment, providing more accurate pore size distributions."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "What is the molecular cross-sectional area of Nitrogen at 77.35 K?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "The standard IUPAC cross-sectional area (sigma) for Nitrogen at 77.35 K is 0.162 nm² (16.2 square Ångströms). This yields a conversion factor of 4.353 m²/cm³ at standard temperature and pressure (STP)."
-        }
+        "@type": "FAQPage",
+        "@id": "https://chemistrycal.com/bet#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is the acceptable relative pressure (P/P0) range for BET calculations?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "For classic mesoporous materials (like MCM-41 or SBA-15), the linear BET range is typically between P/P0 = 0.05 and 0.30. For microporous MOFs and zeolites, pore filling occurs at much lower pressures, shifting the valid linear region down to P/P0 = 0.005 to 0.08."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why is the calculated BET constant C sometimes negative?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "A negative C-constant is physically impossible. It occurs when relative pressure points beyond monolayer completion or into the micropore filling regime are evaluated. Rouquerol consistency criteria require removing higher pressure points until the intercept becomes positive."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How much sample mass is needed for an accurate BET analysis?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Instrument transducers typically require at least 2 to 5 m² of total surface area in the sample tube. For high-surface-area materials (1000 m²/g), 0.02–0.05 g suffices; for low-surface-area materials (1–5 m²/g), 1 to 2 g is recommended."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why is Argon preferred over Nitrogen for microporous zeolites and MOFs?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nitrogen has a permanent quadrupole moment that interacts specifically with exposed metal sites, cations, and polar functional groups, distorting the adsorption isotherm. Argon at 87.27 K is a spherical monoatomic noble gas without a quadrupole moment, providing more accurate pore size distributions."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is the molecular cross-sectional area of Nitrogen at 77.35 K?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The standard IUPAC cross-sectional area (sigma) for Nitrogen at 77.35 K is 0.162 nm² (16.2 square Ångströms). This yields a conversion factor of 4.353 m²/cm³ at standard temperature and pressure (STP)."
+            }
+          }
+        ]
       }
     ]
   })} />
@@ -112,23 +132,35 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <span style="color: #0f172a; font-weight: 700;">BET Surface Area Studio</span>
     </nav>
 
-    <!-- Header Section -->
+    <!-- FRONT TOP-LEFT: Verified Author & E-E-A-T Review Card -->
+    <AuthorCard />
+
+    <!-- Header Section with Direct-Answer Block -->
     <div style="border-bottom: 1px solid #e2e8f0; padding-bottom: 1.75rem; margin-bottom: 2rem;">
       <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
         <span style="font-size: 2.5rem;">📊</span>
         <div>
-          <h1 style="font-size: 2.25rem; font-weight: 800; color: #0f172a; letter-spacing: -0.025em; margin: 0;">
-            BET Surface Area &amp; Physisorption Studio
+          <h1 style="font-size: clamp(1.85rem, 4vw, 2.25rem); font-weight: 800; color: #0f172a; letter-spacing: -0.025em; margin: 0;">
+            BET Surface Area Calculator (Multipoint Physisorption)
           </h1>
-          <p style="color: #64748b; font-size: 0.95rem; margin-top: 0.25rem; margin-bottom: 0;">
+          <p style="color: #64748b; font-size: 0.95rem; margin-top: 0.25rem; margin-bottom: 0.85rem;">
             Multipoint isotherm regression, automated Rouquerol consistency evaluation, Excel/CSV paste importer, and single-point QC estimator.
           </p>
         </div>
       </div>
 
+      <!-- GEO Direct-Answer Callout Box (Clean HTML without JSX Brackets) -->
+      <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-left: 4px solid #0284c7; border-radius: 8px; padding: 0.9rem 1.15rem; font-size: 0.88rem; line-height: 1.55; color: #334155; margin-bottom: 1.25rem;">
+        <strong style="color: #0f172a;">The BET Equation:</strong> Determines specific surface area (<i>S</i><sub>BET</sub>) from multimolecular gas adsorption:
+        <span style="display: block; font-family: ui-monospace, SFMono-Regular, monospace; font-size: 0.92rem; font-weight: 700; color: #0284c7; margin: 0.3rem 0;">
+          1 / [ V<sub>a</sub> &middot; ((P<sub>0</sub>/P) &minus; 1) ] = [ (C &minus; 1) / (V<sub>m</sub> &middot; C) ] &middot; (P/P<sub>0</sub>) + [ 1 / (V<sub>m</sub> &middot; C) ]
+        </span>
+        where <strong>V<sub>a</sub></strong> is volume adsorbed at relative pressure <strong>P/P<sub>0</sub></strong>, <strong>V<sub>m</sub></strong> is the monolayer capacity (1 / (s + i)), and <strong>C</strong> is the energetic net heat of adsorption constant (1 + s/i).
+      </div>
+
       <!-- Segmented Mode Switcher -->
-      <div style="margin-top: 1.5rem; display: flex; align-items: center; justify-content: flex-start;">
-        <div style="background: #e2e8f0; padding: 4px; border-radius: 10px; display: inline-flex; gap: 4px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.06);">
+      <div style="display: flex; align-items: center; justify-content: flex-start;">
+        <div style="background: #e2e8f0; padding: 4px; border-radius: 10px; display: inline-flex; gap: 4px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.06); flex-wrap: wrap;">
           <button 
             id="modeMultiBtn" 
             style="background: #0284c7; color: #ffffff; border: none; padding: 0.65rem 1.4rem; border-radius: 8px; font-size: 0.875rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: all 0.2s ease;"
@@ -139,7 +171,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             id="modeSingleBtn" 
             style="background: transparent; color: #475569; border: none; padding: 0.65rem 1.4rem; border-radius: 8px; font-size: 0.875rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s ease;"
           >
-            <span>⚡</span> Single-Point BET (Rapid QC @ P/P₀ ≈ 0.30)
+            <span>⚡</span> Single-Point BET (Rapid QC @ P/P₀ &asymp; 0.30)
           </button>
         </div>
       </div>
@@ -157,9 +189,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <div style="display: flex; align-items: center; gap: 0.35rem;">
             <span style="font-weight: 700; color: #475569; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Adsorbate Gas:</span>
             <select id="adsorbateSelect" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 0.35rem 0.65rem; border-radius: 6px; font-weight: 600; color: #0284c7; cursor: pointer;">
-              <option value="0.162" selected>Nitrogen (N₂, 77.35 K) — σ = 0.162 nm²</option>
-              <option value="0.142">Argon (Ar, 87.27 K) — σ = 0.142 nm²</option>
-              <option value="0.170">Carbon Dioxide (CO₂, 273.15 K) — σ = 0.170 nm²</option>
+              <option value="0.162" selected>Nitrogen (N₂, 77.35 K) &mdash; &sigma; = 0.162 nm²</option>
+              <option value="0.142">Argon (Ar, 87.27 K) &mdash; &sigma; = 0.142 nm²</option>
+              <option value="0.170">Carbon Dioxide (CO₂, 273.15 K) &mdash; &sigma; = 0.170 nm²</option>
             </select>
           </div>
 
@@ -169,7 +201,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </div>
 
           <div style="display: flex; align-items: center; gap: 0.35rem;">
-            <span style="font-weight: 700; color: #475569; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Degas (°C):</span>
+            <span style="font-weight: 700; color: #475569; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Degas (&deg;C):</span>
             <input type="number" id="inpDegasTemp" value="120" style="width: 75px; background: #ffffff; border: 1px solid #cbd5e1; padding: 0.35rem 0.5rem; border-radius: 6px; font-weight: 600; font-family: monospace;" />
           </div>
         </div>
@@ -193,7 +225,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
       </div>
 
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
         
         <!-- Isotherm & Rouquerol Data Table Panel -->
         <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
@@ -304,6 +336,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       </div>
 
+      <!-- RESERVED DISPLAY AD CONTAINER 1 (ADSENSE RESPONSIVE) -->
+      <div class="adsense-slot-wrapper" style="min-height: 100px; margin: 2rem auto; text-align: center; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+        <span style="font-size: 0.75rem; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Advertisement Placement</span>
+      </div>
+
       <!-- Live Dynamic Linear BET SVG Plot -->
       <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem;">
         <h3 style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #475569; margin: 0 0 0.5rem 0;">
@@ -367,12 +404,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       
       <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.25rem 2rem; margin: 1.5rem 0; text-align: center; box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);">
         <div style="font-size: 1.35rem; font-weight: 800; color: #0f172a; letter-spacing: 0.05em; font-family: 'Times New Roman', Times, serif;">
-          1 / [ V<sub>a</sub> · ((P<sub>0</sub>/P) &minus; 1) ] = [ (C &minus; 1) / (V<sub>m</sub> &middot; C) ] &middot; (P/P<sub>0</sub>) + [ 1 / (V<sub>m</sub> &middot; C) ]
+          1 / [ V<sub>a</sub> &middot; ((P<sub>0</sub>/P) &minus; 1) ] = [ (C &minus; 1) / (V<sub>m</sub> &middot; C) ] &middot; (P/P<sub>0</sub>) + [ 1 / (V<sub>m</sub> &middot; C) ]
         </div>
       </div>
 
       <p>
-        When plotted as <em>1 / [ V<sub>a</sub> · ((P<sub>0</sub>/P) &minus; 1) ]</em> versus <em>P/P<sub>0</sub></em>, the relationship yields a straight line with slope <em>s = (C &minus; 1) / (V<sub>m</sub> &middot; C)</em> and y-intercept <em>i = 1 / (V<sub>m</sub> &middot; C)</em>. From these empirical parameters, the monolayer capacity <em>V<sub>m</sub></em> and the dimensionless energetic constant <em>C</em> are resolved:
+        When plotted as <em>1 / [ V<sub>a</sub> &middot; ((P<sub>0</sub>/P) &minus; 1) ]</em> versus <em>P/P<sub>0</sub></em>, the relationship yields a straight line with slope <em>s = (C &minus; 1) / (V<sub>m</sub> &middot; C)</em> and y-intercept <em>i = 1 / (V<sub>m</sub> &middot; C)</em>. From these empirical parameters, the monolayer capacity <em>V<sub>m</sub></em> and the dimensionless energetic constant <em>C</em> are resolved:
       </p>
 
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
@@ -388,6 +425,51 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <strong style="color: #64748b; font-size: 0.8rem; text-transform: uppercase; display: block; margin-bottom: 0.35rem;">Specific Surface Area (S<sub>BET</sub>)</strong>
           <span style="font-family: monospace; font-size: 1.15rem; font-weight: 800; color: #059669;">S<sub>BET</sub> = (V<sub>m</sub> &middot; N<sub>A</sub> &middot; &sigma;) / V<sub>mol</sub></span>
         </div>
+      </div>
+
+      <!-- CERTIFIED NIST SRM PHYSISORPTION BENCHMARK TABLE -->
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2.5rem; margin-bottom: 0.75rem;">
+        Certified NIST Reference Materials for BET Surface Area Calibration
+      </h3>
+      <p style="font-size: 0.9rem; color: #475569; margin-bottom: 1rem;">
+        To ensure laboratory quality control and pressure transducer verification, physisorption instruments are calibrated using Standard Reference Materials (SRMs) certified by the National Institute of Standards and Technology (NIST):
+      </p>
+
+      <div style="overflow-x: auto; margin-bottom: 2rem;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 8px; overflow: hidden;">
+          <thead>
+            <tr style="background: #0f172a; color: #ffffff; text-align: left;">
+              <th style="padding: 0.75rem 0.85rem;">NIST Standard</th>
+              <th style="padding: 0.75rem 0.85rem;">Material Composition</th>
+              <th style="padding: 0.75rem 0.85rem;">Certified S<sub>BET</sub></th>
+              <th style="padding: 0.75rem 0.85rem;">Uncertainty (&plusmn;2&sigma;)</th>
+              <th style="padding: 0.75rem 0.85rem;">Measurement Conditions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.7rem 0.85rem; font-weight: 700; color: #0284c7;">NIST SRM 1898</td>
+              <td style="padding: 0.7rem 0.85rem; font-family: monospace;">Titanium Dioxide (TiO₂)</td>
+              <td style="padding: 0.7rem 0.85rem; font-weight: 800; color: #059669;">55.83 m²/g</td>
+              <td style="padding: 0.7rem 0.85rem; font-family: monospace;">&plusmn; 0.42 m²/g</td>
+              <td style="padding: 0.7rem 0.85rem; color: #475569;">N₂ physisorption at 77.35 K (&sigma; = 0.162 nm²)</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #f8fafc;">
+              <td style="padding: 0.7rem 0.85rem; font-weight: 700; color: #0284c7;">NIST SRM 1900</td>
+              <td style="padding: 0.7rem 0.85rem; font-family: monospace;">Silicon Nitride (Si₃N₄)</td>
+              <td style="padding: 0.7rem 0.85rem; font-weight: 800; color: #059669;">2.85 m²/g</td>
+              <td style="padding: 0.7rem 0.85rem; font-family: monospace;">&plusmn; 0.09 m²/g</td>
+              <td style="padding: 0.7rem 0.85rem; color: #475569;">Continuous volumetric N₂ adsorption (low surface area)</td>
+            </tr>
+            <tr>
+              <td style="padding: 0.7rem 0.85rem; font-weight: 700; color: #0284c7;">NIST SRM 1897</td>
+              <td style="padding: 0.7rem 0.85rem; font-family: monospace;">Synthetic Fumed Silica</td>
+              <td style="padding: 0.7rem 0.85rem; font-weight: 800; color: #059669;">182.2 m²/g</td>
+              <td style="padding: 0.7rem 0.85rem; font-family: monospace;">&plusmn; 4.3 m²/g</td>
+              <td style="padding: 0.7rem 0.85rem; color: #475569;">Multipoint gas physisorption across P/P₀ = 0.05–0.30</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
       <!-- BENCHMARK DATASET TABLE 1: Real-World Adsorbent Benchmarks -->
@@ -683,88 +765,97 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     }
   </style>
 
-  <!-- ALL SCRIPT LOGIC 100% PRESERVED -->
-  <script>
+  <!-- ALL SCRIPT LOGIC (INLINE TO PREVENT VITE BUNDLING ERRORS) -->
+  <script is:inline>
     // MODE SWITCHING
-    const multiSection = document.getElementById('multiModeSection')!;
-    const singleSection = document.getElementById('singleModeSection')!;
-    const modeMultiBtn = document.getElementById('modeMultiBtn')!;
-    const modeSingleBtn = document.getElementById('modeSingleBtn')!;
+    var multiSection = document.getElementById('multiModeSection');
+    var singleSection = document.getElementById('singleModeSection');
+    var modeMultiBtn = document.getElementById('modeMultiBtn');
+    var modeSingleBtn = document.getElementById('modeSingleBtn');
 
-    modeMultiBtn.addEventListener('click', () => {
-      multiSection.style.display = 'block';
-      singleSection.style.display = 'none';
-      modeMultiBtn.style.background = '#0284c7';
-      modeMultiBtn.style.color = '#ffffff';
-      modeMultiBtn.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
-      modeSingleBtn.style.background = 'transparent';
-      modeSingleBtn.style.color = '#475569';
-      modeSingleBtn.style.boxShadow = 'none';
-      runMultiEngine();
-    });
-
-    modeSingleBtn.addEventListener('click', () => {
-      multiSection.style.display = 'none';
-      singleSection.style.display = 'block';
-      modeSingleBtn.style.background = '#0284c7';
-      modeSingleBtn.style.color = '#ffffff';
-      modeSingleBtn.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
-      modeMultiBtn.style.background = 'transparent';
-      modeMultiBtn.style.color = '#475569';
-      modeMultiBtn.style.boxShadow = 'none';
-      runSinglePointEngine();
-    });
-
-    // PASTE BOX TOGGLING
-    const togglePasteBtn = document.getElementById('togglePasteBoxBtn')!;
-    const pasteContainer = document.getElementById('pasteContainer')!;
-    const cancelPasteBtn = document.getElementById('cancelPasteBtn')!;
-    const applyPasteBtn = document.getElementById('applyPasteBtn')!;
-    const pasteTextArea = document.getElementById('pasteTextArea') as HTMLTextAreaElement;
-
-    togglePasteBtn.addEventListener('click', () => {
-      const isClosed = pasteContainer.style.display === 'none';
-      pasteContainer.style.display = isClosed ? 'block' : 'none';
-      if (isClosed) pasteTextArea.focus();
-    });
-
-    cancelPasteBtn.addEventListener('click', () => {
-      pasteContainer.style.display = 'none';
-    });
-
-    applyPasteBtn.addEventListener('click', () => {
-      const text = pasteTextArea.value.trim();
-      if (!text) return;
-      const lines = text.split('\n');
-      const newPoints: Array<{ p: number; v: number }> = [];
-
-      lines.forEach(line => {
-        const clean = line.trim().replace(/,/g, ' ').replace(/\t/g, ' ');
-        const parts = clean.split(/\s+/);
-        if (parts.length >= 2) {
-          const p = parseFloat(parts[0]);
-          const v = parseFloat(parts[1]);
-          if (!isNaN(p) && !isNaN(v) && p > 0 && p < 1 && v > 0) {
-            newPoints.push({ p, v });
-          }
-        }
+    if (modeMultiBtn && modeSingleBtn) {
+      modeMultiBtn.addEventListener('click', function() {
+        multiSection.style.display = 'block';
+        singleSection.style.display = 'none';
+        modeMultiBtn.style.background = '#0284c7';
+        modeMultiBtn.style.color = '#ffffff';
+        modeMultiBtn.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+        modeSingleBtn.style.background = 'transparent';
+        modeSingleBtn.style.color = '#475569';
+        modeSingleBtn.style.boxShadow = 'none';
+        runMultiEngine();
       });
 
-      if (newPoints.length >= 2) {
-        newPoints.sort((a, b) => a.p - b.p);
-        isothermPoints = newPoints;
-        renderIsothermTable();
-        runMultiEngine();
+      modeSingleBtn.addEventListener('click', function() {
+        multiSection.style.display = 'none';
+        singleSection.style.display = 'block';
+        modeSingleBtn.style.background = '#0284c7';
+        modeSingleBtn.style.color = '#ffffff';
+        modeSingleBtn.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+        modeMultiBtn.style.background = 'transparent';
+        modeMultiBtn.style.color = '#475569';
+        modeMultiBtn.style.boxShadow = 'none';
+        runSinglePointEngine();
+      });
+    }
+
+    // PASTE BOX TOGGLING
+    var togglePasteBtn = document.getElementById('togglePasteBoxBtn');
+    var pasteContainer = document.getElementById('pasteContainer');
+    var cancelPasteBtn = document.getElementById('cancelPasteBtn');
+    var applyPasteBtn = document.getElementById('applyPasteBtn');
+    var pasteTextArea = document.getElementById('pasteTextArea');
+
+    if (togglePasteBtn && pasteContainer) {
+      togglePasteBtn.addEventListener('click', function() {
+        var isClosed = pasteContainer.style.display === 'none';
+        pasteContainer.style.display = isClosed ? 'block' : 'none';
+        if (isClosed && pasteTextArea) pasteTextArea.focus();
+      });
+    }
+
+    if (cancelPasteBtn && pasteContainer) {
+      cancelPasteBtn.addEventListener('click', function() {
         pasteContainer.style.display = 'none';
-        pasteTextArea.value = '';
-      } else {
-        alert('Could not parse at least 2 valid points. Format: P/P0 [tab or space] Volume');
-      }
-    });
+      });
+    }
+
+    if (applyPasteBtn && pasteTextArea) {
+      applyPasteBtn.addEventListener('click', function() {
+        var text = pasteTextArea.value.trim();
+        if (!text) return;
+        var lines = text.split('\n');
+        var newPoints = [];
+
+        lines.forEach(function(line) {
+          var clean = line.trim().replace(/,/g, ' ').replace(/\t/g, ' ');
+          var parts = clean.split(/\s+/);
+          if (parts.length >= 2) {
+            var p = parseFloat(parts[0]);
+            var v = parseFloat(parts[1]);
+            if (!isNaN(p) && !isNaN(v) && p > 0 && p < 1 && v > 0) {
+              newPoints.push({ p: p, v: v });
+            }
+          }
+        });
+
+        if (newPoints.length >= 2) {
+          newPoints.sort(function(a, b) { return a.p - b.p; });
+          isothermPoints = newPoints;
+          renderIsothermTable();
+          runMultiEngine();
+          pasteContainer.style.display = 'none';
+          pasteTextArea.value = '';
+        } else {
+          alert('Could not parse at least 2 valid points. Format: P/P0 [tab or space] Volume');
+        }
+      });
+    }
 
     // TRANSDUCER AREA SENSITIVITY CHECK
-    function checkSensitivity(totalArea: number) {
-      const box = document.getElementById('transducerAlertBox')!;
+    function checkSensitivity(totalArea) {
+      var box = document.getElementById('transducerAlertBox');
+      if (!box) return;
       if (totalArea > 0 && totalArea < 2.0) {
         box.style.display = 'block';
         box.innerHTML = '<strong>Transducer Sensitivity Alert:</strong> Total cell surface area (' + totalArea.toFixed(2) + ' m²) is below the recommended 2.0 m² threshold. Consider increasing sample mass to improve precision.';
@@ -774,11 +865,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     }
 
     // MULTIPOINT ENGINE CORE
-    const adsorbateSelect = document.getElementById('adsorbateSelect') as HTMLSelectElement;
-    const inpSampleMass = document.getElementById('inpSampleMass') as HTMLInputElement;
-    const inpDegasTemp = document.getElementById('inpDegasTemp') as HTMLInputElement;
+    var adsorbateSelect = document.getElementById('adsorbateSelect');
+    var inpSampleMass = document.getElementById('inpSampleMass');
+    var inpDegasTemp = document.getElementById('inpDegasTemp');
 
-    let isothermPoints = [
+    var isothermPoints = [
       { p: 0.055, v: 82.4 },
       { p: 0.092, v: 91.2 },
       { p: 0.134, v: 98.5 },
@@ -787,60 +878,60 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       { p: 0.252, v: 114.8 }
     ];
 
-    function getConvFactor(): number {
-      const sigma = parseFloat(adsorbateSelect.value) || 0.162;
+    function getConvFactor() {
+      var sigma = parseFloat(adsorbateSelect ? adsorbateSelect.value : '0.162') || 0.162;
       return (6.02214076e23 * (sigma * 1e-18)) / 22414.0;
     }
 
     function renderIsothermTable() {
-      const tbody = document.getElementById('isothermTableBody')!;
+      var tbody = document.getElementById('isothermTableBody');
+      if (!tbody) return;
       tbody.innerHTML = '';
 
-      let prevRouqVal = -1;
+      var prevRouqVal = -1;
 
-      isothermPoints.forEach((pt, i) => {
-        const rouqVal = pt.v * (1.0 - pt.p);
-        const isDecreasing = (prevRouqVal !== -1 && rouqVal < prevRouqVal);
+      isothermPoints.forEach(function(pt, i) {
+        var rouqVal = pt.v * (1.0 - pt.p);
+        var isDecreasing = (prevRouqVal !== -1 && rouqVal < prevRouqVal);
         prevRouqVal = rouqVal;
 
-        const tr = document.createElement('tr');
+        var tr = document.createElement('tr');
         tr.style.borderBottom = '1px solid #f1f5f9';
-        tr.innerHTML = `
-          <td style="padding: 0.45rem 0.2rem; font-weight: 700; color: #64748b; font-family: monospace;">#${i + 1}</td>
-          <td style="padding: 0.45rem 0.2rem;">
-            <input type="number" step="0.001" value="${pt.p}" data-index="${i}" data-field="p" class="iso-input" style="width: 75px; border: 1px solid #cbd5e1; border-radius: 4px; padding: 0.25rem 0.4rem; font-family: monospace; font-size: 0.82rem;" />
-          </td>
-          <td style="padding: 0.45rem 0.2rem;">
-            <input type="number" step="0.1" value="${pt.v}" data-index="${i}" data-field="v" class="iso-input" style="width: 85px; border: 1px solid #cbd5e1; border-radius: 4px; padding: 0.25rem 0.4rem; font-family: monospace; font-size: 0.82rem;" />
-          </td>
-          <td style="padding: 0.45rem 0.2rem; font-family: monospace; font-size: 0.8rem; color: #334155;">
-            ${rouqVal.toFixed(2)}
-          </td>
-          <td style="padding: 0.45rem 0.2rem;">
-            <span style="font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; ${isDecreasing ? 'background: #fef2f2; color: #ef4444; border: 1px solid #fecaca;' : 'background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;'}">
-              ${isDecreasing ? 'Violation' : 'Valid'}
-            </span>
-          </td>
-          <td style="padding: 0.45rem 0.2rem; text-align: right;">
-            <button data-index="${i}" class="del-pt-btn" style="background: none; border: none; color: #ef4444; font-size: 0.85rem; cursor: pointer; padding: 0.2rem;">✕</button>
-          </td>
-        `;
+        tr.innerHTML = 
+          '<td style="padding: 0.45rem 0.2rem; font-weight: 700; color: #64748b; font-family: monospace;">#' + (i + 1) + '</td>' +
+          '<td style="padding: 0.45rem 0.2rem;">' +
+            '<input type="number" step="0.001" value="' + pt.p + '" data-index="' + i + '" data-field="p" class="iso-input" style="width: 75px; border: 1px solid #cbd5e1; border-radius: 4px; padding: 0.25rem 0.4rem; font-family: monospace; font-size: 0.82rem;" />' +
+          '</td>' +
+          '<td style="padding: 0.45rem 0.2rem;">' +
+            '<input type="number" step="0.1" value="' + pt.v + '" data-index="' + i + '" data-field="v" class="iso-input" style="width: 85px; border: 1px solid #cbd5e1; border-radius: 4px; padding: 0.25rem 0.4rem; font-family: monospace; font-size: 0.82rem;" />' +
+          '</td>' +
+          '<td style="padding: 0.45rem 0.2rem; font-family: monospace; font-size: 0.8rem; color: #334155;">' +
+            rouqVal.toFixed(2) +
+          '</td>' +
+          '<td style="padding: 0.45rem 0.2rem;">' +
+            '<span style="font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; ' + (isDecreasing ? 'background: #fef2f2; color: #ef4444; border: 1px solid #fecaca;' : 'background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;') + '">' +
+              (isDecreasing ? 'Violation' : 'Valid') +
+            '</span>' +
+          '</td>' +
+          '<td style="padding: 0.45rem 0.2rem; text-align: right;">' +
+            '<button data-index="' + i + '" class="del-pt-btn" style="background: none; border: none; color: #ef4444; font-size: 0.85rem; cursor: pointer; padding: 0.2rem;">✕</button>' +
+          '</td>';
         tbody.appendChild(tr);
       });
 
-      tbody.querySelectorAll('.iso-input').forEach(input => {
-        input.addEventListener('input', (e) => {
-          const target = e.target as HTMLInputElement;
-          const idx = parseInt(target.getAttribute('data-index')!, 10);
-          const field = target.getAttribute('data-field') as 'p' | 'v';
+      tbody.querySelectorAll('.iso-input').forEach(function(input) {
+        input.addEventListener('input', function(e) {
+          var target = e.target;
+          var idx = parseInt(target.getAttribute('data-index'), 10);
+          var field = target.getAttribute('data-field');
           isothermPoints[idx][field] = parseFloat(target.value) || 0;
           runMultiEngine();
         });
       });
 
-      tbody.querySelectorAll('.del-pt-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const idx = parseInt((e.currentTarget as HTMLElement).getAttribute('data-index')!, 10);
+      tbody.querySelectorAll('.del-pt-btn').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+          var idx = parseInt(e.currentTarget.getAttribute('data-index'), 10);
           if (isothermPoints.length > 2) {
             isothermPoints.splice(idx, 1);
             renderIsothermTable();
@@ -852,112 +943,128 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       });
     }
 
-    document.getElementById('addRowBtn')?.addEventListener('click', () => {
-      const lastP = isothermPoints.length > 0 ? isothermPoints[isothermPoints.length - 1].p : 0.05;
-      isothermPoints.push({ p: parseFloat(Math.min(0.35, lastP + 0.03).toFixed(3)), v: 120.0 });
-      renderIsothermTable();
-      runMultiEngine();
-    });
+    var addRowBtn = document.getElementById('addRowBtn');
+    if (addRowBtn) {
+      addRowBtn.addEventListener('click', function() {
+        var lastP = isothermPoints.length > 0 ? isothermPoints[isothermPoints.length - 1].p : 0.05;
+        isothermPoints.push({ p: parseFloat(Math.min(0.35, lastP + 0.03).toFixed(3)), v: 120.0 });
+        renderIsothermTable();
+        runMultiEngine();
+      });
+    }
 
     function runMultiEngine() {
-      const conv = getConvFactor();
-      const mass = parseFloat(inpSampleMass.value) || 0.125;
-      const temp = inpDegasTemp.value || '120';
+      var conv = getConvFactor();
+      var mass = parseFloat(inpSampleMass ? inpSampleMass.value : '0.125') || 0.125;
+      var temp = (inpDegasTemp ? inpDegasTemp.value : '120') || '120';
 
-      const valid = isothermPoints.filter(pt => pt.p > 0 && pt.p < 1 && pt.v > 0);
+      var valid = isothermPoints.filter(function(pt) { return pt.p > 0 && pt.p < 1 && pt.v > 0; });
       if (valid.length < 2) return;
 
-      const xVals: number[] = [];
-      const yVals: number[] = [];
+      var xVals = [];
+      var yVals = [];
 
-      valid.forEach(pt => {
+      valid.forEach(function(pt) {
         xVals.push(pt.p);
         yVals.push(1.0 / (pt.v * ((1.0 / pt.p) - 1.0)));
       });
 
-      const n = xVals.length;
-      let sX = 0, sY = 0, sXY = 0, sXX = 0, sYY = 0;
-      for (let i = 0; i < n; i++) {
+      var n = xVals.length;
+      var sX = 0, sY = 0, sXY = 0, sXX = 0, sYY = 0;
+      for (var i = 0; i < n; i++) {
         sX += xVals[i]; sY += yVals[i]; sXY += xVals[i] * yVals[i];
         sXX += xVals[i] * xVals[i]; sYY += yVals[i] * yVals[i];
       }
 
-      const denom = n * sXX - sX * sX;
+      var denom = n * sXX - sX * sX;
       if (Math.abs(denom) < 1e-12) return;
 
-      const slope = (n * sXY - sX * sY) / denom;
-      const intercept = (sY - slope * sX) / n;
+      var slope = (n * sXY - sX * sY) / denom;
+      var intercept = (sY - slope * sX) / n;
 
-      const ssTot = sYY - (sY * sY) / n;
-      const ssRes = sYY - intercept * sY - slope * sXY;
-      const r2 = ssTot !== 0 ? Math.max(0, 1 - (ssRes / ssTot)) : 1.0;
+      var ssTot = sYY - (sY * sY) / n;
+      var ssRes = sYY - intercept * sY - slope * sXY;
+      var r2 = ssTot !== 0 ? Math.max(0, 1 - (ssRes / ssTot)) : 1.0;
 
-      const vm = 1.0 / (slope + intercept);
-      const cConst = 1.0 + (slope / intercept);
-      const sbet = vm * conv;
-      const totalArea = sbet * mass;
+      var vm = 1.0 / (slope + intercept);
+      var cConst = 1.0 + (slope / intercept);
+      var sbet = vm * conv;
+      var totalArea = sbet * mass;
 
-      document.getElementById('regSlope')!.textContent = slope.toFixed(4);
-      document.getElementById('regIntercept')!.textContent = intercept.toFixed(4);
-      document.getElementById('regC')!.textContent = cConst.toFixed(1);
-      document.getElementById('regR2')!.textContent = r2.toFixed(4);
+      var elSlope = document.getElementById('regSlope');
+      var elIntercept = document.getElementById('regIntercept');
+      var elC = document.getElementById('regC');
+      var elR2 = document.getElementById('regR2');
+      var elPrimary = document.getElementById('primaryResult');
+      var elTotalArea = document.getElementById('displayTotalArea');
+      var elVm = document.getElementById('displayVm');
 
-      document.getElementById('primaryResult')!.textContent = sbet.toFixed(1) + ' m²/g';
-      document.getElementById('displayTotalArea')!.textContent = totalArea.toFixed(2) + ' m²';
-      document.getElementById('displayVm')!.textContent = vm.toFixed(2) + ' cm³/g';
+      if (elSlope) elSlope.textContent = slope.toFixed(4);
+      if (elIntercept) elIntercept.textContent = intercept.toFixed(4);
+      if (elC) elC.textContent = cConst.toFixed(1);
+      if (elR2) elR2.textContent = r2.toFixed(4);
+
+      if (elPrimary) elPrimary.textContent = sbet.toFixed(1) + ' m²/g';
+      if (elTotalArea) elTotalArea.textContent = totalArea.toFixed(2) + ' m²';
+      if (elVm) elVm.textContent = vm.toFixed(2) + ' cm³/g';
 
       checkSensitivity(totalArea);
 
-      const covPct = Math.min(Math.max((totalArea / 5.0) * 100, 2), 100);
-      const coverageBar = document.getElementById('coverageBar')!;
-      coverageBar.style.width = covPct + '%';
-      coverageBar.style.background = (totalArea >= 2.0) ? '#059669' : '#f59e0b';
-      document.getElementById('scaleStatusText')!.textContent = totalArea.toFixed(2) + ' m² in cell (' + (totalArea >= 2.0 ? 'Optimal' : 'Low Sensitivity') + ')';
+      var covPct = Math.min(Math.max((totalArea / 5.0) * 100, 2), 100);
+      var coverageBar = document.getElementById('coverageBar');
+      var scaleStatusText = document.getElementById('scaleStatusText');
+      if (coverageBar) {
+        coverageBar.style.width = covPct + '%';
+        coverageBar.style.background = (totalArea >= 2.0) ? '#059669' : '#f59e0b';
+      }
+      if (scaleStatusText) {
+        scaleStatusText.textContent = totalArea.toFixed(2) + ' m² in cell (' + (totalArea >= 2.0 ? 'Optimal' : 'Low Sensitivity') + ')';
+      }
 
-      const protocolEl = document.getElementById('protocolSteps')!;
-      protocolEl.innerHTML = `
-        <li>Degas <strong>${mass.toFixed(4)} g</strong> of sample under high vacuum (&lt; 10⁻³ Torr) at <strong>${temp}°C</strong> for 6–12 h.</li>
-        <li>Collect N₂ isotherm at 77.35 K across the designated relative pressure interval.</li>
-        <li>Monolayer capacity derived: <strong>${vm.toFixed(2)} cm³/g STP</strong> with C-constant = <strong>${cConst.toFixed(1)}</strong>.</li>
-        <li>Specific Surface Area: <strong>${sbet.toFixed(1)} m²/g</strong> (Total cell surface: ${totalArea.toFixed(2)} m²).</li>
-      `;
+      var protocolEl = document.getElementById('protocolSteps');
+      if (protocolEl) {
+        protocolEl.innerHTML = 
+          '<li>Degas <strong>' + mass.toFixed(4) + ' g</strong> of sample under high vacuum (&lt; 10⁻³ Torr) at <strong>' + temp + '°C</strong> for 6–12 h.</li>' +
+          '<li>Collect N₂ isotherm at 77.35 K across the designated relative pressure interval.</li>' +
+          '<li>Monolayer capacity derived: <strong>' + vm.toFixed(2) + ' cm³/g STP</strong> with C-constant = <strong>' + cConst.toFixed(1) + '</strong>.</li>' +
+          '<li>Specific Surface Area: <strong>' + sbet.toFixed(1) + ' m²/g</strong> (Total cell surface: ' + totalArea.toFixed(2) + ' m²).</li>';
+      }
 
       renderBetPlot(xVals, yVals, slope, intercept);
     }
 
-    function renderBetPlot(xVals: number[], yVals: number[], slope: number, intercept: number) {
-      const svg = document.getElementById('betPlotSvg')!;
-      const minX = Math.min(...xVals), maxX = Math.max(...xVals);
-      const minY = Math.min(...yVals), maxY = Math.max(...yVals);
+    function renderBetPlot(xVals, yVals, slope, intercept) {
+      var svg = document.getElementById('betPlotSvg');
+      if (!svg) return;
+      var minX = Math.min.apply(null, xVals), maxX = Math.max.apply(null, xVals);
+      var minY = Math.min.apply(null, yVals), maxY = Math.max.apply(null, yVals);
 
-      const padLeft = 60, padRight = 30, padTop = 20, padBottom = 35;
-      const width = 600 - padLeft - padRight;
-      const height = 240 - padTop - padBottom;
+      var padLeft = 60, padRight = 30, padTop = 20, padBottom = 35;
+      var width = 600 - padLeft - padRight;
+      var height = 240 - padTop - padBottom;
 
-      const xRange = maxX - minX || 0.1;
-      const yRange = maxY - minY || 0.001;
+      var xRange = maxX - minX || 0.1;
+      var yRange = maxY - minY || 0.001;
 
-      function scaleX(val: number) { return padLeft + ((val - minX) / xRange) * width; }
-      function scaleY(val: number) { return padTop + height - ((val - minY) / yRange) * height; }
+      function scaleX(val) { return padLeft + ((val - minX) / xRange) * width; }
+      function scaleY(val) { return padTop + height - ((val - minY) / yRange) * height; }
 
-      const y1 = slope * minX + intercept;
-      const y2 = slope * maxX + intercept;
+      var y1 = slope * minX + intercept;
+      var y2 = slope * maxX + intercept;
 
-      let svgHtml = `
-        <line x1="${padLeft}" y1="${padTop}" x2="${padLeft}" y2="${padTop + height}" stroke="#94a3b8" stroke-width="1.5" />
-        <line x1="${padLeft}" y1="${padTop + height}" x2="${padLeft + width}" y2="${padTop + height}" stroke="#94a3b8" stroke-width="1.5" />
-        <text x="10" y="${padTop + height / 2}" transform="rotate(-90 15,${padTop + height / 2})" fill="#64748b" font-weight="bold">1/[Va((P₀/P)-1)]</text>
-        <text x="${padLeft + width / 2}" y="${padTop + height + 30}" fill="#64748b" font-weight="bold">Relative Pressure (P/P₀)</text>
-        <line x1="${scaleX(minX)}" y1="${scaleY(y1)}" x2="${scaleX(maxX)}" y2="${scaleY(y2)}" stroke="#0284c7" stroke-width="2" stroke-dasharray="4" />
-      `;
+      var svgHtml = 
+        '<line x1="' + padLeft + '" y1="' + padTop + '" x2="' + padLeft + '" y2="' + (padTop + height) + '" stroke="#94a3b8" stroke-width="1.5" />' +
+        '<line x1="' + padLeft + '" y1="' + (padTop + height) + '" x2="' + (padLeft + width) + '" y2="' + (padTop + height) + '" stroke="#94a3b8" stroke-width="1.5" />' +
+        '<text x="10" y="' + (padTop + height / 2) + '" transform="rotate(-90 15,' + (padTop + height / 2) + ')" fill="#64748b" font-weight="bold">1/[Va((P₀/P)-1)]</text>' +
+        '<text x="' + (padLeft + width / 2) + '" y="' + (padTop + height + 30) + '" fill="#64748b" font-weight="bold">Relative Pressure (P/P₀)</text>' +
+        '<line x1="' + scaleX(minX) + '" y1="' + scaleY(y1) + '" x2="' + scaleX(maxX) + '" y2="' + scaleY(y2) + '" stroke="#0284c7" stroke-width="2" stroke-dasharray="4" />';
 
-      xVals.forEach((x, i) => {
-        const cx = scaleX(x);
-        const cy = scaleY(yVals[i]);
-        svgHtml += `
-          <circle cx="${cx}" cy="${cy}" r="5" fill="#059669" stroke="#ffffff" stroke-width="1.5" />
-          <text x="${cx}" y="${cy - 8}" text-anchor="middle" fill="#0f172a" font-weight="bold">${x.toFixed(3)}</text>
-        `;
+      xVals.forEach(function(x, i) {
+        var cx = scaleX(x);
+        var cy = scaleY(yVals[i]);
+        svgHtml += 
+          '<circle cx="' + cx + '" cy="' + cy + '" r="5" fill="#059669" stroke="#ffffff" stroke-width="1.5" />' +
+          '<text x="' + cx + '" y="' + (cy - 8) + '" text-anchor="middle" fill="#0f172a" font-weight="bold">' + x.toFixed(3) + '</text>';
       });
 
       svg.innerHTML = svgHtml;
@@ -965,108 +1072,140 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     // SINGLE-POINT BET ENGINE
     function runSinglePointEngine() {
-      const p = parseFloat((document.getElementById('singleP') as HTMLInputElement).value) || 0.3;
-      const v = parseFloat((document.getElementById('singleV') as HTMLInputElement).value) || 0;
-      const m = parseFloat((document.getElementById('singleMass') as HTMLInputElement).value) || 0.125;
-      const conv = getConvFactor();
+      var singleP = document.getElementById('singleP');
+      var singleV = document.getElementById('singleV');
+      var singleMass = document.getElementById('singleMass');
+
+      var p = parseFloat(singleP ? singleP.value : '0.3') || 0.3;
+      var v = parseFloat(singleV ? singleV.value : '0') || 0;
+      var m = parseFloat(singleMass ? singleMass.value : '0.125') || 0.125;
+      var conv = getConvFactor();
 
       if (p > 0 && p < 1 && v > 0) {
-        const vmSingle = v * (1.0 - p);
-        const sbetSingle = vmSingle * conv;
-        const totalArea = sbetSingle * m;
+        var vmSingle = v * (1.0 - p);
+        var sbetSingle = vmSingle * conv;
+        var totalArea = sbetSingle * m;
 
-        document.getElementById('singleResultArea')!.textContent = sbetSingle.toFixed(1) + ' m²/g';
-        document.getElementById('singleResultVm')!.textContent = vmSingle.toFixed(2);
-        document.getElementById('singleResultCell')!.textContent = totalArea.toFixed(2);
+        var elArea = document.getElementById('singleResultArea');
+        var elVm = document.getElementById('singleResultVm');
+        var elCell = document.getElementById('singleResultCell');
+
+        if (elArea) elArea.textContent = sbetSingle.toFixed(1) + ' m²/g';
+        if (elVm) elVm.textContent = vmSingle.toFixed(2);
+        if (elCell) elCell.textContent = totalArea.toFixed(2);
       }
     }
 
-    ['singleP', 'singleV', 'singleMass'].forEach(id => {
-      document.getElementById(id)?.addEventListener('input', runSinglePointEngine);
+    ['singleP', 'singleV', 'singleMass'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.addEventListener('input', runSinglePointEngine);
     });
 
     // PRINT TUBE LABEL
-    document.getElementById('printLabelBtn')?.addEventListener('click', () => {
-      const sbet = document.getElementById('primaryResult')!.textContent || '--';
-      const mass = inpSampleMass.value + ' g';
-      const gas = adsorbateSelect.options[adsorbateSelect.selectedIndex].text.split('—')[0];
-      const temp = inpDegasTemp.value + ' °C';
+    var printLabelBtn = document.getElementById('printLabelBtn');
+    if (printLabelBtn) {
+      printLabelBtn.addEventListener('click', function() {
+        var primaryRes = document.getElementById('primaryResult');
+        var sbet = primaryRes ? primaryRes.textContent : '--';
+        var mass = (inpSampleMass ? inpSampleMass.value : '') + ' g';
+        var gas = adsorbateSelect ? adsorbateSelect.options[adsorbateSelect.selectedIndex].text.split('—')[0] : 'N2';
+        var temp = (inpDegasTemp ? inpDegasTemp.value : '') + ' °C';
 
-      document.getElementById('labelDate')!.textContent = new Date().toLocaleDateString();
-      document.getElementById('labelMass')!.textContent = mass;
-      document.getElementById('labelTemp')!.textContent = temp;
-      document.getElementById('labelSbet')!.textContent = sbet;
-      document.getElementById('labelGas')!.textContent = gas;
+        var labelDate = document.getElementById('labelDate');
+        var labelMass = document.getElementById('labelMass');
+        var labelTemp = document.getElementById('labelTemp');
+        var labelSbet = document.getElementById('labelSbet');
+        var labelGas = document.getElementById('labelGas');
 
-      window.print();
-    });
+        if (labelDate) labelDate.textContent = new Date().toLocaleDateString();
+        if (labelMass) labelMass.textContent = mass;
+        if (labelTemp) labelTemp.textContent = temp;
+        if (labelSbet) labelSbet.textContent = sbet;
+        if (labelGas) labelGas.textContent = gas;
+
+        window.print();
+      });
+    }
 
     // CSV DOWNLOAD
-    document.getElementById('downloadCsvBtn')?.addEventListener('click', () => {
-      let csv = 'Point,Relative_Pressure_P_P0,Volume_Adsorbed_cm3_g_STP,Rouquerol_Va_1_minus_P\n';
-      isothermPoints.forEach((pt, i) => {
-        csv += `${i + 1},${pt.p},${pt.v},${(pt.v * (1 - pt.p)).toFixed(3)}\n`;
+    var downloadCsvBtn = document.getElementById('downloadCsvBtn');
+    if (downloadCsvBtn) {
+      downloadCsvBtn.addEventListener('click', function() {
+        var csv = 'Point,Relative_Pressure_P_P0,Volume_Adsorbed_cm3_g_STP,Rouquerol_Va_1_minus_P\n';
+        isothermPoints.forEach(function(pt, i) {
+          csv += (i + 1) + ',' + pt.p + ',' + pt.v + ',' + (pt.v * (1 - pt.p)).toFixed(3) + '\n';
+        });
+        var blob = new Blob([csv], { type: 'text/csv' });
+        var url = window.URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'chemistrydesk_isotherm_points.csv';
+        a.click();
       });
-      const blob = new Blob([csv], { type: 'text/csv' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'chemistrydesk_isotherm_points.csv';
-      a.click();
-    });
+    }
 
     // EVENT BINDINGS
-    [inpSampleMass, inpDegasTemp].forEach(inp => {
-      inp.addEventListener('input', runMultiEngine);
-    });
-    adsorbateSelect.addEventListener('change', runMultiEngine);
+    if (inpSampleMass) inpSampleMass.addEventListener('input', runMultiEngine);
+    if (inpDegasTemp) inpDegasTemp.addEventListener('input', runMultiEngine);
+    if (adsorbateSelect) adsorbateSelect.addEventListener('change', runMultiEngine);
 
-    document.getElementById('copyProtocolBtn')?.addEventListener('click', () => {
-      const text = document.getElementById('protocolSteps')?.innerText || '';
-      navigator.clipboard.writeText(text);
-      alert('Benchtop SOP protocol copied.');
-    });
+    var copyProtocolBtn = document.getElementById('copyProtocolBtn');
+    if (copyProtocolBtn) {
+      copyProtocolBtn.addEventListener('click', function() {
+        var el = document.getElementById('protocolSteps');
+        var text = el ? el.innerText : '';
+        navigator.clipboard.writeText(text);
+        alert('Benchtop SOP protocol copied.');
+      });
+    }
 
-    document.getElementById('shareBtn')?.addEventListener('click', () => {
-      navigator.clipboard.writeText(window.location.href);
-      alert('Experiment URL copied.');
-    });
+    var shareBtn = document.getElementById('shareBtn');
+    if (shareBtn) {
+      shareBtn.addEventListener('click', function() {
+        navigator.clipboard.writeText(window.location.href);
+        alert('Experiment URL copied.');
+      });
+    }
 
-    document.getElementById('copyBetLatex')?.addEventListener('click', () => {
-      const sbetVal = document.getElementById('primaryResult')!.textContent || '--';
-      const latex = `S_{\\text{BET}} = \\frac{V_m \\cdot N_A \\cdot \\sigma}{V_{\\text{molar}}} = ${sbetVal}`;
-      navigator.clipboard.writeText(latex);
-      alert('LaTeX equation copied to clipboard.');
-    });
+    var copyBetLatex = document.getElementById('copyBetLatex');
+    if (copyBetLatex) {
+      copyBetLatex.addEventListener('click', function() {
+        var primaryRes = document.getElementById('primaryResult');
+        var sbetVal = primaryRes ? primaryRes.textContent : '--';
+        var latex = 'S_{\\text{BET}} = \\frac{V_m \\cdot N_A \\cdot \\sigma}{V_{\\text{molar}}} = ' + sbetVal;
+        navigator.clipboard.writeText(latex);
+        alert('LaTeX equation copied to clipboard.');
+      });
+    }
 
     // --- ACADEMIC CITATION SYSTEM ---
-    const citeDrawer = document.getElementById('citeDrawer');
-    const toggleCiteBtn = document.getElementById('toggleCiteBtn');
-    const inlineCiteOutput = document.getElementById('inlineCiteOutput');
-    const inlineTabs = document.querySelectorAll('.inline-cite-tab');
-    const inlineCopyBtn = document.getElementById('inlineCopyCiteBtn');
+    var citeDrawer = document.getElementById('citeDrawer');
+    var toggleCiteBtn = document.getElementById('toggleCiteBtn');
+    var inlineCiteOutput = document.getElementById('inlineCiteOutput');
+    var inlineTabs = document.querySelectorAll('.inline-cite-tab');
+    var inlineCopyBtn = document.getElementById('inlineCopyCiteBtn');
 
-    const doi = "10.5281/zenodo.23059466";
-    const currentYear = new Date().getFullYear();
+    var doi = "10.5281/zenodo.23059466";
+    var currentYear = new Date().getFullYear();
 
-    const betCitations: Record<string, string> = {
-      bibtex: `@software{khan_chemistrydesk_bet_${currentYear},
-  author    = {Khan, Bilal},
-  title     = {ChemistryDesk: Multipoint BET Surface Area & Physisorption Engine},
-  year      = {${currentYear}},
-  version   = {v1.0.1},
-  publisher = {Zenodo},
-  doi       = {${doi}},
-  url       = {https://chemistrycal.com/bet}
-}`,
-      acs: `Khan, B. ChemistryDesk: Multipoint BET Surface Area & Physisorption Engine, version 1.0.1; Zenodo, ${currentYear}. https://doi.org/${doi}.`,
-      rsc: `B. Khan, ChemistryDesk: Multipoint BET Surface Area & Physisorption Engine, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`,
-      nature: `Khan, B. ChemistryDesk: Multipoint BET Surface Area & Physisorption Engine. Zenodo https://doi.org/${doi} (${currentYear}).`,
-      elsevier: `Khan, B., ${currentYear}. ChemistryDesk: Multipoint BET Surface Area & Physisorption Engine (Version 1.0.1). Zenodo. https://doi.org/${doi}.`,
-      wiley: `B. Khan, ChemistryDesk: Multipoint BET Surface Area & Physisorption Engine, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`
+    var betCitations = {
+      bibtex: '@software{khan_chemistrydesk_bet_' + currentYear + ',\n' +
+              '  author    = {Khan, Bilal},\n' +
+              '  title     = {ChemistryDesk: Multipoint BET Surface Area & Physisorption Engine},\n' +
+              '  year      = {' + currentYear + '},\n' +
+              '  version   = {v1.0.1},\n' +
+              '  publisher = {Zenodo},\n' +
+              '  doi       = {' + doi + '},\n' +
+              '  url       = {https://chemistrycal.com/bet}\n' +
+              '}',
+      acs: 'Khan, B. ChemistryDesk: Multipoint BET Surface Area & Physisorption Engine, version 1.0.1; Zenodo, ' + currentYear + '. https://doi.org/' + doi + '.',
+      rsc: 'B. Khan, ChemistryDesk: Multipoint BET Surface Area & Physisorption Engine, version 1.0.1, Zenodo, ' + currentYear + ', DOI: ' + doi + '.',
+      nature: 'Khan, B. ChemistryDesk: Multipoint BET Surface Area & Physisorption Engine. Zenodo https://doi.org/' + doi + ' (' + currentYear + ').',
+      elsevier: 'Khan, B., ' + currentYear + '. ChemistryDesk: Multipoint BET Surface Area & Physisorption Engine (Version 1.0.1). Zenodo. https://doi.org/' + doi + '.',
+      wiley: 'B. Khan, ChemistryDesk: Multipoint BET Surface Area & Physisorption Engine, version 1.0.1, Zenodo, ' + currentYear + ', DOI: ' + doi + '.'
     };
 
-    let currentInlineFormat = 'bibtex';
+    var currentInlineFormat = 'bibtex';
 
     function updateInlineCite() {
       if (inlineCiteOutput) {
@@ -1075,9 +1214,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     }
 
     if (toggleCiteBtn && citeDrawer) {
-      toggleCiteBtn.addEventListener('click', (e) => {
+      toggleCiteBtn.addEventListener('click', function(e) {
         e.preventDefault();
-        const isHidden = window.getComputedStyle(citeDrawer).display === 'none';
+        var isHidden = window.getComputedStyle(citeDrawer).display === 'none';
         citeDrawer.style.display = isHidden ? 'block' : 'none';
         toggleCiteBtn.style.background = isHidden ? '#0284c7' : '#e0f2fe';
         toggleCiteBtn.style.color = isHidden ? '#ffffff' : '#0369a1';
@@ -1085,38 +1224,35 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       });
     }
 
-    inlineTabs.forEach(tab => {
-      tab.addEventListener('click', (e) => {
+    inlineTabs.forEach(function(tab) {
+      tab.addEventListener('click', function(e) {
         e.preventDefault();
-        inlineTabs.forEach(t => {
-          const el = t as HTMLElement;
-          el.style.background = '#ffffff';
-          el.style.color = '#334155';
-          el.style.borderColor = '#cbd5e1';
-          el.fontWeight = '600';
+        inlineTabs.forEach(function(tabElement) {
+          tabElement.style.background = '#ffffff';
+          tabElement.style.color = '#334155';
+          tabElement.style.borderColor = '#cbd5e1';
+          tabElement.style.fontWeight = '600';
         });
-        const activeTab = tab as HTMLElement;
-        activeTab.style.background = '#0f172a';
-        activeTab.style.color = '#ffffff';
-        activeTab.style.borderColor = '#0f172a';
-        activeTab.style.fontWeight = '700';
-        currentInlineFormat = activeTab.getAttribute('data-format') || 'bibtex';
+        tab.style.background = '#0f172a';
+        tab.style.color = '#ffffff';
+        tab.style.borderColor = '#0f172a';
+        tab.style.fontWeight = '700';
+        currentInlineFormat = tab.getAttribute('data-format') || 'bibtex';
         updateInlineCite();
       });
     });
 
     if (inlineCopyBtn) {
-      inlineCopyBtn.addEventListener('click', async (e) => {
+      inlineCopyBtn.addEventListener('click', function(e) {
         e.preventDefault();
-        try {
-          await navigator.clipboard.writeText(betCitations[currentInlineFormat]);
+        navigator.clipboard.writeText(betCitations[currentInlineFormat]).then(function() {
           inlineCopyBtn.textContent = '✅ Copied!';
-          setTimeout(() => {
+          setTimeout(function() {
             inlineCopyBtn.textContent = '📋 Copy';
           }, 1800);
-        } catch (err) {
+        }).catch(function(err) {
           console.error('Failed to copy citation:', err);
-        }
+        });
       });
     }
 
