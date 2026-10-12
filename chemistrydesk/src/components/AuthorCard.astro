@@ -12,9 +12,9 @@ const {
 
 <aside 
   aria-label="Author and Scientific Editorial Review"
-  style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 1.5rem; margin: 2.5rem 0 1.5rem 0; box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.04); font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;"
+  style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1rem 1.15rem; margin: 0 0 1.75rem 0; max-width: 680px; box-shadow: 0 2px 5px rgba(15, 23, 42, 0.03); font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;"
 >
-  <div style="display: flex; gap: 1.25rem; align-items: flex-start; flex-wrap: wrap;">
+  <div style="display: flex; gap: 0.9rem; align-items: flex-start; flex-wrap: wrap;">
     
     <!-- Profile Photo Container with In-Browser Live Preview -->
     <div style="position: relative; flex-shrink: 0; text-align: center;">
@@ -27,14 +27,14 @@ const {
           id="authorAvatarImg"
           src="/images/bilal-khan.jpg" 
           alt="Bilal Khan - Chemistry Researcher & Author" 
-          width="82" 
-          height="82"
+          width="56" 
+          height="56"
           loading="lazy"
-          onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=Bilal+Khan&background=0284c7&color=fff&size=164&bold=true';"
-          style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2.5px solid #0284c7; box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25); display: block;" 
+          onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=Bilal+Khan&background=0284c7&color=fff&size=112&bold=true';"
+          style="width: 54px; height: 54px; border-radius: 50%; object-fit: cover; border: 2px solid #0284c7; box-shadow: 0 2px 4px rgba(2, 132, 199, 0.2); display: block;" 
         />
         <span 
-          style="position: absolute; bottom: 0; right: 0; background: #059669; color: white; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; border: 2px solid white; font-weight: 800;" 
+          style="position: absolute; bottom: -2px; right: -2px; background: #059669; color: white; width: 17px; height: 17px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; border: 1.5px solid white; font-weight: 800;" 
           title="Verified Chemistry Author"
         >
           ✓
@@ -43,40 +43,40 @@ const {
       
       <!-- Hidden Local File Selector for Testing -->
       <input type="file" id="authorAvatarUpload" accept="image/*" style="display: none;" />
-      <span style="font-size: 0.68rem; color: #64748b; display: block; margin-top: 5px;">Tap photo to test</span>
+      <span style="font-size: 0.62rem; color: #64748b; display: block; margin-top: 3px;">Change photo</span>
     </div>
 
     <!-- Author Details & Verified Identifiers -->
-    <div style="flex: 1; min-width: 260px;">
-      <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.35rem;">
-        <div>
-          <h3 style="margin: 0; font-size: 1.18rem; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 0.45rem;">
+    <div style="flex: 1; min-width: 250px;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.2rem;">
+        <div style="display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap;">
+          <h3 style="margin: 0; font-size: 1.05rem; font-weight: 800; color: #0f172a; display: flex; align-items: center;">
             Bilal Khan
-            <span style="font-size: 0.72rem; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 9999px; font-weight: 700;">Verified Author</span>
           </h3>
-          <p style="margin: 0.15rem 0 0 0; font-size: 0.85rem; color: #64748b; font-weight: 600;">
-            Researcher in Physical &amp; Materials Chemistry
-          </p>
+          <span style="font-size: 0.68rem; background: #e0f2fe; color: #0369a1; padding: 1px 7px; border-radius: 9999px; font-weight: 700;">Verified Author</span>
+          <span style="font-size: 0.75rem; color: #64748b; font-weight: 500;">
+            • Researcher in Physical &amp; Materials Chemistry
+          </span>
         </div>
-        <div style="font-size: 0.75rem; color: #94a3b8; font-weight: 600;">
+        <div style="font-size: 0.72rem; color: #94a3b8; font-weight: 600;">
           Reviewed: <strong style="color: #475569;">{lastUpdated}</strong>
         </div>
       </div>
 
-      <p style="margin: 0.65rem 0 0.85rem 0; font-size: 0.88rem; color: #334155; line-height: 1.6;">
+      <p style="margin: 0.25rem 0 0.5rem 0; font-size: 0.78rem; color: #334155; line-height: 1.45;">
         Specializes in porous material characterization (BET / PXRD), gas physisorption equilibria, and aqueous solution thermodynamics. All formula derivations, calibration tolerances, and empirical constants across ChemistryDesk are verified against IUPAC nomenclature and peer-reviewed reference standards.
       </p>
 
       <!-- Authority Badges & Persistent Identifiers -->
-      <div style="display: flex; flex-wrap: wrap; gap: 0.45rem; align-items: center; font-size: 0.75rem;">
-        <span style="background: #f1f5f9; color: #334155; padding: 4px 9px; border-radius: 6px; font-weight: 600; border: 1px solid #cbd5e1;">
+      <div style="display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center; font-size: 0.7rem;">
+        <span style="background: #f1f5f9; color: #334155; padding: 2px 7px; border-radius: 5px; font-weight: 600; border: 1px solid #cbd5e1;">
           🛡️ Verified against {reviewedBy}
         </span>
         <a 
           href="https://orcid.org/0009-0006-3082-7043" 
           target="_blank" 
           rel="noopener noreferrer" 
-          style="background: #f8fafc; color: #2e7d32; border: 1px solid #a5d6a7; padding: 4px 10px; border-radius: 6px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem;"
+          style="background: #f8fafc; color: #2e7d32; border: 1px solid #a5d6a7; padding: 2px 7px; border-radius: 5px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 0.25rem;"
         >
           <span style="color: #43a047; font-weight: 900;">iD</span> ORCID (0009-0006-3082-7043)
         </a>
@@ -84,7 +84,7 @@ const {
           href="https://www.linkedin.com/in/bilal-khan-bbb259248" 
           target="_blank" 
           rel="noopener noreferrer" 
-          style="background: #0a66c2; color: #ffffff; padding: 4px 10px; border-radius: 6px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem;"
+          style="background: #0a66c2; color: #ffffff; padding: 2px 7px; border-radius: 5px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 0.25rem;"
         >
           <span>in</span> LinkedIn Profile
         </a>
@@ -92,7 +92,7 @@ const {
           href="https://doi.org/10.5281/zenodo.23059466" 
           target="_blank" 
           rel="noopener noreferrer" 
-          style="background: #0f172a; color: #38bdf8; padding: 4px 10px; border-radius: 6px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem;"
+          style="background: #0f172a; color: #38bdf8; padding: 2px 7px; border-radius: 5px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 0.25rem;"
         >
           <span>📦</span> CERN Zenodo Record
         </a>
@@ -100,7 +100,7 @@ const {
           href="https://www.wikidata.org/wiki/Q141699332" 
           target="_blank" 
           rel="noopener noreferrer" 
-          style="background: #f8fafc; color: #0284c7; border: 1px solid #bae6fd; padding: 4px 10px; border-radius: 6px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem;"
+          style="background: #f8fafc; color: #0284c7; border: 1px solid #bae6fd; padding: 2px 7px; border-radius: 5px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 0.25rem;"
         >
           <span>🌐</span> Wikidata (Q141699332)
         </a>

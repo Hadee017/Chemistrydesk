@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { toolsCatalog } from '../data/tools';
 import AuthorCard from '../components/AuthorCard.astro';
 
-// Comprehensive metadata mapping to enrich all 13 calculators for semantic search & crawlability
+// Comprehensive metadata mapping to enrich all 15 calculators for semantic search & crawlability
 const toolMetaMap: Record<string, { formula: string; inputs: string; outputs: string; category: string }> = {
   "/molarity": {
     formula: "m = (C · V · MW) / Purity",
@@ -29,6 +29,12 @@ const toolMetaMap: Record<string, { formula: string; inputs: string; outputs: st
     outputs: "Titration Curve, Equivalence Point pH, Van Slyke Capacity",
     category: "solutions"
   },
+  "/ph": {
+    formula: "pH = -log₁₀[H⁺] | pOH = 14 - pH",
+    inputs: "Hydronium [H₃O⁺], Hydroxide [OH⁻], Ka / Kb Dissociation Constant",
+    outputs: "pH, pOH, Hydrogen Ion Activity, Solution Acid-Base Regime",
+    category: "solutions"
+  },
   "/stoichiometry": {
     formula: "aA + bB → cC + dD (Mass Balance)",
     inputs: "Chemical Equation, Reagent Masses (g, mol), Percent Purity",
@@ -41,16 +47,22 @@ const toolMetaMap: Record<string, { formula: string; inputs: string; outputs: st
     outputs: "Molecular Weight (g/mol), Elemental Mass Percentages, Total Moles",
     category: "solutions"
   },
+  "/sig-figs": {
+    formula: "Analytical Significant Figures & Propagation Rules",
+    inputs: "Measurement Value String, Operation Type (+, -, ×, ÷)",
+    outputs: "Significant Digit Count, Precision Tolerance, Rounded Result",
+    category: "solutions"
+  },
   "/gas": {
     formula: "PV = nRT | (P + an²/V²)(V - nb) = nRT",
     inputs: "Pressure (P), Volume (V), Moles/Mass (n/m), Temperature (T)",
     outputs: "Unknown State Variable, Compressibility (Z), Gas Density (ρ)",
     category: "physical"
   },
-  "/kinetics": {
-    formula: "A = ε·b·c | ln[A] = -kt | 1/[A] = kt",
-    inputs: "Absorbance / Time Series, Path Length (b), Molar Absorptivity (ε)",
-    outputs: "Reaction Order (0th, 1st, 2nd), Rate Constant (k), Half-Life (t½)",
+  "/spectro": {
+    formula: "A = ε · b · c (Beer-Lambert Law)",
+    inputs: "Path Length (b), Molar Absorptivity (ε), % Transmittance or Absorbance (A)",
+    outputs: "Analyte Concentration (c), Transmittance (T), Optical Density",
     category: "physical"
   },
   "/electron-configuration": {
@@ -92,6 +104,9 @@ const toolMetaMap: Record<string, { formula: string; inputs: string; outputs: st
 >
   <main style="max-width: 1100px; margin: 2rem auto 4rem; padding: 0 1.25rem; color: #0f172a; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; box-sizing: border-box;">
     
+    <!-- FRONT TOP-LEFT: Verified Author & E-E-A-T Review Card -->
+    <AuthorCard lastUpdated="October 2026" />
+
     <!-- Hero Banner -->
     <header style="text-align: center; margin-bottom: 2.75rem; padding: 0.5rem 0;">
       <span style="display: inline-block; background: #e0f2fe; color: #0369a1; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.35rem 0.85rem; border-radius: 9999px; margin-bottom: 0.85rem; border: 1px solid #bae6fd;">
@@ -238,7 +253,7 @@ const toolMetaMap: Record<string, { formula: string; inputs: string; outputs: st
 
     <!-- Programmatic Long-Tail Solution Formulation Shortcuts (Preserved) -->
     <section style="margin: 3rem auto 2.5rem; padding: 1.5rem; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);">
-      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.75rem;">
+      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: gap: 0.5rem; margin-bottom: 1rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.75rem;">
         <div>
           <h2 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 0.5rem;">
             <span>⚡</span> One-Click Analytical Benchtop Recipes
@@ -374,7 +389,7 @@ const toolMetaMap: Record<string, { formula: string; inputs: string; outputs: st
     </section>
 
     <!-- Offline Wet-Lab Utility Section for SEO (Preserved) -->
-    <section style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 2rem; box-sizing: border-box; margin-bottom: 2.5rem;">
+    <section style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 2rem; box-sizing: border-box;">
       <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.75rem;">
         <span style="font-size: 1.5rem;">📶</span>
         <h2 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin: 0;">
@@ -399,9 +414,6 @@ const toolMetaMap: Record<string, { formula: string; inputs: string; outputs: st
         </div>
       </div>
     </section>
-
-    <!-- Verified Chemistry Researcher & Author Card -->
-    <AuthorCard lastUpdated="October 2026" />
 
   </main>
 
