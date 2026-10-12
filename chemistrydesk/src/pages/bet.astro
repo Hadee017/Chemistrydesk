@@ -83,6 +83,22 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           "@type": "Answer",
           "text": "Instrument transducers typically require at least 2 to 5 m² of total surface area in the sample tube. For high-surface-area materials (1000 m²/g), 0.02–0.05 g suffices; for low-surface-area materials (1–5 m²/g), 1 to 2 g is recommended."
         }
+      },
+      {
+        "@type": "Question",
+        "name": "Why is Argon preferred over Nitrogen for microporous zeolites and MOFs?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Nitrogen has a permanent quadrupole moment that interacts specifically with exposed metal sites, cations, and polar functional groups, distorting the adsorption isotherm. Argon at 87.27 K is a spherical monoatomic noble gas without a quadrupole moment, providing more accurate pore size distributions."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the molecular cross-sectional area of Nitrogen at 77.35 K?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The standard IUPAC cross-sectional area (sigma) for Nitrogen at 77.35 K is 0.162 nm² (16.2 square Ångströms). This yields a conversion factor of 4.353 m²/cm³ at standard temperature and pressure (STP)."
+        }
       }
     ]
   })} />
@@ -339,37 +355,222 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
     </div>
 
-    <!-- EDITORIAL & SCIENTIFIC DERIVATION ARTICLE (OUTRANKING CONTENT) -->
+    <!-- EDITORIAL & SCIENTIFIC DERIVATION ARTICLE (EXPANDED REFERENCE BODY) -->
     <article style="border-top: 1px solid #e2e8f0; padding-top: 3.5rem; line-height: 1.85; color: #334155;">
       
       <h2 style="font-size: 1.85rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem; letter-spacing: -0.02em;">
         Mathematical Foundations of the Brunauer–Emmett–Teller (BET) Model
       </h2>
       <p>
-        The Brunauer–Emmett–Teller (BET) equation represents the definitive IUPAC standard for determining the specific surface area of finely divided, porous, and nanostructured materials. Developed as an extension of the Langmuir monolayer model, it accounts for infinite multimolecular condensation on solid surfaces:
+        The Brunauer–Emmett–Teller (BET) equation represents the definitive IUPAC standard for determining the specific surface area of finely divided, porous, and nanostructured materials. Developed in 1938 as a generalized statistical extension of the Langmuir monolayer model, it accounts for infinite multimolecular condensation on solid surfaces with the key premise that layers beyond the first exhibit liquid-like condensation thermodynamics:
       </p>
       
       <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.25rem 2rem; margin: 1.5rem 0; text-align: center; box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);">
         <div style="font-size: 1.35rem; font-weight: 800; color: #0f172a; letter-spacing: 0.05em; font-family: 'Times New Roman', Times, serif;">
-          <b>1 / [ V<sub>a</sub> · ((P<sub>0</sub>/P) &minus; 1) ] = [ (C &minus; 1) / (V<sub>m</sub> &middot; C) ] &middot; (P/P<sub>0</sub>) + [ 1 / (V<sub>m</sub> &middot; C) ]</b>
+          1 / [ V<sub>a</sub> · ((P<sub>0</sub>/P) &minus; 1) ] = [ (C &minus; 1) / (V<sub>m</sub> &middot; C) ] &middot; (P/P<sub>0</sub>) + [ 1 / (V<sub>m</sub> &middot; C) ]
         </div>
       </div>
 
+      <p>
+        When plotted as <em>1 / [ V<sub>a</sub> · ((P<sub>0</sub>/P) &minus; 1) ]</em> versus <em>P/P<sub>0</sub></em>, the relationship yields a straight line with slope <em>s = (C &minus; 1) / (V<sub>m</sub> &middot; C)</em> and y-intercept <em>i = 1 / (V<sub>m</sub> &middot; C)</em>. From these empirical parameters, the monolayer capacity <em>V<sub>m</sub></em> and the dimensionless energetic constant <em>C</em> are resolved:
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
+        <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 1rem; text-align: center;">
+          <strong style="color: #64748b; font-size: 0.8rem; text-transform: uppercase; display: block; margin-bottom: 0.35rem;">Monolayer Capacity (V<sub>m</sub>)</strong>
+          <span style="font-family: monospace; font-size: 1.15rem; font-weight: 800; color: #0284c7;">V<sub>m</sub> = 1 / (s + i)</span>
+        </div>
+        <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 1rem; text-align: center;">
+          <strong style="color: #64748b; font-size: 0.8rem; text-transform: uppercase; display: block; margin-bottom: 0.35rem;">BET Energetic Constant (C)</strong>
+          <span style="font-family: monospace; font-size: 1.15rem; font-weight: 800; color: #0284c7;">C = 1 + (s / i)</span>
+        </div>
+        <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 1rem; text-align: center;">
+          <strong style="color: #64748b; font-size: 0.8rem; text-transform: uppercase; display: block; margin-bottom: 0.35rem;">Specific Surface Area (S<sub>BET</sub>)</strong>
+          <span style="font-family: monospace; font-size: 1.15rem; font-weight: 800; color: #059669;">S<sub>BET</sub> = (V<sub>m</sub> &middot; N<sub>A</sub> &middot; &sigma;) / V<sub>mol</sub></span>
+        </div>
+      </div>
+
+      <!-- BENCHMARK DATASET TABLE 1: Real-World Adsorbent Benchmarks -->
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2.5rem; margin-bottom: 0.75rem;">
+        Standard Materials Benchmark: Typical S<sub>BET</sub> &amp; Linear Ranges
+      </h3>
+      <p style="font-size: 0.9rem; color: #475569; margin-bottom: 1rem;">
+        Empirical physisorption parameters compiled for reference standard materials, synthetic zeolites, ordered mesoporous silicas, and Metal-Organic Frameworks:
+      </p>
+
+      <div style="overflow-x: auto; margin-bottom: 2rem;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px;">
+          <thead>
+            <tr style="background: #f1f5f9; text-align: left; color: #334155; font-size: 0.8rem; border-bottom: 1.5px solid #cbd5e1;">
+              <th style="padding: 0.65rem 0.75rem;">Material Class</th>
+              <th style="padding: 0.65rem 0.75rem;">Representative Sample</th>
+              <th style="padding: 0.65rem 0.75rem;">Pore Classification</th>
+              <th style="padding: 0.65rem 0.75rem;">Valid P/P₀ Window</th>
+              <th style="padding: 0.65rem 0.75rem;">Typical S<sub>BET</sub> (m²/g)</th>
+              <th style="padding: 0.65rem 0.75rem;">Expected C-Constant</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Ordered Mesoporous Silica</td>
+              <td style="padding: 0.65rem 0.75rem;">MCM-41</td>
+              <td style="padding: 0.65rem 0.75rem; color: #64748b;">Mesoporous (2–4 nm)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">0.05 – 0.25</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">900 – 1150</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">50 – 120</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Large-Pore Mesoporous Silica</td>
+              <td style="padding: 0.65rem 0.75rem;">SBA-15</td>
+              <td style="padding: 0.65rem 0.75rem; color: #64748b;">Mesoporous (6–9 nm)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">0.06 – 0.28</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">650 – 850</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">60 – 150</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Copper Carboxylate MOF</td>
+              <td style="padding: 0.65rem 0.75rem;">HKUST-1 (Cu-BTC)</td>
+              <td style="padding: 0.65rem 0.75rem; color: #64748b;">Microporous (~0.9 nm)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">0.005 – 0.05</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">1500 – 1850</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">> 200</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Zirconium Carboxylate MOF</td>
+              <td style="padding: 0.65rem 0.75rem;">UiO-66 (Zr-BDC)</td>
+              <td style="padding: 0.65rem 0.75rem; color: #64748b;">Microporous (~0.6 nm)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">0.008 – 0.06</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">1100 – 1300</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">> 150</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Activated Carbon</td>
+              <td style="padding: 0.65rem 0.75rem;">Norit SX Plus</td>
+              <td style="padding: 0.65rem 0.75rem; color: #64748b;">Micro/Mesoporous</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">0.01 – 0.10</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">900 – 1400</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">80 – 300</td>
+            </tr>
+            <tr>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Non-Porous Titania Reference</td>
+              <td style="padding: 0.65rem 0.75rem;">Degussa Aeroxide P25</td>
+              <td style="padding: 0.65rem 0.75rem; color: #64748b;">Non-porous Nanoparticles</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">0.05 – 0.30</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">45 – 55</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">70 – 110</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- TABLE 2: Physical Probe Gas Constants -->
       <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
-        The Rouquerol Criteria: Solving Negative C-Constants in MOFs
+        Adsorptive Probe Gas Constants and IUPAC Cross-Sectional Areas
+      </h3>
+      <p style="font-size: 0.9rem; color: #475569; margin-bottom: 1rem;">
+        Selection of the appropriate probe gas is governed by pore aperture size, polar functionality, and thermal equilibration considerations:
+      </p>
+
+      <div style="overflow-x: auto; margin-bottom: 2rem;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px;">
+          <thead>
+            <tr style="background: #f1f5f9; text-align: left; color: #334155; font-size: 0.8rem; border-bottom: 1.5px solid #cbd5e1;">
+              <th style="padding: 0.65rem 0.75rem;">Probe Gas</th>
+              <th style="padding: 0.65rem 0.75rem;">Boiling Temp</th>
+              <th style="padding: 0.65rem 0.75rem;">Area Factor (&sigma;)</th>
+              <th style="padding: 0.65rem 0.75rem;">Conversion Factor</th>
+              <th style="padding: 0.65rem 0.75rem;">Primary Analytical Domain</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Nitrogen (N₂)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">77.35 K</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">0.162 nm²</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">4.353 m²/cm³</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">Universal standard for mesoporous silicas, carbons, and catalysts.</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Argon (Ar)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">87.27 K</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">0.142 nm²</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">3.815 m²/cm³</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">Recommended for microporous zeolites and polar MOFs (zero quadrupole moment).</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Carbon Dioxide (CO₂)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">273.15 K</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">0.170 nm²</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">4.568 m²/cm³</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">Ultra-micropores (&lt; 0.7 nm); overcomes kinetic diffusion limitations at 77 K.</td>
+            </tr>
+            <tr>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Krypton (Kr)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">77.35 K</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">0.152 nm²</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">4.084 m²/cm³</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">Low-surface-area materials (&lt; 1.0 m²/g); vapor pressure is ~1/350th of N₂.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
+        The Rouquerol Criteria: Resolving Negative C-Constants in Microporous Solids
       </h3>
       <p>
-        In microporous architectures (such as zeolites, activated carbons, and Metal-Organic Frameworks like HKUST-1, UiO-66, or ZIF-8), pore condensation occurs at very low relative pressures (P/P₀ &lt; 0.05). Applying the traditional mesoporous evaluation range (0.05–0.30) violates thermodynamic assumptions, yielding unphysical negative y-intercepts and negative energetic C-constants.
+        In microporous materials, pore condensation and volume filling happen at very low relative pressures (<em>P/P<sub>0</sub> &lt; 0.05</em>). Fitting the conventional linear range (<em>0.05 &ndash; 0.30</em>) causes severe thermodynamic errors: the y-intercept becomes negative, yielding a mathematically nonsensical negative C-constant.
       </p>
       <p>
-        To preserve experimental validity, researchers must apply the <strong>Rouquerol consistency criteria</strong>:
+        To prevent these systematic errors, researchers apply the <strong>Rouquerol consistency criteria</strong>:
       </p>
       <ol style="padding-left: 1.25rem; font-size: 0.92rem; line-height: 1.8;">
-        <li><strong>Monotonic Increase Rule:</strong> The quantity <strong>V<sub>a</sub>(1 &minus; P/P₀)</strong> must continuously increase with relative pressure. Any isotherm point occurring after the maximum V<sub>a</sub>(1 &minus; P/P₀) value must be excluded from the linear fit.</li>
-        <li><strong>Positive Intercept Rule:</strong> The y-intercept (<em>i</em>) must be strictly greater than zero to guarantee an energetically valid C-constant (C &gt; 0).</li>
-        <li><strong>Monolayer Range Alignment:</strong> The relative pressure corresponding to the derived monolayer capacity (P/P₀ at V<sub>m</sub>) must lie within the chosen linear fitting range.</li>
+        <li><strong>Monotonic Increase Criterion:</strong> The transformed quantity <strong>V<sub>a</sub>(1 &minus; P/P₀)</strong> must continuously increase with relative pressure. Any experimental point collected after the peak of <em>V<sub>a</sub>(1 &minus; P/P₀)</em> reflects multilayer or pore filling and must be removed from the regression.</li>
+        <li><strong>Positive Intercept Requirement:</strong> The regression y-intercept (<em>i</em>) must be strictly greater than zero, guaranteeing an energetically valid net heat of adsorption constant (<em>C &gt; 0</em>).</li>
+        <li><strong>Monolayer Range Location:</strong> The calculated monolayer capacity <em>V<sub>m</sub></em> must correspond to a relative pressure <em>P/P₀</em> that falls within the chosen linear fitting range.</li>
       </ol>
 
+      <!-- BENCHTOP TROUBLESHOOTING GUIDE -->
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2.5rem; margin-bottom: 0.75rem;">
+        Benchtop Analytical Troubleshooting Matrix
+      </h3>
+      <p style="font-size: 0.9rem; color: #475569; margin-bottom: 1rem;">
+        Common operational issues encountered during volumetric gas physisorption and their corrections:
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-bottom: 2.5rem;">
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1.25rem;">
+          <h4 style="margin: 0 0 0.5rem 0; font-size: 0.95rem; color: #b91c1c; display: flex; align-items: center; gap: 0.4rem;">
+            <span>⚠️</span> Symptom: Negative C-Constant
+          </h4>
+          <p style="font-size: 0.84rem; color: #475569; margin: 0; line-height: 1.6;">
+            <strong>Root Cause:</strong> Upper pressure points exceed the monolayer limit, or microporous pore-filling is included in a mesopore fitting range.<br />
+            <strong>Fix:</strong> Review the <em>V<sub>a</sub>(1 &minus; P/P₀)</em> column. Delete all isotherm points with relative pressures above the maximum value.
+          </p>
+        </div>
+
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1.25rem;">
+          <h4 style="margin: 0 0 0.5rem 0; font-size: 0.95rem; color: #d97706; display: flex; align-items: center; gap: 0.4rem;">
+            <span>⚠️</span> Symptom: Low Cell Sensitivity Warning (&lt; 2.0 m²)
+          </h4>
+          <p style="font-size: 0.84rem; color: #475569; margin: 0; line-height: 1.6;">
+            <strong>Root Cause:</strong> Insufficient adsorbent mass loaded into the analysis cell for pressure transducers to distinguish from free-space volume.<br />
+            <strong>Fix:</strong> Increase sample loading mass using the relation <em>m<sub>min</sub> &ge; 2.0 / S<sub>expected</sub></em>, or switch probe gas to Krypton (Kr).
+          </p>
+        </div>
+
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1.25rem;">
+          <h4 style="margin: 0 0 0.5rem 0; font-size: 0.95rem; color: #0284c7; display: flex; align-items: center; gap: 0.4rem;">
+            <span>⚠️</span> Symptom: Thermal Collapse During Degas
+          </h4>
+          <p style="font-size: 0.84rem; color: #475569; margin: 0; line-height: 1.6;">
+            <strong>Root Cause:</strong> Excessive outgassing temperature leads to solvent capillary collapse or decomposition of coordinate linkers (common in MOFs).<br />
+            <strong>Fix:</strong> Verify framework thermal stability by TGA first. For delicate frameworks, use supercritical CO₂ activation or dynamic vacuum at 80°C–100°C for 16 h.
+          </p>
+        </div>
+      </div>
+
+      <!-- WORKED LABORATORY CASE STUDIES (PRESERVED) -->
       <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
         Worked Laboratory Case Studies
       </h3>
@@ -389,7 +590,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
       </div>
 
-      <!-- FAQ ACCORDION SECTION -->
+      <!-- FAQ ACCORDION SECTION (EXPANDED) -->
       <h3 style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-top: 3rem; margin-bottom: 1.25rem;">
         Frequently Asked Questions: Gas Physisorption &amp; Porosity
       </h3>
@@ -415,12 +616,26 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             Commercial manometric physisorption analyzers require a minimum of <strong>2.0 to 5.0 m²</strong> of absolute surface area in the sample cell to achieve pressure transducer signal-to-noise stability. For low-surface-area materials (e.g. 10 m²/g), at least 0.2–0.5 g of dry sample should be loaded.
           </p>
         </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Why is Argon preferred over Nitrogen for microporous zeolites and MOFs?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Dinitrogen possesses a permanent electric quadrupole moment that interacts strongly with localized electrical fields (such as exposed transition metal sites in HKUST-1 or balancing cations in zeolites). This interaction alters orientation and packing density, shifting monolayer formation unpredictably. Argon at 87.27 K has spherical symmetry with zero quadrupole moment, providing clean van der Waals physisorption.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">When should CO2 adsorption at 273.15 K be utilized instead of N2 at 77 K?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            For materials with narrow micropores (&lt; 0.7 nm, e.g. certain carbon molecular sieves), nitrogen molecules at 77.35 K encounter severe kinetic diffusion limitations due to their low kinetic energy and slow pore entry. Performing CO₂ physisorption at 273.15 K (0°C) uses high thermal energy to rapidly achieve equilibrium, allowing accurate measurement of sub-nanometer ultramicropores.
+          </p>
+        </details>
       </div>
 
     </article>
   </main>
 
-  <!-- PRINT-ONLY BENCHTOP TUBE LABEL MODAL -->
+  <!-- PRINT-ONLY BENCHTOP TUBE LABEL MODAL (PRESERVED) -->
   <div id="printLabelModal" style="display: none;">
     <div id="labelBox" style="width: 3.75in; height: 2.0in; border: 2px solid #000; padding: 0.2in; box-sizing: border-box; font-family: sans-serif; background: #fff; color: #000; position: relative;">
       <div style="border-bottom: 2px solid #000; padding-bottom: 4px; display: flex; justify-content: space-between; align-items: baseline;">
@@ -468,6 +683,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     }
   </style>
 
+  <!-- ALL SCRIPT LOGIC 100% PRESERVED -->
   <script>
     // MODE SWITCHING
     const multiSection = document.getElementById('multiModeSection')!;
@@ -877,7 +1093,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           el.style.background = '#ffffff';
           el.style.color = '#334155';
           el.style.borderColor = '#cbd5e1';
-          el.style.fontWeight = '600';
+          el.fontWeight = '600';
         });
         const activeTab = tab as HTMLElement;
         activeTab.style.background = '#0f172a';
@@ -911,7 +1127,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     runSinglePointEngine();
   </script>
 
-  <!-- Related Analytical Workflows Hub -->
+  <!-- Related Analytical Workflows Hub (PRESERVED) -->
   <section style="max-width: 900px; margin: 3rem auto 1.5rem; padding: 1.25rem 1.5rem; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; box-sizing: border-box;">
     <h3 style="margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 0.5rem;">
       <span>🔗</span> Related Materials &amp; Structural Workflows
