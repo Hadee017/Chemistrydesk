@@ -1,111 +1,131 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import AuthorCard from '../components/AuthorCard.astro';
 ---
 <BaseLayout 
-  title="PXRD Scherrer Calculator — Crystallite Domain Size & Peak Deconvolution | ChemistryDesk"
-  description="Calculate mean crystallite domain size (τ) from powder X-ray diffraction peak FWHM. Features instrumental broadening deconvolution and shape factor selection."
+  title="Scherrer Equation Calculator — XRD Crystallite Size (τ) & Peak Broadening | ChemistryDesk"
+  description="Calculate mean crystallite domain size (τ) from powder X-ray diffraction peak FWHM. Features instrumental broadening deconvolution (NIST SRM 660c/640e) and shape factor selection."
 >
-  <!-- 1. WebApplication Schema -->
+  <!-- UNIFIED SEMANTIC JSON-LD SCHEMA GRAPH (GEO & ADSENSE E-E-A-T) -->
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "ChemistryDesk PXRD Scherrer Crystallite & Domain Studio",
-    "applicationCategory": "EducationalApplication",
-    "operatingSystem": "All",
-    "browserRequirements": "Requires JavaScript",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    }
-  })} />
-
-  <!-- 2. HowTo Step-by-Step Schema -->
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "HowTo",
-    "name": "How to Accurately Determine Mean Crystallite Size from PXRD Line Broadening",
-    "step": [
+    "@graph": [
       {
-        "@type": "HowToStep",
-        "name": "Select Isolated Bragg Reflection",
-        "text": "Identify an intense, non-overlapping diffraction reflection centroid (2-theta) from your powder pattern."
-      },
-      {
-        "@type": "HowToStep",
-        "name": "Extract Observed Peak FWHM",
-        "text": "Measure the full width at half-maximum (FWHM) in degrees using profile fitting software."
-      },
-      {
-        "@type": "HowToStep",
-        "name": "Deconvolute Diffractometer Instrumental Broadening",
-        "text": "Subtract instrumental broadening measured with a certified strain-free standard (NIST SRM 660c LaB6 or annealed silicon) using Gaussian or Cauchy deconvolution."
-      },
-      {
-        "@type": "HowToStep",
-        "name": "Convert Peak Width to Dimensional Radians",
-        "text": "Convert the corrected FWHM from degrees into natural radians by multiplying by pi / 180."
-      },
-      {
-        "@type": "HowToStep",
-        "name": "Solve the Scherrer Formula",
-        "text": "Evaluate D = (K * lambda) / (beta * cos(theta)) with the appropriate shape factor K and X-ray tube wavelength."
-      }
-    ]
-  })} />
-
-  <!-- 3. FAQPage Accordion Schema -->
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "What is the physical difference between crystallite size, grain size, and particle size?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Crystallite size represents the coherence length of uninterrupted, defect-free single crystalline domains. A grain may contain multiple crystallites, and a particle (observed in SEM or dynamic light scattering) is an agglomeration of multiple crystalline grains."
+        "@type": "WebApplication",
+        "@id": "https://chemistrycal.com/scherrer#app",
+        "name": "ChemistryDesk PXRD Scherrer Crystallite & Domain Studio",
+        "url": "https://chemistrycal.com/scherrer",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript",
+        "author": {
+          "@type": "Person",
+          "@id": "https://orcid.org/0009-0006-3082-7043",
+          "name": "Bilal Khan",
+          "jobTitle": "Materials Scientist & Physical Chemistry Researcher",
+          "sameAs": [
+            "https://orcid.org/0009-0006-3082-7043",
+            "https://www.linkedin.com/in/bilal-khan-bbb259248",
+            "https://www.wikidata.org/wiki/Q141699332",
+            "https://doi.org/10.5281/zenodo.23059466"
+          ]
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "ChemistryDesk",
+          "url": "https://chemistrycal.com"
+        },
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
         }
       },
       {
-        "@type": "Question",
-        "name": "Why is the Scherrer equation limited to domains between 1 nm and 100 nm?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "For crystallites larger than 100 nm, physical line broadening becomes negligible compared to the diffractometer internal instrumental broadening. When beta_obs approaches beta_inst, subtraction causes extreme mathematical errors."
-        }
+        "@type": "HowTo",
+        "@id": "https://chemistrycal.com/scherrer#howto",
+        "name": "How to Accurately Determine Mean Crystallite Size from PXRD Line Broadening",
+        "step": [
+          {
+            "@type": "HowToStep",
+            "name": "Select Isolated Bragg Reflection",
+            "text": "Identify an intense, non-overlapping diffraction reflection centroid (2-theta) from your powder pattern."
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Extract Observed Peak FWHM",
+            "text": "Measure the full width at half-maximum (FWHM) in degrees using profile fitting software."
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Deconvolute Diffractometer Instrumental Broadening",
+            "text": "Subtract instrumental broadening measured with a certified strain-free standard (NIST SRM 660c LaB6 or annealed silicon) using Gaussian or Cauchy deconvolution."
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Convert Peak Width to Dimensional Radians",
+            "text": "Convert the corrected FWHM from degrees into natural radians by multiplying by pi / 180."
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Solve the Scherrer Formula",
+            "text": "Evaluate D = (K * lambda) / (beta * cos(theta)) with the appropriate shape factor K and X-ray tube wavelength."
+          }
+        ]
       },
       {
-        "@type": "Question",
-        "name": "Why must FWHM be converted from degrees to radians?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "The Scherrer equation derives from Fourier wave mechanics where angular broadening beta is a natural dimensionless ratio requiring pure radians. Entering raw degrees will underestimate crystallite size by a factor of 57.3 (180 / pi)."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "How does lattice microstrain distort Scherrer crystallite results?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Lattice microstrain broadens peaks proportional to tan(theta), whereas crystallite size broadens peaks inversely proportional to cos(theta). Applying Scherrer alone on strained materials artificially underestimates crystallite size; a Williamson-Hall plot must be used to decouple size and strain."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "What shape factor (K) value should be used?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "K is a dimensionless shape factor that depends on crystallite morphology. K = 0.94 is standard for spherical crystallites using FWHM, K = 0.89 is widely used for spherical crystallites of unknown packing, and K = 1.00 is designated for regular cubic crystallites."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Can the Scherrer equation be applied to amorphous materials?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "No. The Scherrer formula requires periodic Bragg diffraction from ordered atomic lattice stacks. Amorphous materials yield diffuse scattering halos from short-range radial distributions, which cannot be quantified using the Scherrer formula."
-        }
+        "@type": "FAQPage",
+        "@id": "https://chemistrycal.com/scherrer#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is the physical difference between crystallite size, grain size, and particle size?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Crystallite size represents the coherence length of uninterrupted, defect-free single crystalline domains. A grain may contain multiple crystallites, and a particle (observed in SEM or dynamic light scattering) is an agglomeration of multiple crystalline grains."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why is the Scherrer equation limited to domains between 1 nm and 100 nm?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "For crystallites larger than 100 nm, physical line broadening becomes negligible compared to the diffractometer internal instrumental broadening. When beta_obs approaches beta_inst, subtraction causes extreme mathematical errors."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why must FWHM be converted from degrees to radians?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The Scherrer equation derives from Fourier wave mechanics where angular broadening beta is a natural dimensionless ratio requiring pure radians. Entering raw degrees will underestimate crystallite size by a factor of 57.3 (180 / pi)."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does lattice microstrain distort Scherrer crystallite results?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Lattice microstrain broadens peaks proportional to tan(theta), whereas crystallite size broadens peaks inversely proportional to cos(theta). Applying Scherrer alone on strained materials artificially underestimates crystallite size; a Williamson-Hall plot must be used to decouple size and strain."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What shape factor (K) value should be used?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "K is a dimensionless shape factor that depends on crystallite morphology. K = 0.94 is standard for spherical crystallites using FWHM, K = 0.89 is widely used for spherical crystallites of unknown packing, and K = 1.00 is designated for regular cubic crystallites."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can the Scherrer equation be applied to amorphous materials?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. The Scherrer formula requires periodic Bragg diffraction from ordered atomic lattice stacks. Amorphous materials yield diffuse scattering halos from short-range radial distributions, which cannot be quantified using the Scherrer formula."
+            }
+          }
+        ]
       }
     ]
   })} />
@@ -119,19 +139,31 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <span style="color: #0f172a; font-weight: 700;">PXRD Scherrer Studio</span>
     </nav>
 
-    <!-- Header Hero Card -->
+    <!-- FRONT TOP-LEFT: Verified Author & E-E-A-T Review Card -->
+    <AuthorCard />
+
+    <!-- Header Hero Card with Direct-Answer Block for Search Snippets -->
     <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 16px; padding: 2rem; margin-bottom: 2rem; color: #ffffff; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.15);">
       <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.5rem;">
         <div style="max-width: 760px;">
           <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); padding: 0.3rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem;">
             <span>Materials Crystallography Engine</span>
           </div>
-          <h1 style="font-size: 2.35rem; font-weight: 800; color: #ffffff; letter-spacing: -0.025em; margin: 0; line-height: 1.2;">
-            PXRD Scherrer Crystallite Size &amp; Strain Studio
+          <h1 style="font-size: clamp(1.85rem, 4vw, 2.35rem); font-weight: 800; color: #ffffff; letter-spacing: -0.025em; margin: 0; line-height: 1.2;">
+            Scherrer Equation Calculator (XRD Crystallite Size &tau;)
           </h1>
-          <p style="color: #cbd5e1; font-size: 1rem; margin-top: 0.65rem; margin-bottom: 0; line-height: 1.6;">
+          <p style="color: #cbd5e1; font-size: 1rem; margin-top: 0.65rem; margin-bottom: 1.25rem; line-height: 1.6;">
             High-precision coherent domain sizing, custom specimen inputs, instrumental broadening deconvolution, dynamic peak simulation, and printable sample vial labeling.
           </p>
+
+          <!-- GEO Direct-Answer Definition Box -->
+          <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.35); border-radius: 10px; padding: 1rem 1.15rem; font-size: 0.88rem; line-height: 1.55; color: #e2e8f0;">
+            <strong style="color: #38bdf8;">The Scherrer Equation:</strong> Calculates mean sub-micrometer crystallite domain dimension ($D$ or $\tau$) along the crystallographic plane normal:
+            <span style="display: block; font-family: ui-monospace, SFMono-Regular, monospace; font-size: 0.95rem; font-weight: 700; color: #ffffff; margin: 0.35rem 0;">
+              &tau; = (K &middot; &lambda;) / (&beta; &middot; cos&theta;)
+            </span>
+            where <strong>K</strong> is crystallite shape factor (typically 0.94), <strong>&lambda;</strong> is incident X-ray wavelength (1.54056 &#197; for Cu-K&alpha;1), <strong>&beta;</strong> is structural broadening strictly in <strong>radians</strong>, and <strong>&theta;</strong> is the Bragg reflection half-angle.
+          </div>
         </div>
         <button id="shareSetupBtn" type="button" style="background: #0284c7; border: none; color: white; padding: 0.65rem 1.25rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
           <span>Share Setup URL</span>
@@ -184,7 +216,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </div>
 
     <!-- MAIN COMPUTATION WORKBENCH (Two-Column Layout) -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
       
       <!-- LEFT COLUMN: Parameter Controls -->
       <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 1.75rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);">
@@ -243,7 +275,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             <input type="text" inputmode="decimal" id="fwhmInst" value="0.080" style="flex: 1; padding: 0.75rem 1rem; border: 1.5px solid #cbd5e1; border-right: none; border-radius: 8px 0 0 8px; font-size: 1rem; font-weight: 700; color: #0f172a; outline: none;" />
             <span style="background: #f1f5f9; border: 1.5px solid #cbd5e1; padding: 0 1rem; border-radius: 0 8px 8px 0; font-size: 0.85rem; font-weight: 700; color: #475569; display: flex; align-items: center;">degrees (&deg;)</span>
           </div>
-          <span style="display: block; font-size: 0.75rem; color: #64748b; margin-top: 0.35rem;">Standard calibration: 0.05&deg; - 0.10&deg; (LaB6 / NIST SRM 660c).</span>
+          <span style="display: block; font-size: 0.75rem; color: #64748b; margin-top: 0.35rem;">Standard calibration: 0.04&deg; - 0.08&deg; (LaB6 / NIST SRM 660c).</span>
         </div>
 
         <!-- Deconvolution Model Dropdown -->
@@ -410,6 +442,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     </div>
 
+    <!-- RESERVED IN-ARTICLE DISPLAY AD CONTAINER 1 (ADSENSE RESPONSIVE) -->
+    <div class="adsense-slot-wrapper" style="min-height: 100px; margin: 2rem auto; text-align: center; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+      <!-- Google AdSense in-feed unit placeholder -->
+      <span style="font-size: 0.75rem; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Advertisement Placement</span>
+    </div>
+
     <!-- PRINTABLE VIAL LABEL -->
     <div id="printableLabelWrapper" style="display: none; margin-bottom: 3.5rem;">
       <div style="border: 2px dashed #0284c7; border-radius: 12px; padding: 1.75rem; background: #ffffff; max-width: 500px; margin: 0 auto; box-shadow: 0 4px 10px rgba(0,0,0,0.06);">
@@ -523,6 +561,51 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </tr>
         </tbody>
       </table>
+
+      <!-- NIST SRM EMPIRICAL BENCHMARK TABLE FOR INFORMATION GAIN & GEO CITATION -->
+      <h3 style="font-size: 1.45rem; font-weight: 800; color: #0f172a; margin-top: 2.5rem; margin-bottom: 0.85rem;">
+        Certified NIST Reference Materials for Instrumental Calibration (&beta;<sub>inst</sub>)
+      </h3>
+      <p style="font-size: 1rem; margin-bottom: 1rem;">
+        Accurate deconvolution requires calibrating diffractometer geometry with certified Standard Reference Materials (SRMs) that produce negligible physical line broadening:
+      </p>
+
+      <div style="overflow-x: auto; margin-bottom: 2rem;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.88rem; background: white; border: 1.5px solid #cbd5e1; border-radius: 8px; overflow: hidden;">
+          <thead>
+            <tr style="background: #0f172a; color: #ffffff; text-align: left;">
+              <th style="padding: 0.75rem 0.9rem;">Reference Standard</th>
+              <th style="padding: 0.75rem 0.9rem;">Material Formula</th>
+              <th style="padding: 0.75rem 0.9rem;">Primary 2&theta; Peaks (Cu-K&alpha;)</th>
+              <th style="padding: 0.75rem 0.9rem;">Typical &beta;<sub>inst</sub> Range</th>
+              <th style="padding: 0.75rem 0.9rem;">Calibration Application</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.7rem 0.9rem; font-weight: 700; color: #0284c7;">NIST SRM 660c</td>
+              <td style="padding: 0.7rem 0.9rem; font-family: monospace;">LaB₆</td>
+              <td style="padding: 0.7rem 0.9rem;">21.36&deg;, 30.38&deg;, 37.44&deg;</td>
+              <td style="padding: 0.7rem 0.9rem; font-weight: 700;">0.038&deg; &ndash; 0.055&deg;</td>
+              <td style="padding: 0.7rem 0.9rem;">Certified line position &amp; profile shape standard</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #f8fafc;">
+              <td style="padding: 0.7rem 0.9rem; font-weight: 700; color: #0284c7;">NIST SRM 640e</td>
+              <td style="padding: 0.7rem 0.9rem; font-family: monospace;">Si (annealed powder)</td>
+              <td style="padding: 0.7rem 0.9rem;">28.44&deg;, 47.30&deg;, 56.12&deg;</td>
+              <td style="padding: 0.7rem 0.9rem; font-weight: 700;">0.045&deg; &ndash; 0.065&deg;</td>
+              <td style="padding: 0.7rem 0.9rem;">2&theta; angular accuracy and zero-error calibration</td>
+            </tr>
+            <tr>
+              <td style="padding: 0.7rem 0.9rem; font-weight: 700; color: #0284c7;">NIST SRM 674b</td>
+              <td style="padding: 0.7rem 0.9rem; font-family: monospace;">CeO₂ / ZnO / TiO₂</td>
+              <td style="padding: 0.7rem 0.9rem;">28.55&deg;, 33.08&deg;, 47.48&deg;</td>
+              <td style="padding: 0.7rem 0.9rem; font-weight: 700;">0.040&deg; &ndash; 0.060&deg;</td>
+              <td style="padding: 0.7rem 0.9rem;">Quantitative phase analysis &amp; high-angle optical profile</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       <h3 style="font-size: 1.45rem; font-weight: 800; color: #0f172a; margin-top: 2.5rem; margin-bottom: 0.85rem;">
         Worked Laboratory Walkthrough: Zinc Oxide (101) Reflection
@@ -954,13 +1037,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     var scherrerCitations = {
       bibtex: '@software{khan_chemistrydesk_scherrer_' + currentYear + ',\n' +
-              '  author       = {Khan, Bilal},\n' +
-              '  title        = {ChemistryDesk: PXRD Scherrer Crystallite Size & Strain Studio},\n' +
-              '  year         = {' + currentYear + '},\n' +
-              '  version      = {v1.0.1},\n' +
-              '  publisher    = {Zenodo},\n' +
-              '  doi          = {' + doi + '},\n' +
-              '  url          = {https://chemistrycal.com/scherrer}\n' +
+              '  author        = {Khan, Bilal},\n' +
+              '  title         = {ChemistryDesk: PXRD Scherrer Crystallite Size & Strain Studio},\n' +
+              '  year          = {' + currentYear + '},\n' +
+              '  version       = {v1.0.1},\n' +
+              '  publisher     = {Zenodo},\n' +
+              '  doi           = {' + doi + '},\n' +
+              '  url           = {https://chemistrycal.com/scherrer}\n' +
               '}',
       acs: 'Khan, B. ChemistryDesk: PXRD Scherrer Crystallite Size & Strain Studio, version 1.0.1; Zenodo, ' + currentYear + '. https://doi.org/' + doi + '.',
       rsc: 'B. Khan, ChemistryDesk: PXRD Scherrer Crystallite Size & Strain Studio, version 1.0.1, Zenodo, ' + currentYear + ', DOI: ' + doi + '.',
@@ -1074,6 +1157,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     loadUrlParams();
     runScherrerEngine();
   </script>
+
   <!-- Related Analytical Workflows Hub -->
   <section style="max-width: 900px; margin: 3rem auto 1.5rem; padding: 1.25rem 1.5rem; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; box-sizing: border-box;">
     <h3 style="margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 0.5rem;">
