@@ -116,11 +116,28 @@ import { REAGENTS_DATABASE } from '../data/reagents';
               "@type": "Answer",
               "text": "Dissolution of salts frequently produces significant enthalpy of solution (exothermic heat or endothermic cooling). Volumetric flasks are calibrated strictly at 20°C; thermal expansion of glass and liquids causes significant volumetric calibration errors before thermal equilibrium is restored."
             }
+          },
+          {
+            "@type": "Question",
+            "name": "What are the ASTM Class-A volumetric flask tolerances?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Per ASTM E288 and ISO 1042 standards, Class-A flasks have strictly enforced volume limits: 100 mL flasks carry a tolerance of ±0.08 mL, 250 mL flasks have ±0.12 mL, 500 mL flasks have ±0.20 mL, and 1000 mL flasks have ±0.30 mL."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why must primary standards such as KHP and Na2CO3 be oven-dried prior to weighing?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Primary standards pick up surface-adsorbed atmospheric moisture during storage. Oven drying (e.g., KHP at 110°C–120°C for 2 hours, or anhydrous Na2CO3 at 260°C–270°C for 1 hour) drives off free moisture so that analytical balance readings reflect 100.0% pure stoichiometric mass."
+            }
           }
         ]
       }
     ]
   })} />
+  
   <!-- Breadcrumb Navigation -->
   <main style="max-width: 1140px; margin: 0 auto; padding: 1.5rem 1rem 3rem; box-sizing: border-box;">
     <nav style="font-size: 0.85rem; margin-bottom: 1.25rem;">
@@ -339,21 +356,22 @@ import { REAGENTS_DATABASE } from '../data/reagents';
               <button id="exportMolarityCsv" style="background: #0f172a; border: none; padding: 0.4rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: white;">Export CSV</button>
               <button id="toggleCiteBtn" type="button" style="background: #e0f2fe; border: 1px solid #7dd3fc; padding: 0.4rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #0369a1; display: inline-flex; align-items: center; gap: 0.35rem;"><span>📖</span> Cite</button>
             </div>
-            <!-- Expandable Benchtop Citation Drawer -->
+          </div>
+
+          <!-- Expandable Benchtop Citation Drawer -->
           <div id="citeDrawer" style="display: none; margin-bottom: 1rem; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 0.85rem; background: #f8fafc;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.4rem;">
               <div style="display: flex; gap: 0.3rem;">
-               <button type="button" class="inline-cite-tab" data-format="bibtex" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 700; border-radius: 5px; border: 1px solid #0f172a; background: #0f172a; color: #fff; cursor: pointer;">BibTeX</button>
-<button type="button" class="inline-cite-tab" data-format="acs" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">ACS</button>
-<button type="button" class="inline-cite-tab" data-format="rsc" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">RSC</button>
-<button type="button" class="inline-cite-tab" data-format="nature" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Nature</button>
-<button type="button" class="inline-cite-tab" data-format="elsevier" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Elsevier</button>
-<button type="button" class="inline-cite-tab" data-format="wiley" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Wiley</button>
+                <button type="button" class="inline-cite-tab" data-format="bibtex" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 700; border-radius: 5px; border: 1px solid #0f172a; background: #0f172a; color: #fff; cursor: pointer;">BibTeX</button>
+                <button type="button" class="inline-cite-tab" data-format="acs" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">ACS</button>
+                <button type="button" class="inline-cite-tab" data-format="rsc" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">RSC</button>
+                <button type="button" class="inline-cite-tab" data-format="nature" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Nature</button>
+                <button type="button" class="inline-cite-tab" data-format="elsevier" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Elsevier</button>
+                <button type="button" class="inline-cite-tab" data-format="wiley" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Wiley</button>
               </div>
               <button id="inlineCopyCiteBtn" type="button" style="padding: 0.25rem 0.6rem; font-size: 0.75rem; font-weight: 700; border-radius: 5px; background: #0284c7; color: #fff; border: none; cursor: pointer;">📋 Copy</button>
             </div>
             <pre id="inlineCiteOutput" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.75rem; font-size: 0.75rem; font-family: ui-monospace, monospace; color: #0f172a; white-space: pre-wrap; word-break: break-all; margin: 0; line-height: 1.4;"></pre>
-          </div>
           </div>
           
           <div id="molarityStepLog" style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 1rem; font-family: system-ui, sans-serif; font-size: 0.85rem; line-height: 1.7; color: #1e293b;">
@@ -436,16 +454,195 @@ import { REAGENTS_DATABASE } from '../data/reagents';
         Mass<sub>weighed</sub> = Mass<sub>theoretical</sub> / (Assay% / 100)
       </div>
 
+      <!-- REFERENCE DATASET TABLE 1: Primary Analytical Standards Benchmarks -->
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2.75rem; margin-bottom: 0.75rem;">
+        Primary &amp; Secondary Analytical Standards Reference Table
+      </h3>
+      <p style="font-size: 0.9rem; color: #475569; margin-bottom: 1rem;">
+        Stoichiometric constants, drying pre-treatments, and standardized laboratory functions for high-purity volumetric standards:
+      </p>
+
+      <div style="overflow-x: auto; margin-bottom: 2rem;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px;">
+          <thead>
+            <tr style="background: #f1f5f9; text-align: left; color: #334155; font-size: 0.8rem; border-bottom: 1.5px solid #cbd5e1;">
+              <th style="padding: 0.65rem 0.75rem;">Analytical Standard</th>
+              <th style="padding: 0.65rem 0.75rem;">Formula</th>
+              <th style="padding: 0.65rem 0.75rem;">Molar Mass (g/mol)</th>
+              <th style="padding: 0.65rem 0.75rem;">Standard Grade / Assay</th>
+              <th style="padding: 0.65rem 0.75rem;">Oven Drying Protocol</th>
+              <th style="padding: 0.65rem 0.75rem;">Primary Analytical Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Potassium Hydrogen Phthalate (KHP)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">KHC₈H₄O₄</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">204.22</td>
+              <td style="padding: 0.65rem 0.75rem; color: #0284c7; font-weight: 700;">&ge; 99.95% (NIST SRM)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">110°C &ndash; 120°C (2 h)</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">Standardization of secondary NaOH solutions</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Sodium Carbonate Anhydrous</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">Na₂CO₃</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">105.99</td>
+              <td style="padding: 0.65rem 0.75rem; color: #0284c7; font-weight: 700;">&ge; 99.95%</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">260°C &ndash; 270°C (1 h)</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">Standardization of secondary HCl and H₂SO₄ titrants</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Sodium Chloride Primary Standard</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">NaCl</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">58.44</td>
+              <td style="padding: 0.65rem 0.75rem; color: #0284c7; font-weight: 700;">&ge; 99.9%</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">110°C (2 h), desiccate</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">Argentometric standardization of AgNO₃ (Mohr / Fajans)</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Potassium Dichromate</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">K₂Cr₂O₇</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">294.18</td>
+              <td style="padding: 0.65rem 0.75rem; color: #0284c7; font-weight: 700;">&ge; 99.9%</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">140°C &ndash; 150°C (2 h)</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">Redox primary standard for Na₂S₂O₃ and Fe²⁺ titrations</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">EDTA Disodium Dihydrate</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">C₁₀H₁₄N₂Na₂O₈·2H₂O</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">372.24</td>
+              <td style="padding: 0.65rem 0.75rem; color: #0284c7; font-weight: 700;">99.0% &ndash; 100.5%</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">80°C (Do NOT overheat)</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">Complexometric standard for total water hardness (Ca²⁺/Mg²⁺)</td>
+            </tr>
+            <tr>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Silver Nitrate</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">AgNO₃</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">169.87</td>
+              <td style="padding: 0.65rem 0.75rem; color: #0284c7; font-weight: 700;">&ge; 99.8% (ACS Reagent)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">Desiccate in dark (amber)</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">Precipitation titration of halides; store light-protected</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- REFERENCE DATASET TABLE 2: ASTM Volumetric Glassware Tolerances -->
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2.75rem; margin-bottom: 0.75rem;">
+        Class-A vs. Class-B Volumetric Flask Tolerances (ASTM E288 / ISO 1042)
+      </h3>
+      <p style="font-size: 0.9rem; color: #475569; margin-bottom: 1rem;">
+        Maximum permissible volumetric uncertainties calibrated strictly at 20°C:
+      </p>
+
+      <div style="overflow-x: auto; margin-bottom: 2rem;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px;">
+          <thead>
+            <tr style="background: #f1f5f9; text-align: left; color: #334155; font-size: 0.8rem; border-bottom: 1.5px solid #cbd5e1;">
+              <th style="padding: 0.65rem 0.75rem;">Nominal Capacity</th>
+              <th style="padding: 0.65rem 0.75rem;">Class-A Tolerance (&plusmn; mL)</th>
+              <th style="padding: 0.65rem 0.75rem;">Class-A Relative Error (%)</th>
+              <th style="padding: 0.65rem 0.75rem;">Class-B Tolerance (&plusmn; mL)</th>
+              <th style="padding: 0.65rem 0.75rem;">Recommended Homogenization</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">25 mL</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; color: #0284c7; font-weight: 700;">&plusmn;0.03 mL</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">&plusmn;0.120%</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; color: #64748b;">&plusmn;0.06 mL</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">Invert 10&ndash;12 times with wrist rotation</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">50 mL</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; color: #0284c7; font-weight: 700;">&plusmn;0.05 mL</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">&plusmn;0.100%</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; color: #64748b;">&plusmn;0.10 mL</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">Invert 10&ndash;12 times with wrist rotation</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">100 mL</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; color: #0284c7; font-weight: 700;">&plusmn;0.08 mL</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">&plusmn;0.080%</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; color: #64748b;">&plusmn;0.16 mL</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">Invert 10&ndash;12 times with wrist rotation</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">250 mL</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; color: #0284c7; font-weight: 700;">&plusmn;0.12 mL</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">&plusmn;0.048%</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; color: #64748b;">&plusmn;0.24 mL</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">Invert 12&ndash;15 times with complete drainage</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">500 mL</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; color: #0284c7; font-weight: 700;">&plusmn;0.20 mL</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">&plusmn;0.040%</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; color: #64748b;">&plusmn;0.40 mL</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">Invert 15 times with complete neck drainage</td>
+            </tr>
+            <tr>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">1000 mL (1.0 L)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; color: #0284c7; font-weight: 700;">&plusmn;0.30 mL</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">&plusmn;0.030%</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; color: #64748b;">&plusmn;0.60 mL</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">Invert 15&ndash;20 times; allow bubble transit</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
       <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2.5rem; margin-bottom: 0.85rem;">
         Standard Volumetric Preparation Workflow
       </h3>
       <ol style="margin-left: 1.5rem; line-height: 1.8; font-size: 0.95rem;">
-        <li><strong>Analytical Balance Weighing:</strong> Tare a clean weighing boat and weigh the gross mass on a calibrated analytical balance (±0.0001 g precision).</li>
+        <li><strong>Analytical Balance Weighing:</strong> Tare a clean weighing boat and weigh the gross mass on a calibrated analytical balance (&plusmn;0.0001 g precision).</li>
         <li><strong>Initial Beaker Dissolution:</strong> Transfer the salt into a clean glass beaker containing ~60% of the target deionized water volume. Stir gently until solid dissolution is complete.</li>
         <li><strong>Thermal Equilibrate:</strong> Allow any endothermic cooling or exothermic heat of solution to return to ambient laboratory temperature (20&deg;C).</li>
         <li><strong>Quantitative Transfer:</strong> Pour the solution into a Class-A volumetric flask using a clean funnel. Rinse the beaker walls and funnel 3 times with solvent aliquots into the flask.</li>
         <li><strong>Meniscus Adjustment:</strong> Dilute dropwise until the lowest curved boundary of the meniscus touches the graduation line at eye level. Stopper and invert 10 times.</li>
       </ol>
+
+      <!-- BENCHTOP TROUBLESHOOTING GUIDE -->
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2.75rem; margin-bottom: 0.75rem;">
+        Benchtop Analytical Troubleshooting Matrix
+      </h3>
+      <p style="font-size: 0.9rem; color: #475569; margin-bottom: 1rem;">
+        Common preparation discrepancies encountered during volumetric weighing and their analytical resolutions:
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-bottom: 2.5rem;">
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1.25rem;">
+          <h4 style="margin: 0 0 0.5rem 0; font-size: 0.95rem; color: #b91c1c; display: flex; align-items: center; gap: 0.4rem;">
+            <span>⚠️</span> Exothermic Dissolution Error (e.g. NaOH)
+          </h4>
+          <p style="font-size: 0.84rem; color: #475569; margin: 0; line-height: 1.6;">
+            <strong>Root Cause:</strong> Dissolving concentrated bases produces massive exothermic dissolution enthalpy (&Delta;H<sub>soln</sub> = &minus;44.5 kJ/mol). Diluting to the calibration line while hot causes the solution to contract upon cooling, resulting in a significantly over-concentrated standard.<br />
+            <strong>Fix:</strong> Dissolve pellets in a beaker on an ice bath or let equilibrate to 20°C before transferring to a Class-A volumetric flask.
+          </p>
+        </div>
+
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1.25rem;">
+          <h4 style="margin: 0 0 0.5rem 0; font-size: 0.95rem; color: #d97706; display: flex; align-items: center; gap: 0.4rem;">
+            <span>⚠️</span> Deliquescent &amp; Hygroscopic Mass Drift
+          </h4>
+          <p style="font-size: 0.84rem; color: #475569; margin: 0; line-height: 1.6;">
+            <strong>Root Cause:</strong> Salts like anhydrous CaCl₂, LiCl, and KOH rapidly absorb moisture from ambient air while on the weighing balance, causing balance readings to continuously drift upward.<br />
+            <strong>Fix:</strong> Use weighing by difference with a stoppered weighing bottle, or select stable hydrated crystalline forms (e.g., CaCl₂·2H₂O) using the integrated hydrate selector.
+          </p>
+        </div>
+
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1.25rem;">
+          <h4 style="margin: 0 0 0.5rem 0; font-size: 0.95rem; color: #0284c7; display: flex; align-items: center; gap: 0.4rem;">
+            <span>⚠️</span> Carbonate Contamination in Hydroxide Stocks
+          </h4>
+          <p style="font-size: 0.84rem; color: #475569; margin: 0; line-height: 1.6;">
+            <strong>Root Cause:</strong> Aqueous NaOH absorbs atmospheric CO₂ to form sodium carbonate (2 NaOH + CO₂ &rarr; Na₂CO₃ + H₂O), altering titrimetric inflection points.<br />
+            <strong>Fix:</strong> Prepare a 50% w/w NaOH stock where Na₂CO₃ is insoluble and precipitates out; decant clear supernatant using boiled, degassed Milli-Q water.
+          </p>
+        </div>
+      </div>
 
       <!-- FAQ Section -->
       <h3 style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-top: 3rem; margin-bottom: 1.25rem;">
@@ -471,6 +668,20 @@ import { REAGENTS_DATABASE } from '../data/reagents';
           <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Why should solutions never be dissolved directly inside a volumetric flask?</summary>
           <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
             Salts often display significant dissolution heats (&Delta;H<sub>solution</sub>). Volumetric flasks are calibrated strictly at 20&deg;C; dissolving hot or cold reagents alters glass dimensions and causes inaccurate volume markings before thermal equilibrium.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What are the ASTM Class-A volumetric flask tolerances?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Per ASTM E288 and ISO 1042 standards, Class-A flasks have strictly enforced volume limits: 100 mL flasks carry a tolerance of &plusmn;0.08 mL, 250 mL flasks have &plusmn;0.12 mL, 500 mL flasks have &plusmn;0.20 mL, and 1000 mL flasks have &plusmn;0.30 mL.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Why must primary standards such as KHP and Na2CO3 be oven-dried prior to weighing?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Primary standards pick up surface-adsorbed atmospheric moisture during storage. Oven drying (e.g., KHP at 110°C–120°C for 2 hours, or anhydrous Na₂CO₃ at 260°C–270°C for 1 hour) drives off free moisture so that analytical balance readings reflect 100.0% pure stoichiometric mass.
           </p>
         </details>
       </div>
@@ -799,79 +1010,80 @@ import { REAGENTS_DATABASE } from '../data/reagents';
 
     loadUrlParams();
     calculateMolarity();
+
     // --- In-Dashboard Academic Citation Logic ---
-  const citeDrawer = document.getElementById('citeDrawer');
-  const toggleCiteBtn = document.getElementById('toggleCiteBtn');
-  const inlineCiteOutput = document.getElementById('inlineCiteOutput');
-  const inlineTabs = document.querySelectorAll('.inline-cite-tab');
-  const inlineCopyBtn = document.getElementById('inlineCopyCiteBtn');
+    const citeDrawer = document.getElementById('citeDrawer');
+    const toggleCiteBtn = document.getElementById('toggleCiteBtn');
+    const inlineCiteOutput = document.getElementById('inlineCiteOutput');
+    const inlineTabs = document.querySelectorAll('.inline-cite-tab');
+    const inlineCopyBtn = document.getElementById('inlineCopyCiteBtn');
 
-  const doi = "10.5281/zenodo.23059466";
-  const currentYear = new Date().getFullYear();
+    const doi = "10.5281/zenodo.23059466";
+    const currentYear = new Date().getFullYear();
 
-  const molCitations = {
-    bibtex: `@software{khan_chemistrydesk_molarity_${currentYear},
-  author       = {Khan, Bilal},
-  title        = {ChemistryDesk: Solution Molarity Studio & Hydrate Compensation Engine},
-  year         = {${currentYear}},
-  version      = {v1.0.1},
-  publisher    = {Zenodo},
-  doi          = {${doi}},
-  url          = {https://chemistrycal.com/molarity}
+    const molCitations = {
+      bibtex: `@software{khan_chemistrydesk_molarity_${currentYear},
+  author        = {Khan, Bilal},
+  title         = {ChemistryDesk: Solution Molarity Studio & Hydrate Compensation Engine},
+  year          = {${currentYear}},
+  version       = {v1.0.1},
+  publisher     = {Zenodo},
+  doi           = {${doi}},
+  url           = {https://chemistrycal.com/molarity}
 }`,
-    acs: `Khan, B. ChemistryDesk: Solution Molarity Studio & Hydrate Compensation Engine, version 1.0.1; Zenodo, ${currentYear}. https://doi.org/${doi}.`,
-    rsc: `B. Khan, ChemistryDesk: Solution Molarity Studio & Hydrate Compensation Engine, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`,
-    nature: `Khan, B. ChemistryDesk: Solution Molarity Studio & Hydrate Compensation Engine. Zenodo https://doi.org/${doi} (${currentYear}).`,
-    elsevier: `Khan, B., ${currentYear}. ChemistryDesk: Solution Molarity Studio & Hydrate Compensation Engine (Version 1.0.1). Zenodo. https://doi.org/${doi}.`,
-    wiley: `B. Khan, ChemistryDesk: Solution Molarity Studio & Hydrate Compensation Engine, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`
-  };
+      acs: `Khan, B. ChemistryDesk: Solution Molarity Studio & Hydrate Compensation Engine, version 1.0.1; Zenodo, ${currentYear}. https://doi.org/${doi}.`,
+      rsc: `B. Khan, ChemistryDesk: Solution Molarity Studio & Hydrate Compensation Engine, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`,
+      nature: `Khan, B. ChemistryDesk: Solution Molarity Studio & Hydrate Compensation Engine. Zenodo https://doi.org/${doi} (${currentYear}).`,
+      elsevier: `Khan, B., ${currentYear}. ChemistryDesk: Solution Molarity Studio & Hydrate Compensation Engine (Version 1.0.1). Zenodo. https://doi.org/${doi}.`,
+      wiley: `B. Khan, ChemistryDesk: Solution Molarity Studio & Hydrate Compensation Engine, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`
+    };
 
-  let currentInlineFormat = 'bibtex';
+    let currentInlineFormat = 'bibtex';
 
-  function updateInlineCite() {
-    if (inlineCiteOutput) {
-      inlineCiteOutput.textContent = molCitations[currentInlineFormat];
-    }
-  }
-
-  if (toggleCiteBtn && citeDrawer) {
-    toggleCiteBtn.addEventListener('click', () => {
-      const isHidden = citeDrawer.style.display === 'none' || citeDrawer.style.display === '';
-      citeDrawer.style.display = isHidden ? 'block' : 'none';
-      toggleCiteBtn.style.background = isHidden ? '#0284c7' : '#e0f2fe';
-      toggleCiteBtn.style.color = isHidden ? '#ffffff' : '#0369a1';
-      if (isHidden) updateInlineCite();
-    });
-  }
-
-  inlineTabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      inlineTabs.forEach(t => {
-        t.style.background = '#ffffff';
-        t.style.color = '#334155';
-        t.style.borderColor = '#cbd5e1';
-      });
-      tab.style.background = '#0f172a';
-      tab.style.color = '#ffffff';
-      tab.style.borderColor = '#0f172a';
-      currentInlineFormat = tab.getAttribute('data-format');
-      updateInlineCite();
-    });
-  });
-
-  if (inlineCopyBtn) {
-    inlineCopyBtn.addEventListener('click', async () => {
-      try {
-        await navigator.clipboard.writeText(molCitations[currentInlineFormat]);
-        inlineCopyBtn.textContent = '✅ Copied!';
-        setTimeout(() => {
-          inlineCopyBtn.textContent = '📋 Copy';
-        }, 2000);
-      } catch (err) {
-        console.error('Failed to copy citation:', err);
+    function updateInlineCite() {
+      if (inlineCiteOutput) {
+        inlineCiteOutput.textContent = molCitations[currentInlineFormat];
       }
+    }
+
+    if (toggleCiteBtn && citeDrawer) {
+      toggleCiteBtn.addEventListener('click', () => {
+        const isHidden = citeDrawer.style.display === 'none' || citeDrawer.style.display === '';
+        citeDrawer.style.display = isHidden ? 'block' : 'none';
+        toggleCiteBtn.style.background = isHidden ? '#0284c7' : '#e0f2fe';
+        toggleCiteBtn.style.color = isHidden ? '#ffffff' : '#0369a1';
+        if (isHidden) updateInlineCite();
+      });
+    }
+
+    inlineTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        inlineTabs.forEach(t => {
+          t.style.background = '#ffffff';
+          t.style.color = '#334155';
+          t.style.borderColor = '#cbd5e1';
+        });
+        tab.style.background = '#0f172a';
+        tab.style.color = '#ffffff';
+        tab.style.borderColor = '#0f172a';
+        currentInlineFormat = tab.getAttribute('data-format');
+        updateInlineCite();
+      });
     });
-  }
+
+    if (inlineCopyBtn) {
+      inlineCopyBtn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(molCitations[currentInlineFormat]);
+          inlineCopyBtn.textContent = '✅ Copied!';
+          setTimeout(() => {
+            inlineCopyBtn.textContent = '📋 Copy';
+          }, 2000);
+        } catch (err) {
+          console.error('Failed to copy citation:', err);
+        }
+      });
+    }
   </script>
 
   <!-- Related Analytical Workflows Hub -->
