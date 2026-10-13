@@ -1,200 +1,225 @@
 ---
+// src/pages/molarity.astro
 import BaseLayout from '../layouts/BaseLayout.astro';
 import AuthorCard from '../components/AuthorCard.astro';
 import { REAGENTS_DATABASE } from '../data/reagents';
+
+const pageTitle = "Offline Solution Molarity Calculator & Solute Mass Studio | ChemistryDesk";
+const pageDescription = "Research-grade offline laboratory molarity calculator. Automatically compensates for crystalline hydration water (·nH2O) and chemical assay purity. Features dynamic GHS safety alerts, step-by-step SOPs, Overleaf LaTeX export, and printable bottle labels.";
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://chemistrycal.com';
+const canonicalUrl = `${siteUrl}/molarity`;
+
+const schemaData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      "url": siteUrl,
+      "name": "ChemistryDesk",
+      "description": "Precision Scientific Utilities & Computational Laboratory Engines",
+      "inLanguage": "en-US"
+    },
+    {
+      "@type": "WebPage",
+      "@id": `${canonicalUrl}#webpage`,
+      "url": canonicalUrl,
+      "name": pageTitle,
+      "isPartOf": { "@id": `${siteUrl}/#website` },
+      "description": pageDescription,
+      "inLanguage": "en-US",
+      "author": { "@id": `${siteUrl}/#author` }
+    },
+    {
+      "@type": "Person",
+      "@id": `${siteUrl}/#author`,
+      "name": "Bilal Khan",
+      "jobTitle": "Physical & Materials Chemistry Researcher",
+      "description": "Specialist in porous coordination polymers, heterogeneous adsorption kinetics, and computational chemical physics.",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q141699332",
+        "https://orcid.org/0009-0006-3082-7043",
+        "https://www.linkedin.com/in/bilal-khan-bbb259248",
+        "https://doi.org/10.5281/zenodo.23059466",
+        "https://github.com/Hadee017",
+        "https://about.me/bilalkhan01",
+        "https://www.behance.net/bilalkhan"
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${canonicalUrl}#breadcrumb`,
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": siteUrl
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Molarity Studio",
+          "item": canonicalUrl
+        }
+      ]
+    },
+    {
+      "@type": "WebApplication",
+      "@id": `${canonicalUrl}#app`,
+      "name": "ChemistryDesk Offline Solution Molarity & Reagent Prep Studio",
+      "url": canonicalUrl,
+      "applicationCategory": "ScientificApplication, EducationalApplication",
+      "operatingSystem": "All modern web browsers (Desktop, Tablet, Mobile)",
+      "browserRequirements": "Requires JavaScript; fully functional offline via Service Worker cache",
+      "description": pageDescription,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "creator": { "@id": `${siteUrl}/#author` },
+      "featureList": [
+        "Offline laboratory benchtop calculation via Service Worker / PWA",
+        "Hydrate crystal water stoichiometry compensation (·nH2O)",
+        "Manufacturer chemical assay purity correction (P%)",
+        "40+ analytical bench standard reagent autocomplete",
+        "Printable standard benchtop reagent bottle label generator",
+        "CSV laboratory recipe export",
+        "Direct academic citation export (BibTeX, ACS, RSC, Nature, Elsevier, Wiley)",
+        "Overleaf LaTeX formula export"
+      ]
+    },
+    {
+      "@type": "HowTo",
+      "@id": `${canonicalUrl}#howto`,
+      "name": "How to Accurately Prepare a Molar Solution with Chemical Purity and Hydration Correction",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "name": "Determine Solute Formula Mass & Hydration State",
+          "text": "Identify the anhydrous molecular weight and stoichiometric coordinated crystal water (·nH2O) from the manufacturer bottle label."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Define Working Volume and Concentration",
+          "text": "Specify the target volume (mL or L) and required molarity (M or mM)."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Compensate for Reagent Assay Purity",
+          "text": "Adjust the theoretical mass upward by dividing by the decimal assay purity (e.g., 0.98 for 98% ACS reagent grade) to weigh sufficient active chemical."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Dissolve in Initial Solvent",
+          "text": "Weigh the calculated gross mass on a calibrated 4-decimal balance. Dissolve in a beaker with 60% to 70% of the target solvent volume."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Quantitative Transfer & Meniscus Alignment",
+          "text": "Equilibrate any dissolution enthalpy to room temperature, transfer quantitatively to a Class-A volumetric flask, rinse the beaker, and dilute to the calibration line."
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${canonicalUrl}#faq`,
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Does ChemistryDesk Molarity Studio work offline in the laboratory?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. ChemistryDesk uses a client-side Service Worker architecture. Once loaded in your browser, the molarity solver, hydrate compensator, and reagent label generator function completely offline at the bench without an active internet connection."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the difference between molarity and molality?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Molarity (M) denotes moles of solute per liter of total solution, which is temperature-dependent due to solvent thermal expansion. Molality (m) is moles of solute per kilogram of pure solvent, which remains strictly temperature-invariant."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why must chemical assay purity be factored into molarity mass calculations?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Commercial reagents are rarely 100% pure due to atmospheric moisture absorption, trace isomers, or manufacturing tolerances. If a salt has an assay of 98%, weighing 100 g supplies only 98 g of active solute, producing an under-concentrated solution unless mathematically compensated."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does crystalline hydration water affect balance weighing?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Hydrates incorporate water molecules into their crystal lattice (e.g., CuSO4·5H2O). Because water adds significant molecular mass without contributing active ions, weighing must be based on the complete hydrate formula weight (249.68 g/mol) rather than the anhydrous weight (159.60 g/mol)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why should solutes never be dissolved directly inside a volumetric flask?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Dissolution of salts frequently produces significant enthalpy of solution (exothermic heat or endothermic cooling). Volumetric flasks are calibrated strictly at 20°C; thermal expansion of glass and liquids causes significant volumetric calibration errors before thermal equilibrium is restored."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What are the ASTM Class-A volumetric flask tolerances?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Per ASTM E288 and ISO 1042 standards, Class-A flasks have strictly enforced volume limits: 100 mL flasks carry a tolerance of ±0.08 mL, 250 mL flasks have ±0.12 mL, 500 mL flasks have ±0.20 mL, and 1000 mL flasks have ±0.30 mL."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why must primary standards such as KHP and Na2CO3 be oven-dried prior to weighing?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Primary standards pick up surface-adsorbed atmospheric moisture during storage. Oven drying (e.g., KHP at 110°C–120°C for 2 hours, or anhydrous Na2CO3 at 260°C–270°C for 1 hour) drives off free moisture so that analytical balance readings reflect 100.0% pure stoichiometric mass."
+          }
+        }
+      ]
+    }
+  ]
+};
 ---
 
-<BaseLayout 
-  title="Offline Solution Molarity Calculator & Solute Mass Studio | ChemistryDesk"
-  description="Research-grade offline laboratory molarity calculator. Automatically compensates for crystalline hydration water (·nH2O) and chemical assay purity. Features dynamic GHS safety alerts, step-by-step SOPs, Overleaf LaTeX export, and printable bottle labels."
->
-  <!-- Unified Structured Data Schema (@graph) for AI & Search Engines -->
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebSite",
-        "@id": "https://chemistrycal.com/#website",
-        "url": "https://chemistrycal.com",
-        "name": "ChemistryDesk",
-        "description": "Precision Scientific Utilities & Computational Laboratory Engines",
-        "inLanguage": "en-US"
-      },
-      {
-        "@type": "WebPage",
-        "@id": "https://chemistrycal.com/molarity#webpage",
-        "url": "https://chemistrycal.com/molarity",
-        "name": "Offline Solution Molarity Calculator & Solute Mass Studio | ChemistryDesk",
-        "isPartOf": { "@id": "https://chemistrycal.com/#website" },
-        "description": "Calculate exact reagent mass for molar solutions with automatic crystalline hydrate and assay purity compensation. Includes Class-A glassware tolerances and NIST reference standards.",
-        "inLanguage": "en-US",
-        "author": { "@id": "https://chemistrycal.com/#author" }
-      },
-      {
-        "@type": "Person",
-        "@id": "https://chemistrycal.com/#author",
-        "name": "Bilal Khan",
-        "jobTitle": "Physical & Materials Chemistry Researcher",
-        "description": "Specialist in porous coordination polymers, heterogeneous adsorption kinetics, and computational chemical physics.",
-        "sameAs": [
-          "https://orcid.org/0009-0006-3082-7043",
-          "https://github.com/Hadee017",
-          "https://about.me/bilalkhan01"
-        ]
-      },
-      {
-        "@type": "WebApplication",
-        "@id": "https://chemistrycal.com/molarity#app",
-        "name": "ChemistryDesk Offline Solution Molarity & Reagent Prep Studio",
-        "url": "https://chemistrycal.com/molarity",
-        "applicationCategory": "ScientificApplication, EducationalApplication",
-        "operatingSystem": "All modern web browsers (Desktop, Tablet, Mobile)",
-        "browserRequirements": "Requires JavaScript; fully functional offline via Service Worker cache",
-        "description": "Interactive, offline-capable laboratory benchtop calculator for solution molarity, solute mass requirements, hydrate water stoichiometry compensation, purity assay adjustment, and reagent label printing.",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        },
-        "creator": { "@id": "https://chemistrycal.com/#author" },
-        "featureList": [
-          "Offline laboratory benchtop calculation via Service Worker / PWA",
-          "Hydrate crystal water stoichiometry compensation",
-          "Manufacturer chemical assay purity correction",
-          "40+ analytical bench standard reagent autocomplete",
-          "Printable standard benchtop reagent label generator",
-          "CSV laboratory recipe export",
-          "Direct academic citation export (BibTeX, ACS, APA 7, IEEE)",
-          "Overleaf LaTeX formula export"
-        ]
-      },
-      {
-        "@type": "HowTo",
-        "@id": "https://chemistrycal.com/molarity#howto",
-        "name": "How to Accurately Prepare a Molar Solution with Chemical Purity and Hydration Correction",
-        "step": [
-          {
-            "@type": "HowToStep",
-            "name": "Determine Solute Formula Mass & Hydration State",
-            "text": "Identify the anhydrous molecular weight and stoichiometric coordinated crystal water (·nH2O) from the manufacturer bottle label."
-          },
-          {
-            "@type": "HowToStep",
-            "name": "Define Working Volume and Concentration",
-            "text": "Specify the target volume (mL or L) and required molarity (M or mM)."
-          },
-          {
-            "@type": "HowToStep",
-            "name": "Compensate for Reagent Assay Purity",
-            "text": "Adjust the theoretical mass upward by dividing by the decimal assay purity (e.g., 0.98 for 98% ACS reagent grade) to weigh sufficient active chemical."
-          },
-          {
-            "@type": "HowToStep",
-            "name": "Dissolve in Initial Solvent",
-            "text": "Weigh the calculated gross mass on a calibrated 4-decimal balance. Dissolve in a beaker with 60% to 70% of the target solvent volume."
-          },
-          {
-            "@type": "HowToStep",
-            "name": "Quantitative Transfer & Meniscus Alignment",
-            "text": "Equilibrate any dissolution enthalpy to room temperature, transfer quantitatively to a Class-A volumetric flask, rinse the beaker, and dilute to the calibration line."
-          }
-        ]
-      },
-      {
-        "@type": "FAQPage",
-        "@id": "https://chemistrycal.com/molarity#faq",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "Does ChemistryDesk Molarity Studio work offline in the laboratory?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes. ChemistryDesk uses a client-side Service Worker architecture. Once loaded in your browser, the molarity solver, hydrate compensator, and reagent label generator function completely offline at the bench without an active internet connection."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "What is the difference between molarity and molality?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Molarity (M) denotes moles of solute per liter of total solution, which is temperature-dependent due to solvent thermal expansion. Molality (m) is moles of solute per kilogram of pure solvent, which remains strictly temperature-invariant."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Why must chemical assay purity be factored into molarity mass calculations?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Commercial reagents are rarely 100% pure due to atmospheric moisture absorption, trace isomers, or manufacturing tolerances. If a salt has an assay of 98%, weighing 100 g supplies only 98 g of active solute, producing an under-concentrated solution unless mathematically compensated."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How does crystalline hydration water affect balance weighing?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Hydrates incorporate water molecules into their crystal lattice (e.g., CuSO4·5H2O). Because water adds significant molecular mass without contributing active ions, weighing must be based on the complete hydrate formula weight (249.68 g/mol) rather than the anhydrous weight (159.60 g/mol)."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Why should solutes never be dissolved directly inside a volumetric flask?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Dissolution of salts frequently produces significant enthalpy of solution (exothermic heat or endothermic cooling). Volumetric flasks are calibrated strictly at 20°C; thermal expansion of glass and liquids causes significant volumetric calibration errors before thermal equilibrium is restored."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "What are the ASTM Class-A volumetric flask tolerances?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Per ASTM E288 and ISO 1042 standards, Class-A flasks have strictly enforced volume limits: 100 mL flasks carry a tolerance of ±0.08 mL, 250 mL flasks have ±0.12 mL, 500 mL flasks have ±0.20 mL, and 1000 mL flasks have ±0.30 mL."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Why must primary standards such as KHP and Na2CO3 be oven-dried prior to weighing?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Primary standards pick up surface-adsorbed atmospheric moisture during storage. Oven drying (e.g., KHP at 110°C–120°C for 2 hours, or anhydrous Na2CO3 at 260°C–270°C for 1 hour) drives off free moisture so that analytical balance readings reflect 100.0% pure stoichiometric mass."
-            }
-          }
-        ]
-      }
-    ]
-  })} />
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(schemaData)}></script>
   
-  <!-- Main Content Container -->
   <main style="max-width: 1140px; margin: 0 auto; padding: 1.25rem 1rem 3rem; box-sizing: border-box; overflow-x: hidden;">
-    <!-- Breadcrumb Navigation -->
+    
+    <!-- Validated 2-Tier Breadcrumb Navigation -->
     <nav style="font-size: 0.85rem; margin-bottom: 1.25rem;">
       <a href="/" style="color: #0284c7; text-decoration: none; font-weight: 600;">Home</a> &rsaquo; 
-      <span style="color: #64748b;"> Solution Preparation</span> &rsaquo; 
       <span style="color: #0f172a; font-weight: 700;">Molarity Studio</span>
     </nav>
 
-    <!-- Header Section -->
-    <div style="border-bottom: 1.5px solid #e2e8f0; padding-bottom: 1.5rem; margin-bottom: 1.5rem;">
-      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
-        <div style="display: flex; align-items: center; gap: 0.75rem; max-width: 800px;">
-          <span style="font-size: 2.25rem; flex-shrink: 0;">🧪</span>
-          <div>
-            <h1 style="font-size: clamp(1.6rem, 4vw, 2.25rem); font-weight: 800; color: #0f172a; letter-spacing: -0.025em; margin: 0; line-height: 1.2;">
-              Solution Molarity &amp; Reagent Prep Studio
-            </h1>
-            <p style="color: #64748b; font-size: 0.95rem; margin-top: 0.35rem; margin-bottom: 0; line-height: 1.5;">
-              Two-way analytical mass solver with crystal hydration water compensation (&middot;nH₂O), manufacturer assay purity corrections, dynamic GHS safety alerts, and benchtop bottle label generation.
-            </p>
+    <!-- Header Hero Card -->
+    <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 16px; padding: clamp(1.25rem, 3vw, 2rem); margin-bottom: 1.75rem; color: #ffffff; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.15);">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.5rem;">
+        <div style="max-width: 780px;">
+          <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); padding: 0.3rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem;">
+            <span>Analytical Volumetric Formulation</span>
           </div>
+          <h1 style="font-size: clamp(1.6rem, 4vw, 2.25rem); font-weight: 800; color: #ffffff; letter-spacing: -0.025em; margin: 0; line-height: 1.2;">
+            Solution Molarity &amp; Reagent Prep Studio
+          </h1>
+          <p style="color: #cbd5e1; font-size: 0.95rem; margin-top: 0.5rem; margin-bottom: 0; line-height: 1.6;">
+            Two-way analytical mass solver with crystal hydration water compensation (&middot;nH₂O), manufacturer assay purity corrections, dynamic GHS safety alerts, and benchtop bottle label generation.
+          </p>
         </div>
-        <button id="shareSetupBtn" style="background: #e0f2fe; border: 1px solid #bae6fd; color: #0284c7; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.5rem; height: 38px;">
+        <button id="shareSetupBtn" type="button" style="background: #0284c7; border: none; color: white; padding: 0.65rem 1.25rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.2); min-height: 38px;">
           <span>🔗 Share Setup URL</span>
         </button>
       </div>
 
-      <!-- Verified Author / E-E-A-T Card -->
-      <div style="margin-top: 1.25rem;">
+      <!-- AuthorCard / E-E-A-T Component -->
+      <div style="margin-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.25rem;">
         <AuthorCard />
       </div>
     </div>
@@ -210,7 +235,7 @@ import { REAGENTS_DATABASE } from '../data/reagents';
     </section>
 
     <!-- REAGENT AUTOCOMPLETE DATABASE SEARCH BAR -->
-    <div style="background: linear-gradient(to right, #f8fafc, #f1f5f9); border: 2px solid #0284c7; border-radius: 12px; padding: 1.25rem; margin-bottom: 1.75rem; position: relative; box-shadow: 0 4px 6px -1px rgba(2, 132, 199, 0.08);">
+    <div style="background: linear-gradient(to right, #f8fafc, #f1f5f9); border: 2px solid #0284c7; border-radius: 12px; padding: 1.25rem; margin-bottom: 1.75rem; position: relative; box-shadow: 0 4px 6px -1px rgba(2, 132, 199, 0.08); min-width: 0;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
         <label for="reagentSearchInput" style="font-size: 0.88rem; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.03em; display: flex; align-items: center; gap: 0.45rem;">
           <span>🔍</span> Reagent Database Auto-Lookup (40+ Bench Standards)
@@ -266,12 +291,12 @@ import { REAGENTS_DATABASE } from '../data/reagents';
       <div style="margin-top: 0.35rem; font-size: 0.8rem; color: #b45309;"><strong>Mandatory PPE:</strong> <span id="ghsPpeText">Safety Glasses, Nitrile Gloves, Lab Coat</span></div>
     </div>
 
-    <!-- WORKBENCH GRID (Mobile-Safe MinMax Clamp) -->
+    <!-- WORKBENCH GRID -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
       
       <!-- LEFT COLUMN: Inputs -->
       <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: clamp(1rem, 3vw, 1.75rem); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); min-width: 0;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 0.75rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
           <h2 style="font-size: 0.95rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #0f172a; margin: 0;">
             1. Formulation Parameters
           </h2>
@@ -357,46 +382,46 @@ import { REAGENTS_DATABASE } from '../data/reagents';
       <div style="display: flex; flex-direction: column; gap: 1.5rem; min-width: 0;">
         
         <!-- Primary Result HUD -->
-        <div style="background: #0f172a; border-radius: 14px; padding: clamp(1.25rem, 3vw, 2rem); color: #ffffff; box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.3); border: 1px solid #334155;">
+        <div style="background: #0f172a; border-radius: 14px; padding: clamp(1.25rem, 3vw, 2rem); color: #ffffff; box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.3); border: 1px solid #334155; min-width: 0;">
           <span style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #38bdf8;">
             Mass of Reagent to Weigh on Balance
           </span>
           <div id="primaryMassGrams" style="font-size: clamp(2.4rem, 6vw, 3.25rem); font-weight: 900; color: #38bdf8; margin: 0.4rem 0 0.75rem 0; line-height: 1; word-break: break-all;">--</div>
 
-          <div style="border-top: 1px solid #334155; padding-top: 1.25rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.9rem;">
+          <div style="border-top: 1px solid #334155; padding-top: 1.25rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr)); gap: 1rem; font-size: 0.9rem;">
             <div>
               <span style="color: #94a3b8; display: block; font-size: 0.75rem; text-transform: uppercase; font-weight: 700;">Effective Formula Mass</span>
-              <strong id="displayEffectiveMw" style="color: #34d399; font-size: clamp(1.1rem, 2.5vw, 1.35rem);">--</strong>
+              <strong id="displayEffectiveMw" style="color: #34d399; font-size: clamp(1.1rem, 2.5vw, 1.35rem); word-break: break-all;">--</strong>
             </div>
             <div>
               <span style="color: #94a3b8; display: block; font-size: 0.75rem; text-transform: uppercase; font-weight: 700;">Moles Solute (n)</span>
-              <strong id="displayTotalMoles" style="color: #f8fafc; font-size: clamp(1.1rem, 2.5vw, 1.35rem);">--</strong>
+              <strong id="displayTotalMoles" style="color: #f8fafc; font-size: clamp(1.1rem, 2.5vw, 1.35rem); word-break: break-all;">--</strong>
             </div>
           </div>
         </div>
 
         <!-- Preparation Metrics Cards -->
-        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1.25rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1.25rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr)); gap: 1rem; min-width: 0;">
           <div>
             <span style="color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; display: block;">Theoretical Pure Mass</span>
-            <strong id="displayPureMass" style="color: #0f172a; font-size: 1.15rem; display: block; margin: 0.2rem 0;">--</strong>
+            <strong id="displayPureMass" style="color: #0f172a; font-size: 1.15rem; display: block; margin: 0.2rem 0; word-break: break-all;">--</strong>
             <span style="display: block; font-size: 0.72rem; color: #64748b; font-family: monospace;">Mass at 100% assay</span>
           </div>
           <div>
             <span style="color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; display: block;">Mass Concentration</span>
-            <strong id="displayMassConc" style="color: #0f172a; font-size: 1.15rem; display: block; margin: 0.2rem 0;">--</strong>
+            <strong id="displayMassConc" style="color: #0f172a; font-size: 1.15rem; display: block; margin: 0.2rem 0; word-break: break-all;">--</strong>
             <span style="display: block; font-size: 0.72rem; color: #64748b; font-family: monospace;">g/L equivalent</span>
           </div>
         </div>
 
         <!-- Practical Benchtop Preparation Protocol (SOP) -->
-        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: clamp(1rem, 2.5vw, 1.5rem);">
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: clamp(1rem, 2.5vw, 1.5rem); min-width: 0;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem; flex-wrap: wrap; gap: 0.5rem;">
             <h3 style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #0f172a; margin: 0;">Practical Benchtop SOP &amp; Actions</h3>
             <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
-              <button id="copyMolarityLatex" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.45rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b; min-height: 36px;">Copy LaTeX</button>
-              <button id="printMolarityLabelBtn" style="background: #0284c7; border: none; padding: 0.45rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: white; min-height: 36px;">Print Bench Label</button>
-              <button id="exportMolarityCsv" style="background: #0f172a; border: none; padding: 0.45rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: white; min-height: 36px;">Export CSV</button>
+              <button id="copyMolarityLatex" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.45rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b; min-height: 36px;">Copy LaTeX</button>
+              <button id="printMolarityLabelBtn" type="button" style="background: #0284c7; border: none; padding: 0.45rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: white; min-height: 36px;">Print Bench Label</button>
+              <button id="exportMolarityCsv" type="button" style="background: #0f172a; border: none; padding: 0.45rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: white; min-height: 36px;">Export CSV</button>
               <button id="toggleCiteBtn" type="button" style="background: #e0f2fe; border: 1px solid #7dd3fc; padding: 0.45rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #0369a1; display: inline-flex; align-items: center; gap: 0.35rem; min-height: 36px;"><span>📖</span> Cite</button>
             </div>
           </div>
@@ -449,11 +474,11 @@ import { REAGENTS_DATABASE } from '../data/reagents';
         </div>
       </div>
       <div style="text-align: center; margin-top: 1rem;">
-        <button id="triggerMolarityPrint" style="background: #0284c7; color: white; border: none; padding: 0.6rem 1.5rem; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.9rem;">Send Label to Printer</button>
+        <button id="triggerMolarityPrint" type="button" style="background: #0284c7; color: white; border: none; padding: 0.6rem 1.5rem; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.9rem; min-height: 38px;">Send Label to Printer</button>
       </div>
     </div>
 
-    <!-- EDITORIAL & SCIENTIFIC REFERENCE ARTICLE (ADSENSE E-E-A-T & GEO COMPLIANT) -->
+    <!-- EDITORIAL & SCIENTIFIC REFERENCE ARTICLE -->
     <article style="border-top: 2px solid #e2e8f0; padding-top: 3rem; line-height: 1.85; color: #1e293b;">
       
       <h2 style="font-size: clamp(1.4rem, 3.5vw, 1.85rem); font-weight: 800; color: #0f172a; margin-bottom: 1.25rem; letter-spacing: -0.02em; line-height: 1.3;">
@@ -470,7 +495,7 @@ import { REAGENTS_DATABASE } from '../data/reagents';
         </div>
       </div>
 
-      <!-- WORKED REAL-WORLD MATHEMATICAL DERIVATION (PREVENTS THIN-CONTENT FLAGS) -->
+      <!-- WORKED REAL-WORLD MATHEMATICAL DERIVATION -->
       <section style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: clamp(1rem, 3vw, 1.5rem); margin: 2rem 0; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
         <h3 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin-top: 0; margin-bottom: 0.75rem;">
           Step-by-Step Benchtop Worked Example: NIST SRM 84k Standard Acid
@@ -481,11 +506,11 @@ import { REAGENTS_DATABASE } from '../data/reagents';
 
         <div style="background: #f8fafc; border-left: 4px solid #0284c7; padding: 1rem; margin-bottom: 1rem; font-family: ui-monospace, monospace; font-size: 0.88rem; line-height: 1.7; overflow-x: auto;">
           <strong>Step 1: Calculate pure theoretical stoichiometric moles required:</strong><br />
-          n = C &times; V = (0.1000 mol/L) &times; (0.2500 L) = 0.02500 mol KHP<br /><br />
+          <span>n = C &times; V = (0.1000 mol/L) &times; (0.2500 L) = 0.02500 mol KHP</span><br /><br />
           <strong>Step 2: Calculate stoichiometric mass at 100% theoretical purity:</strong><br />
-          m_theoretical = n &times; MW = (0.02500 mol) &times; (204.2212 g/mol) = 5.10553 g<br /><br />
+          <span>m_theoretical = n &times; MW = (0.02500 mol) &times; (204.2212 g/mol) = 5.10553 g</span><br /><br />
           <strong>Step 3: Adjust for manufacturer assay purity (99.98%):</strong><br />
-          m_weighed = m_theoretical / (Assay% / 100) = 5.10553 g / 0.9998 = <strong>5.1066 g</strong>
+          <span>m_weighed = m_theoretical / (Assay% / 100) = 5.10553 g / 0.9998 = <strong>5.1066 g</strong></span>
         </div>
 
         <p style="font-size: 0.9rem; color: #475569; margin: 0;">
@@ -507,7 +532,7 @@ import { REAGENTS_DATABASE } from '../data/reagents';
         Weighing 159.60 g of the pentahydrate delivers only 102.0 g of active CuSO₄ and 57.6 g of water, resulting in a severe <strong>36.1% deficit in target solution concentration</strong>. The effective molecular weight must reflect the complete crystal stoichiometry:
       </p>
       <div style="background: #f1f5f9; border-left: 4px solid #0284c7; padding: 0.85rem 1.25rem; margin: 1.25rem 0; font-family: monospace; font-size: 0.9rem; color: #0f172a; font-weight: 600; overflow-x: auto;">
-        MW<sub>effective</sub> = MW<sub>anhydrous</sub> + (n &times; 18.01528 g/mol)
+        <span>MW<sub>effective</sub> = MW<sub>anhydrous</sub> + (n &times; 18.01528 g/mol)</span>
       </div>
 
       <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2.5rem; margin-bottom: 0.85rem;">
@@ -517,7 +542,7 @@ import { REAGENTS_DATABASE } from '../data/reagents';
         Analytical reagents are stamped with a certified manufacturer assay purity percentage (<em>P%</em>). Analytical Reagent (AR) grade chemicals often range between 95.0% and 99.5% purity due to atmospheric moisture absorption and synthesis traces. To supply the target moles of pure chemical (<em>n</em>), the balance mass must be adjusted:
       </p>
       <div style="background: #f1f5f9; border-left: 4px solid #0284c7; padding: 0.85rem 1.25rem; margin: 1.25rem 0; font-family: monospace; font-size: 0.9rem; color: #0f172a; font-weight: 600; overflow-x: auto;">
-        Mass<sub>weighed</sub> = Mass<sub>theoretical</sub> / (Assay% / 100)
+        <span>Mass<sub>weighed</sub> = Mass<sub>theoretical</sub> / (Assay% / 100)</span>
       </div>
 
       <!-- REFERENCE DATASET TABLE 1: Primary Analytical Standards Benchmarks -->
@@ -528,8 +553,8 @@ import { REAGENTS_DATABASE } from '../data/reagents';
         Stoichiometric constants, drying pre-treatments, and standardized laboratory functions for high-purity volumetric standards:
       </p>
 
-      <div style="overflow-x: auto; margin-bottom: 2rem;">
-        <table style="width: 100%; min-width: 620px; border-collapse: collapse; font-size: 0.85rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px;">
+      <div style="border: 1px solid #cbd5e1; border-radius: 8px; overflow-x: auto; margin-bottom: 2rem;">
+        <table style="width: 100%; min-width: 620px; border-collapse: collapse; font-size: 0.85rem; background: #ffffff;">
           <thead>
             <tr style="background: #f1f5f9; text-align: left; color: #334155; font-size: 0.8rem; border-bottom: 1.5px solid #cbd5e1;">
               <th style="padding: 0.65rem 0.75rem;">Analytical Standard</th>
@@ -601,8 +626,8 @@ import { REAGENTS_DATABASE } from '../data/reagents';
         Maximum permissible volumetric uncertainties calibrated strictly at 20°C:
       </p>
 
-      <div style="overflow-x: auto; margin-bottom: 2rem;">
-        <table style="width: 100%; min-width: 600px; border-collapse: collapse; font-size: 0.85rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px;">
+      <div style="border: 1px solid #cbd5e1; border-radius: 8px; overflow-x: auto; margin-bottom: 2rem;">
+        <table style="width: 100%; min-width: 600px; border-collapse: collapse; font-size: 0.85rem; background: #ffffff;">
           <thead>
             <tr style="background: #f1f5f9; text-align: left; color: #334155; font-size: 0.8rem; border-bottom: 1.5px solid #cbd5e1;">
               <th style="padding: 0.65rem 0.75rem;">Nominal Capacity</th>
@@ -766,7 +791,7 @@ import { REAGENTS_DATABASE } from '../data/reagents';
       font-size: 0.75rem;
       font-weight: 700;
       transition: all 0.2s ease;
-      min-height: 32px;
+      min-height: 34px;
     }
     .molarity-preset-btn:hover {
       background: #0284c7;
@@ -1161,7 +1186,7 @@ import { REAGENTS_DATABASE } from '../data/reagents';
     <p style="margin: 0 0 1rem; font-size: 0.85rem; color: #64748b; line-height: 1.4;">
       Connect your freshly prepared reagent stock with serial dilutions, titrations, and materials characterization:
     </p>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 1rem;">
       <a href="/dilution" style="display: block; padding: 1rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
         <div style="font-weight: 700; font-size: 0.92rem; color: #0284c7; margin-bottom: 0.35rem;">Stock Dilution &amp; Serial Ladder Studio &rarr;</div>
         <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">
