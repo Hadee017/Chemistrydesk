@@ -4,7 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import AuthorCard from '../components/AuthorCard.astro';
 
 const pageTitle = "Stoichiometry & Reaction Yield Engine | Limiting Reactant & Balancer | ChemistryDesk";
-const pageDescription = "Balance chemical reactions, calculate molar masses, identify limiting reactants, and compute theoretical and percent yields with real-time mass balance diagnostics.";
+const pageDescription = "Research-grade reaction stoichiometry engine. Balance equations via matrix nullspace, determine exact limiting reactants, and compute theoretical & percent yields with atomic mass balance checks.";
 const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://chemistrycal.com';
 const canonicalUrl = `${siteUrl}/stoichiometry`;
 
@@ -80,12 +80,13 @@ const schemaData = {
       "creator": { "@id": `${siteUrl}/#author` },
       "featureList": [
         "Exact Integer Chemical Equation Balancing via Matrix Nullspace",
-        "Element Breakdown & Accurate Molar Mass Resolution",
-        "Multi-Unit Reagent Input (g, mg, mol, mmol)",
-        "Limiting Reactant Identification & Excess Quantities",
+        "Element Breakdown & Molar Mass Resolution via CIAAW Atomic Weights",
+        "Multi-Unit Reagent Input Support (g, mg, mol, mmol)",
+        "Reaction Extent (xi) & Limiting Reactant Identification",
+        "Excess Reagent Mass Quantitation & Atom Economy Analysis",
         "Theoretical Yield & Percent Yield Calculation",
-        "LaTeX Equation Block & CSV Data Export",
-        "Integrated academic citation drawer (BibTeX, ACS, Nature, etc.)"
+        "Dynamic SVG Reaction Mass-Conservation Visualization",
+        "1-Click LaTeX Equation Block, Plain-Text Summary, and CSV Data Export"
       ]
     },
     {
@@ -96,22 +97,22 @@ const schemaData = {
         {
           "@type": "HowToStep",
           "name": "Balance the Chemical Equation",
-          "text": "Input reactants and products to compute lowest positive integer stoichiometric coefficients via atomic conservation."
+          "text": "Identify all reactants and products. Balance the equation using exact integer stoichiometric coefficients to satisfy atomic conservation."
         },
         {
           "@type": "HowToStep",
-          "name": "Convert Reagent Quantities to Moles",
-          "text": "Divide each initial reactant mass by its exact molar mass to determine initial molar amounts."
+          "name": "Convert Reagent Masses to Molar Quantities",
+          "text": "Divide each starting reactant mass by its exact molar mass (n = m / MW) to determine initial moles available."
         },
         {
           "@type": "HowToStep",
-          "name": "Identify the Limiting Reactant via Extent of Reaction",
-          "text": "Divide initial moles by stoichiometric coefficients. The reagent with the smallest reaction extent (xi) is limiting."
+          "name": "Calculate Extent of Reaction (xi)",
+          "text": "Divide initial moles by the stoichiometric coefficient (xi = n / nu). The reactant with the lowest extent is the limiting reagent."
         },
         {
           "@type": "HowToStep",
-          "name": "Calculate Theoretical and Percent Yield",
-          "text": "Multiply limiting extent by product coefficients and molar masses to find theoretical yield, then compare with actual yield."
+          "name": "Compute Theoretical and Percent Yields",
+          "text": "Multiply the limiting extent by product stoichiometric coefficients and molar masses to find theoretical yield in grams. Compare against actual isolated mass."
         }
       ]
     },
@@ -121,42 +122,34 @@ const schemaData = {
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "How does this engine balance chemical equations?",
+          "name": "How does the matrix nullspace balancing algorithm work?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "The engine constructs a stoichiometric conservation matrix of atomic balances across all chemical species and applies Gaussian elimination using exact rational fractions to compute the smallest positive integer null-space coefficients."
+            "text": "The engine constructs a stoichiometric matrix A where rows represent unique elements and columns represent chemical species. By performing Gaussian elimination using exact rational arithmetic, it solves the homogeneous system A * x = 0 to yield the smallest positive integer nullspace vector for stoichiometric coefficients."
           }
         },
         {
           "@type": "Question",
-          "name": "What is a limiting reactant and how is it determined?",
+          "name": "What is the difference between limiting reactant and excess reactant?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "The limiting reactant is the reagent that is completely consumed first, limiting the maximum amount of product formed. It is identified by computing the reaction extent (initial moles divided by stoichiometric coefficient) for each reactant; the reagent with the lowest extent is the limiting species."
+            "text": "The limiting reactant is completely consumed first, dictating the maximum theoretical quantity of product that can form. Excess reactants remain partially unreacted after the limiting reagent is exhausted."
           }
         },
         {
           "@type": "Question",
-          "name": "How is percent yield calculated?",
+          "name": "Why can an experimental percent yield exceed 100%?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Percent yield is the ratio of the experimentally obtained actual mass yield to the calculated theoretical maximum mass yield, expressed as a percentage: Percent Yield = (Actual Yield / Theoretical Yield) * 100%."
+            "text": "A percent yield above 100% indicates product contamination. Common sources include residual crystallization solvents, unevaporated water, co-precipitated byproduct salts, or unreacted starting materials in the isolated product."
           }
         },
         {
           "@type": "Question",
-          "name": "What does a percent yield greater than 100% indicate?",
+          "name": "What is atom economy and how does it differ from percent yield?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "A percent yield above 100% physically indicates an impure product sample—commonly containing residual crystallization solvent, unevaporated water, unreacted starting material, or co-precipitated byproduct salts."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Why is the stoichiometric coefficient never altered during mass calculation?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Stoichiometric coefficients represent fundamental molar ratios determined by atomic conservation. Molar mass represents the mass of exactly one mole (g/mol). Multiplying molar mass by the coefficient directly inside the mole conversion introduces dimensional error."
+            "text": "Percent yield measures practical reaction efficiency in the laboratory (actual vs. theoretical yield). Atom economy is a green chemistry metric measuring theoretical efficiency: the percentage of all starting reactant atoms that end up in the desired product molecule."
           }
         }
       ]
@@ -168,7 +161,7 @@ const schemaData = {
 <BaseLayout title={pageTitle} description={pageDescription}>
   <script is:inline type="application/ld+json" set:html={JSON.stringify(schemaData)}></script>
 
-  <main style="max-width: 1100px; margin: 1.5rem auto 3rem auto; padding: 0 1rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1e293b; box-sizing: border-box; overflow-x: hidden;">
+  <main style="max-width: 1140px; margin: 1.5rem auto 4rem auto; padding: 0 1rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #0f172a; box-sizing: border-box; overflow-x: hidden;">
     
     <!-- Validated 2-Tier Breadcrumb Navigation -->
     <nav style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.25rem;">
@@ -176,10 +169,10 @@ const schemaData = {
       <span style="color: #0f172a; font-weight: 700;">Stoichiometry Studio</span>
     </nav>
 
-    <!-- Header Section -->
+    <!-- Header Hero Card -->
     <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 16px; padding: clamp(1.25rem, 3vw, 2rem); margin-bottom: 1.75rem; color: #ffffff; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.15);">
       <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.25rem;">
-        <div style="max-width: 760px;">
+        <div style="max-width: 780px;">
           <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); padding: 0.3rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem;">
             <span>Quantitative Reaction &amp; Mass Balance Studio</span>
           </div>
@@ -190,41 +183,15 @@ const schemaData = {
             Exact integer equation balancing, automatic molar mass calculation, limiting reactant detection, and theoretical &amp; percent yield optimization.
           </p>
         </div>
-      </div>
 
-      <!-- Quick Presets & Export Actions Bar -->
-      <div style="margin-top: 1.25rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
-        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
-          <span style="font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase;">Presets:</span>
-          <button type="button" class="preset-rxn-btn" data-rxn="C3H8 + O2 -> CO2 + H2O" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; padding: 0.35rem 0.65rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #38bdf8; min-height: 32px;">Propane Combustion</button>
-          <button type="button" class="preset-rxn-btn" data-rxn="Al + HCl -> AlCl3 + H2" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; padding: 0.35rem 0.65rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #38bdf8; min-height: 32px;">Al + HCl Redox</button>
-          <button type="button" class="preset-rxn-btn" data-rxn="FeCl3 + NaOH -> Fe(OH)3 + NaCl" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; padding: 0.35rem 0.65rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #38bdf8; min-height: 32px;">Precipitation</button>
-          <button type="button" class="preset-rxn-btn" data-rxn="N2 + H2 -> NH3" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; padding: 0.35rem 0.65rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #38bdf8; min-height: 32px;">Haber Synthesis</button>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+          <button id="btnCopyShareUrl" type="button" style="background: #0284c7; border: none; padding: 0.6rem 1.15rem; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; color: #ffffff; display: inline-flex; align-items: center; gap: 0.4rem; min-height: 38px;">
+            <span>🔗 Share Link</span>
+          </button>
+          <button id="btnExportCsv" type="button" style="background: #334155; border: 1px solid #475569; padding: 0.6rem 1rem; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; color: #ffffff; min-height: 38px;">
+            CSV
+          </button>
         </div>
-
-        <div style="display: flex; gap: 0.45rem; flex-wrap: wrap;">
-          <button id="btnCopyShareUrl" type="button" style="background: #0284c7; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff; display: inline-flex; align-items: center; gap: 0.3rem; min-height: 34px;">🔗 Share Link</button>
-          <button id="btnCopyReport" type="button" style="background: #10b981; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff; display: inline-flex; align-items: center; gap: 0.3rem; min-height: 34px;">📋 Copy Report</button>
-          <button id="btnExportCsv" type="button" style="background: #334155; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff; min-height: 34px;">📥 CSV</button>
-          <button id="btnCopyLatex" type="button" style="background: #475569; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff; min-height: 34px;">LaTeX</button>
-          <button id="toggleCiteBtn" type="button" style="background: #e0f2fe; border: 1px solid #bae6fd; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #0369a1; min-height: 34px;">📖 Cite</button>
-        </div>
-      </div>
-
-      <!-- Citation Drawer -->
-      <div id="citeDrawer" style="display: none; margin-top: 1rem; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 0.85rem; background: #f8fafc;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.4rem;">
-          <div style="display: flex; gap: 0.3rem; flex-wrap: wrap;">
-            <button type="button" class="inline-cite-tab" data-format="bibtex" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 700; border-radius: 5px; border: 1px solid #0f172a; background: #0f172a; color: #fff; cursor: pointer;">BibTeX</button>
-            <button type="button" class="inline-cite-tab" data-format="acs" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">ACS</button>
-            <button type="button" class="inline-cite-tab" data-format="rsc" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">RSC</button>
-            <button type="button" class="inline-cite-tab" data-format="nature" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Nature</button>
-            <button type="button" class="inline-cite-tab" data-format="elsevier" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Elsevier</button>
-            <button type="button" class="inline-cite-tab" data-format="wiley" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Wiley</button>
-          </div>
-          <button id="inlineCopyCiteBtn" type="button" style="padding: 0.25rem 0.65rem; font-size: 0.75rem; font-weight: 700; border-radius: 5px; background: #0284c7; color: #fff; border: none; cursor: pointer;">📋 Copy</button>
-        </div>
-        <pre id="inlineCiteOutput" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.75rem; font-size: 0.75rem; font-family: ui-monospace, monospace; color: #0f172a; white-space: pre-wrap; word-break: break-all; margin: 0; line-height: 1.45;"></pre>
       </div>
 
       <!-- AuthorCard / E-E-A-T Component -->
@@ -239,15 +206,30 @@ const schemaData = {
         <span>💡</span> What is Chemical Stoichiometry? (Direct Answer)
       </h2>
       <p style="font-size: 0.92rem; color: #334155; margin: 0; line-height: 1.6;">
-        <strong>Chemical stoichiometry</strong> is the quantitative study of mole and mass relationships between reactants and products governed by the Law of Conservation of Mass. The <strong>limiting reactant</strong> is the reagent with the smallest reaction extent (<code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">&xi; = n / &nu;</code>) that is consumed completely first, setting the theoretical yield, while <strong>percent yield</strong> compares actual recovered product against this theoretical maximum.
+        <strong>Chemical stoichiometry</strong> is the quantitative measurement of relationships between reactants and products governed by the <strong>Law of Conservation of Mass</strong>. The <strong>limiting reactant</strong> is the reagent with the lowest extent of reaction (<code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">&xi; = n / &nu;</code>) that is consumed completely first, setting the theoretical yield ceiling. <strong>Percent yield</strong> measures the experimental recovery: <code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">(Actual Mass / Theoretical Mass) &times; 100%</code>.
       </p>
     </section>
+
+    <!-- PRESET SELECTION CHIPS -->
+    <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1.25rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+      <div style="font-weight: 800; font-size: 0.85rem; color: #0f172a; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+        <span>Representative Reaction Presets:</span>
+        <span style="font-size: 0.75rem; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 9999px; font-weight: 800;">1-Click Setup</span>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+        <button type="button" class="preset-rxn-btn" data-rxn="C3H8 + O2 -> CO2 + H2O">Propane Combustion (C₃H₈ + O₂)</button>
+        <button type="button" class="preset-rxn-btn" data-rxn="Al + HCl -> AlCl3 + H2">Metal Oxidation (Al + HCl)</button>
+        <button type="button" class="preset-rxn-btn" data-rxn="FeCl3 + NaOH -> Fe(OH)3 + NaCl">Hydroxide Precipitation</button>
+        <button type="button" class="preset-rxn-btn" data-rxn="N2 + H2 -> NH3">Haber Ammonia (N₂ + H₂)</button>
+        <button type="button" class="preset-rxn-btn" data-rxn="C7H6O3 + C4H6O3 -> C9H8O4 + C2H4O2">Aspirin Synthesis</button>
+      </div>
+    </div>
 
     <!-- MAIN WORKSPACE -->
     <div style="display: grid; grid-template-columns: 1fr; gap: 2rem; margin-bottom: 2.5rem;">
       
       <!-- EQUATION INPUT & BALANCER CARD -->
-      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: clamp(1rem, 3vw, 1.5rem); box-shadow: 0 1px 3px rgba(0,0,0,0.05); min-width: 0;">
+      <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: clamp(1rem, 3vw, 1.75rem); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); min-width: 0;">
         <label for="inputEquation" style="font-size: 0.85rem; font-weight: 800; color: #334155; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">
           Enter Chemical Reaction (Unbalanced or Balanced):
         </label>
@@ -258,9 +240,9 @@ const schemaData = {
             id="inputEquation" 
             value="C3H8 + O2 -> CO2 + H2O" 
             placeholder="e.g., C3H8 + O2 -> CO2 + H2O or Fe + Cl2 -> FeCl3" 
-            style="flex: 1; min-width: 220px; padding: 0.75rem 1rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 1.05rem; font-family: ui-monospace, monospace; font-weight: 700; color: #0f172a; outline: none; box-sizing: border-box;" 
+            style="flex: 1; min-width: min(100%, 260px); padding: 0.75rem 1rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 1.15rem; font-family: ui-monospace, monospace; font-weight: 700; color: #0f172a; outline: none; box-sizing: border-box;" 
           />
-          <button id="btnBalanceRxn" type="button" style="background: #0284c7; color: #ffffff; border: none; padding: 0 1.25rem; border-radius: 8px; font-size: 0.9rem; font-weight: 700; cursor: pointer; min-height: 44px;">
+          <button id="btnBalanceRxn" type="button" style="background: #0284c7; color: #ffffff; border: none; padding: 0 1.35rem; border-radius: 8px; font-size: 0.9rem; font-weight: 700; cursor: pointer; min-height: 44px;">
             ⚡ Balance
           </button>
         </div>
@@ -269,11 +251,11 @@ const schemaData = {
         <div id="balancedBanner" style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 0.85rem 1rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
           <div>
             <span style="font-size: 0.72rem; font-weight: 800; color: #166534; text-transform: uppercase; display: block;">Balanced Stoichiometric Equation:</span>
-            <div id="balancedEqText" style="font-size: 1.15rem; font-weight: 800; color: #14532d; font-family: ui-monospace, monospace; margin-top: 0.2rem; word-break: break-all;">
+            <div id="balancedEqText" style="font-size: 1.25rem; font-weight: 800; color: #14532d; font-family: ui-monospace, monospace; margin-top: 0.2rem; word-break: break-all;">
               C₃H₈ + 5 O₂ → 3 CO₂ + 4 H₂O
             </div>
           </div>
-          <span style="background: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 9999px; font-size: 0.75rem; font-weight: 800;">Atoms Conserved</span>
+          <span style="background: #dcfce7; color: #15803d; padding: 3px 10px; border-radius: 9999px; font-size: 0.75rem; font-weight: 800;">Atoms Conserved</span>
         </div>
 
         <div id="errorBanner" style="display: none; background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 0.75rem 1rem; margin-top: 0.75rem; color: #991b1b; font-size: 0.85rem; font-weight: 600;">
@@ -281,26 +263,26 @@ const schemaData = {
       </div>
 
       <!-- REAGENT INPUTS & STOICHIOMETRIC MATRIX GRID -->
-      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: clamp(1rem, 3vw, 1.5rem); box-shadow: 0 1px 3px rgba(0,0,0,0.05); min-width: 0;">
+      <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: clamp(1rem, 3vw, 1.75rem); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); min-width: 0;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
-          <h3 style="font-size: 1rem; font-weight: 800; color: #0f172a; margin: 0;">
+          <h3 style="font-size: 1rem; font-weight: 800; color: #0f172a; margin: 0; text-transform: uppercase; letter-spacing: 0.05em;">
             Reactant &amp; Product Stoichiometric Grid
           </h3>
-          <span style="font-size: 0.75rem; color: #64748b;">Enter initial reactant amounts below</span>
+          <span style="font-size: 0.75rem; color: #64748b; font-weight: 600;">Enter initial reactant amounts below</span>
         </div>
 
-        <!-- Dynamic Grid Table -->
-        <div style="border: 1px solid #cbd5e1; border-radius: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 1.25rem;">
-          <table style="width: 100%; min-width: 600px; border-collapse: collapse; font-size: 0.85rem; text-align: left;">
+        <!-- Dynamic Grid Table with Explicit Mobile Touch Wrapper -->
+        <div style="border: 1px solid #cbd5e1; border-radius: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 1.5rem;">
+          <table style="width: 100%; min-width: 650px; border-collapse: collapse; font-size: 0.85rem; text-align: left;">
             <thead style="background: #f8fafc; border-bottom: 1.5px solid #cbd5e1;">
               <tr>
-                <th style="padding: 0.6rem 0.75rem; color: #475569; font-weight: 700;">Role</th>
-                <th style="padding: 0.6rem 0.75rem; color: #0f172a; font-weight: 800;">Formula</th>
-                <th style="padding: 0.6rem 0.75rem; color: #475569; font-weight: 700;">Coeff</th>
-                <th style="padding: 0.6rem 0.75rem; color: #475569; font-weight: 700;">Molar Mass (g/mol)</th>
-                <th style="padding: 0.6rem 0.75rem; color: #0284c7; font-weight: 800;">Initial Quantity</th>
-                <th style="padding: 0.6rem 0.75rem; color: #475569; font-weight: 700;">Initial Moles</th>
-                <th style="padding: 0.6rem 0.75rem; color: #10b981; font-weight: 800; background: #f0fdf4;">Final / Formed Mass</th>
+                <th style="padding: 0.65rem 0.75rem; color: #475569; font-weight: 700;">Role</th>
+                <th style="padding: 0.65rem 0.75rem; color: #0f172a; font-weight: 800;">Formula</th>
+                <th style="padding: 0.65rem 0.75rem; color: #475569; font-weight: 700;">Coeff</th>
+                <th style="padding: 0.65rem 0.75rem; color: #475569; font-weight: 700;">Molar Mass (g/mol)</th>
+                <th style="padding: 0.65rem 0.75rem; color: #0284c7; font-weight: 800;">Initial Quantity</th>
+                <th style="padding: 0.65rem 0.75rem; color: #475569; font-weight: 700;">Initial Moles</th>
+                <th style="padding: 0.65rem 0.75rem; color: #10b981; font-weight: 800; background: #f0fdf4;">Final / Formed Mass</th>
               </tr>
             </thead>
             <tbody id="stoichTableBody">
@@ -309,34 +291,60 @@ const schemaData = {
         </div>
 
         <!-- Limiting Reactant & Theoretical Yield Diagnostics Banner -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 1rem;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
           
-          <div style="background: #f8fafc; border-left: 4px solid #e11d48; padding: 0.85rem 1rem; border-radius: 0 8px 8px 0;">
+          <div style="background: #f8fafc; border-left: 4px solid #e11d48; padding: 1rem 1.25rem; border-radius: 0 8px 8px 0; border: 1px solid #e2e8f0; border-left-width: 4px;">
             <span style="font-size: 0.72rem; font-weight: 800; color: #475569; text-transform: uppercase; display: block;">Limiting Reactant Verdict:</span>
-            <div id="limitingVerdictText" style="font-size: 1.1rem; font-weight: 800; color: #e11d48; margin-top: 0.25rem;">
+            <div id="limitingVerdictText" style="font-size: 1.25rem; font-weight: 800; color: #e11d48; margin-top: 0.25rem;">
               C₃H₈ is Limiting
             </div>
-            <div id="excessSummaryText" style="font-size: 0.78rem; color: #64748b; margin-top: 0.25rem;">
+            <div id="excessSummaryText" style="font-size: 0.8rem; color: #64748b; margin-top: 0.25rem;">
               Excess unreacted: 0.00 g O₂
             </div>
           </div>
 
-          <div style="background: #f0fdf4; border-left: 4px solid #10b981; padding: 0.85rem 1rem; border-radius: 0 8px 8px 0; display: flex; flex-direction: column; justify-content: space-between;">
+          <div style="background: #f0fdf4; border-left: 4px solid #10b981; padding: 1rem 1.25rem; border-radius: 0 8px 8px 0; border: 1px solid #bbf7d0; border-left-width: 4px; display: flex; flex-direction: column; justify-content: space-between;">
             <div>
               <span style="font-size: 0.72rem; font-weight: 800; color: #166534; text-transform: uppercase; display: block;">Theoretical Product Yield:</span>
-              <div id="theoreticalYieldText" style="font-size: 1.35rem; font-weight: 800; color: #15803d; margin-top: 0.2rem;">
+              <div id="theoreticalYieldText" style="font-size: 1.45rem; font-weight: 800; color: #15803d; margin-top: 0.2rem;">
                 0.00 g Total
               </div>
             </div>
 
             <!-- Actual Yield & Percent Yield Input -->
-            <div style="margin-top: 0.5rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
-              <span style="font-size: 0.75rem; font-weight: 700; color: #166534;">Actual Yield:</span>
-              <input type="text" inputmode="decimal" id="inpActualYield" placeholder="Actual mass (g)" style="width: 100px; padding: 0.25rem 0.5rem; border: 1px solid #86efac; border-radius: 4px; font-size: 0.82rem; font-weight: 700;" />
-              <span id="percentYieldBadge" style="background: #15803d; color: #fff; padding: 2px 8px; border-radius: 9999px; font-size: 0.75rem; font-weight: 800;">-- %</span>
+            <div style="margin-top: 0.65rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+              <label for="inpActualYield" style="font-size: 0.78rem; font-weight: 700; color: #166534;">Actual Yield:</label>
+              <input type="text" inputmode="decimal" id="inpActualYield" placeholder="Actual mass (g)" style="width: 110px; padding: 0.35rem 0.6rem; border: 1.5px solid #86efac; border-radius: 5px; font-size: 0.85rem; font-weight: 700; font-family: monospace;" />
+              <span id="percentYieldBadge" style="background: #15803d; color: #fff; padding: 3px 10px; border-radius: 9999px; font-size: 0.78rem; font-weight: 800;">-- %</span>
             </div>
           </div>
 
+        </div>
+
+        <!-- Action / Reporting Tray -->
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; border-top: 1px solid #f1f5f9; padding-top: 1rem;">
+          <span style="font-size: 0.78rem; font-weight: 800; text-transform: uppercase; color: #475569;">Export Options:</span>
+          <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+            <button id="btnCopyReport" type="button" style="background: #0284c7; border: none; padding: 0.45rem 0.85rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #ffffff; min-height: 34px;">📋 Copy Report</button>
+            <button id="btnCopyLatex" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.45rem 0.85rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #334155; min-height: 34px;">LaTeX Block</button>
+            <button id="toggleCiteBtn" type="button" style="background: #e0f2fe; border: 1px solid #7dd3fc; padding: 0.45rem 0.85rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #0369a1; min-height: 34px;">📖 Cite</button>
+          </div>
+        </div>
+
+        <!-- Citation Drawer -->
+        <div id="citeDrawer" style="display: none; margin-top: 1rem; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 0.85rem; background: #f8fafc;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.4rem;">
+            <div style="display: flex; gap: 0.3rem; flex-wrap: wrap;">
+              <button type="button" class="inline-cite-tab" data-format="bibtex" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 700; border-radius: 5px; border: 1px solid #0f172a; background: #0f172a; color: #fff; cursor: pointer;">BibTeX</button>
+              <button type="button" class="inline-cite-tab" data-format="acs" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">ACS</button>
+              <button type="button" class="inline-cite-tab" data-format="rsc" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">RSC</button>
+              <button type="button" class="inline-cite-tab" data-format="nature" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Nature</button>
+              <button type="button" class="inline-cite-tab" data-format="elsevier" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Elsevier</button>
+              <button type="button" class="inline-cite-tab" data-format="wiley" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Wiley</button>
+            </div>
+            <button id="inlineCopyCiteBtn" type="button" style="padding: 0.25rem 0.65rem; font-size: 0.75rem; font-weight: 700; border-radius: 5px; background: #0284c7; color: #fff; border: none; cursor: pointer;">📋 Copy</button>
+          </div>
+          <pre id="inlineCiteOutput" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.75rem; font-size: 0.75rem; font-family: ui-monospace, monospace; color: #0f172a; white-space: pre-wrap; word-break: break-all; margin: 0; line-height: 1.45;"></pre>
         </div>
 
       </div>
@@ -587,6 +595,27 @@ const schemaData = {
     </section>
 
   </main>
+
+  <style>
+    .preset-rxn-btn {
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      padding: 0.4rem 0.75rem;
+      border-radius: 8px;
+      cursor: pointer;
+      color: #1e293b;
+      font-size: 0.8rem;
+      font-weight: 700;
+      transition: all 0.2s ease;
+      min-height: 34px;
+    }
+    .preset-rxn-btn:hover {
+      background: #0284c7;
+      color: #ffffff;
+      border-color: #0284c7;
+      transform: translateY(-1px);
+    }
+  </style>
 
   <script>
     import { 
