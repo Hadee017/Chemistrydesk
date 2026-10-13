@@ -1,9 +1,10 @@
 ---
 // src/pages/titration.astro
 import BaseLayout from '../layouts/BaseLayout.astro';
+import AuthorCard from '../components/AuthorCard.astro';
 
 const pageTitle = "Acid-Base Titration Calculator & Curve Simulator | ChemistryDesk";
-const pageDescription = "Interactive titration curve generator and pH calculator for students. Compute equivalence points, buffer regions, pH at any added volume, and indicator color changes.";
+const pageDescription = "Research-grade interactive titration curve simulator and pH engine. Calculate equivalence points, buffer regions, Henderson-Hasselbalch inflection points, and indicator color transitions.";
 const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://chemistrycal.com';
 const canonicalUrl = `${siteUrl}/titration`;
 
@@ -11,14 +12,60 @@ const schemaData = {
   "@context": "https://schema.org",
   "@graph": [
     {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      "url": siteUrl,
+      "name": "ChemistryDesk",
+      "description": "Precision Scientific Utilities & Computational Laboratory Engines",
+      "inLanguage": "en-US"
+    },
+    {
+      "@type": "WebPage",
+      "@id": `${canonicalUrl}#webpage`,
+      "url": canonicalUrl,
+      "name": pageTitle,
+      "isPartOf": { "@id": `${siteUrl}/#website` },
+      "description": pageDescription,
+      "inLanguage": "en-US",
+      "author": { "@id": `${siteUrl}/#author` }
+    },
+    {
+      "@type": "Person",
+      "@id": `${siteUrl}/#author`,
+      "name": "Bilal Khan",
+      "jobTitle": "Physical & Materials Chemistry Researcher",
+      "description": "Specialist in porous coordination polymers, heterogeneous adsorption kinetics, and computational chemical physics.",
+      "sameAs": [
+        "https://orcid.org/0009-0006-3082-7043",
+        "https://github.com/Hadee017",
+        "https://about.me/bilalkhan01",
+        "https://www.behance.net/bilalkhan"
+      ]
+    },
+    {
       "@type": "WebApplication",
       "@id": `${canonicalUrl}#software`,
-      "name": "ChemistryDesk Student Titration Curve Simulator",
+      "name": "ChemistryDesk Acid-Base Titration Curve Simulator",
       "url": canonicalUrl,
-      "applicationCategory": "EducationalApplication",
-      "operatingSystem": "All",
-      "browserRequirements": "Requires JavaScript. Runs 100% offline.",
-      "description": pageDescription
+      "applicationCategory": "EducationalApplication, ScientificApplication",
+      "operatingSystem": "All modern web browsers (Desktop, Tablet, Mobile)",
+      "browserRequirements": "Requires JavaScript. Runs 100% offline via Service Worker.",
+      "description": pageDescription,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "creator": { "@id": `${siteUrl}/#author` },
+      "featureList": [
+        "Dynamic acid-base titration pH curve generation",
+        "Live 1st derivative (dpH/dV) inflection curve overlay",
+        "Equivalence point and half-equivalence buffer calculations",
+        "Interactive volume probe with visual indicator color change simulation",
+        "CSV titration data export",
+        "Step-by-step Standard Operating Procedure (SOP) generation",
+        "Integrated academic citation drawer (BibTeX, ACS, Nature, etc.)"
+      ]
     },
     {
       "@type": "HowTo",
@@ -38,7 +85,7 @@ const schemaData = {
         {
           "@type": "HowToStep",
           "name": "Locate the Half-Equivalence Point",
-          "text": "For weak acid titrations, find Veq / 2 where pH equals the pKa of the acid."
+          "text": "For weak acid titrations, find Veq / 2 where pH equals the pKa of the acid under the Henderson-Hasselbalch equation."
         },
         {
           "@type": "HowToStep",
@@ -56,7 +103,7 @@ const schemaData = {
           "name": "What is the difference between the equivalence point and the endpoint?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "The equivalence point is the exact stoichiometric moment when moles of added base equal moles of initial acid. The endpoint is the physical observation when the chemical indicator changes color. A well-chosen indicator ensures the endpoint occurs right at the equivalence point."
+            "text": "The equivalence point is the exact stoichiometric moment when moles of added titrant chemically equal moles of analyte in the flask. The endpoint is the physical experimental observation when the chemical indicator changes color. A well-selected indicator ensures the endpoint coincides with the equivalence point."
           }
         },
         {
@@ -64,7 +111,7 @@ const schemaData = {
           "name": "Why is the equivalence point pH not always 7.00?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "The equivalence pH depends on the salt produced. In a strong acid-strong base titration, the salt ions do not hydrolyze water, giving pH 7.00. In a weak acid-strong base titration, the conjugate base hydrolyzes water to form OH-, producing an equivalence pH above 7 (typically 8.0 to 9.5)."
+            "text": "The equivalence pH depends on salt hydrolysis. In a strong acid-strong base titration, the spectator ions do not hydrolyze water, giving pH 7.00. In a weak acid-strong base titration, the conjugate base hydrolyzes water to generate hydroxide ions (OH-), yielding a basic equivalence pH (typically 8.0 to 9.5)."
           }
         },
         {
@@ -72,7 +119,7 @@ const schemaData = {
           "name": "What happens at the half-equivalence point?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "At half the equivalence volume (V = Veq / 2), half of the weak acid has converted to its conjugate base. Under the Henderson-Hasselbalch equation, log([A-]/[HA]) = log(1) = 0, so pH = pKa."
+            "text": "At half the equivalence volume (V = Veq / 2), half of the weak acid has converted to its conjugate base ([HA] = [A-]). Under the Henderson-Hasselbalch equation, log([A-]/[HA]) = log(1) = 0, so pH equals pKa directly."
           }
         },
         {
@@ -80,7 +127,15 @@ const schemaData = {
           "name": "Which indicator should I use for vinegar (acetic acid) titrated with NaOH?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Phenolphthalein is standard. The equivalence point for acetic acid occurs at pH ~8.7, which sits within phenolphthalein's transition window (pH 8.2 to 10.0)."
+            "text": "Phenolphthalein is the optimal indicator. The equivalence point for acetic acid occurs at pH ~8.7, which falls cleanly inside phenolphthalein's transition window (pH 8.2 to 10.0)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why is primary standard KHP preferred for standardizing NaOH titrants?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Potassium hydrogen phthalate (KHP, KHC8H4O4) has a high molar mass (204.22 g/mol), non-hygroscopic crystalline stability, high purity (>99.95%), and a clean 1:1 stoichiometric reaction with NaOH, reducing balance weighing errors."
           }
         }
       ]
@@ -92,40 +147,58 @@ const schemaData = {
 <BaseLayout title={pageTitle} description={pageDescription}>
   <script is:inline type="application/ld+json" set:html={JSON.stringify(schemaData)}></script>
 
-  <main style="max-width: 1140px; margin: 1.5rem auto 4rem auto; padding: 0 1.5rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #0f172a; box-sizing: border-box;">
+  <main style="max-width: 1140px; margin: 1.5rem auto 4rem auto; padding: 0 1rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #0f172a; box-sizing: border-box; overflow-x: hidden;">
     
+    <!-- Breadcrumb Navigation -->
     <nav style="font-size: 0.85rem; color: #475569; margin-bottom: 1.25rem;">
       <a href="/" style="color: #0284c7; text-decoration: none; font-weight: 600;">Home</a> &rsaquo; 
       <span style="color: #64748b;"> Analytical Tools</span> &rsaquo; 
       <span style="color: #0f172a; font-weight: 700;">Titration Studio</span>
     </nav>
 
-    <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 16px; padding: 2rem; margin-bottom: 2rem; color: #ffffff; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.15);">
-      <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.5rem;">
+    <!-- Header Section -->
+    <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 16px; padding: clamp(1.25rem, 3vw, 2rem); margin-bottom: 1.75rem; color: #ffffff; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.15);">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.25rem;">
         <div style="max-width: 780px;">
           <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); padding: 0.3rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem;">
             <span>Interactive Chemistry Lab Simulation</span>
           </div>
-          <h1 style="font-size: 2.35rem; font-weight: 800; color: #ffffff; letter-spacing: -0.025em; margin: 0; line-height: 1.2;">
+          <h1 style="font-size: clamp(1.6rem, 4vw, 2.35rem); font-weight: 800; color: #ffffff; letter-spacing: -0.025em; margin: 0; line-height: 1.2;">
             Acid-Base Titration Calculator &amp; Curve Generator
           </h1>
-          <p style="color: #cbd5e1; font-size: 1rem; margin-top: 0.65rem; margin-bottom: 0; line-height: 1.6;">
+          <p style="color: #cbd5e1; font-size: 0.95rem; margin-top: 0.65rem; margin-bottom: 0; line-height: 1.6;">
             Select your acid and base solutions to generate live neutralization curves, pinpoint stoichiometric equivalence points, explore Henderson-Hasselbalch buffer regions, and determine indicator color transitions.
           </p>
         </div>
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-          <button id="btn-share-link" type="button" style="background: #0284c7; border: none; color: white; padding: 0.65rem 1.15rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.4rem; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+          <button id="btn-share-link" type="button" style="background: #0284c7; border: none; color: white; padding: 0.55rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.4rem; box-shadow: 0 2px 4px rgba(0,0,0,0.2); min-height: 38px;">
             <span>🔗 Share Setup URL</span>
           </button>
-          <button id="btn-reset-defaults" type="button" style="background: #334155; border: 1px solid #475569; color: white; padding: 0.65rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700;">
+          <button id="btn-reset-defaults" type="button" style="background: #334155; border: 1px solid #475569; color: white; padding: 0.55rem 0.85rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; min-height: 38px;">
             Reset
           </button>
         </div>
       </div>
+
+      <!-- AuthorCard / E-E-A-T Component -->
+      <div style="margin-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.25rem;">
+        <AuthorCard />
+      </div>
     </div>
 
+    <!-- DIRECT DEFINITION & GEO SUMMARY CALLOUT BOX -->
+    <section style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-left: 5px solid #0284c7; border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 1.75rem;">
+      <h2 style="font-size: 1rem; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.04em; margin: 0 0 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+        <span>💡</span> What is an Acid-Base Titration? (Direct Answer)
+      </h2>
+      <p style="font-size: 0.92rem; color: #334155; margin: 0; line-height: 1.6;">
+        An <strong>acid-base titration</strong> is a quantitative analytical method where a standard titrant of known concentration is delivered from a burette to neutralize an analyte of unknown concentration. The <strong>equivalence point</strong> is reached when moles of titrant chemically equal moles of analyte (<code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">C_a &middot; V_a = C_b &middot; V_b</code>), while the <strong>endpoint</strong> is the visual color transition of an indicator bracketing that equivalence pH.
+      </p>
+    </section>
+
+    <!-- PRESET SELECTION CHIPS -->
     <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1.25rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
-      <div style="font-weight: 800; font-size: 0.85rem; color: #0f172a; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+      <div style="font-weight: 800; font-size: 0.85rem; color: #0f172a; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
         <span>Common Lab Experiment Presets:</span>
         <span style="font-size: 0.75rem; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 9999px; font-weight: 800;">1-Click Setup</span>
       </div>
@@ -137,11 +210,13 @@ const schemaData = {
       </div>
     </div>
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+    <!-- MAIN WORKBENCH GRID (Clamped for Mobile) -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
       
-      <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 1.75rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); box-sizing: border-box;">
+      <!-- LEFT COLUMN: Inputs & Controls -->
+      <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: clamp(1rem, 3vw, 1.75rem); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); box-sizing: border-box; min-width: 0;">
         
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 0.75rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
           <h2 style="font-size: 0.95rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #0f172a; margin: 0;">
             1. Lab Setup: Flask &amp; Burette
           </h2>
@@ -150,6 +225,7 @@ const schemaData = {
           </span>
         </div>
 
+        <!-- Analyte Panel -->
         <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 1.15rem; margin-bottom: 1.25rem;">
           <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem;">
             <label style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; color: #0f172a;">
@@ -159,27 +235,27 @@ const schemaData = {
           </div>
 
           <div style="margin-bottom: 0.75rem;">
-            <select id="select-analyte-chemical" style="width: 100%; padding: 0.6rem 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.88rem; font-weight: 700; color: #0f172a; background: white; cursor: pointer; box-sizing: border-box;">
+            <select id="select-analyte-chemical" style="width: 100%; min-width: 0; padding: 0.6rem 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.88rem; font-weight: 700; color: #0f172a; background: white; cursor: pointer; box-sizing: border-box;">
               <option value="ch3cooh" selected>Acetic Acid (CH₃COOH) - pKa 4.76 [Weak Acid]</option>
               <option value="hcl">Hydrochloric Acid (HCl) [Strong Acid]</option>
               <option value="nh3">Ammonia (NH₃) - pKb 4.75 [Weak Base]</option>
               <option value="hcooh">Formic Acid (HCOOH) - pKa 3.75 [Weak Acid]</option>
-              <option value="custom">-- Custom Solution / User Entry --</option>
             </select>
           </div>
 
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
             <div>
               <label for="input-ca" style="display: block; font-size: 0.75rem; font-weight: 700; color: #475569; margin-bottom: 0.25rem;">Concentration (M)</label>
-              <input type="text" inputmode="decimal" id="input-ca" value="0.100" style="width: 100%; padding: 0.55rem 0.65rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; font-weight: 700; font-family: monospace; box-sizing: border-box;" />
+              <input type="text" inputmode="decimal" id="input-ca" value="0.100" style="width: 100%; min-width: 0; padding: 0.55rem 0.65rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; font-weight: 700; font-family: monospace; box-sizing: border-box;" />
             </div>
             <div>
               <label for="input-va" style="display: block; font-size: 0.75rem; font-weight: 700; color: #475569; margin-bottom: 0.25rem;">Flask Volume (mL)</label>
-              <input type="text" inputmode="decimal" id="input-va" value="25.0" style="width: 100%; padding: 0.55rem 0.65rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; font-weight: 700; font-family: monospace; box-sizing: border-box;" />
+              <input type="text" inputmode="decimal" id="input-va" value="25.0" style="width: 100%; min-width: 0; padding: 0.55rem 0.65rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; font-weight: 700; font-family: monospace; box-sizing: border-box;" />
             </div>
           </div>
         </div>
 
+        <!-- Titrant Panel -->
         <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 1.15rem; margin-bottom: 1.25rem;">
           <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem;">
             <label style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; color: #0f172a;">
@@ -189,7 +265,7 @@ const schemaData = {
           </div>
 
           <div style="margin-bottom: 0.75rem;">
-            <select id="select-titrant-chemical" style="width: 100%; padding: 0.6rem 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.88rem; font-weight: 700; color: #0f172a; background: white; cursor: pointer; box-sizing: border-box;">
+            <select id="select-titrant-chemical" style="width: 100%; min-width: 0; padding: 0.6rem 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.88rem; font-weight: 700; color: #0f172a; background: white; cursor: pointer; box-sizing: border-box;">
               <option value="naoh" selected>Sodium Hydroxide (NaOH) [Strong Base]</option>
               <option value="hcl_titrant">Hydrochloric Acid (HCl) [Strong Acid]</option>
             </select>
@@ -197,18 +273,19 @@ const schemaData = {
 
           <div>
             <label for="input-cb" style="display: block; font-size: 0.75rem; font-weight: 700; color: #475569; margin-bottom: 0.25rem;">Burette Concentration (M)</label>
-            <input type="text" inputmode="decimal" id="input-cb" value="0.100" style="width: 100%; padding: 0.55rem 0.65rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; font-weight: 700; font-family: monospace; box-sizing: border-box;" />
+            <input type="text" inputmode="decimal" id="input-cb" value="0.100" style="width: 100%; min-width: 0; padding: 0.55rem 0.65rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; font-weight: 700; font-family: monospace; box-sizing: border-box;" />
           </div>
         </div>
 
+        <!-- Indicator Panel -->
         <div style="margin-bottom: 1.25rem;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem; flex-wrap: wrap; gap: 0.25rem;">
             <label for="select-indicator" style="font-size: 0.8rem; font-weight: 700; color: #334155;">
               COLORIMETRIC INDICATOR
             </label>
             <span id="indicator-range-tag" style="font-size: 0.75rem; color: #ec4899; font-weight: 700; font-family: monospace;">pH 8.2 - 10.0</span>
           </div>
-          <select id="select-indicator" style="width: 100%; padding: 0.65rem 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.88rem; font-weight: 600; color: #0f172a; background: white; cursor: pointer; box-sizing: border-box;">
+          <select id="select-indicator" style="width: 100%; min-width: 0; padding: 0.65rem 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.88rem; font-weight: 600; color: #0f172a; background: white; cursor: pointer; box-sizing: border-box;">
             <option value="Phenolphthalein" selected>Phenolphthalein (Colorless &rarr; Vivid Pink)</option>
             <option value="Bromothymol Blue">Bromothymol Blue (Yellow &rarr; Green &rarr; Blue)</option>
             <option value="Methyl Orange">Methyl Orange (Red &rarr; Orange &rarr; Yellow)</option>
@@ -216,15 +293,16 @@ const schemaData = {
           </select>
         </div>
 
+        <!-- Probe Tool -->
         <div style="background: #f0f9ff; border: 1.5px solid #bae6fd; border-radius: 10px; padding: 1rem; margin-bottom: 1.5rem;">
-          <label for="input-probe-vol" style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 800; color: #0369a1; margin-bottom: 0.35rem;">
+          <label for="input-probe-vol" style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 800; color: #0369a1; margin-bottom: 0.35rem; flex-wrap: wrap; gap: 0.25rem;">
             <span>🔬 CHECK pH AT SPECIFIC ADDED VOLUME:</span>
             <span id="probe-region-badge" style="font-size: 0.72rem; background: #0284c7; color: white; padding: 2px 8px; border-radius: 4px;">Buffer Region</span>
           </label>
-          <div style="display: flex; gap: 0.5rem; align-items: center;">
-            <input type="text" inputmode="decimal" id="input-probe-vol" value="12.5" style="width: 110px; padding: 0.5rem 0.65rem; border: 1.5px solid #38bdf8; border-radius: 6px; font-size: 0.95rem; font-weight: 800; font-family: monospace; outline: none;" />
-            <span style="font-size: 0.85rem; font-weight: 700; color: #0369a1;">mL Added &rarr;</span>
-            <div style="flex: 1; background: white; border: 1.5px solid #bae6fd; border-radius: 6px; padding: 0.5rem 0.75rem; font-weight: 800; font-size: 0.95rem; color: #0f172a; display: flex; justify-content: space-between; align-items: center;">
+          <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+            <input type="text" inputmode="decimal" id="input-probe-vol" value="12.5" style="width: 100px; padding: 0.5rem 0.65rem; border: 1.5px solid #38bdf8; border-radius: 6px; font-size: 0.95rem; font-weight: 800; font-family: monospace; outline: none;" />
+            <span style="font-size: 0.85rem; font-weight: 700; color: #0369a1;">mL &rarr;</span>
+            <div style="flex: 1; min-width: 140px; background: white; border: 1.5px solid #bae6fd; border-radius: 6px; padding: 0.5rem 0.75rem; font-weight: 800; font-size: 0.95rem; color: #0f172a; display: flex; justify-content: space-between; align-items: center;">
               <span>pH = <strong id="probe-ph-output" style="color: #0284c7;">4.76</strong></span>
               <div id="probe-color-indicator" style="width: 18px; height: 18px; border-radius: 50%; border: 1px solid #cbd5e1; background: #334155;"></div>
             </div>
@@ -234,23 +312,26 @@ const schemaData = {
           </span>
         </div>
 
+        <!-- Action Buttons -->
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
-          <button id="btn-export-csv" type="button" style="padding: 0.7rem 1rem; border-radius: 6px; background: #0f172a; color: white; border: none; font-size: 0.8rem; font-weight: 700; cursor: pointer;">
-            📥 Export CSV Table
+          <button id="btn-export-csv" type="button" style="padding: 0.65rem 0.75rem; border-radius: 6px; background: #0f172a; color: white; border: none; font-size: 0.8rem; font-weight: 700; cursor: pointer; min-height: 38px;">
+            📥 Export CSV
           </button>
-          <button id="btn-copy-sop" type="button" style="padding: 0.7rem 1rem; border-radius: 6px; background: #0284c7; color: white; border: none; font-size: 0.8rem; font-weight: 700; cursor: pointer;">
+          <button id="btn-copy-sop" type="button" style="padding: 0.65rem 0.75rem; border-radius: 6px; background: #0284c7; color: white; border: none; font-size: 0.8rem; font-weight: 700; cursor: pointer; min-height: 38px;">
             📋 Copy Lab Steps
           </button>
         </div>
 
       </div>
 
-      <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+      <!-- RIGHT COLUMN: HUD & SVG Curve -->
+      <div style="display: flex; flex-direction: column; gap: 1.5rem; min-width: 0;">
         
+        <!-- Key Metrics Cards -->
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
           <div style="background: #0f172a; border-radius: 12px; padding: 1.25rem; color: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
-            <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #38bdf8;">Equivalence Volume (V_eq)</span>
-            <div style="font-size: 2rem; font-weight: 900; font-family: monospace; color: #38bdf8; margin: 0.2rem 0;">
+            <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #38bdf8;">Equivalence Vol (V_eq)</span>
+            <div style="font-size: clamp(1.6rem, 3.5vw, 2rem); font-weight: 900; font-family: monospace; color: #38bdf8; margin: 0.2rem 0; word-break: break-all;">
               <span id="metric-veq">25.00</span> <span style="font-size: 0.95rem; color: #94a3b8;">mL</span>
             </div>
             <span style="font-size: 0.72rem; color: #94a3b8;">Burette delivery to neutralize</span>
@@ -258,7 +339,7 @@ const schemaData = {
 
           <div style="background: #0f172a; border-radius: 12px; padding: 1.25rem; color: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
             <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #ec4899;">Equivalence pH</span>
-            <div style="font-size: 2rem; font-weight: 900; font-family: monospace; color: #ec4899; margin: 0.2rem 0;">
+            <div style="font-size: clamp(1.6rem, 3.5vw, 2rem); font-weight: 900; font-family: monospace; color: #ec4899; margin: 0.2rem 0; word-break: break-all;">
               <span id="metric-eqph">8.73</span>
             </div>
             <span id="eq-ph-nature" style="font-size: 0.72rem; color: #f472b6;">Basic (Salt Hydrolysis)</span>
@@ -281,10 +362,11 @@ const schemaData = {
           </div>
         </div>
 
+        <!-- SVG Curve Display -->
         <div style="background: #0f172a; border: 1.5px solid #1e293b; border-radius: 14px; padding: 1.25rem; box-shadow: 0 4px 10px rgba(0,0,0,0.15);">
-          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 0.6rem; margin-bottom: 0.85rem; color: white;">
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 0.6rem; margin-bottom: 0.85rem; color: white; flex-wrap: wrap; gap: 0.5rem;">
             <span style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #38bdf8;">Interactive Titration Curve</span>
-            <div style="display: flex; gap: 0.85rem; font-size: 0.72rem; color: #94a3b8;">
+            <div style="display: flex; gap: 0.75rem; font-size: 0.72rem; color: #94a3b8; flex-wrap: wrap;">
               <span style="color: #38bdf8;">━ pH Curve</span>
               <span style="color: #a78bfa;">┅ 1st Deriv</span>
               <span style="color: #ec4899;">░ Indicator</span>
@@ -294,17 +376,43 @@ const schemaData = {
 
           <div id="svg-chart-container" style="width: 100%; aspect-ratio: 640 / 380; overflow: hidden;"></div>
 
-          <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #94a3b8; border-top: 1px solid #334155; padding-top: 0.6rem; margin-top: 0.6rem;">
+          <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #94a3b8; border-top: 1px solid #334155; padding-top: 0.6rem; margin-top: 0.6rem; flex-wrap: wrap; gap: 0.5rem;">
             <div>Steepest Slope: <strong id="metric-max-deriv" style="color: #a78bfa; font-family: monospace;">6.62</strong> dpH/mL</div>
             <div id="metric-buffer-range-note" style="color: #f59e0b; font-family: monospace;">Buffer Shelf [pKa ± 1]: [3.76 - 5.76]</div>
           </div>
         </div>
 
+        <!-- Benchtop SOP Protocol & Citation Drawer -->
         <div style="background: white; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1.25rem;">
-          <h3 style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #0f172a; margin: 0 0 0.6rem 0;">
-            Benchtop Laboratory Procedure (SOP)
-          </h3>
-          <p id="sop-recipe-text" style="margin: 0; font-size: 0.85rem; color: #334155; line-height: 1.65; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.85rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.5rem;">
+            <h3 style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #0f172a; margin: 0;">
+              Benchtop Laboratory Procedure (SOP)
+            </h3>
+            <button id="toggleCiteBtn" type="button" style="background: #e0f2fe; border: 1px solid #7dd3fc; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer; color: #0369a1; display: inline-flex; align-items: center; gap: 0.35rem; min-height: 32px;">
+              <span>📖</span> Cite Studio
+            </button>
+          </div>
+
+          <!-- Academic Citation Drawer -->
+          <div id="citeDrawer" style="display: none; margin: 0.75rem 0 1rem 0; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 0.85rem; background: #f8fafc;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.4rem;">
+              <div style="display: flex; gap: 0.3rem; flex-wrap: wrap;">
+                <button type="button" class="inline-cite-tab" data-format="bibtex" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 700; border-radius: 5px; border: 1px solid #0f172a; background: #0f172a; color: #fff; cursor: pointer;">BibTeX</button>
+                <button type="button" class="inline-cite-tab" data-format="acs" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">ACS</button>
+                <button type="button" class="inline-cite-tab" data-format="rsc" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">RSC</button>
+                <button type="button" class="inline-cite-tab" data-format="nature" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Nature</button>
+                <button type="button" class="inline-cite-tab" data-format="elsevier" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Elsevier</button>
+                <button type="button" class="inline-cite-tab" data-format="wiley" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Wiley</button>
+              </div>
+              <button id="inlineCopyCiteBtn" type="button" style="padding: 0.25rem 0.65rem; font-size: 0.75rem; font-weight: 700; border-radius: 5px; background: #0284c7; color: #fff; border: none; cursor: pointer;">📋 Copy</button>
+            </div>
+            <pre id="inlineCiteOutput" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.75rem; font-size: 0.75rem; font-family: ui-monospace, monospace; color: #0f172a; white-space: pre-wrap; word-break: break-all; margin: 0; line-height: 1.45;"></pre>
+            <div style="margin-top: 0.5rem; text-align: right;">
+              <a href="https://doi.org/10.5281/zenodo.23059466" target="_blank" rel="noopener noreferrer" style="font-size: 0.72rem; color: #0284c7; text-decoration: none; font-weight: 600;">Indexed via CERN Zenodo (DOI: 10.5281/zenodo.23059466) &rarr;</a>
+            </div>
+          </div>
+
+          <p id="sop-recipe-text" style="margin: 0; font-size: 0.85rem; color: #334155; line-height: 1.65; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.85rem; white-space: pre-line;">
             Loading experimental protocol...
           </p>
         </div>
@@ -313,23 +421,24 @@ const schemaData = {
 
     </div>
 
+    <!-- EDITORIAL & SCIENTIFIC DERIVATION ARTICLE (ADSENSE E-E-A-T & GEO COMPLIANT) -->
     <article style="border-top: 2px solid #e2e8f0; padding-top: 3.5rem; line-height: 1.85; color: #1e293b;">
       
-      <h2 style="font-size: 2rem; font-weight: 800; color: #0f172a; margin-bottom: 1.25rem; letter-spacing: -0.02em;">
+      <h2 style="font-size: clamp(1.4rem, 3.5vw, 2rem); font-weight: 800; color: #0f172a; margin-bottom: 1.25rem; letter-spacing: -0.02em; line-height: 1.3;">
         Acid-Base Titration Theory, Curve Shapes, and Equivalence Calculations
       </h2>
       <p style="font-size: 1rem; margin-bottom: 1.25rem;">
         An acid-base titration is a quantitative analytical technique used to determine the unknown concentration of an identified analyte. By systematically delivering a standard solution of known concentration (the <strong>titrant</strong>) from a graduated Class-A burette into a known volume of sample (the <strong>analyte</strong>) inside an Erlenmeyer flask, the stoichiometric point of complete chemical neutralization can be measured.
       </p>
 
-      <h3 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin-top: 2.25rem; margin-bottom: 0.75rem;">
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2.25rem; margin-bottom: 0.75rem;">
         1. The Fundamental Stoichiometric Neutralization Formula
       </h3>
       <p style="font-size: 0.95rem;">
         At the stoichiometric equivalence point, the chemical amount of hydronium ions (H⁺) delivered by the acid equals the amount of hydroxide ions (OH⁻) delivered by the base:
       </p>
       
-      <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1rem; font-family: monospace; font-size: 1.1rem; font-weight: 700; text-align: center; margin: 1.25rem 0; color: #0f172a;">
+      <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1rem; font-family: monospace; font-size: clamp(0.95rem, 2.5vw, 1.1rem); font-weight: 700; text-align: center; margin: 1.25rem 0; color: #0f172a; overflow-x: auto;">
         n<sub>acid</sub> = n<sub>base</sub> &emsp;&rArr;&emsp; C<sub>acid</sub> &times; V<sub>acid</sub> = C<sub>base</sub> &times; V<sub>base</sub>
       </div>
 
@@ -337,18 +446,41 @@ const schemaData = {
         Solving for the unknown equivalence volume (V<sub>eq</sub>) delivered from the burette gives:
       </p>
 
-      <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1rem; font-family: monospace; font-size: 1.1rem; font-weight: 700; text-align: center; margin: 1.25rem 0; color: #0284c7;">
+      <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1rem; font-family: monospace; font-size: clamp(0.95rem, 2.5vw, 1.1rem); font-weight: 700; text-align: center; margin: 1.25rem 0; color: #0284c7; overflow-x: auto;">
         V<sub>eq</sub> = (C<sub>analyte</sub> &times; V<sub>analyte</sub>) / C<sub>titrant</sub>
       </div>
 
-      <h3 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin-top: 2.5rem; margin-bottom: 0.75rem;">
+      <!-- WORKED REAL-WORLD ANALYTICAL DERIVATION (PREVENTS THIN-CONTENT FLAGS) -->
+      <section style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: clamp(1rem, 3vw, 1.5rem); margin: 2rem 0; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+        <h3 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin-top: 0; margin-bottom: 0.75rem;">
+          Step-by-Step Analytical Standardization: NIST SRM 84k KHP vs. Secondary NaOH
+        </h3>
+        <p style="font-size: 0.92rem; color: #334155; margin-bottom: 1rem;">
+          Sodium hydroxide pellets rapidly absorb atmospheric water and carbon dioxide, making direct primary weighing impossible. To determine its exact concentration, secondary NaOH is titrated against primary standard <strong>potassium hydrogen phthalate (KHP, KHC₈H₄O₄)</strong>. Suppose an analytical chemist dissolves <strong>0.5106 g</strong> of oven-dried KHP (Molar Mass = 204.221 g/mol) in 50.0 mL of CO₂-free water and titrates it to a persistent faint-pink phenolphthalein endpoint, consuming <strong>24.85 mL</strong> of the NaOH solution.
+        </p>
+
+        <div style="background: #f8fafc; border-left: 4px solid #0284c7; padding: 1rem; margin-bottom: 1rem; font-family: ui-monospace, monospace; font-size: 0.88rem; line-height: 1.7; overflow-x: auto;">
+          <strong>Step 1: Calculate stoichiometric moles of pure primary standard KHP:</strong><br />
+          n_KHP = Mass / MW = 0.5106 g / 204.221 g/mol = <strong>2.5002 &times; 10⁻³ mol</strong><br /><br />
+          <strong>Step 2: Apply 1:1 reaction stoichiometry (KHP + NaOH &rarr; KNaP + H₂O):</strong><br />
+          n_NaOH = n_KHP = 2.5002 &times; 10⁻³ mol<br /><br />
+          <strong>Step 3: Calculate exact standardized molarity of secondary NaOH:</strong><br />
+          C_NaOH = n_NaOH / V_burette = (2.5002 &times; 10⁻³ mol) / (0.02485 L) = <strong>0.1006 M</strong>
+        </div>
+
+        <p style="font-size: 0.9rem; color: #475569; margin: 0;">
+          <strong>Equivalence pH Context:</strong> Because the phthalate dianion (P²⁻) acts as a weak base in water, the equivalence point of this titration occurs at <strong>pH &approx; 8.85</strong>. Using methyl red (pH 4.4–6.2) would introduce significant negative titration error, whereas phenolphthalein (pH 8.2–10.0) changes color precisely within the vertical inflection rise.
+        </p>
+      </section>
+
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2.5rem; margin-bottom: 0.75rem;">
         2. The Four Stages of an Acid-Base Titration Curve
       </h3>
       <p style="font-size: 0.95rem;">
         When plotting pH on the y-axis against titrant volume added (V) on the x-axis, the curve transitions across four physicochemical equilibrium regions:
       </p>
 
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 1rem; margin: 1.5rem 0;">
         <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.25rem;">
           <strong style="color: #0284c7; font-size: 0.9rem; display: block; margin-bottom: 0.4rem;">Stage I: Initial Flask pH (V = 0 mL)</strong>
           <p style="font-size: 0.82rem; color: #475569; margin: 0; line-height: 1.6;">
@@ -378,14 +510,14 @@ const schemaData = {
         </div>
       </div>
 
-      <h3 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin-top: 2.5rem; margin-bottom: 0.75rem;">
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2.5rem; margin-bottom: 0.75rem;">
         3. Physical Significance of the Half-Equivalence Point
       </h3>
       <p style="font-size: 0.95rem;">
         The half-equivalence point (V = V<sub>eq</sub> / 2) is an important diagnostic landmark in analytical chemistry. At this volume, half of the weak acid has converted to conjugate base:
       </p>
       
-      <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1rem; font-family: monospace; font-size: 1rem; text-align: center; margin: 1rem 0;">
+      <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1rem; font-family: monospace; font-size: clamp(0.9rem, 2.5vw, 1rem); text-align: center; margin: 1rem 0; overflow-x: auto;">
         [HA] = [A⁻] &emsp;&rArr;&emsp; log₁₀([A⁻] / [HA]) = log₁₀(1) = 0 &emsp;&rArr;&emsp; <b>pH = pK<sub>a</sub></b>
       </div>
 
@@ -393,48 +525,75 @@ const schemaData = {
         Reading the solution pH directly off the curve at half the equivalence volume provides an experimental measurement of the weak acid's dissociation constant (pK<sub>a</sub>) without requiring secondary equilibrium calculations.
       </p>
 
-      <h3 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin-top: 2.5rem; margin-bottom: 0.75rem;">
-        4. Scientific Indicator Selection Principles
+      <!-- REFERENCE DATASET TABLE: NIST / IUPAC INDICATORS BENCHMARK -->
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2.75rem; margin-bottom: 0.75rem;">
+        NIST / IUPAC Acid-Base Indicators &amp; Transition Interval Reference Table
       </h3>
-      <p style="font-size: 0.95rem;">
-        A colorimetric indicator is a weak organic acid (HIn &hArr; H⁺ + In⁻) whose protonated and deprotonated structures exhibit distinct optical absorption bands. For an indicator to signal the endpoint accurately, its transition range (pK<sub>In</sub> &plusmn; 1) must match the vertical inflection rise of the titration curve:
+      <p style="font-size: 0.9rem; color: #475569; margin-bottom: 1rem;">
+        Optical transition intervals, pK_In constants, and system suitability for primary volumetric analytical titrations:
       </p>
 
-      <div style="overflow-x: auto; margin: 1.5rem 0;">
-        <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left;">
+      <div style="overflow-x: auto; margin-bottom: 2rem;">
+        <table style="width: 100%; min-width: 640px; border-collapse: collapse; font-size: 0.85rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px;">
           <thead>
-            <tr style="background: #0f172a; color: white;">
-              <th style="padding: 0.65rem 1rem; border: 1px solid #334155;">Titration System</th>
-              <th style="padding: 0.65rem 1rem; border: 1px solid #334155;">Typical Equivalence pH</th>
-              <th style="padding: 0.65rem 1rem; border: 1px solid #334155;">Optimal Indicator</th>
-              <th style="padding: 0.65rem 1rem; border: 1px solid #334155;">Color Change</th>
+            <tr style="background: #0f172a; color: white; text-align: left;">
+              <th style="padding: 0.65rem 0.75rem; border: 1px solid #334155;">Chemical Indicator</th>
+              <th style="padding: 0.65rem 0.75rem; border: 1px solid #334155;">pK<sub>In</sub></th>
+              <th style="padding: 0.65rem 0.75rem; border: 1px solid #334155;">Transition pH Interval</th>
+              <th style="padding: 0.65rem 0.75rem; border: 1px solid #334155;">Acid Color &rarr; Base Color</th>
+              <th style="padding: 0.65rem 0.75rem; border: 1px solid #334155;">Ideal Titration System</th>
             </tr>
           </thead>
           <tbody>
-            <tr style="border-bottom: 1px solid #cbd5e1; background: #ffffff;">
-              <td style="padding: 0.65rem 1rem; font-weight: 700;">Strong Acid vs. Strong Base</td>
-              <td style="padding: 0.65rem 1rem; font-family: monospace;">pH = 7.00</td>
-              <td style="padding: 0.65rem 1rem;">Bromothymol Blue or Phenolphthalein</td>
-              <td style="padding: 0.65rem 1rem;">Yellow &rarr; Blue / Colorless &rarr; Pink</td>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Methyl Orange</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">3.7</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; color: #ef4444; font-weight: 700;">3.1 &ndash; 4.4</td>
+              <td style="padding: 0.65rem 0.75rem;">Red &rarr; Orange / Yellow</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">Weak base vs. Strong acid (e.g. NH₃ vs. HCl)</td>
             </tr>
-            <tr style="border-bottom: 1px solid #cbd5e1; background: #f8fafc;">
-              <td style="padding: 0.65rem 1rem; font-weight: 700;">Weak Acid vs. Strong Base</td>
-              <td style="padding: 0.65rem 1rem; font-family: monospace;">pH = 8.0 &ndash; 9.5</td>
-              <td style="padding: 0.65rem 1rem;">Phenolphthalein (8.2 &ndash; 10.0)</td>
-              <td style="padding: 0.65rem 1rem;">Colorless &rarr; Faint Pink</td>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Bromocresol Green</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">4.7</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; color: #d97706; font-weight: 700;">3.8 &ndash; 5.4</td>
+              <td style="padding: 0.65rem 0.75rem;">Yellow &rarr; Blue-Green</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">Alkalinity titration (Carbonate/Bicarbonate endpoint)</td>
             </tr>
-            <tr style="border-bottom: 1px solid #cbd5e1; background: #ffffff;">
-              <td style="padding: 0.65rem 1rem; font-weight: 700;">Weak Base vs. Strong Acid</td>
-              <td style="padding: 0.65rem 1rem; font-family: monospace;">pH = 4.5 &ndash; 6.0</td>
-              <td style="padding: 0.65rem 1rem;">Methyl Orange or Methyl Red</td>
-              <td style="padding: 0.65rem 1rem;">Yellow &rarr; Orange/Red</td>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Methyl Red</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">5.1</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; color: #f59e0b; font-weight: 700;">4.4 &ndash; 6.2</td>
+              <td style="padding: 0.65rem 0.75rem;">Red &rarr; Yellow</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">Secondary amine and ammonia titrations</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Bromothymol Blue</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">7.0</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; color: #10b981; font-weight: 700;">6.0 &ndash; 7.6</td>
+              <td style="padding: 0.65rem 0.75rem;">Yellow &rarr; Green &rarr; Blue</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">Strong acid vs. Strong base (Neutral equivalence)</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Phenolphthalein</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">9.4</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; color: #ec4899; font-weight: 700;">8.2 &ndash; 10.0</td>
+              <td style="padding: 0.65rem 0.75rem;">Colorless &rarr; Faint Pink</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">Weak acid vs. Strong base (KHP, Acetic acid)</td>
+            </tr>
+            <tr>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Thymolphthalein</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">10.0</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; color: #3b82f6; font-weight: 700;">9.3 &ndash; 10.5</td>
+              <td style="padding: 0.65rem 0.75rem;">Colorless &rarr; Blue</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">Very weak acid determinations (e.g. Boric acid)</td>
             </tr>
           </tbody>
         </table>
       </div>
 
+      <!-- FAQ ACCORDION -->
       <h3 style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-top: 2.5rem; margin-bottom: 1rem;">
-        Frequently Asked Questions: College &amp; AP Chemistry Titrations
+        Frequently Asked Questions: Volumetric Titrations &amp; Buffer Equivalence
       </h3>
       <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 2rem;">
         <details style="background: white; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1rem;">
@@ -449,10 +608,23 @@ const schemaData = {
             In the buffer region, weak acid (HA) and conjugate base (A⁻) are both present in substantial quantities. When strong base is added, it is neutralized by HA, converting it to A⁻. Because the ratio [A⁻]/[HA] changes gradually under a logarithmic scale, the pH resists sudden swings.
           </p>
         </details>
+        <details style="background: white; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.9rem;">How does the first derivative determine the exact equivalence volume?</summary>
+          <p style="margin: 0.5rem 0 0; font-size: 0.85rem; color: #475569; line-height: 1.6;">
+            The first derivative of the curve (dpH/dV) measures the rate of pH change per milliliter of added titrant. Because the titration curve has an inflection point at the equivalence volume where the slope is steepest, the first derivative displays a sharp mathematical maximum, providing an objective endpoint determination.
+          </p>
+        </details>
+        <details style="background: white; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.9rem;">Why must standardized secondary NaOH solutions be protected from atmospheric CO₂?</summary>
+          <p style="margin: 0.5rem 0 0; font-size: 0.85rem; color: #475569; line-height: 1.6;">
+            Aqueous NaOH absorbs carbon dioxide from the air to form sodium carbonate (2 NaOH + CO₂ &rarr; Na₂CO₃ + H₂O). In titrations using phenolphthalein, the carbonate ion reacts only as far as hydrogen carbonate (HCO₃⁻), resulting in systematic carbonate error and under-titration. Standard NaOH bottles should be fitted with an ascarite or soda-lime absorption tube.
+          </p>
+        </details>
       </div>
 
     </article>
 
+    <!-- Upstream & Downstream Workflows -->
     <section style="max-width: 900px; margin: 3rem auto 1.5rem; padding: 1.25rem 1.5rem; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; box-sizing: border-box;">
       <h3 style="margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 0.5rem;">
         <span>🔗</span> Upstream &amp; Downstream Analytical Workflows
@@ -490,6 +662,7 @@ const schemaData = {
     font-size: 0.8rem;
     font-weight: 700;
     transition: all 0.2s ease;
+    min-height: 34px;
   }
   .preset-chip-btn:hover {
     background: #0284c7;
@@ -925,6 +1098,69 @@ const schemaData = {
     document.getElementById('btn-reset-defaults').addEventListener('click', function() {
       window.location.href = window.location.pathname;
     });
+
+    // --- In-Dashboard Academic Citation Logic ---
+    var citeDrawer = document.getElementById('citeDrawer');
+    var toggleCiteBtn = document.getElementById('toggleCiteBtn');
+    var inlineCiteOutput = document.getElementById('inlineCiteOutput');
+    var inlineTabs = document.querySelectorAll('.inline-cite-tab');
+    var inlineCopyBtn = document.getElementById('inlineCopyCiteBtn');
+
+    var doi = "10.5281/zenodo.23059466";
+    var currentYear = new Date().getFullYear();
+
+    var titCitations = {
+      bibtex: '@software{khan_chemistrydesk_titration_' + currentYear + ',\n  author        = {Khan, Bilal},\n  title         = {ChemistryDesk: Acid-Base Titration Simulator & Analytical pH Engine},\n  year          = {' + currentYear + '},\n  version       = {v1.0.1},\n  publisher     = {Zenodo},\n  doi           = {' + doi + '},\n  url           = {https://chemistrycal.com/titration}\n}',
+      acs: 'Khan, B. ChemistryDesk: Acid-Base Titration Simulator & Analytical pH Engine, version 1.0.1; Zenodo, ' + currentYear + '. https://doi.org/' + doi + '.',
+      rsc: 'B. Khan, ChemistryDesk: Acid-Base Titration Simulator & Analytical pH Engine, version 1.0.1, Zenodo, ' + currentYear + ', DOI: ' + doi + '.',
+      nature: 'Khan, B. ChemistryDesk: Acid-Base Titration Simulator & Analytical pH Engine. Zenodo https://doi.org/' + doi + ' (' + currentYear + ').',
+      elsevier: 'Khan, B., ' + currentYear + '. ChemistryDesk: Acid-Base Titration Simulator & Analytical pH Engine (Version 1.0.1). Zenodo. https://doi.org/' + doi + '.',
+      wiley: 'B. Khan, ChemistryDesk: Acid-Base Titration Simulator & Analytical pH Engine, version 1.0.1, Zenodo, ' + currentYear + ', DOI: ' + doi + '.'
+    };
+
+    var currentInlineFormat = 'bibtex';
+
+    function updateInlineCite() {
+      if (inlineCiteOutput) {
+        inlineCiteOutput.textContent = titCitations[currentInlineFormat];
+      }
+    }
+
+    if (toggleCiteBtn && citeDrawer) {
+      toggleCiteBtn.addEventListener('click', function() {
+        var isHidden = citeDrawer.style.display === 'none' || citeDrawer.style.display === '';
+        citeDrawer.style.display = isHidden ? 'block' : 'none';
+        toggleCiteBtn.style.background = isHidden ? '#0284c7' : '#e0f2fe';
+        toggleCiteBtn.style.color = isHidden ? '#ffffff' : '#0369a1';
+        if (isHidden) updateInlineCite();
+      });
+    }
+
+    inlineTabs.forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        inlineTabs.forEach(function(t) {
+          t.style.background = '#ffffff';
+          t.style.color = '#334155';
+          t.style.borderColor = '#cbd5e1';
+        });
+        tab.style.background = '#0f172a';
+        tab.style.color = '#ffffff';
+        tab.style.borderColor = '#0f172a';
+        currentInlineFormat = tab.getAttribute('data-format');
+        updateInlineCite();
+      });
+    });
+
+    if (inlineCopyBtn) {
+      inlineCopyBtn.addEventListener('click', function() {
+        navigator.clipboard.writeText(titCitations[currentInlineFormat]).then(function() {
+          inlineCopyBtn.textContent = '✅ Copied!';
+          setTimeout(function() {
+            inlineCopyBtn.textContent = '📋 Copy';
+          }, 1800);
+        });
+      });
+    }
 
     // Initial Load
     updateStudentDashboard();
