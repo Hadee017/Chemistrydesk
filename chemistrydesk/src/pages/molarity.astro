@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import AuthorCard from '../components/AuthorCard.astro';
 import { REAGENTS_DATABASE } from '../data/reagents';
 ---
 
@@ -11,6 +12,36 @@ import { REAGENTS_DATABASE } from '../data/reagents';
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://chemistrycal.com/#website",
+        "url": "https://chemistrycal.com",
+        "name": "ChemistryDesk",
+        "description": "Precision Scientific Utilities & Computational Laboratory Engines",
+        "inLanguage": "en-US"
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://chemistrycal.com/molarity#webpage",
+        "url": "https://chemistrycal.com/molarity",
+        "name": "Offline Solution Molarity Calculator & Solute Mass Studio | ChemistryDesk",
+        "isPartOf": { "@id": "https://chemistrycal.com/#website" },
+        "description": "Calculate exact reagent mass for molar solutions with automatic crystalline hydrate and assay purity compensation. Includes Class-A glassware tolerances and NIST reference standards.",
+        "inLanguage": "en-US",
+        "author": { "@id": "https://chemistrycal.com/#author" }
+      },
+      {
+        "@type": "Person",
+        "@id": "https://chemistrycal.com/#author",
+        "name": "Bilal Khan",
+        "jobTitle": "Physical & Materials Chemistry Researcher",
+        "description": "Specialist in porous coordination polymers, heterogeneous adsorption kinetics, and computational chemical physics.",
+        "sameAs": [
+          "https://orcid.org/0009-0006-3082-7043",
+          "https://github.com/Hadee017",
+          "https://about.me/bilalkhan01"
+        ]
+      },
       {
         "@type": "WebApplication",
         "@id": "https://chemistrycal.com/molarity#app",
@@ -25,11 +56,7 @@ import { REAGENTS_DATABASE } from '../data/reagents';
           "price": "0",
           "priceCurrency": "USD"
         },
-        "creator": {
-          "@type": "Organization",
-          "name": "ChemistryDesk Precision Scientific Utilities",
-          "url": "https://chemistrycal.com"
-        },
+        "creator": { "@id": "https://chemistrycal.com/#author" },
         "featureList": [
           "Offline laboratory benchtop calculation via Service Worker / PWA",
           "Hydrate crystal water stoichiometry compensation",
@@ -138,8 +165,9 @@ import { REAGENTS_DATABASE } from '../data/reagents';
     ]
   })} />
   
-  <!-- Breadcrumb Navigation -->
-  <main style="max-width: 1140px; margin: 0 auto; padding: 1.5rem 1rem 3rem; box-sizing: border-box;">
+  <!-- Main Content Container -->
+  <main style="max-width: 1140px; margin: 0 auto; padding: 1.25rem 1rem 3rem; box-sizing: border-box; overflow-x: hidden;">
+    <!-- Breadcrumb Navigation -->
     <nav style="font-size: 0.85rem; margin-bottom: 1.25rem;">
       <a href="/" style="color: #0284c7; text-decoration: none; font-weight: 600;">Home</a> &rsaquo; 
       <span style="color: #64748b;"> Solution Preparation</span> &rsaquo; 
@@ -147,28 +175,43 @@ import { REAGENTS_DATABASE } from '../data/reagents';
     </nav>
 
     <!-- Header Section -->
-    <div style="border-bottom: 1.5px solid #e2e8f0; padding-bottom: 1.75rem; margin-bottom: 2rem;">
+    <div style="border-bottom: 1.5px solid #e2e8f0; padding-bottom: 1.5rem; margin-bottom: 1.5rem;">
       <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
-        <div style="display: flex; align-items: center; gap: 0.75rem;">
-          <span style="font-size: 2.5rem;">🧪</span>
+        <div style="display: flex; align-items: center; gap: 0.75rem; max-width: 800px;">
+          <span style="font-size: 2.25rem; flex-shrink: 0;">🧪</span>
           <div>
-            <h1 style="font-size: 2.25rem; font-weight: 800; color: #0f172a; letter-spacing: -0.025em; margin: 0;">
+            <h1 style="font-size: clamp(1.6rem, 4vw, 2.25rem); font-weight: 800; color: #0f172a; letter-spacing: -0.025em; margin: 0; line-height: 1.2;">
               Solution Molarity &amp; Reagent Prep Studio
             </h1>
-            <p style="color: #64748b; font-size: 0.95rem; margin-top: 0.25rem; margin-bottom: 0;">
+            <p style="color: #64748b; font-size: 0.95rem; margin-top: 0.35rem; margin-bottom: 0; line-height: 1.5;">
               Two-way analytical mass solver with crystal hydration water compensation (&middot;nH₂O), manufacturer assay purity corrections, dynamic GHS safety alerts, and benchtop bottle label generation.
             </p>
           </div>
         </div>
-        <button id="shareSetupBtn" style="background: #e0f2fe; border: 1px solid #bae6fd; color: #0284c7; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem;">
+        <button id="shareSetupBtn" style="background: #e0f2fe; border: 1px solid #bae6fd; color: #0284c7; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.5rem; height: 38px;">
           <span>🔗 Share Setup URL</span>
         </button>
       </div>
+
+      <!-- Verified Author / E-E-A-T Card -->
+      <div style="margin-top: 1.25rem;">
+        <AuthorCard />
+      </div>
     </div>
+
+    <!-- DIRECT DEFINITION & GEO SUMMARY CALLOUT BOX -->
+    <section style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-left: 5px solid #0284c7; border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 1.75rem;">
+      <h2 style="font-size: 1rem; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.04em; margin: 0 0 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+        <span>💡</span> What is Solution Molarity? (Direct Answer)
+      </h2>
+      <p style="font-size: 0.92rem; color: #334155; margin: 0; line-height: 1.6;">
+        <strong>Molarity (<em>M</em>)</strong> is the fundamental SI concentration unit representing the <strong>number of moles of solute dissolved per liter of total solution</strong> (<code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">mol/L</code> or <code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">mol&middot;dm⁻³</code>). In quantitative wet-chemistry formulations, balance mass must always be adjusted upward for <strong>crystalline hydrate water (<var>&middot;nH₂O</var>)</strong> and <strong>manufacturer chemical assay purity (<var>P%</var>)</strong> to avoid under-concentrated standard reagents.
+      </p>
+    </section>
 
     <!-- REAGENT AUTOCOMPLETE DATABASE SEARCH BAR -->
     <div style="background: linear-gradient(to right, #f8fafc, #f1f5f9); border: 2px solid #0284c7; border-radius: 12px; padding: 1.25rem; margin-bottom: 1.75rem; position: relative; box-shadow: 0 4px 6px -1px rgba(2, 132, 199, 0.08);">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
         <label for="reagentSearchInput" style="font-size: 0.88rem; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.03em; display: flex; align-items: center; gap: 0.45rem;">
           <span>🔍</span> Reagent Database Auto-Lookup (40+ Bench Standards)
         </label>
@@ -181,7 +224,7 @@ import { REAGENTS_DATABASE } from '../data/reagents';
           id="reagentSearchInput" 
           placeholder="Start typing formula or name (e.g., CuSO4, Copper, NaOH, EDTA, KMnO4, Iron, Glucose)..." 
           autocomplete="off" 
-          style="width: 100%; padding: 0.85rem 1rem; font-size: 0.98rem; font-weight: 600; color: #0f172a; border: 1.5px solid #cbd5e1; border-radius: 8px; outline: none; box-sizing: border-box; background: #ffffff; transition: all 0.2s ease;"
+          style="width: 100%; min-width: 0; padding: 0.85rem 1rem; font-size: 0.98rem; font-weight: 600; color: #0f172a; border: 1.5px solid #cbd5e1; border-radius: 8px; outline: none; box-sizing: border-box; background: #ffffff; transition: all 0.2s ease;"
         />
         <div 
           id="reagentSearchDropdown" 
@@ -196,7 +239,7 @@ import { REAGENTS_DATABASE } from '../data/reagents';
 
     <!-- PRESET CHEMICAL REAGENTS -->
     <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1.25rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
-      <div style="font-weight: 800; font-size: 0.85rem; color: #0f172a; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+      <div style="font-weight: 800; font-size: 0.85rem; color: #0f172a; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
         <span>Common Analytical Standards:</span>
         <span style="font-size: 0.75rem; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 9999px; font-weight: 800;">1-Click Setup</span>
       </div>
@@ -223,11 +266,11 @@ import { REAGENTS_DATABASE } from '../data/reagents';
       <div style="margin-top: 0.35rem; font-size: 0.8rem; color: #b45309;"><strong>Mandatory PPE:</strong> <span id="ghsPpeText">Safety Glasses, Nitrile Gloves, Lab Coat</span></div>
     </div>
 
-    <!-- WORKBENCH GRID -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+    <!-- WORKBENCH GRID (Mobile-Safe MinMax Clamp) -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
       
       <!-- LEFT COLUMN: Inputs -->
-      <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 1.75rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);">
+      <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: clamp(1rem, 3vw, 1.75rem); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); min-width: 0;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 0.75rem;">
           <h2 style="font-size: 0.95rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #0f172a; margin: 0;">
             1. Formulation Parameters
@@ -240,7 +283,7 @@ import { REAGENTS_DATABASE } from '../data/reagents';
           <label for="soluteName" style="display: block; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: #475569; margin-bottom: 0.35rem;">
             Reagent Chemical Name
           </label>
-          <input type="text" id="soluteName" value="Sodium Chloride (NaCl)" style="width: 100%; padding: 0.65rem 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; font-weight: 700; color: #0f172a; box-sizing: border-box;" />
+          <input type="text" id="soluteName" value="Sodium Chloride (NaCl)" style="width: 100%; min-width: 0; padding: 0.65rem 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; font-weight: 700; color: #0f172a; box-sizing: border-box;" />
         </div>
 
         <!-- Target Concentration -->
@@ -249,7 +292,7 @@ import { REAGENTS_DATABASE } from '../data/reagents';
             TARGET CONCENTRATION (C)
           </label>
           <div style="display: flex;">
-            <input type="text" inputmode="decimal" id="concInput" value="0.5" style="flex: 1; padding: 0.75rem 1rem; border: 1.5px solid #cbd5e1; border-right: none; border-radius: 8px 0 0 8px; font-size: 1rem; font-weight: 700; color: #0f172a; outline: none;" />
+            <input type="text" inputmode="decimal" id="concInput" value="0.5" style="flex: 1; min-width: 0; padding: 0.75rem 1rem; border: 1.5px solid #cbd5e1; border-right: none; border-radius: 8px 0 0 8px; font-size: 1rem; font-weight: 700; color: #0f172a; outline: none;" />
             <select id="concUnit" style="background: #f1f5f9; border: 1.5px solid #cbd5e1; padding: 0 0.85rem; border-radius: 0 8px 8px 0; font-size: 0.85rem; font-weight: 700; color: #334155; cursor: pointer;">
               <option value="1" selected>M (mol/L)</option>
               <option value="1e-3">mM (mmol/L)</option>
@@ -264,7 +307,7 @@ import { REAGENTS_DATABASE } from '../data/reagents';
             FINAL SOLUTION VOLUME (V)
           </label>
           <div style="display: flex;">
-            <input type="text" inputmode="decimal" id="volInput" value="500" style="flex: 1; padding: 0.75rem 1rem; border: 1.5px solid #cbd5e1; border-right: none; border-radius: 8px 0 0 8px; font-size: 1rem; font-weight: 700; color: #0f172a; outline: none;" />
+            <input type="text" inputmode="decimal" id="volInput" value="500" style="flex: 1; min-width: 0; padding: 0.75rem 1rem; border: 1.5px solid #cbd5e1; border-right: none; border-radius: 8px 0 0 8px; font-size: 1rem; font-weight: 700; color: #0f172a; outline: none;" />
             <select id="volUnit" style="background: #f1f5f9; border: 1.5px solid #cbd5e1; padding: 0 0.85rem; border-radius: 0 8px 8px 0; font-size: 0.85rem; font-weight: 700; color: #334155; cursor: pointer;">
               <option value="1e-3" selected>mL</option>
               <option value="1">Liters (L)</option>
@@ -279,18 +322,18 @@ import { REAGENTS_DATABASE } from '../data/reagents';
             ANHYDROUS FORMULA WEIGHT (MW)
           </label>
           <div style="display: flex;">
-            <input type="text" inputmode="decimal" id="mwInput" value="58.44" style="flex: 1; padding: 0.75rem 1rem; border: 1.5px solid #cbd5e1; border-right: none; border-radius: 8px 0 0 8px; font-size: 1rem; font-weight: 700; color: #0f172a; outline: none;" />
-            <span style="background: #f1f5f9; border: 1.5px solid #cbd5e1; padding: 0 1rem; border-radius: 0 8px 8px 0; font-size: 0.85rem; font-weight: 700; color: #475569; display: flex; align-items: center;">g/mol</span>
+            <input type="text" inputmode="decimal" id="mwInput" value="58.44" style="flex: 1; min-width: 0; padding: 0.75rem 1rem; border: 1.5px solid #cbd5e1; border-right: none; border-radius: 8px 0 0 8px; font-size: 1rem; font-weight: 700; color: #0f172a; outline: none;" />
+            <span style="background: #f1f5f9; border: 1.5px solid #cbd5e1; padding: 0 1rem; border-radius: 0 8px 8px 0; font-size: 0.85rem; font-weight: 700; color: #475569; display: flex; align-items: center; white-space: nowrap;">g/mol</span>
           </div>
         </div>
 
         <!-- Hydration Water Compensator -->
         <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; margin-bottom: 1.25rem;">
-          <label for="hydrateCount" style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; color: #1e293b; margin-bottom: 0.4rem;">
+          <label for="hydrateCount" style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; color: #1e293b; margin-bottom: 0.4rem; flex-wrap: wrap; gap: 0.25rem;">
             <span>CRYSTALLINE HYDRATE WATER (&middot;nH₂O)</span>
             <span style="color: #0284c7; font-weight: 800;" id="hydrateTag">Anhydrous (0 H₂O)</span>
           </label>
-          <input type="number" id="hydrateCount" min="0" max="24" value="0" style="width: 100%; padding: 0.5rem 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem; font-weight: 700; color: #0f172a; box-sizing: border-box;" />
+          <input type="number" id="hydrateCount" min="0" max="24" value="0" style="width: 100%; min-width: 0; padding: 0.5rem 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem; font-weight: 700; color: #0f172a; box-sizing: border-box;" />
           <span style="display: block; font-size: 0.75rem; color: #64748b; margin-top: 0.35rem;">Adds 18.01528 g/mol per crystal water molecule to target formula mass.</span>
         </div>
 
@@ -302,8 +345,8 @@ import { REAGENTS_DATABASE } from '../data/reagents';
           </label>
           <input type="range" id="puritySlider" min="50" max="100" step="0.1" value="99.5" style="width: 100%; accent-color: #0284c7; cursor: pointer;" />
           <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #64748b; margin-top: 0.25rem;">
-            <span>50% Technical Grade</span>
-            <span>98% ACS Grade</span>
+            <span>50% Tech</span>
+            <span>98% ACS</span>
             <span>100% Pure</span>
           </div>
         </div>
@@ -311,57 +354,57 @@ import { REAGENTS_DATABASE } from '../data/reagents';
       </div>
 
       <!-- RIGHT COLUMN: Output HUD & Action Center -->
-      <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+      <div style="display: flex; flex-direction: column; gap: 1.5rem; min-width: 0;">
         
         <!-- Primary Result HUD -->
-        <div style="background: #0f172a; border-radius: 14px; padding: 2rem; color: #ffffff; box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.3); border: 1px solid #334155;">
+        <div style="background: #0f172a; border-radius: 14px; padding: clamp(1.25rem, 3vw, 2rem); color: #ffffff; box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.3); border: 1px solid #334155;">
           <span style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #38bdf8;">
             Mass of Reagent to Weigh on Balance
           </span>
-          <div id="primaryMassGrams" style="font-size: 3.25rem; font-weight: 900; color: #38bdf8; margin: 0.4rem 0 0.75rem 0; line-height: 1;">--</div>
+          <div id="primaryMassGrams" style="font-size: clamp(2.4rem, 6vw, 3.25rem); font-weight: 900; color: #38bdf8; margin: 0.4rem 0 0.75rem 0; line-height: 1; word-break: break-all;">--</div>
 
-          <div style="border-top: 1px solid #334155; padding-top: 1.25rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; font-size: 0.9rem;">
+          <div style="border-top: 1px solid #334155; padding-top: 1.25rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.9rem;">
             <div>
               <span style="color: #94a3b8; display: block; font-size: 0.75rem; text-transform: uppercase; font-weight: 700;">Effective Formula Mass</span>
-              <strong id="displayEffectiveMw" style="color: #34d399; font-size: 1.35rem;">--</strong>
+              <strong id="displayEffectiveMw" style="color: #34d399; font-size: clamp(1.1rem, 2.5vw, 1.35rem);">--</strong>
             </div>
             <div>
               <span style="color: #94a3b8; display: block; font-size: 0.75rem; text-transform: uppercase; font-weight: 700;">Moles Solute (n)</span>
-              <strong id="displayTotalMoles" style="color: #f8fafc; font-size: 1.35rem;">--</strong>
+              <strong id="displayTotalMoles" style="color: #f8fafc; font-size: clamp(1.1rem, 2.5vw, 1.35rem);">--</strong>
             </div>
           </div>
         </div>
 
         <!-- Preparation Metrics Cards -->
-        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1.25rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1.25rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
           <div>
             <span style="color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; display: block;">Theoretical Pure Mass</span>
-            <strong id="displayPureMass" style="color: #0f172a; font-size: 1.25rem; display: block; margin: 0.2rem 0;">--</strong>
-            <span style="display: block; font-size: 0.75rem; color: #64748b; font-family: monospace;">Mass at 100% assay</span>
+            <strong id="displayPureMass" style="color: #0f172a; font-size: 1.15rem; display: block; margin: 0.2rem 0;">--</strong>
+            <span style="display: block; font-size: 0.72rem; color: #64748b; font-family: monospace;">Mass at 100% assay</span>
           </div>
           <div>
             <span style="color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; display: block;">Mass Concentration</span>
-            <strong id="displayMassConc" style="color: #0f172a; font-size: 1.25rem; display: block; margin: 0.2rem 0;">--</strong>
-            <span style="display: block; font-size: 0.75rem; color: #64748b; font-family: monospace;">g/L equivalent</span>
+            <strong id="displayMassConc" style="color: #0f172a; font-size: 1.15rem; display: block; margin: 0.2rem 0;">--</strong>
+            <span style="display: block; font-size: 0.72rem; color: #64748b; font-family: monospace;">g/L equivalent</span>
           </div>
         </div>
 
         <!-- Practical Benchtop Preparation Protocol (SOP) -->
-        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1.5rem;">
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: clamp(1rem, 2.5vw, 1.5rem);">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem; flex-wrap: wrap; gap: 0.5rem;">
             <h3 style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #0f172a; margin: 0;">Practical Benchtop SOP &amp; Actions</h3>
             <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
-              <button id="copyMolarityLatex" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.4rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Copy LaTeX</button>
-              <button id="printMolarityLabelBtn" style="background: #0284c7; border: none; padding: 0.4rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: white;">Print Bench Label</button>
-              <button id="exportMolarityCsv" style="background: #0f172a; border: none; padding: 0.4rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: white;">Export CSV</button>
-              <button id="toggleCiteBtn" type="button" style="background: #e0f2fe; border: 1px solid #7dd3fc; padding: 0.4rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #0369a1; display: inline-flex; align-items: center; gap: 0.35rem;"><span>📖</span> Cite</button>
+              <button id="copyMolarityLatex" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.45rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b; min-height: 36px;">Copy LaTeX</button>
+              <button id="printMolarityLabelBtn" style="background: #0284c7; border: none; padding: 0.45rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: white; min-height: 36px;">Print Bench Label</button>
+              <button id="exportMolarityCsv" style="background: #0f172a; border: none; padding: 0.45rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: white; min-height: 36px;">Export CSV</button>
+              <button id="toggleCiteBtn" type="button" style="background: #e0f2fe; border: 1px solid #7dd3fc; padding: 0.45rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #0369a1; display: inline-flex; align-items: center; gap: 0.35rem; min-height: 36px;"><span>📖</span> Cite</button>
             </div>
           </div>
 
           <!-- Expandable Benchtop Citation Drawer -->
           <div id="citeDrawer" style="display: none; margin-bottom: 1rem; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 0.85rem; background: #f8fafc;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.4rem;">
-              <div style="display: flex; gap: 0.3rem;">
+              <div style="display: flex; gap: 0.3rem; flex-wrap: wrap;">
                 <button type="button" class="inline-cite-tab" data-format="bibtex" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 700; border-radius: 5px; border: 1px solid #0f172a; background: #0f172a; color: #fff; cursor: pointer;">BibTeX</button>
                 <button type="button" class="inline-cite-tab" data-format="acs" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">ACS</button>
                 <button type="button" class="inline-cite-tab" data-format="rsc" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">RSC</button>
@@ -374,7 +417,7 @@ import { REAGENTS_DATABASE } from '../data/reagents';
             <pre id="inlineCiteOutput" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.75rem; font-size: 0.75rem; font-family: ui-monospace, monospace; color: #0f172a; white-space: pre-wrap; word-break: break-all; margin: 0; line-height: 1.4;"></pre>
           </div>
           
-          <div id="molarityStepLog" style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 1rem; font-family: system-ui, sans-serif; font-size: 0.85rem; line-height: 1.7; color: #1e293b;">
+          <div id="molarityStepLog" style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 1rem; font-family: system-ui, sans-serif; font-size: 0.85rem; line-height: 1.7; color: #1e293b; overflow-wrap: break-word;">
             Calculating solution parameters...
           </div>
         </div>
@@ -385,7 +428,7 @@ import { REAGENTS_DATABASE } from '../data/reagents';
 
     <!-- PRINTABLE BENCHTOP REAGENT LABEL -->
     <div id="molarityLabelWrapper" style="display: none; margin-bottom: 3.5rem;">
-      <div id="labelBoxMolarity" style="width: 3.75in; border: 2px solid #000; padding: 0.25in; box-sizing: border-box; font-family: system-ui, sans-serif; background: #fff; color: #000; margin: 0 auto; box-shadow: 0 4px 10px rgba(0,0,0,0.06);">
+      <div id="labelBoxMolarity" style="width: 3.75in; max-width: 100%; border: 2px solid #000; padding: 0.25in; box-sizing: border-box; font-family: system-ui, sans-serif; background: #fff; color: #000; margin: 0 auto; box-shadow: 0 4px 10px rgba(0,0,0,0.06);">
         <div style="border-bottom: 2px solid #000; padding-bottom: 4px; display: flex; justify-content: space-between; align-items: baseline;">
           <span style="font-size: 11pt; font-weight: 900; letter-spacing: -0.02em;">ChemistryDesk LAB STANDARD</span>
           <span id="labelDate" style="font-size: 8pt; font-weight: bold;"></span>
@@ -410,22 +453,45 @@ import { REAGENTS_DATABASE } from '../data/reagents';
       </div>
     </div>
 
-    <!-- EDITORIAL & SCIENTIFIC REFERENCE ARTICLE (ADSENSE E-E-A-T COMPLIANT) -->
-    <article style="border-top: 2px solid #e2e8f0; padding-top: 3.5rem; line-height: 1.85; color: #1e293b;">
+    <!-- EDITORIAL & SCIENTIFIC REFERENCE ARTICLE (ADSENSE E-E-A-T & GEO COMPLIANT) -->
+    <article style="border-top: 2px solid #e2e8f0; padding-top: 3rem; line-height: 1.85; color: #1e293b;">
       
-      <h2 style="font-size: 1.85rem; font-weight: 800; color: #0f172a; margin-bottom: 1.25rem; letter-spacing: -0.02em;">
+      <h2 style="font-size: clamp(1.4rem, 3.5vw, 1.85rem); font-weight: 800; color: #0f172a; margin-bottom: 1.25rem; letter-spacing: -0.02em; line-height: 1.3;">
         Theoretical Principles of Molar Solution Formulation &amp; Analytical Weighing
       </h2>
       <p style="font-size: 1rem; margin-bottom: 1.25rem;">
         Molarity (designated <em>M</em>, with standard SI units of <strong>mol&middot;L<sup>&minus;1</sup></strong> or <strong>mol&middot;dm<sup>&minus;3</sup></strong>) defines the amount of solute in moles dissolved per unit volume of final liquid solution. In analytical chemistry, materials synthesis, and spectrophotometric calibration, formulating precise volumetric solutions is the basis of repeatable stoichiometric calculations.
       </p>
 
-      <!-- Centered Formula Box -->
-      <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 1.5rem 2rem; margin: 2rem 0; text-align: center;">
-        <div style="font-size: 1.45rem; font-weight: 800; color: #0f172a; font-family: 'Times New Roman', Times, serif;">
+      <!-- Centered Formula Box with Mobile Overflow Protection -->
+      <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 1.25rem; margin: 1.75rem 0; text-align: center; overflow-x: auto;">
+        <div style="font-size: clamp(1.1rem, 3vw, 1.45rem); font-weight: 800; color: #0f172a; font-family: 'Times New Roman', Times, serif; white-space: nowrap;">
           <i>Mass</i> (g) = <span style="display: inline-block; vertical-align: middle; text-align: center; margin: 0 6px;"><span style="display: block; border-bottom: 2px solid #0f172a; padding: 0 6px;"><i>C</i> &middot; <i>V</i> &middot; <i>MW</i><sub>effective</sub></span><span style="display: block; padding-top: 3px;"><i>Purity</i> (%) / 100</span></span>
         </div>
       </div>
+
+      <!-- WORKED REAL-WORLD MATHEMATICAL DERIVATION (PREVENTS THIN-CONTENT FLAGS) -->
+      <section style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: clamp(1rem, 3vw, 1.5rem); margin: 2rem 0; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+        <h3 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin-top: 0; margin-bottom: 0.75rem;">
+          Step-by-Step Benchtop Worked Example: NIST SRM 84k Standard Acid
+        </h3>
+        <p style="font-size: 0.92rem; color: #334155; margin-bottom: 1rem;">
+          Suppose an analytical chemist needs to prepare exactly <strong>250.0 mL (0.2500 L)</strong> of a <strong>0.1000 M</strong> primary standard potassium hydrogen phthalate (KHP, KHC₈H₄O₄) solution to titrate a standardized secondary sodium hydroxide (NaOH) stock. The analytical certificate of analysis confirms an anhydrous formula weight of <strong>204.2212 g/mol</strong> and a certified assay purity of <strong>99.98%</strong>.
+        </p>
+
+        <div style="background: #f8fafc; border-left: 4px solid #0284c7; padding: 1rem; margin-bottom: 1rem; font-family: ui-monospace, monospace; font-size: 0.88rem; line-height: 1.7; overflow-x: auto;">
+          <strong>Step 1: Calculate pure theoretical stoichiometric moles required:</strong><br />
+          n = C &times; V = (0.1000 mol/L) &times; (0.2500 L) = 0.02500 mol KHP<br /><br />
+          <strong>Step 2: Calculate stoichiometric mass at 100% theoretical purity:</strong><br />
+          m_theoretical = n &times; MW = (0.02500 mol) &times; (204.2212 g/mol) = 5.10553 g<br /><br />
+          <strong>Step 3: Adjust for manufacturer assay purity (99.98%):</strong><br />
+          m_weighed = m_theoretical / (Assay% / 100) = 5.10553 g / 0.9998 = <strong>5.1066 g</strong>
+        </div>
+
+        <p style="font-size: 0.9rem; color: #475569; margin: 0;">
+          <strong>Benchtop Execution:</strong> Pre-dry the crystalline KHP powder in a laboratory oven at 110°C–120°C for 2 hours to remove surface moisture, cool inside a glass desiccator over activated silica gel, and weigh <strong>5.1066 g (&plusmn;0.0002 g)</strong> on a 4-decimal analytical balance. Transfer quantitatively into an ASTM Class-A 250 mL volumetric flask.
+        </p>
+      </section>
 
       <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2.5rem; margin-bottom: 0.85rem;">
         Compensating for Crystalline Hydrates (&middot;nH₂O)
@@ -440,7 +506,7 @@ import { REAGENTS_DATABASE } from '../data/reagents';
       <p style="font-size: 1rem;">
         Weighing 159.60 g of the pentahydrate delivers only 102.0 g of active CuSO₄ and 57.6 g of water, resulting in a severe <strong>36.1% deficit in target solution concentration</strong>. The effective molecular weight must reflect the complete crystal stoichiometry:
       </p>
-      <div style="background: #f1f5f9; border-left: 4px solid #0284c7; padding: 0.85rem 1.25rem; margin: 1.25rem 0; font-family: monospace; font-size: 0.9rem; color: #0f172a; font-weight: 600;">
+      <div style="background: #f1f5f9; border-left: 4px solid #0284c7; padding: 0.85rem 1.25rem; margin: 1.25rem 0; font-family: monospace; font-size: 0.9rem; color: #0f172a; font-weight: 600; overflow-x: auto;">
         MW<sub>effective</sub> = MW<sub>anhydrous</sub> + (n &times; 18.01528 g/mol)
       </div>
 
@@ -450,7 +516,7 @@ import { REAGENTS_DATABASE } from '../data/reagents';
       <p style="font-size: 1rem;">
         Analytical reagents are stamped with a certified manufacturer assay purity percentage (<em>P%</em>). Analytical Reagent (AR) grade chemicals often range between 95.0% and 99.5% purity due to atmospheric moisture absorption and synthesis traces. To supply the target moles of pure chemical (<em>n</em>), the balance mass must be adjusted:
       </p>
-      <div style="background: #f1f5f9; border-left: 4px solid #0284c7; padding: 0.85rem 1.25rem; margin: 1.25rem 0; font-family: monospace; font-size: 0.9rem; color: #0f172a; font-weight: 600;">
+      <div style="background: #f1f5f9; border-left: 4px solid #0284c7; padding: 0.85rem 1.25rem; margin: 1.25rem 0; font-family: monospace; font-size: 0.9rem; color: #0f172a; font-weight: 600; overflow-x: auto;">
         Mass<sub>weighed</sub> = Mass<sub>theoretical</sub> / (Assay% / 100)
       </div>
 
@@ -463,7 +529,7 @@ import { REAGENTS_DATABASE } from '../data/reagents';
       </p>
 
       <div style="overflow-x: auto; margin-bottom: 2rem;">
-        <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px;">
+        <table style="width: 100%; min-width: 620px; border-collapse: collapse; font-size: 0.85rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px;">
           <thead>
             <tr style="background: #f1f5f9; text-align: left; color: #334155; font-size: 0.8rem; border-bottom: 1.5px solid #cbd5e1;">
               <th style="padding: 0.65rem 0.75rem;">Analytical Standard</th>
@@ -536,7 +602,7 @@ import { REAGENTS_DATABASE } from '../data/reagents';
       </p>
 
       <div style="overflow-x: auto; margin-bottom: 2rem;">
-        <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px;">
+        <table style="width: 100%; min-width: 600px; border-collapse: collapse; font-size: 0.85rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px;">
           <thead>
             <tr style="background: #f1f5f9; text-align: left; color: #334155; font-size: 0.8rem; border-bottom: 1.5px solid #cbd5e1;">
               <th style="padding: 0.65rem 0.75rem;">Nominal Capacity</th>
@@ -612,7 +678,7 @@ import { REAGENTS_DATABASE } from '../data/reagents';
         Common preparation discrepancies encountered during volumetric weighing and their analytical resolutions:
       </p>
 
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-bottom: 2.5rem;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 1rem; margin-bottom: 2.5rem;">
         <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1.25rem;">
           <h4 style="margin: 0 0 0.5rem 0; font-size: 0.95rem; color: #b91c1c; display: flex; align-items: center; gap: 0.4rem;">
             <span>⚠️</span> Exothermic Dissolution Error (e.g. NaOH)
@@ -700,6 +766,7 @@ import { REAGENTS_DATABASE } from '../data/reagents';
       font-size: 0.75rem;
       font-weight: 700;
       transition: all 0.2s ease;
+      min-height: 32px;
     }
     .molarity-preset-btn:hover {
       background: #0284c7;
