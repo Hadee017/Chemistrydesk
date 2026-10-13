@@ -1,101 +1,155 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import AuthorCard from '../components/AuthorCard.astro';
 ---
 
 <BaseLayout 
   title="Solution Dilution Calculator (C1V1 = C2V2) & Serial Ladder Studio | ChemistryDesk"
   description="Free research-grade dilution calculator. Solves C1V1 = C2V2 with automated multi-tube serial dilution ladders, diluent volume breakdown, and printable SOPs."
 >
-  <!-- Schema: WebApplication -->
+  <!-- Unified Structured Data Schema (@graph) for AI & Search Engines -->
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "ChemistryDesk Serial Dilution & C1V1 Solver Studio",
-    "applicationCategory": "EducationalApplication",
-    "operatingSystem": "All",
-    "browserRequirements": "Requires JavaScript",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    }
-  })} />
-
-  <!-- Schema: HowTo -->
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "HowTo",
-    "name": "How to Calculate and Perform a Stock Solution Dilution (C1V1 = C2V2)",
-    "step": [
+    "@graph": [
       {
-        "@type": "HowToStep",
-        "name": "Determine Stock and Target Concentrations",
-        "text": "Identify the initial concentration of your stock solution (C1) and choose the desired target working concentration (C2)."
+        "@type": "WebSite",
+        "@id": "https://chemistrycal.com/#website",
+        "url": "https://chemistrycal.com",
+        "name": "ChemistryDesk",
+        "description": "Precision Scientific Utilities & Computational Laboratory Engines",
+        "inLanguage": "en-US"
       },
       {
-        "@type": "HowToStep",
-        "name": "Define Target Working Volume",
-        "text": "Select the final volume of diluted solution required for your assay or experiment (V2)."
+        "@type": "WebPage",
+        "@id": "https://chemistrycal.com/dilution#webpage",
+        "url": "https://chemistrycal.com/dilution",
+        "name": "Solution Dilution Calculator (C1V1 = C2V2) & Serial Ladder Studio | ChemistryDesk",
+        "isPartOf": { "@id": "https://chemistrycal.com/#website" },
+        "description": "Solve two-way C1V1 = C2V2 calculations and multi-tube serial dilution ladders with dynamic semi-log decay curves, solvent matrix contraction warnings, and ASTM Class-A volumetric tolerances.",
+        "inLanguage": "en-US",
+        "author": { "@id": "https://chemistrycal.com/#author" }
       },
       {
-        "@type": "HowToStep",
-        "name": "Calculate Required Aliquot Volume (V1)",
-        "text": "Apply the conservation of mass equation V1 = (C2 * V2) / C1 to determine the volume of stock solution to transfer."
+        "@type": "Person",
+        "@id": "https://chemistrycal.com/#author",
+        "name": "Bilal Khan",
+        "jobTitle": "Physical & Materials Chemistry Researcher",
+        "description": "Specialist in porous coordination polymers, heterogeneous adsorption kinetics, and computational chemical physics.",
+        "sameAs": [
+          "https://orcid.org/0009-0006-3082-7043",
+          "https://github.com/Hadee017",
+          "https://about.me/bilalkhan01"
+        ]
       },
       {
-        "@type": "HowToStep",
-        "name": "Calculate Diluent Volume",
-        "text": "Subtract the aliquot volume from the target volume (V_diluent = V2 - V1) for ideal aqueous mixtures."
+        "@type": "WebApplication",
+        "@id": "https://chemistrycal.com/dilution#app",
+        "name": "ChemistryDesk Serial Dilution & C1V1 Solver Studio",
+        "url": "https://chemistrycal.com/dilution",
+        "applicationCategory": "EducationalApplication, ScientificApplication",
+        "operatingSystem": "All modern web browsers (Desktop, Tablet, Mobile)",
+        "browserRequirements": "Requires JavaScript; fully functional offline via Service Worker cache",
+        "description": "Interactive laboratory benchtop calculator for single aliquot dilutions (C1V1 = C2V2) and multi-step geometric serial ladders with dynamic semi-log plots and CSV export.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "creator": { "@id": "https://chemistrycal.com/#author" },
+        "featureList": [
+          "Two-way C1V1 = C2V2 parameter solver",
+          "Multi-tube geometric serial dilution ladder generator",
+          "Dynamic inline SVG semi-log concentration decay plot",
+          "Non-ideal solvent volumetric contraction alerts (Ethanol-Water)",
+          "Exothermic mineral acid dissolution warnings",
+          "Sub-microliter micropipetting CV sanity alerts",
+          "CSV laboratory recipe export",
+          "Printable benchtop bottle label generator",
+          "Overleaf LaTeX formula export"
+        ]
       },
       {
-        "@type": "HowToStep",
-        "name": "Transfer and Dilute to Meniscus",
-        "text": "Add partial diluent to a Class-A volumetric flask, dispense the stock aliquot, and dilute to the final meniscus graduation mark."
+        "@type": "HowTo",
+        "@id": "https://chemistrycal.com/dilution#howto",
+        "name": "How to Calculate and Perform a Stock Solution Dilution (C1V1 = C2V2)",
+        "step": [
+          {
+            "@type": "HowToStep",
+            "name": "Determine Stock and Target Concentrations",
+            "text": "Identify the initial concentration of your stock solution (C1) and choose the desired target working concentration (C2)."
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Define Target Working Volume",
+            "text": "Select the final volume of diluted solution required for your assay or experiment (V2)."
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Calculate Required Aliquot Volume (V1)",
+            "text": "Apply the conservation of mass equation V1 = (C2 * V2) / C1 to determine the volume of stock solution to transfer."
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Calculate Diluent Volume",
+            "text": "Subtract the aliquot volume from the target volume (V_diluent = V2 - V1) for ideal aqueous mixtures."
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Transfer and Dilute to Meniscus",
+            "text": "Add partial diluent to a Class-A volumetric flask, dispense the stock aliquot, and dilute to the final meniscus graduation mark."
+          }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://chemistrycal.com/dilution#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is the formula for calculating solution dilutions?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The fundamental formula is C1 * V1 = C2 * V2, where C1 is stock concentration, V1 is aliquot volume, C2 is target concentration, and V2 is final total volume. It is based on the conservation of solute mass."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why is serial dilution preferred over single-step dilution for low concentrations?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Direct single-step dilution of high-concentration stocks to micromolar or nanomolar levels requires pipetting sub-microliter volumes (<1 µL), which introduces high error and coefficient of variation. Serial dilution reduces concentration geometrically across sequential steps with manageable pipetting volumes."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is the dilution factor (DF) and how is it calculated?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The dilution factor (DF) represents the ratio of stock concentration to diluted concentration (DF = C1 / C2), or equivalently the ratio of final volume to aliquot volume (DF = V2 / V1)."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why does mixing ethanol and water result in less total volume than expected?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Ethanol and water exhibit non-ideal thermodynamic excess molar volume. Strong intermolecular hydrogen bonding causes the water molecules to pack tightly into interstitial spaces between ethanol molecules, contracting total solution volume by up to 3.5%."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What are the tolerance limits of ASTM Class-A volumetric pipettes?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Per ASTM E969 and ISO 648 standards, Class-A volumetric transfer pipettes provide high precision: 1 mL carries ±0.006 mL, 5 mL carries ±0.01 mL, 10 mL carries ±0.02 mL, 25 mL carries ±0.03 mL, and 50 mL carries ±0.05 mL tolerance."
+            }
+          }
+        ]
       }
     ]
   })} />
 
-  <!-- Schema: FAQPage -->
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "What is the formula for calculating solution dilutions?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "The fundamental formula is C1 * V1 = C2 * V2, where C1 is stock concentration, V1 is aliquot volume, C2 is target concentration, and V2 is final total volume. It is based on the conservation of solute mass."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Why is serial dilution preferred over single-step dilution for low concentrations?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Direct single-step dilution of high-concentration stocks to micromolar or nanomolar levels requires pipetting sub-microliter volumes (<1 µL), which introduces high error and coefficient of variation. Serial dilution reduces concentration geometrically across sequential steps with manageable pipetting volumes."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "What is the dilution factor (DF) and how is it calculated?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "The dilution factor (DF) represents the ratio of stock concentration to diluted concentration (DF = C1 / C2), or equivalently the ratio of final volume to aliquot volume (DF = V2 / V1)."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Why does mixing ethanol and water result in less total volume than expected?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Ethanol and water exhibit non-ideal thermodynamic excess molar volume. Strong intermolecular hydrogen bonding causes the water molecules to pack tightly into interstitial spaces between ethanol molecules, contracting total solution volume by up to 3.5%."
-        }
-      }
-    ]
-  })} />
-
-  <main style="max-width: 1060px; margin: 1.5rem auto 3rem auto; padding: 0 1.5rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1e293b;">
+  <main style="max-width: 1060px; margin: 1.5rem auto 3rem auto; padding: 0 1rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1e293b; box-sizing: border-box; overflow-x: hidden;">
     
     <!-- Breadcrumb Navigation -->
     <nav style="font-size: 0.8rem; color: #64748b; margin-bottom: 1.25rem;">
@@ -105,31 +159,36 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </nav>
 
     <!-- Header Section -->
-    <div style="border-bottom: 1px solid #e2e8f0; padding-bottom: 1.75rem; margin-bottom: 2rem;">
-      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
-        <span style="font-size: 2.5rem;">💧</span>
+    <div style="border-bottom: 1px solid #e2e8f0; padding-bottom: 1.5rem; margin-bottom: 1.5rem;">
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; flex-wrap: wrap;">
+        <span style="font-size: 2.5rem; flex-shrink: 0;">💧</span>
         <div>
-          <h1 style="font-size: 2.25rem; font-weight: 800; color: #0f172a; letter-spacing: -0.025em; margin: 0;">
+          <h1 style="font-size: clamp(1.6rem, 4vw, 2.25rem); font-weight: 800; color: #0f172a; letter-spacing: -0.025em; margin: 0; line-height: 1.2;">
             Stock Dilution &amp; Serial Ladder Studio
           </h1>
-          <p style="color: #64748b; font-size: 0.95rem; margin-top: 0.25rem; margin-bottom: 0;">
+          <p style="color: #64748b; font-size: 0.95rem; margin-top: 0.35rem; margin-bottom: 0; line-height: 1.5;">
             Two-way mass conservation engine, multi-tube serial ladders, dynamic semi-log graphs, non-ideal solvent warnings, and benchtop label printing.
           </p>
         </div>
       </div>
 
-      <!-- Segmented Mode Switcher -->
+      <!-- Verified Author / E-E-A-T Card -->
+      <div style="margin-top: 1.25rem;">
+        <AuthorCard />
+      </div>
+
+      <!-- Segmented Mode Switcher (Mobile Responsive Wrap) -->
       <div style="margin-top: 1.5rem; display: flex; align-items: center; justify-content: flex-start;">
-        <div style="background: #e2e8f0; padding: 4px; border-radius: 10px; display: inline-flex; gap: 4px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.06);">
+        <div style="background: #e2e8f0; padding: 4px; border-radius: 10px; display: inline-flex; flex-wrap: wrap; gap: 4px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.06); max-width: 100%;">
           <button 
             id="modeSingleBtn" 
-            style="background: #0284c7; color: #ffffff; border: none; padding: 0.65rem 1.4rem; border-radius: 8px; font-size: 0.875rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: all 0.2s ease;"
+            style="background: #0284c7; color: #ffffff; border: none; padding: 0.65rem 1.2rem; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: all 0.2s ease; min-height: 38px;"
           >
             <span>🎯</span> Two-Way Aliquot Solver (C₁V₁ = C₂V₂)
           </button>
           <button 
             id="modeSerialBtn" 
-            style="background: transparent; color: #475569; border: none; padding: 0.65rem 1.4rem; border-radius: 8px; font-size: 0.875rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s ease;"
+            style="background: transparent; color: #475569; border: none; padding: 0.65rem 1.2rem; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s ease; min-height: 38px;"
           >
             <span>🧪</span> Multi-Step Serial Ladder &amp; Semi-Log Plot
           </button>
@@ -137,9 +196,19 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
     </div>
 
+    <!-- DIRECT DEFINITION & GEO SUMMARY CALLOUT BOX -->
+    <section style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-left: 5px solid #0284c7; border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 1.75rem;">
+      <h2 style="font-size: 1rem; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.04em; margin: 0 0 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+        <span>💡</span> What is the Dilution Equation? (Direct Answer)
+      </h2>
+      <p style="font-size: 0.92rem; color: #334155; margin: 0; line-height: 1.6;">
+        The fundamental formula for chemical dilution is <strong><var>C₁V₁ = C₂V₂</var></strong>, where <var>C₁</var> is stock concentration, <var>V₁</var> is aliquot volume, <var>C₂</var> is working concentration, and <var>V₂</var> is final solution volume. This is derived from the <strong>conservation of solute mass</strong> (<var>n₁ = n₂</var>). The <strong>Dilution Factor (DF)</strong> is given by <code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">DF = C₁ / C₂ = V₂ / V₁</code>. Always dilute to the volumetric line rather than adding a pre-measured volume of diluent, due to non-ideal solvent contraction.
+      </p>
+    </section>
+
     <!-- QUICK BENCH PRESETS -->
     <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 12px; padding: 1.25rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
-      <div style="font-weight: 800; font-size: 0.85rem; color: #0f172a; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+      <div style="font-weight: 800; font-size: 0.85rem; color: #0f172a; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
         <span>Common Laboratory Stock Dilutions:</span>
         <span style="font-size: 0.75rem; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 9999px; font-weight: 700;">1-Click Setup</span>
       </div>
@@ -165,7 +234,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 2rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; font-size: 0.85rem;">
         <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
           <span style="font-weight: 700; color: #475569; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Solve For:</span>
-          <select id="targetVariable" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.65rem; border-radius: 6px; font-weight: 700; color: #0284c7; cursor: pointer;">
+          <select id="targetVariable" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.4rem 0.65rem; border-radius: 6px; font-weight: 700; color: #0284c7; cursor: pointer; min-height: 34px;">
             <option value="v1">Aliquot Volume (V₁) [Standard]</option>
             <option value="c2">Target Concentration (C₂)</option>
             <option value="v2">Final Total Volume (V₂)</option>
@@ -175,20 +244,21 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
         <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
           <span style="font-weight: 700; color: #475569; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Solvent Matrix:</span>
-          <select id="solventMatrix" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 0.35rem 0.65rem; border-radius: 6px; font-weight: 600; color: #334155; cursor: pointer;">
+          <select id="solventMatrix" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 0.4rem 0.65rem; border-radius: 6px; font-weight: 600; color: #334155; cursor: pointer; min-height: 34px;">
             <option value="aqueous">Ideal Aqueous (Water / PBS)</option>
             <option value="ethanol">Ethanol / Water (Volumetric Contraction)</option>
             <option value="acid">Concentrated Mineral Acid (Exothermic Dissolution)</option>
           </select>
         </div>
 
-        <button id="shareBtn" style="background: #e0f2fe; border: 1px solid #bae6fd; color: #0284c7; padding: 0.35rem 0.75rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 700;">🔗 Share Setup</button>
+        <button id="shareBtn" style="background: #e0f2fe; border: 1px solid #bae6fd; color: #0284c7; padding: 0.45rem 0.85rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 700; min-height: 34px;">🔗 Share Setup</button>
       </div>
 
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+      <!-- WORKBENCH GRID (Clamped for Mobile) -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 310px), 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
         
         <!-- Inputs Form -->
-        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: clamp(1rem, 3vw, 1.75rem); box-shadow: 0 1px 3px rgba(0,0,0,0.05); min-width: 0;">
           <h2 style="font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; margin-top: 0; margin-bottom: 1.25rem;">
             Parameter Inputs
           </h2>
@@ -198,7 +268,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
               STOCK CONCENTRATION (C₁)
             </label>
             <div style="display: flex;">
-              <input type="number" id="c1" step="any" value="10.0" style="flex: 1; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-right: none; border-radius: 6px 0 0 6px; font-size: 0.95rem; font-weight: 600; outline: none;" />
+              <input type="number" id="c1" step="any" value="10.0" style="flex: 1; min-width: 0; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-right: none; border-radius: 6px 0 0 6px; font-size: 0.95rem; font-weight: 600; outline: none;" />
               <select id="unitC1" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 0 0.75rem; border-radius: 0 6px 6px 0; font-size: 0.85rem; font-weight: 600; color: #475569;">
                 <option value="M">M</option>
                 <option value="mM">mM</option>
@@ -215,7 +285,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
               ALIQUOT VOLUME (V₁)
             </label>
             <div style="display: flex;">
-              <input type="number" id="v1Input" step="any" value="2.5" disabled style="flex: 1; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-right: none; border-radius: 6px 0 0 6px; font-size: 0.95rem; font-weight: 600; background: #f8fafc; color: #64748b; outline: none;" />
+              <input type="number" id="v1Input" step="any" value="2.5" disabled style="flex: 1; min-width: 0; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-right: none; border-radius: 6px 0 0 6px; font-size: 0.95rem; font-weight: 600; background: #f8fafc; color: #64748b; outline: none;" />
               <select id="unitV1" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 0 0.75rem; border-radius: 0 6px 6px 0; font-size: 0.85rem; font-weight: 600; color: #475569;">
                 <option value="mL">mL</option>
                 <option value="uL">&micro;L</option>
@@ -229,7 +299,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
               TARGET WORKING CONCENTRATION (C₂)
             </label>
             <div style="display: flex;">
-              <input type="number" id="c2" step="any" value="0.25" style="flex: 1; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-right: none; border-radius: 6px 0 0 6px; font-size: 0.95rem; font-weight: 600; outline: none;" />
+              <input type="number" id="c2" step="any" value="0.25" style="flex: 1; min-width: 0; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-right: none; border-radius: 6px 0 0 6px; font-size: 0.95rem; font-weight: 600; outline: none;" />
               <select id="unitC2" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 0 0.75rem; border-radius: 0 6px 6px 0; font-size: 0.85rem; font-weight: 600; color: #475569;">
                 <option value="M">M</option>
                 <option value="mM">mM</option>
@@ -246,7 +316,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
               FINAL TARGET VOLUME (V₂)
             </label>
             <div style="display: flex;">
-              <input type="number" id="v2" step="any" value="100.0" style="flex: 1; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-right: none; border-radius: 6px 0 0 6px; font-size: 0.95rem; font-weight: 600; outline: none;" />
+              <input type="number" id="v2" step="any" value="100.0" style="flex: 1; min-width: 0; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-right: none; border-radius: 6px 0 0 6px; font-size: 0.95rem; font-weight: 600; outline: none;" />
               <select id="unitV2" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 0 0.75rem; border-radius: 0 6px 6px 0; font-size: 0.85rem; font-weight: 600; color: #475569;">
                 <option value="mL">mL</option>
                 <option value="uL">&micro;L</option>
@@ -259,14 +329,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
 
         <!-- Readout & Actions Panel -->
-        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        <div style="display: flex; flex-direction: column; gap: 1.5rem; min-width: 0;">
           
           <!-- Live Result Readout -->
-          <div style="background: #0f172a; border-radius: 12px; padding: 1.75rem; color: #ffffff; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+          <div style="background: #0f172a; border-radius: 12px; padding: clamp(1.25rem, 3vw, 1.75rem); color: #ffffff; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
             <span id="readoutLabel" style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #38bdf8;">
               Calculated Aliquot (V₁)
             </span>
-            <div id="primaryResult" style="font-size: 2.5rem; font-weight: 800; color: #38bdf8; margin: 0.25rem 0 0.75rem 0;">--</div>
+            <div id="primaryResult" style="font-size: clamp(2rem, 5vw, 2.5rem); font-weight: 800; color: #38bdf8; margin: 0.25rem 0 0.75rem 0; word-break: break-all;">--</div>
 
             <div style="border-top: 1px solid #334155; padding-top: 1rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.85rem;">
               <div>
@@ -293,14 +363,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </div>
 
           <!-- Benchtop SOP Protocol -->
-          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: clamp(1rem, 2.5vw, 1.5rem);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
               <h3 style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #475569; margin: 0;">Execution Protocol</h3>
               <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
-                <button id="copyDilutionLatex" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #334155;">Copy LaTeX</button>
-                <button id="copyProtocolBtn" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #334155;">Copy Steps</button>
-                <button id="printLabelBtn" type="button" style="background: #0284c7; border: none; padding: 0.25rem 0.65rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: white;">🖨️ Print Label</button>
-                <button id="toggleCiteBtn" type="button" style="background: #e0f2fe; border: 1px solid #7dd3fc; padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #0369a1; display: inline-flex; align-items: center; gap: 0.35rem;"><span>📖</span> Cite</button>
+                <button id="copyDilutionLatex" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #334155; min-height: 32px;">Copy LaTeX</button>
+                <button id="copyProtocolBtn" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #334155; min-height: 32px;">Copy Steps</button>
+                <button id="printLabelBtn" type="button" style="background: #0284c7; border: none; padding: 0.35rem 0.75rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: white; min-height: 32px;">🖨️ Print Label</button>
+                <button id="toggleCiteBtn" type="button" style="background: #e0f2fe; border: 1px solid #7dd3fc; padding: 0.35rem 0.7rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #0369a1; display: inline-flex; align-items: center; gap: 0.35rem; min-height: 32px;"><span>📖</span> Cite</button>
               </div>
             </div>
 
@@ -332,27 +402,27 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     <!-- MODE 2: MULTI-STEP SERIAL TUBE LADDER & DYNAMIC LOG PLOT -->
     <div id="serialModeSection" style="display: none; margin-bottom: 3rem;">
-      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.75rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: clamp(1rem, 3vw, 1.75rem); margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
         <h2 style="font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; margin-top: 0; margin-bottom: 1.25rem;">
           Serial Ladder Configuration
         </h2>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr)); gap: 1.25rem; margin-bottom: 1.5rem;">
           <div>
             <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">INITIAL STOCK CONC (C₀)</label>
-            <input type="number" id="serialC0" step="any" value="10.0" style="width: 100%; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem; font-weight: 600; box-sizing: border-box;" />
+            <input type="number" id="serialC0" step="any" value="10.0" style="width: 100%; min-width: 0; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem; font-weight: 600; box-sizing: border-box;" />
           </div>
           <div>
             <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">TRANSFER VOL PER STEP (V_trans)</label>
-            <input type="number" id="serialVtrans" step="any" value="1.0" style="width: 100%; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem; font-weight: 600; box-sizing: border-box;" />
+            <input type="number" id="serialVtrans" step="any" value="1.0" style="width: 100%; min-width: 0; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem; font-weight: 600; box-sizing: border-box;" />
           </div>
           <div>
             <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">DILUENT VOL PER TUBE (V_dil)</label>
-            <input type="number" id="serialVdil" step="any" value="9.0" style="width: 100%; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem; font-weight: 600; box-sizing: border-box;" />
+            <input type="number" id="serialVdil" step="any" value="9.0" style="width: 100%; min-width: 0; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem; font-weight: 600; box-sizing: border-box;" />
           </div>
           <div>
             <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">TOTAL NUMBER OF TUBES</label>
-            <select id="serialTubes" style="width: 100%; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem; font-weight: 600; background: white; box-sizing: border-box;">
+            <select id="serialTubes" style="width: 100%; min-width: 0; padding: 0.65rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem; font-weight: 600; background: white; box-sizing: border-box;">
               <option value="4">4 Tubes</option>
               <option value="5" selected>5 Tubes</option>
               <option value="6">6 Tubes</option>
@@ -362,51 +432,74 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </div>
         </div>
 
-        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 1.25rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
           <span style="font-size: 0.85rem; color: #64748b;">
             Step Dilution Factor: <strong id="stepDFText" style="color: #0284c7;">10&times;</strong> | Series Type: <strong id="seriesTypeText" style="color: #0f172a;">1:10 Logarithmic Ladder</strong>
           </span>
-          <button id="downloadCsvBtn" style="background: #0284c7; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer;">
+          <button id="downloadCsvBtn" style="background: #0284c7; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; min-height: 36px;">
             📥 Export CSV Spreadsheet
           </button>
         </div>
       </div>
 
       <!-- Live Tube Rack Visualizer -->
-      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; overflow-x: auto;">
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; overflow-x: auto; -webkit-overflow-scrolling: touch;">
         <h3 style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #475569; margin: 0 0 1.25rem 0;">
           Interactive Tube Rack Layout &amp; Remaining Volumes
         </h3>
-        <div id="tubeRackContainer" style="display: flex; gap: 1rem; min-width: 650px; align-items: stretch;"></div>
+        <div id="tubeRackContainer" style="display: flex; gap: 1rem; min-width: 600px; align-items: stretch;"></div>
       </div>
 
       <!-- Live Dynamic Semi-Log Plot -->
-      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem;">
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; overflow-x: auto;">
         <h3 style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #475569; margin: 0 0 0.5rem 0;">
           Dynamic Semi-Log Dilution Decay Curve
         </h3>
         <p style="font-size: 0.8rem; color: #64748b; margin-top: 0; margin-bottom: 1rem;">Log₁₀(Concentration) vs. Tube Step Number verifying linear geometric calibration spacing.</p>
-        <div style="width: 100%; height: 260px;">
+        <div style="width: 100%; min-width: 500px; height: 260px;">
           <svg id="semiLogSvg" viewBox="0 0 600 240" style="width: 100%; height: 100%; overflow: visible; font-family: monospace; font-size: 11px;"></svg>
         </div>
       </div>
     </div>
 
-    <!-- EDITORIAL & SCIENTIFIC DERIVATION ARTICLE -->
+    <!-- EDITORIAL & SCIENTIFIC DERIVATION ARTICLE (ADSENSE E-E-A-T & GEO COMPLIANT) -->
     <article style="border-top: 1px solid #e2e8f0; padding-top: 3.5rem; line-height: 1.85; color: #334155;">
       
-      <h2 style="font-size: 1.85rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem; letter-spacing: -0.02em;">
+      <h2 style="font-size: clamp(1.4rem, 3.5vw, 1.85rem); font-weight: 800; color: #0f172a; margin-bottom: 1rem; letter-spacing: -0.02em; line-height: 1.3;">
         Mathematical Foundations of Serial Dilutions &amp; Mass Conservation
       </h2>
       <p>
         Volumetric chemical dilutions rest on the thermodynamic principle of the conservation of mass. In a non-reactive solution, adding solvent does not alter the absolute quantity of solute (moles or mass units). Hence, the relationship between initial stock parameters and final diluted conditions is formalized:
       </p>
       
-      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.25rem 2rem; margin: 1.5rem 0; text-align: center; box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);">
-        <div style="font-size: 1.45rem; font-weight: 800; color: #0f172a; letter-spacing: 0.05em; font-family: 'Times New Roman', Times, serif;">
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.25rem; margin: 1.5rem 0; text-align: center; box-shadow: inset 0 1px 2px rgba(0,0,0,0.02); overflow-x: auto;">
+        <div style="font-size: clamp(1.1rem, 3vw, 1.45rem); font-weight: 800; color: #0f172a; letter-spacing: 0.05em; font-family: 'Times New Roman', Times, serif; white-space: nowrap;">
           <i>n</i><sub>initial</sub> = <i>n</i><sub>final</sub> &nbsp;&rArr;&nbsp; <b>C₁ &times; V₁ = C₂ &times; V₂</b>
         </div>
       </div>
+
+      <!-- WORKED REAL-WORLD BENCHTOP CALIBRATION LADDER (PREVENTS THIN-CONTENT FLAGS) -->
+      <section style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: clamp(1rem, 3vw, 1.5rem); margin: 2rem 0; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+        <h3 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin-top: 0; margin-bottom: 0.75rem;">
+          Step-by-Step Benchtop Worked Example: 5-Point Analytical Calibration Ladder
+        </h3>
+        <p style="font-size: 0.92rem; color: #334155; margin-bottom: 1rem;">
+          Suppose an analytical chemist is preparing a multi-point standard calibration series for UV-Vis spectrophotometry or HPLC. The laboratory possesses a certified stock standard of <strong>1000.0 mg/L (ppm)</strong>. The target is to formulate five <strong>100.0 mL (V₂)</strong> working standards at concentrations of <strong>1.00, 2.50, 5.00, 10.00, and 20.00 mg/L (C₂)</strong> in ASTM Class-A volumetric flasks.
+        </p>
+
+        <div style="background: #f8fafc; border-left: 4px solid #0284c7; padding: 1rem; margin-bottom: 1rem; font-family: ui-monospace, monospace; font-size: 0.88rem; line-height: 1.7; overflow-x: auto;">
+          <strong>Aliquot calculations via V₁ = (C₂ &times; V₂) / C₁:</strong><br />
+          • Standard 1 (1.00 mg/L): V₁ = (1.00 mg/L &times; 100.0 mL) / 1000.0 mg/L = <strong>0.100 mL (100.0 µL)</strong><br />
+          • Standard 2 (2.50 mg/L): V₁ = (2.50 mg/L &times; 100.0 mL) / 1000.0 mg/L = <strong>0.250 mL (250.0 µL)</strong><br />
+          • Standard 3 (5.00 mg/L): V₁ = (5.00 mg/L &times; 100.0 mL) / 1000.0 mg/L = <strong>0.500 mL (500.0 µL)</strong><br />
+          • Standard 4 (10.00 mg/L): V₁ = (10.00 mg/L &times; 100.0 mL) / 1000.0 mg/L = <strong>1.000 mL (1000.0 µL)</strong><br />
+          • Standard 5 (20.00 mg/L): V₁ = (20.00 mg/L &times; 100.0 mL) / 1000.0 mg/L = <strong>2.000 mL</strong>
+        </div>
+
+        <p style="font-size: 0.9rem; color: #475569; margin: 0;">
+          <strong>Practical SOP Note:</strong> Direct pipetting of 100.0 µL requires an ISO 8655-calibrated air-displacement micropipette (uncertainty &plusmn;0.8%). Alternatively, an intermediate stock of 100.0 mg/L can be generated (10.0 mL stock diluted into 100 mL flask, DF = 10&times;), allowing standard transfers of 1.00 mL to 20.00 mL using Class-A volumetric pipettes.
+        </p>
+      </section>
 
       <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
         Non-Ideal Thermodynamic Excess Volume in Mixtures
@@ -414,6 +507,79 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <p>
         Standard laboratory manuals assume volumetric additivity: <em>V</em><sub>final</sub> = <em>V</em><sub>1</sub> + <em>V</em><sub>solvent</sub>. In practice, intermolecular interactions like hydrogen bonding alter packing density. When mixing ethanol and water, contraction reduces total volume by up to 3.5%. Measuring diluent separately and adding it to the aliquot results in systematic concentration errors. The solution must always be brought to the final calibration mark in a Class-A volumetric flask.
       </p>
+
+      <!-- REFERENCE DATASET TABLE: Volumetric Pipette Tolerances Benchmark -->
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2.75rem; margin-bottom: 0.75rem;">
+        ASTM Class-A Transfer Pipettes vs. Air-Displacement Micropipettes (ASTM E969 / ISO 8655)
+      </h3>
+      <p style="font-size: 0.9rem; color: #475569; margin-bottom: 1rem;">
+        Permissible volumetric uncertainty limits across standard analytical liquid-handling tools:
+      </p>
+
+      <div style="overflow-x: auto; margin-bottom: 2rem;">
+        <table style="width: 100%; min-width: 620px; border-collapse: collapse; font-size: 0.85rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px;">
+          <thead>
+            <tr style="background: #f1f5f9; text-align: left; color: #334155; font-size: 0.8rem; border-bottom: 1.5px solid #cbd5e1;">
+              <th style="padding: 0.65rem 0.75rem;">Instrument Type</th>
+              <th style="padding: 0.65rem 0.75rem;">Nominal Volume</th>
+              <th style="padding: 0.65rem 0.75rem;">Standard Standard</th>
+              <th style="padding: 0.65rem 0.75rem;">Systematic Error (&plusmn; Vol)</th>
+              <th style="padding: 0.65rem 0.75rem;">Relative Systematic Error</th>
+              <th style="padding: 0.65rem 0.75rem;">Random Error (CV %)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Micropipette (P10)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">1 &mu;L (0.001 mL)</td>
+              <td style="padding: 0.65rem 0.75rem; color: #64748b;">ISO 8655</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; color: #b91c1c;">&plusmn;0.025 &mu;L</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; color: #b91c1c;">&plusmn;2.50%</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">&le; 1.50%</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Micropipette (P200)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">100 &mu;L (0.1 mL)</td>
+              <td style="padding: 0.65rem 0.75rem; color: #64748b;">ISO 8655</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; color: #d97706;">&plusmn;0.80 &mu;L</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; color: #d97706;">&plusmn;0.80%</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">&le; 0.30%</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Class-A Volumetric Pipette</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">1.0 mL</td>
+              <td style="padding: 0.65rem 0.75rem; color: #0284c7; font-weight: 700;">ASTM E969</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; color: #0284c7; font-weight: 700;">&plusmn;0.006 mL</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">&plusmn;0.60%</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">&le; 0.15%</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Class-A Volumetric Pipette</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">5.0 mL</td>
+              <td style="padding: 0.65rem 0.75rem; color: #0284c7; font-weight: 700;">ASTM E969</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; color: #0284c7; font-weight: 700;">&plusmn;0.010 mL</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">&plusmn;0.20%</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">&le; 0.08%</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Class-A Volumetric Pipette</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">10.0 mL</td>
+              <td style="padding: 0.65rem 0.75rem; color: #0284c7; font-weight: 700;">ASTM E969</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; color: #0284c7; font-weight: 700;">&plusmn;0.020 mL</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">&plusmn;0.20%</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">&le; 0.05%</td>
+            </tr>
+            <tr>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Class-A Volumetric Pipette</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">25.0 mL</td>
+              <td style="padding: 0.65rem 0.75rem; color: #0284c7; font-weight: 700;">ASTM E969</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; color: #0284c7; font-weight: 700;">&plusmn;0.030 mL</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">&plusmn;0.12%</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">&le; 0.03%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
         Multi-Step Serial Dilution Mechanics
@@ -425,8 +591,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         Serial dilution avoids this by performing sequential, equal-ratio transfers. The step dilution factor is defined:
       </p>
 
-      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.25rem 2rem; margin: 1.5rem 0; text-align: center; box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);">
-        <div style="font-size: 1.35rem; font-weight: 700; color: #0f172a; font-family: 'Times New Roman', Times, serif;">
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.25rem 2rem; margin: 1.5rem 0; text-align: center; box-shadow: inset 0 1px 2px rgba(0,0,0,0.02); overflow-x: auto;">
+        <div style="font-size: clamp(1.1rem, 2.5vw, 1.35rem); font-weight: 700; color: #0f172a; font-family: 'Times New Roman', Times, serif; white-space: nowrap;">
           DF<sub>step</sub> = <span style="display: inline-block; vertical-align: middle; text-align: center; margin: 0 4px;"><span style="display: block; border-bottom: 1.5px solid #0f172a; padding: 0 4px;">V<sub>transfer</sub> + V<sub>diluent</sub></span><span style="display: block; padding-top: 2px;">V<sub>transfer</sub></span></span>
         </div>
       </div>
@@ -435,8 +601,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         The final concentration in tube <i>n</i> (C<sub><i>n</i></sub>) follows geometric decay:
       </p>
 
-      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.25rem 2rem; margin: 1.5rem 0; text-align: center; box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);">
-        <div style="font-size: 1.35rem; font-weight: 700; color: #0f172a; font-family: 'Times New Roman', Times, serif;">
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.25rem 2rem; margin: 1.5rem 0; text-align: center; box-shadow: inset 0 1px 2px rgba(0,0,0,0.02); overflow-x: auto;">
+        <div style="font-size: clamp(1.1rem, 2.5vw, 1.35rem); font-weight: 700; color: #0f172a; font-family: 'Times New Roman', Times, serif; white-space: nowrap;">
           C<sub><i>n</i></sub> = C<sub>0</sub> &times; <span style="font-size: 1.4rem;">(</span> <sup>1</sup>&frasl;<sub>DF<sub>step</sub></sub> <span style="font-size: 1.4rem;">)</span><sup><i>n</i></sup>
         </div>
       </div>
@@ -465,6 +631,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Why should solvent never be added by fixed pre-measured volume?</summary>
           <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
             Many solute-solvent and solvent-solvent mixtures experience excess Gibbs energy and volume contraction upon mixing (e.g. ethanol-water, acid-water). Dispensing exactly (V₂ &minus; V₁) can lead to a smaller total volume than expected. Always dilute up to the calibration line of a Class-A volumetric flask.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What are the tolerance limits of ASTM Class-A volumetric pipettes?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Per ASTM E969 and ISO 648 standards, Class-A volumetric transfer pipettes provide high precision: 1 mL carries &plusmn;0.006 mL, 5 mL carries &plusmn;0.01 mL, 10 mL carries &plusmn;0.02 mL, 25 mL carries &plusmn;0.03 mL, and 50 mL carries &plusmn;0.05 mL tolerance.
           </p>
         </details>
       </div>
@@ -508,6 +681,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       font-size: 0.75rem;
       font-weight: 700;
       transition: all 0.2s ease;
+      min-height: 32px;
     }
     .dilution-preset-btn:hover {
       background: #0284c7;
@@ -955,13 +1129,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     const dilCitations: Record<string, string> = {
       bibtex: `@software{khan_chemistrydesk_dilution_${currentYear},
-  author       = {Khan, Bilal},
-  title        = {ChemistryDesk: Stock Dilution & Serial Ladder Studio},
-  year         = {${currentYear}},
-  version      = {v1.0.1},
-  publisher    = {Zenodo},
-  doi          = {${doi}},
-  url          = {https://chemistrycal.com/dilution}
+  author        = {Khan, Bilal},
+  title         = {ChemistryDesk: Stock Dilution & Serial Ladder Studio},
+  year          = {${currentYear}},
+  version       = {v1.0.1},
+  publisher     = {Zenodo},
+  doi           = {${doi}},
+  url           = {https://chemistrycal.com/dilution}
 }`,
       acs: `Khan, B. ChemistryDesk: Stock Dilution & Serial Ladder Studio, version 1.0.1; Zenodo, ${currentYear}. https://doi.org/${doi}.`,
       rsc: `B. Khan, ChemistryDesk: Stock Dilution & Serial Ladder Studio, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`,
@@ -1028,6 +1202,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     adjustInputStates();
     runSingleEngine();
   </script>
+
   <!-- Related Analytical Workflows Hub -->
   <section style="max-width: 900px; margin: 3rem auto 1.5rem; padding: 1.25rem 1.5rem; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; box-sizing: border-box;">
     <h3 style="margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 0.5rem;">
