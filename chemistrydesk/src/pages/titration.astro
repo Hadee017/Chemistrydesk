@@ -36,10 +36,31 @@ const schemaData = {
       "jobTitle": "Physical & Materials Chemistry Researcher",
       "description": "Specialist in porous coordination polymers, heterogeneous adsorption kinetics, and computational chemical physics.",
       "sameAs": [
+        "https://www.wikidata.org/wiki/Q141699332",
         "https://orcid.org/0009-0006-3082-7043",
+        "https://www.linkedin.com/in/bilal-khan-bbb259248",
+        "https://doi.org/10.5281/zenodo.23059466",
         "https://github.com/Hadee017",
         "https://about.me/bilalkhan01",
         "https://www.behance.net/bilalkhan"
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${canonicalUrl}#breadcrumb`,
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": siteUrl
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Titration Studio",
+          "item": canonicalUrl
+        }
       ]
     },
     {
@@ -149,14 +170,13 @@ const schemaData = {
 
   <main style="max-width: 1140px; margin: 1.5rem auto 4rem auto; padding: 0 1rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #0f172a; box-sizing: border-box; overflow-x: hidden;">
     
-    <!-- Breadcrumb Navigation -->
+    <!-- Validated 2-Tier Breadcrumb Navigation -->
     <nav style="font-size: 0.85rem; color: #475569; margin-bottom: 1.25rem;">
       <a href="/" style="color: #0284c7; text-decoration: none; font-weight: 600;">Home</a> &rsaquo; 
-      <span style="color: #64748b;"> Analytical Tools</span> &rsaquo; 
       <span style="color: #0f172a; font-weight: 700;">Titration Studio</span>
     </nav>
 
-    <!-- Header Section -->
+    <!-- Header Hero Card -->
     <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 16px; padding: clamp(1.25rem, 3vw, 2rem); margin-bottom: 1.75rem; color: #ffffff; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.15);">
       <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.25rem;">
         <div style="max-width: 780px;">
@@ -210,7 +230,7 @@ const schemaData = {
       </div>
     </div>
 
-    <!-- MAIN WORKBENCH GRID (Clamped for Mobile) -->
+    <!-- MAIN WORKBENCH GRID -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
       
       <!-- LEFT COLUMN: Inputs & Controls -->
@@ -243,7 +263,7 @@ const schemaData = {
             </select>
           </div>
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 120px), 1fr)); gap: 0.75rem;">
             <div>
               <label for="input-ca" style="display: block; font-size: 0.75rem; font-weight: 700; color: #475569; margin-bottom: 0.25rem;">Concentration (M)</label>
               <input type="text" inputmode="decimal" id="input-ca" value="0.100" style="width: 100%; min-width: 0; padding: 0.55rem 0.65rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; font-weight: 700; font-family: monospace; box-sizing: border-box;" />
@@ -313,7 +333,7 @@ const schemaData = {
         </div>
 
         <!-- Action Buttons -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 120px), 1fr)); gap: 0.75rem;">
           <button id="btn-export-csv" type="button" style="padding: 0.65rem 0.75rem; border-radius: 6px; background: #0f172a; color: white; border: none; font-size: 0.8rem; font-weight: 700; cursor: pointer; min-height: 38px;">
             📥 Export CSV
           </button>
@@ -328,8 +348,8 @@ const schemaData = {
       <div style="display: flex; flex-direction: column; gap: 1.5rem; min-width: 0;">
         
         <!-- Key Metrics Cards -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-          <div style="background: #0f172a; border-radius: 12px; padding: 1.25rem; color: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr)); gap: 1rem;">
+          <div style="background: #0f172a; border-radius: 12px; padding: 1.25rem; color: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); min-width: 0;">
             <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #38bdf8;">Equivalence Vol (V_eq)</span>
             <div style="font-size: clamp(1.6rem, 3.5vw, 2rem); font-weight: 900; font-family: monospace; color: #38bdf8; margin: 0.2rem 0; word-break: break-all;">
               <span id="metric-veq">25.00</span> <span style="font-size: 0.95rem; color: #94a3b8;">mL</span>
@@ -337,7 +357,7 @@ const schemaData = {
             <span style="font-size: 0.72rem; color: #94a3b8;">Burette delivery to neutralize</span>
           </div>
 
-          <div style="background: #0f172a; border-radius: 12px; padding: 1.25rem; color: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+          <div style="background: #0f172a; border-radius: 12px; padding: 1.25rem; color: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); min-width: 0;">
             <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #ec4899;">Equivalence pH</span>
             <div style="font-size: clamp(1.6rem, 3.5vw, 2rem); font-weight: 900; font-family: monospace; color: #ec4899; margin: 0.2rem 0; word-break: break-all;">
               <span id="metric-eqph">8.73</span>
@@ -345,17 +365,17 @@ const schemaData = {
             <span id="eq-ph-nature" style="font-size: 0.72rem; color: #f472b6;">Basic (Salt Hydrolysis)</span>
           </div>
 
-          <div style="background: white; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1rem;">
+          <div style="background: white; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1rem; min-width: 0;">
             <span style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: #64748b;">Half-Equivalence Vol (V_1/2)</span>
-            <div style="font-size: 1.45rem; font-weight: 800; font-family: monospace; color: #d97706; margin: 0.2rem 0;">
+            <div style="font-size: 1.45rem; font-weight: 800; font-family: monospace; color: #d97706; margin: 0.2rem 0; word-break: break-all;">
               <span id="metric-halfv">12.50</span> <span style="font-size: 0.8rem; color: #94a3b8;">mL</span>
             </div>
             <span style="font-size: 0.7rem; color: #64748b;">Buffer center (V_eq / 2)</span>
           </div>
 
-          <div style="background: white; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1rem;">
+          <div style="background: white; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1rem; min-width: 0;">
             <span style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: #64748b;">Half-Equivalence pH</span>
-            <div style="font-size: 1.45rem; font-weight: 800; font-family: monospace; color: #059669; margin: 0.2rem 0;">
+            <div style="font-size: 1.45rem; font-weight: 800; font-family: monospace; color: #059669; margin: 0.2rem 0; word-break: break-all;">
               <span id="metric-halfph">4.76</span>
             </div>
             <span style="font-size: 0.7rem; color: #059669; font-weight: 700;">pH = pKa directly</span>
@@ -363,7 +383,7 @@ const schemaData = {
         </div>
 
         <!-- SVG Curve Display -->
-        <div style="background: #0f172a; border: 1.5px solid #1e293b; border-radius: 14px; padding: 1.25rem; box-shadow: 0 4px 10px rgba(0,0,0,0.15);">
+        <div style="background: #0f172a; border: 1.5px solid #1e293b; border-radius: 14px; padding: 1.25rem; box-shadow: 0 4px 10px rgba(0,0,0,0.15); min-width: 0;">
           <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 0.6rem; margin-bottom: 0.85rem; color: white; flex-wrap: wrap; gap: 0.5rem;">
             <span style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #38bdf8;">Interactive Titration Curve</span>
             <div style="display: flex; gap: 0.75rem; font-size: 0.72rem; color: #94a3b8; flex-wrap: wrap;">
@@ -374,7 +394,7 @@ const schemaData = {
             </div>
           </div>
 
-          <div id="svg-chart-container" style="width: 100%; aspect-ratio: 640 / 380; overflow: hidden;"></div>
+          <div id="svg-chart-container" style="width: 100%; aspect-ratio: 640 / 380; overflow-x: auto; -webkit-overflow-scrolling: touch;"></div>
 
           <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #94a3b8; border-top: 1px solid #334155; padding-top: 0.6rem; margin-top: 0.6rem; flex-wrap: wrap; gap: 0.5rem;">
             <div>Steepest Slope: <strong id="metric-max-deriv" style="color: #a78bfa; font-family: monospace;">6.62</strong> dpH/mL</div>
@@ -383,7 +403,7 @@ const schemaData = {
         </div>
 
         <!-- Benchtop SOP Protocol & Citation Drawer -->
-        <div style="background: white; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1.25rem;">
+        <div style="background: white; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: clamp(1rem, 2.5vw, 1.25rem); min-width: 0;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.5rem;">
             <h3 style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #0f172a; margin: 0;">
               Benchtop Laboratory Procedure (SOP)
@@ -412,7 +432,7 @@ const schemaData = {
             </div>
           </div>
 
-          <p id="sop-recipe-text" style="margin: 0; font-size: 0.85rem; color: #334155; line-height: 1.65; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.85rem; white-space: pre-line;">
+          <p id="sop-recipe-text" style="margin: 0; font-size: 0.85rem; color: #334155; line-height: 1.65; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.85rem; white-space: pre-line; word-break: break-word;">
             Loading experimental protocol...
           </p>
         </div>
@@ -421,7 +441,7 @@ const schemaData = {
 
     </div>
 
-    <!-- EDITORIAL & SCIENTIFIC DERIVATION ARTICLE (ADSENSE E-E-A-T & GEO COMPLIANT) -->
+    <!-- EDITORIAL & SCIENTIFIC DERIVATION ARTICLE -->
     <article style="border-top: 2px solid #e2e8f0; padding-top: 3.5rem; line-height: 1.85; color: #1e293b;">
       
       <h2 style="font-size: clamp(1.4rem, 3.5vw, 2rem); font-weight: 800; color: #0f172a; margin-bottom: 1.25rem; letter-spacing: -0.02em; line-height: 1.3;">
@@ -439,7 +459,7 @@ const schemaData = {
       </p>
       
       <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1rem; font-family: monospace; font-size: clamp(0.95rem, 2.5vw, 1.1rem); font-weight: 700; text-align: center; margin: 1.25rem 0; color: #0f172a; overflow-x: auto;">
-        n<sub>acid</sub> = n<sub>base</sub> &emsp;&rArr;&emsp; C<sub>acid</sub> &times; V<sub>acid</sub> = C<sub>base</sub> &times; V<sub>base</sub>
+        <span>n<sub>acid</sub> = n<sub>base</sub> &emsp;&rArr;&emsp; C<sub>acid</sub> &times; V<sub>acid</sub> = C<sub>base</sub> &times; V<sub>base</sub></span>
       </div>
 
       <p style="font-size: 0.95rem;">
@@ -447,10 +467,10 @@ const schemaData = {
       </p>
 
       <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1rem; font-family: monospace; font-size: clamp(0.95rem, 2.5vw, 1.1rem); font-weight: 700; text-align: center; margin: 1.25rem 0; color: #0284c7; overflow-x: auto;">
-        V<sub>eq</sub> = (C<sub>analyte</sub> &times; V<sub>analyte</sub>) / C<sub>titrant</sub>
+        <span>V<sub>eq</sub> = (C<sub>analyte</sub> &times; V<sub>analyte</sub>) / C<sub>titrant</sub></span>
       </div>
 
-      <!-- WORKED REAL-WORLD ANALYTICAL DERIVATION (PREVENTS THIN-CONTENT FLAGS) -->
+      <!-- WORKED REAL-WORLD ANALYTICAL DERIVATION -->
       <section style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: clamp(1rem, 3vw, 1.5rem); margin: 2rem 0; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
         <h3 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin-top: 0; margin-bottom: 0.75rem;">
           Step-by-Step Analytical Standardization: NIST SRM 84k KHP vs. Secondary NaOH
@@ -461,11 +481,11 @@ const schemaData = {
 
         <div style="background: #f8fafc; border-left: 4px solid #0284c7; padding: 1rem; margin-bottom: 1rem; font-family: ui-monospace, monospace; font-size: 0.88rem; line-height: 1.7; overflow-x: auto;">
           <strong>Step 1: Calculate stoichiometric moles of pure primary standard KHP:</strong><br />
-          n_KHP = Mass / MW = 0.5106 g / 204.221 g/mol = <strong>2.5002 &times; 10⁻³ mol</strong><br /><br />
+          <span>n_KHP = Mass / MW = 0.5106 g / 204.221 g/mol = <strong>2.5002 &times; 10⁻³ mol</strong></span><br /><br />
           <strong>Step 2: Apply 1:1 reaction stoichiometry (KHP + NaOH &rarr; KNaP + H₂O):</strong><br />
-          n_NaOH = n_KHP = 2.5002 &times; 10⁻³ mol<br /><br />
+          <span>n_NaOH = n_KHP = 2.5002 &times; 10⁻³ mol</span><br /><br />
           <strong>Step 3: Calculate exact standardized molarity of secondary NaOH:</strong><br />
-          C_NaOH = n_NaOH / V_burette = (2.5002 &times; 10⁻³ mol) / (0.02485 L) = <strong>0.1006 M</strong>
+          <span>C_NaOH = n_NaOH / V_burette = (2.5002 &times; 10⁻³ mol) / (0.02485 L) = <strong>0.1006 M</strong></span>
         </div>
 
         <p style="font-size: 0.9rem; color: #475569; margin: 0;">
@@ -518,7 +538,7 @@ const schemaData = {
       </p>
       
       <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1rem; font-family: monospace; font-size: clamp(0.9rem, 2.5vw, 1rem); text-align: center; margin: 1rem 0; overflow-x: auto;">
-        [HA] = [A⁻] &emsp;&rArr;&emsp; log₁₀([A⁻] / [HA]) = log₁₀(1) = 0 &emsp;&rArr;&emsp; <b>pH = pK<sub>a</sub></b>
+        <span>[HA] = [A⁻] &emsp;&rArr;&emsp; log₁₀([A⁻] / [HA]) = log₁₀(1) = 0 &emsp;&rArr;&emsp; <b>pH = pK<sub>a</sub></b></span>
       </div>
 
       <p style="font-size: 0.95rem;">
@@ -533,8 +553,8 @@ const schemaData = {
         Optical transition intervals, pK_In constants, and system suitability for primary volumetric analytical titrations:
       </p>
 
-      <div style="overflow-x: auto; margin-bottom: 2rem;">
-        <table style="width: 100%; min-width: 640px; border-collapse: collapse; font-size: 0.85rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px;">
+      <div style="border: 1px solid #cbd5e1; border-radius: 8px; overflow-x: auto; margin-bottom: 2rem;">
+        <table style="width: 100%; min-width: 640px; border-collapse: collapse; font-size: 0.85rem; background: #ffffff;">
           <thead>
             <tr style="background: #0f172a; color: white; text-align: left;">
               <th style="padding: 0.65rem 0.75rem; border: 1px solid #334155;">Chemical Indicator</th>
@@ -632,7 +652,7 @@ const schemaData = {
       <p style="margin: 0 0 1rem; font-size: 0.85rem; color: #64748b; line-height: 1.4;">
         Connect your titration results with buffer preparation, standard solution formulation, and dilution calculations:
       </p>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 1rem;">
         <a href="/buffer" style="display: block; padding: 1rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
           <div style="font-weight: 700; font-size: 0.92rem; color: #0284c7; margin-bottom: 0.35rem;">Buffer Preparation Studio &rarr;</div>
           <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">Formulate conjugate acid-base buffer recipes with Van Slyke capacity (&beta;) analysis.</div>
@@ -1137,15 +1157,18 @@ const schemaData = {
     }
 
     inlineTabs.forEach(function(tab) {
-      tab.addEventListener('click', function() {
+      tab.addEventListener('click', function(e) {
+        e.preventDefault();
         inlineTabs.forEach(function(t) {
           t.style.background = '#ffffff';
           t.style.color = '#334155';
           t.style.borderColor = '#cbd5e1';
+          t.style.fontWeight = '600';
         });
         tab.style.background = '#0f172a';
         tab.style.color = '#ffffff';
         tab.style.borderColor = '#0f172a';
+        tab.style.fontWeight = '700';
         currentInlineFormat = tab.getAttribute('data-format');
         updateInlineCite();
       });
