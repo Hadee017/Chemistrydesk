@@ -1,100 +1,190 @@
 ---
+// src/pages/molar-mass.astro
 import BaseLayout from '../layouts/BaseLayout.astro';
+import AuthorCard from '../components/AuthorCard.astro';
+
+const pageTitle = "Molar Mass Calculator | Molecular Weight & Elemental Composition | ChemistryDesk";
+const pageDescription = "Universal chemical formula molar mass calculator. Computes molecular weight, elemental mass percentages, nested coordination complexes, hydrates, and two-way grams to moles conversions.";
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://chemistrycal.com';
+const canonicalUrl = `${siteUrl}/molar-mass`;
+
+const schemaData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      "url": siteUrl,
+      "name": "ChemistryDesk",
+      "description": "Precision Scientific Utilities & Computational Laboratory Engines",
+      "inLanguage": "en-US"
+    },
+    {
+      "@type": "WebPage",
+      "@id": `${canonicalUrl}#webpage`,
+      "url": canonicalUrl,
+      "name": pageTitle,
+      "isPartOf": { "@id": `${siteUrl}/#website` },
+      "description": pageDescription,
+      "inLanguage": "en-US",
+      "author": { "@id": `${siteUrl}/#author` }
+    },
+    {
+      "@type": "Person",
+      "@id": `${siteUrl}/#author`,
+      "name": "Bilal Khan",
+      "jobTitle": "Physical & Materials Chemistry Researcher",
+      "description": "Specialist in porous coordination polymers, heterogeneous adsorption kinetics, and computational chemical physics.",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q141699332",
+        "https://orcid.org/0009-0006-3082-7043",
+        "https://www.linkedin.com/in/bilal-khan-bbb259248",
+        "https://doi.org/10.5281/zenodo.23059466",
+        "https://github.com/Hadee017",
+        "https://about.me/bilalkhan01",
+        "https://www.behance.net/bilalkhan"
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${canonicalUrl}#breadcrumb`,
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": siteUrl
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Molar Mass Studio",
+          "item": canonicalUrl
+        }
+      ]
+    },
+    {
+      "@type": "WebApplication",
+      "@id": `${canonicalUrl}#software`,
+      "name": "ChemistryDesk Universal Molar Mass & Elemental Composition Studio",
+      "url": canonicalUrl,
+      "applicationCategory": "EducationalApplication, ScientificApplication",
+      "operatingSystem": "All modern web browsers",
+      "browserRequirements": "Requires JavaScript. Runs 100% offline via Service Worker.",
+      "description": pageDescription,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "creator": { "@id": `${siteUrl}/#author` },
+      "featureList": [
+        "IUPAC CIAAW Standard Atomic Weights for Elements 1-118",
+        "Auto-Capitalization and Tokenization for Ambiguous Formulas",
+        "Support for Nested Parentheses, Brackets, and Crystalline Hydrates",
+        "Visual Segmented Elemental Mass Percent Bar",
+        "Two-Way Real-Time Conversion: Mass (g) <-> Moles (mol) <-> Molecule Count",
+        "1-Click Step-by-Step Homework Derivation and LaTeX Export",
+        "URL State Sharing and CSV Data Export",
+        "Integrated academic citation drawer (BibTeX, ACS, RSC, Nature, Elsevier, Wiley)"
+      ]
+    },
+    {
+      "@type": "HowTo",
+      "@id": `${canonicalUrl}#howto`,
+      "name": "How to Calculate Molar Mass and Elemental Percent Composition",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "name": "Parse Chemical Formula",
+          "text": "Deconstruct the chemical formula into individual elemental constituents, expanding nested parentheses, coordination brackets, and crystalline hydrate multipliers."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Look Up IUPAC Standard Atomic Weights",
+          "text": "Multiply the stoichiometric atom count of each element by its official IUPAC standard atomic weight (A_r)."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Sum Elemental Subtotals",
+          "text": "Add all individual elemental mass contributions together to calculate the compound's total molar mass in grams per mole (g/mol)."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Compute Mass Percentages",
+          "text": "Divide each element's total mass subtotal by the complete molar mass and multiply by 100% to determine mass composition."
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${canonicalUrl}#faq`,
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the difference between molar mass, molecular weight, and formula weight?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Molar mass is the mass of one mole of a substance expressed in grams per mole (g/mol). Molecular weight is the dimensionless relative ratio of the average mass of one molecule relative to 1/12th the mass of a carbon-12 atom. Formula weight is used specifically for ionic salts (such as NaCl) that do not exist as discreet individual molecules but form extended three-dimensional crystal lattices."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How are crystalline hydrates calculated in molar mass formulas?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Hydrates are chemical salts that have water molecules trapped within their crystalline matrix, designated by a central dot (such as CuSO4·5H2O). To calculate the total molar mass, the formula mass of the anhydrous salt (CuSO4 = 159.609 g/mol) is added to the total mass of the stoichiometric water molecules (5 * 18.015 = 90.075 g/mol), resulting in a combined molar mass of 249.684 g/mol."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why do atomic weights on the periodic table contain decimals?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Standard atomic weights published by the IUPAC Commission on Isotopic Abundances and Atomic Weights (CIAAW) reflect the natural isotopic abundance-weighted averages of all stable isotopes found in terrestrial samples. For example, chlorine is roughly 75.76% Chlorine-35 and 24.24% Chlorine-37, yielding an average atomic weight of 35.45 g/mol."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do you convert sample grams to moles and total molecules?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "To convert mass (m) in grams to moles (n), divide the mass by the molar mass (M): n = m / M. To find the total number of individual molecules (N), multiply the calculated moles by Avogadro's constant (NA = 6.02214076e23 molecules/mol): N = n * NA."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the Hill system notation for chemical formulas?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The Hill system is a standardized convention for writing chemical formulas. For carbon-containing compounds, Carbon (C) is listed first, followed immediately by Hydrogen (H), and then all remaining elements in alphabetical order. If carbon is not present, all elements are listed strictly in alphabetical order."
+          }
+        }
+      ]
+    }
+  ]
+};
 ---
 
-<BaseLayout
-  title="Molar Mass Calculator | Molecular Weight & Elemental Composition | ChemistryDesk"
-  description="Universal chemical formula molar mass calculator. Computes molecular weight, elemental mass percentages, nested coordination complexes, hydrates, and two-way grams to moles conversions."
->
-  <!-- Schema: WebApplication -->
-  <script is:inline type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "ChemistryDesk Universal Molar Mass & Elemental Composition Studio",
-    "applicationCategory": "EducationalApplication",
-    "operatingSystem": "All",
-    "browserRequirements": "Requires JavaScript",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    },
-    "featureList": [
-      "IUPAC CIAAW Standard Atomic Weights for Elements 1-118",
-      "Auto-Capitalization and Tokenization for Ambiguous Formulas",
-      "Support for Nested Parentheses, Brackets, and Crystalline Hydrates",
-      "Visual Segmented Elemental Mass Percent Bar",
-      "Two-Way Real-Time Conversion: Mass (g) <-> Moles (mol) <-> Molecule Count",
-      "1-Click Step-by-Step Homework Derivation and LaTeX Export",
-      "URL State Sharing and CSV Data Export"
-    ]
-  })}></script>
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(schemaData)}></script>
 
-  <!-- Schema: FAQPage -->
-  <script is:inline type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "What is the difference between molar mass, molecular weight, and formula weight?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Molar mass is the mass of one mole of a substance expressed in grams per mole (g/mol). Molecular weight is the dimensionless relative ratio of the average mass of one molecule relative to 1/12th the mass of a carbon-12 atom. Formula weight is used specifically for ionic salts (such as NaCl) that do not exist as discreet individual molecules but form extended three-dimensional crystal lattices."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "How are crystalline hydrates calculated in molar mass formulas?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Hydrates are chemical salts that have water molecules trapped within their crystalline matrix, designated by a central dot (such as CuSO4·5H2O). To calculate the total molar mass, the formula mass of the anhydrous salt (CuSO4 = 159.609 g/mol) is added to the total mass of the stoichiometric water molecules (5 * 18.015 = 90.075 g/mol), resulting in a combined molar mass of 249.684 g/mol."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Why do atomic weights on the periodic table contain decimals?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Standard atomic weights published by the IUPAC Commission on Isotopic Abundances and Atomic Weights (CIAAW) reflect the natural isotopic abundance-weighted averages of all stable isotopes found in terrestrial samples. For example, chlorine is roughly 75.76% Chlorine-35 and 24.24% Chlorine-37, yielding an average atomic weight of 35.45 g/mol."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "How do you convert sample grams to moles and total molecules?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "To convert mass (m) in grams to moles (n), divide the mass by the molar mass (M): n = m / M. To find the total number of individual molecules (N), multiply the calculated moles by Avogadro's constant (NA = 6.02214076e23 molecules/mol): N = n * NA."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "What is the Hill system notation for chemical formulas?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "The Hill system is a standardized convention for writing chemical formulas. For carbon-containing compounds, Carbon (C) is listed first, followed immediately by Hydrogen (H), and then all remaining elements in alphabetical order. If carbon is not present, all elements are listed strictly in alphabetical order."
-        }
-      }
-    ]
-  })}></script>
-
-  <main style="max-width: 1140px; margin: 1.5rem auto 4rem auto; padding: 0 1.5rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #0f172a;">
+  <main style="max-width: 1140px; margin: 1.5rem auto 4rem auto; padding: 0 1rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #0f172a; box-sizing: border-box; overflow-x: hidden;">
     
-    <!-- Navigation Breadcrumbs -->
+    <!-- Validated 2-Tier Breadcrumb Navigation -->
     <nav style="font-size: 0.85rem; color: #475569; margin-bottom: 1.25rem;">
       <a href="/" style="color: #0284c7; text-decoration: none; font-weight: 600;">Home</a> &rsaquo; 
-      <span style="color: #64748b;"> General &amp; Analytical Chemistry</span> &rsaquo; 
-      <span style="color: #0f172a; font-weight: 700;">Molar Mass &amp; Elemental Composition</span>
+      <span style="color: #0f172a; font-weight: 700;">Molar Mass Studio</span>
     </nav>
 
     <!-- Header Hero Card -->
-    <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 16px; padding: 2rem; margin-bottom: 2rem; color: #ffffff; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.15);">
+    <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 16px; padding: clamp(1.25rem, 3vw, 2rem); margin-bottom: 1.75rem; color: #ffffff; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.15);">
       <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.5rem;">
         <div style="max-width: 760px;">
           <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); padding: 0.3rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem;">
             <span>IUPAC CIAAW Atomic Weight Core &bull; Recursive Parser</span>
           </div>
-          <h1 style="font-size: 2.35rem; font-weight: 800; color: #ffffff; letter-spacing: -0.025em; margin: 0; line-height: 1.2;">
+          <h1 style="font-size: clamp(1.6rem, 4vw, 2.35rem); font-weight: 800; color: #ffffff; letter-spacing: -0.025em; margin: 0; line-height: 1.2;">
             Molar Mass &amp; Elemental Composition Studio
           </h1>
           <p style="color: #cbd5e1; font-size: 1rem; margin-top: 0.65rem; margin-bottom: 0; line-height: 1.6;">
@@ -102,18 +192,33 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </p>
         </div>
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-          <button id="btnResetDefault" type="button" style="background: #334155; border: 1px solid #475569; color: #f8fafc; padding: 0.65rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700;">
+          <button id="btnResetDefault" type="button" style="background: #334155; border: 1px solid #475569; color: #f8fafc; padding: 0.65rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; min-height: 38px;">
             Reset
           </button>
-          <button id="btnShareUrl" type="button" style="background: #0284c7; border: none; color: white; padding: 0.65rem 1.15rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 0.4rem;">
+          <button id="btnShareUrl" type="button" style="background: #0284c7; border: none; color: white; padding: 0.65rem 1.15rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 0.4rem; min-height: 38px;">
             <span>Share Formula</span>
           </button>
-          <button id="btnExportCsv" type="button" style="background: #334155; border: 1px solid #475569; color: white; padding: 0.65rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700;">
+          <button id="btnExportCsv" type="button" style="background: #334155; border: 1px solid #475569; color: white; padding: 0.65rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; min-height: 38px;">
             CSV
           </button>
         </div>
       </div>
+
+      <!-- AuthorCard / E-E-A-T Component -->
+      <div style="margin-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.25rem;">
+        <AuthorCard />
+      </div>
     </div>
+
+    <!-- DIRECT DEFINITION & GEO SUMMARY CALLOUT BOX -->
+    <section style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-left: 5px solid #0284c7; border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 1.75rem;">
+      <h2 style="font-size: 1rem; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.04em; margin: 0 0 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+        <span>💡</span> What is Molar Mass? (Direct Answer)
+      </h2>
+      <p style="font-size: 0.92rem; color: #334155; margin: 0; line-height: 1.6;">
+        <strong>Molar mass (M)</strong> is the mass of one mole of a chemical substance, expressed in grams per mole: <code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">g/mol</code>. It equals the sum of standard atomic weights across all constituent atoms: <code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">M = &Sigma;(N &middot; A_r)</code>. It connects sample mass (m) to molar amount (n) via <code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">n = m / M</code>.
+      </p>
+    </section>
 
     <!-- QUICK PRESET PILLS CAROUSEL (TARGETING HIGH-VOLUME BENCHMARKS) -->
     <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
@@ -123,7 +228,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;" id="presetPillsGroup">
         <button type="button" class="preset-pill" data-formula="H2O" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Water (H₂O)</button>
         <button type="button" class="preset-pill" data-formula="NaCl" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">NaCl</button>
-        <button type="button" class="preset-pill" data-formula="C6H12O6" style="background: #0284c7; border: 1px solid #0284c7; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #ffffff;">Glucose (C₆H₁₂O₆)</button>
+        <button type="button" class="preset-pill active" data-formula="C6H12O6" style="background: #0284c7; border: 1px solid #0284c7; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #ffffff;">Glucose (C₆H₁₂O₆)</button>
         <button type="button" class="preset-pill" data-formula="H2SO4" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Sulfuric Acid (H₂SO₄)</button>
         <button type="button" class="preset-pill" data-formula="CuSO4·5H2O" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">CuSO₄·5H₂O</button>
         <button type="button" class="preset-pill" data-formula="C8H10N4O2" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Caffeine</button>
@@ -133,14 +238,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </div>
 
     <!-- MAIN TWO-COLUMN WORKBENCH -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 2rem; margin-bottom: 2.5rem;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 2rem; margin-bottom: 2.5rem;">
       
       <!-- LEFT COLUMN: Formula Input & Two-Way Mass <-> Mole Converter -->
-      <div style="display: flex; direction: column; flex-direction: column; gap: 1.5rem;">
+      <div style="display: flex; flex-direction: column; gap: 1.5rem; min-width: 0;">
         
         <!-- Formula Input Card -->
-        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 1.75rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);">
-          <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.4rem;">
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: clamp(1rem, 3vw, 1.75rem); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); min-width: 0;">
+          <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.4rem; flex-wrap: wrap; gap: 0.25rem;">
             <label for="inpFormula" style="font-size: 0.82rem; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.05em;">
               Enter Chemical Formula:
             </label>
@@ -159,14 +264,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
           <div id="parseAlert" style="display: none; margin-top: 0.75rem; padding: 0.6rem 0.85rem; border-radius: 6px; background: #fef2f2; border: 1px solid #fecaca; color: #b91c1c; font-size: 0.8rem; font-weight: 600;"></div>
 
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.85rem; font-size: 0.78rem; color: #64748b; font-weight: 600;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.85rem; font-size: 0.78rem; color: #64748b; font-weight: 600; flex-wrap: wrap; gap: 0.25rem;">
             <span>Standard Hill Notation: <strong id="lblHillFormula" style="color: #0f172a; font-family: monospace;">C6H12O6</strong></span>
             <span>Total Atoms: <strong id="lblTotalAtoms" style="color: #0284c7; font-family: monospace;">24</strong></span>
           </div>
         </div>
 
         <!-- Two-Way Mass <-> Moles <-> Molecule Count Converter -->
-        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 1.75rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);">
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: clamp(1rem, 3vw, 1.75rem); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); min-width: 0;">
           <div style="border-bottom: 2px solid #f1f5f9; padding-bottom: 0.65rem; margin-bottom: 1.25rem;">
             <h2 style="font-size: 0.95rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #0f172a; margin: 0;">
               Two-Way Mass &harr; Moles &harr; Molecules Bridge
@@ -209,7 +314,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             <div style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: #64748b;">
               Total Number of Molecules (N = n &times; N_A)
             </div>
-            <div id="lblMoleculesDisplay" style="font-size: 1.15rem; font-weight: 900; color: #0284c7; font-family: monospace; margin-top: 0.25rem;">
+            <div id="lblMoleculesDisplay" style="font-size: 1.15rem; font-weight: 900; color: #0284c7; font-family: monospace; margin-top: 0.25rem; word-break: break-all;">
               3.343 &times; 10²² molecules
             </div>
           </div>
@@ -219,12 +324,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
 
       <!-- RIGHT COLUMN: Molar Mass HUD & Elemental Composition Table -->
-      <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+      <div style="display: flex; flex-direction: column; gap: 1.5rem; min-width: 0;">
         
         <!-- Primary Output HUD Card -->
-        <div style="background: #0f172a; border-radius: 14px; padding: 1.75rem 2rem; color: #ffffff; box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.3); border: 1px solid #334155;">
+        <div style="background: #0f172a; border-radius: 14px; padding: clamp(1.25rem, 3vw, 1.75rem); color: #ffffff; box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.3); border: 1px solid #334155; min-width: 0;">
           
-          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+          <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.4rem;">
             <span style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #38bdf8;">
               Standard Molar Mass
             </span>
@@ -233,7 +338,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             </span>
           </div>
 
-          <div id="dispMolarMass" style="font-size: 3rem; font-weight: 900; color: #38bdf8; margin: 0.5rem 0; font-family: ui-monospace, monospace; line-height: 1.1;">
+          <div id="dispMolarMass" style="font-size: clamp(2rem, 5vw, 3rem); font-weight: 900; color: #38bdf8; margin: 0.5rem 0; font-family: ui-monospace, monospace; line-height: 1.1; word-break: break-all;">
             180.156 <span style="font-size: 1.45rem; color: #94a3b8; font-weight: 700;">g/mol</span>
           </div>
 
@@ -254,13 +359,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
 
         <!-- Detailed Elemental Table Card -->
-        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);">
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: clamp(1rem, 3vw, 1.5rem); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); min-width: 0;">
           <div style="font-size: 0.88rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #0f172a; margin-bottom: 0.85rem;">
             Elemental Breakdown &amp; Mass Fractions
           </div>
 
           <div style="border: 1px solid #e2e8f0; border-radius: 8px; overflow-x: auto;">
-            <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left;">
+            <table style="width: 100%; min-width: 480px; border-collapse: collapse; font-size: 0.85rem; text-align: left;">
               <thead style="background: #f8fafc; border-bottom: 1px solid #cbd5e1;">
                 <tr>
                   <th style="padding: 0.55rem 0.75rem; color: #0f172a; font-weight: 700;">Element</th>
@@ -280,9 +385,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.25rem; border-top: 1px solid #f1f5f9; padding-top: 1rem;">
             <span style="font-size: 0.78rem; font-weight: 800; text-transform: uppercase; color: #475569;">Export Options:</span>
             <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
-              <button id="btnCopyHomework" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.3rem 0.6rem; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #334155;">Copy Steps</button>
-              <button id="btnCopyLatex" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.3rem 0.6rem; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #334155;">LaTeX</button>
-              <button id="toggleCiteBtn" type="button" style="background: #e0f2fe; border: 1px solid #7dd3fc; padding: 0.3rem 0.65rem; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #0369a1;">Cite</button>
+              <button id="btnCopyHomework" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.3rem 0.6rem; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #334155; min-height: 30px;">Copy Steps</button>
+              <button id="btnCopyLatex" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.3rem 0.6rem; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #334155; min-height: 30px;">LaTeX</button>
+              <button id="toggleCiteBtn" type="button" style="background: #e0f2fe; border: 1px solid #7dd3fc; padding: 0.3rem 0.65rem; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #0369a1; min-height: 30px;">Cite</button>
             </div>
           </div>
 
@@ -311,18 +416,18 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <!-- EDITORIAL & METHODOLOGICAL KNOWLEDGE SECTION (E-E-A-T) -->
     <article style="border-top: 1px solid #e2e8f0; padding-top: 3.5rem; line-height: 1.85; color: #334155;">
       
-      <h2 style="font-size: 1.85rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem; letter-spacing: -0.02em;">
+      <h2 style="font-size: clamp(1.4rem, 3.5vw, 1.85rem); font-weight: 800; color: #0f172a; margin-bottom: 1rem; letter-spacing: -0.02em; line-height: 1.3;">
         Theoretical Foundations: Molar Mass, Molecular Weight &amp; Mass Conservation
       </h2>
       <p>
         In quantitative chemistry, <strong>molar mass</strong> represents the fundamental bridge connecting the macroscopic world of weighed benchtop grams to the microscopic domain of discrete chemical entities (atoms, molecules, and ions). Expressed in grams per mole (g/mol), it is mathematically defined as:
       </p>
 
-      <div style="background: #f8fafc; border-left: 4px solid #0284c7; padding: 1rem 1.25rem; margin: 1.25rem 0; font-family: ui-monospace, monospace; font-size: 1.15rem; font-weight: 800; color: #0f172a;">
-        M = &Sigma; ( N &times; A_r ) &nbsp; [g/mol]
+      <div style="background: #f8fafc; border-left: 4px solid #0284c7; padding: 1rem 1.25rem; margin: 1.25rem 0; font-family: ui-monospace, monospace; font-size: 1.15rem; font-weight: 800; color: #0f172a; overflow-x: auto;">
+        <span>M = &Sigma; ( N &times; A_r ) &nbsp; [g/mol]</span>
       </div>
       <p>
-        where N denotes the stoichiometric atom count of each element in the chemical formula, and A_r is the standard relative atomic weight established by the IUPAC Commission on Isotopic Abundances and Atomic Weights (CIAAW).
+        where <em>N</em> denotes the stoichiometric atom count of each element in the chemical formula, and <em>A_r</em> is the standard relative atomic weight established by the IUPAC Commission on Isotopic Abundances and Atomic Weights (CIAAW).
       </p>
 
       <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
@@ -348,26 +453,99 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </p>
 
         <p style="margin: 0 0 0.4rem; font-weight: 700; color: #0f172a;">Step 1: Atom Inventory Decomposition</p>
-        <p style="margin: 0 0 0.75rem; font-size: 0.92rem; color: #475569; font-family: monospace;">
-          &bull; Copper (Cu): 1 atom &times; 63.546 g/mol = 63.546 g/mol<br />
-          &bull; Sulfur (S): 1 atom &times; 32.060 g/mol = 32.060 g/mol<br />
-          &bull; Oxygen (O): (4 from SO₄ + 5 from 5H₂O) = 9 atoms &times; 15.999 g/mol = 143.991 g/mol<br />
-          &bull; Hydrogen (H): (5 &times; 2 from 5H₂O) = 10 atoms &times; 1.008 g/mol = 10.080 g/mol
-        </p>
+        <div style="margin: 0 0 0.75rem; font-size: 0.92rem; color: #475569; font-family: monospace; line-height: 1.6;">
+          <span>&bull; Copper (Cu): 1 atom &times; 63.546 g/mol = 63.546 g/mol</span><br />
+          <span>&bull; Sulfur (S): 1 atom &times; 32.060 g/mol = 32.060 g/mol</span><br />
+          <span>&bull; Oxygen (O): (4 from SO₄ + 5 from 5H₂O) = 9 atoms &times; 15.999 g/mol = 143.991 g/mol</span><br />
+          <span>&bull; Hydrogen (H): (5 &times; 2 from 5H₂O) = 10 atoms &times; 1.008 g/mol = 10.080 g/mol</span>
+        </div>
 
         <p style="margin: 0 0 0.4rem; font-weight: 700; color: #0f172a;">Step 2: Total Molecular Weight Summation</p>
-        <p style="margin: 0 0 0.75rem; font-size: 0.92rem; color: #475569; font-family: monospace;">
-          Total Molar Mass = 63.546 + 32.060 + 143.991 + 10.080 = <strong>249.677 g/mol</strong>
-        </p>
+        <div style="margin: 0 0 0.75rem; font-size: 0.92rem; color: #475569; font-family: monospace; line-height: 1.6;">
+          <span>Total Molar Mass = 63.546 + 32.060 + 143.991 + 10.080 = <strong>249.677 g/mol</strong></span>
+        </div>
 
         <p style="margin: 0 0 0.4rem; font-weight: 700; color: #0f172a;">Step 3: Hydration Mass Fraction</p>
-        <p style="margin: 0 0 0.75rem; font-size: 0.92rem; color: #475569; font-family: monospace;">
-          Water Mass = 5 &times; (2 &times; 1.008 + 15.999) = 90.075 g/mol<br />
-          Water Fraction (%) = (90.075 / 249.677) &times; 100% = <strong>36.08%</strong>
-        </p>
+        <div style="margin: 0 0 0.75rem; font-size: 0.92rem; color: #475569; font-family: monospace; line-height: 1.6;">
+          <span>Water Mass = 5 &times; (2 &times; 1.008 + 15.999) = 90.075 g/mol</span><br />
+          <span>Water Fraction (%) = (90.075 / 249.677) &times; 100% = <strong>36.08%</strong></span>
+        </div>
         <p style="margin: 0; font-size: 0.92rem; color: #059669; font-weight: 700;">
           Laboratory Context: Accounting for this 36.08% water fraction is mandatory when preparing molar standard solutions.
         </p>
+      </div>
+
+      <!-- IUPAC CIAAW STANDARD ATOMIC WEIGHTS & BENCHMARK MATRIX TABLE -->
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2.75rem; margin-bottom: 0.75rem;">
+        3. IUPAC CIAAW Standard Reference Compounds &amp; Molecular Weights
+      </h3>
+      <p style="font-size: 0.9rem; color: #475569; margin-bottom: 1rem;">
+        Primary empirical benchmarks evaluated against IUPAC standard atomic weights (CIAAW 2026):
+      </p>
+
+      <div style="border: 1px solid #cbd5e1; border-radius: 8px; overflow-x: auto; margin-bottom: 2rem;">
+        <table style="width: 100%; min-width: 650px; border-collapse: collapse; font-size: 0.85rem; text-align: left; background: #ffffff;">
+          <thead style="background: #0f172a; color: white;">
+            <tr>
+              <th style="padding: 0.65rem 0.75rem; border: 1px solid #334155;">Compound Name</th>
+              <th style="padding: 0.65rem 0.75rem; border: 1px solid #334155;">Hill System Formula</th>
+              <th style="padding: 0.65rem 0.75rem; border: 1px solid #334155;">CAS Number</th>
+              <th style="padding: 0.65rem 0.75rem; border: 1px solid #334155;">Exact Molar Mass (g/mol)</th>
+              <th style="padding: 0.65rem 0.75rem; border: 1px solid #334155;">Dominant Mass Fraction</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Deionized Water</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">H₂O</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">7732-18-5</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; font-weight: 700; color: #0284c7;">18.015</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">88.81% Oxygen</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Sodium Chloride</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">ClNa</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">7647-14-5</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; font-weight: 700; color: #0284c7;">58.443</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">60.66% Chlorine</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">D-Glucose (Dextrose)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">C₆H₁₂O₆</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">50-99-7</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; font-weight: 700; color: #0284c7;">180.156</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">53.29% Oxygen</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Sulfuric Acid</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">H₂O₄S</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">7664-93-9</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; font-weight: 700; color: #0284c7;">98.072</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">65.25% Oxygen</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Caffeine</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">C₈H₁₀N₄O₂</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">58-08-2</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; font-weight: 700; color: #0284c7;">194.191</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">49.48% Carbon</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Acetylsalicylic Acid (Aspirin)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">C₉H₈O₄</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">50-78-2</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; font-weight: 700; color: #0284c7;">180.158</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">60.00% Carbon</td>
+            </tr>
+            <tr>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Copper Sulfate Pentahydrate</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">CuH₁₀O₉S</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">7758-99-8</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; font-weight: 700; color: #0284c7;">249.677</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">36.08% Water (H₂O)</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
       <!-- FAQ Accordion (5 Search-Optimized Questions) -->
@@ -419,7 +597,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <h3 style="margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 0.5rem;">
         <span>🔗</span> Upstream &amp; Downstream Quantitative Studios
       </h3>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 1rem;">
         <a href="/stoichiometry" style="display: block; padding: 1rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
           <div style="font-weight: 700; font-size: 0.92rem; color: #e11d48; margin-bottom: 0.35rem;">Stoichiometry &amp; Reaction Yield &rarr;</div>
           <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">
