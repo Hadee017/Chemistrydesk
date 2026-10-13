@@ -1,101 +1,191 @@
 ---
+// src/pages/electron-configuration.astro
 import BaseLayout from '../layouts/BaseLayout.astro';
+import AuthorCard from '../components/AuthorCard.astro';
+
+const pageTitle = "Electron Configuration Calculator | Orbital Notation, Quantum Numbers & Hund's Rule | ChemistryDesk";
+const pageDescription = "Universal electron configuration studio. Generate full and noble gas configurations, interactive Hund's rule orbital box diagrams, quantum numbers, Slater's Zeff, and ionization energies.";
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://chemistrycal.com';
+const canonicalUrl = `${siteUrl}/electron-configuration`;
+
+const schemaData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      "url": siteUrl,
+      "name": "ChemistryDesk",
+      "description": "Precision Scientific Utilities & Computational Laboratory Engines",
+      "inLanguage": "en-US"
+    },
+    {
+      "@type": "WebPage",
+      "@id": `${canonicalUrl}#webpage`,
+      "url": canonicalUrl,
+      "name": pageTitle,
+      "isPartOf": { "@id": `${siteUrl}/#website` },
+      "description": pageDescription,
+      "inLanguage": "en-US",
+      "author": { "@id": `${siteUrl}/#author` }
+    },
+    {
+      "@type": "Person",
+      "@id": `${siteUrl}/#author`,
+      "name": "Bilal Khan",
+      "jobTitle": "Physical & Materials Chemistry Researcher",
+      "description": "Specialist in porous coordination polymers, heterogeneous adsorption kinetics, and computational chemical physics.",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q141699332",
+        "https://orcid.org/0009-0006-3082-7043",
+        "https://www.linkedin.com/in/bilal-khan-bbb259248",
+        "https://doi.org/10.5281/zenodo.23059466",
+        "https://github.com/Hadee017",
+        "https://about.me/bilalkhan01",
+        "https://www.behance.net/bilalkhan"
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${canonicalUrl}#breadcrumb`,
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": siteUrl
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Electron Configuration Studio",
+          "item": canonicalUrl
+        }
+      ]
+    },
+    {
+      "@type": "WebApplication",
+      "@id": `${canonicalUrl}#software`,
+      "name": "ChemistryDesk Electron Configuration & Orbital Physics Studio",
+      "url": canonicalUrl,
+      "applicationCategory": "EducationalApplication, ScientificApplication",
+      "operatingSystem": "All modern web browsers",
+      "browserRequirements": "Requires JavaScript. Runs 100% offline via Service Worker.",
+      "description": pageDescription,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "creator": { "@id": `${siteUrl}/#author` },
+      "featureList": [
+        "Dynamic SVG Hund's Rule Orbital Box Diagrams with Spin Arrows",
+        "Full and Noble Gas Condensed Shorthand Electron Configurations",
+        "Cation and Anion Ionization Engine with Outer-Shell-First Stripping",
+        "The 4 Quantum Numbers (n, l, ml, ms) for Differentiating Electrons",
+        "Slater's Rules Effective Nuclear Charge (Zeff) and Screening Constant (S)",
+        "Thermodynamic Periodic Trends: IE1-IE3, Electron Affinity, and Electronegativity",
+        "Ground-State Spectroscopic Term Symbols and Crystal Lattice Classifications",
+        "1-Click LaTeX Block, Plain-Text Homework Steps, and CSV Export",
+        "Integrated academic citation drawer (BibTeX, ACS, RSC, Nature)"
+      ]
+    },
+    {
+      "@type": "HowTo",
+      "@id": `${canonicalUrl}#howto`,
+      "name": "How to Determine Electron Configuration and Orbital Diagrams",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "name": "Determine Total Electron Count",
+          "text": "Identify the element's atomic number (Z) and adjust for formal charge (subtracting electrons for cations, adding electrons for anions)."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Apply the Aufbau (Madelung) Filling Sequence",
+          "text": "Fill orbitals in order of increasing (n + l) energy: 1s, 2s, 2p, 3s, 3p, 4s, 3d, 4p, 5s, etc."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Account for Experimental Half- and Full-Subshell Exceptions",
+          "text": "Adjust for quantum exchange energy stability anomalies (such as Chromium [Ar] 3d5 4s1 and Copper [Ar] 3d10 4s1)."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Apply Hund's Rule and Pauli Exclusion in Orbital Boxes",
+          "text": "Populate degenerate spatial orbitals singly with parallel spins (+1/2) before pairing with opposite antiparallel spins (-1/2)."
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${canonicalUrl}#faq`,
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Why do transition metal cations lose 4s electrons before 3d electrons?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Although the 4s subshell is filled before 3d in neutral atoms according to the Aufbau principle, once the 3d orbitals contain electrons, interelectronic repulsion causes the 3d orbitals to drop lower in energy than 4s. Therefore, during ionization, electrons are always removed from the outermost principal quantum shell (n=4) first."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What causes Aufbau ground-state anomalies in Chromium and Copper?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Chromium ([Ar] 3d5 4s1) and Copper ([Ar] 3d10 4s1) promote an electron from 4s to 3d because exactly half-filled (d5) and completely filled (d10) subshells possess maximum quantum mechanical exchange energy and spherical electronic symmetry, which overcomes the energetic cost of promotion."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does Hund's Rule govern orbital filling?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Hund's Rule of Maximum Multiplicity dictates that when filling degenerate orbitals of equal energy (such as px, py, pz), electrons must occupy each orbital singly with parallel spins (+1/2) before pairing with opposite spins (-1/2) to minimize interelectronic electrostatic repulsion."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How is effective nuclear charge (Zeff) calculated using Slater's Rules?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Slater's Rules calculate the shielding constant (S) by grouping orbitals into (1s), (2s,2p), (3s,3p), (3d), etc. Electrons in the same group contribute 0.35 each, electrons in the (n-1) shell contribute 0.85 each, and electrons in deeper shells contribute 1.00 each. The effective nuclear charge is then determined by Zeff = Z - S."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the difference between paramagnetic and diamagnetic species?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A species is paramagnetic if it possesses one or more unpaired electrons, creating a net magnetic dipole moment that is weakly attracted into external magnetic fields. A species is diamagnetic if all electrons are completely paired in opposite spins, causing it to be weakly repelled by magnetic fields."
+          }
+        }
+      ]
+    }
+  ]
+};
 ---
 
-<BaseLayout
-  title="Electron Configuration Calculator | Orbital Notation, Quantum Numbers & Hund's Rule | ChemistryDesk"
-  description="Universal electron configuration studio. Generate full and noble gas configurations, interactive Hund's rule orbital box diagrams, quantum numbers, Slater's Zeff, and ionization energies."
->
-  <!-- Schema: WebApplication -->
-  <script is:inline type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "ChemistryDesk Electron Configuration & Orbital Physics Studio",
-    "applicationCategory": "EducationalApplication",
-    "operatingSystem": "All",
-    "browserRequirements": "Requires JavaScript",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    },
-    "featureList": [
-      "Dynamic SVG Hund's Rule Orbital Box Diagrams with Spin Arrows",
-      "Full and Noble Gas Condensed Shorthand Electron Configurations",
-      "Cation and Anion Ionization Engine with Outer-Shell-First Stripping",
-      "The 4 Quantum Numbers (n, l, ml, ms) for Differentiating Electrons",
-      "Slater's Rules Effective Nuclear Charge (Zeff) and Screening Constant (S)",
-      "Thermodynamic Periodic Trends: IE1-IE3, Electron Affinity, and Electronegativity",
-      "Ground-State Spectroscopic Term Symbols and Crystal Lattice Classifications",
-      "1-Click LaTeX Block, Plain-Text Homework Steps, and CSV Export"
-    ]
-  })}></script>
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(schemaData)}></script>
 
-  <!-- Schema: FAQPage -->
-  <script is:inline type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "Why do transition metal cations lose 4s electrons before 3d electrons?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Although the 4s subshell is filled before 3d in neutral atoms according to the Aufbau principle, once the 3d orbitals contain electrons, interelectronic repulsion causes the 3d orbitals to drop lower in energy than 4s. Therefore, during ionization, electrons are always removed from the outermost principal quantum shell (n=4) first."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "What causes Aufbau ground-state anomalies in Chromium and Copper?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Chromium ([Ar] 3d5 4s1) and Copper ([Ar] 3d10 4s1) promote an electron from 4s to 3d because exactly half-filled (d5) and completely filled (d10) subshells possess maximum quantum mechanical exchange energy and spherical electronic symmetry, which overcomes the energetic cost of promotion."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "How does Hund's Rule govern orbital filling?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Hund's Rule of Maximum Multiplicity dictates that when filling degenerate orbitals of equal energy (such as px, py, pz), electrons must occupy each orbital singly with parallel spins (+1/2) before pairing with opposite spins (-1/2) to minimize interelectronic electrostatic repulsion."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "How is effective nuclear charge (Zeff) calculated using Slater's Rules?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Slater's Rules calculate the shielding constant (S) by grouping orbitals into (1s), (2s,2p), (3s,3p), (3d), etc. Electrons in the same group contribute 0.35 each, electrons in the (n-1) shell contribute 0.85 each, and electrons in deeper shells contribute 1.00 each. The effective nuclear charge is then determined by Zeff = Z - S."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "What is the difference between paramagnetic and diamagnetic species?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "A species is paramagnetic if it possesses one or more unpaired electrons, creating a net magnetic dipole moment that is weakly attracted into external magnetic fields. A species is diamagnetic if all electrons are completely paired in opposite spins, causing it to be weakly repelled by magnetic fields."
-        }
-      }
-    ]
-  })}></script>
-
-  <main style="max-width: 1140px; margin: 1.5rem auto 4rem auto; padding: 0 1.5rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #0f172a;">
+  <main style="max-width: 1140px; margin: 1.5rem auto 4rem auto; padding: 0 1rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #0f172a; box-sizing: border-box; overflow-x: hidden;">
     
-    <!-- Navigation Breadcrumbs -->
+    <!-- Validated 2-Tier Breadcrumb Navigation -->
     <nav style="font-size: 0.85rem; color: #475569; margin-bottom: 1.25rem;">
       <a href="/" style="color: #0284c7; text-decoration: none; font-weight: 600;">Home</a> &rsaquo; 
-      <span style="color: #64748b;"> Atomic &amp; Quantum Physics</span> &rsaquo; 
       <span style="color: #0f172a; font-weight: 700;">Electron Configuration Studio</span>
     </nav>
 
     <!-- Header Hero Card -->
-    <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 16px; padding: 2rem; margin-bottom: 2rem; color: #ffffff; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.15);">
+    <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 16px; padding: clamp(1.25rem, 3vw, 2rem); margin-bottom: 1.75rem; color: #ffffff; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.15);">
       <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.5rem;">
         <div style="max-width: 780px;">
           <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); padding: 0.3rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem;">
             <span>Quantum Mechanics &bull; IUPAC Aufbau Anomalies &bull; Slater's Z_eff</span>
           </div>
-          <h1 style="font-size: 2.35rem; font-weight: 800; color: #ffffff; letter-spacing: -0.025em; margin: 0; line-height: 1.2;">
+          <h1 style="font-size: clamp(1.6rem, 4vw, 2.35rem); font-weight: 800; color: #ffffff; letter-spacing: -0.025em; margin: 0; line-height: 1.2;">
             Electron Configuration Studio
           </h1>
           <p style="color: #cbd5e1; font-size: 1rem; margin-top: 0.65rem; margin-bottom: 0; line-height: 1.6;">
@@ -103,18 +193,33 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </p>
         </div>
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-          <button id="btnResetDefault" type="button" style="background: #334155; border: 1px solid #475569; color: #f8fafc; padding: 0.65rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700;">
+          <button id="btnResetDefault" type="button" style="background: #334155; border: 1px solid #475569; color: #f8fafc; padding: 0.65rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; min-height: 38px;">
             Reset
           </button>
-          <button id="btnShareUrl" type="button" style="background: #0284c7; border: none; color: white; padding: 0.65rem 1.15rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 0.4rem;">
+          <button id="btnShareUrl" type="button" style="background: #0284c7; border: none; color: white; padding: 0.65rem 1.15rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 0.4rem; min-height: 38px;">
             <span>Share Link</span>
           </button>
-          <button id="btnExportCsv" type="button" style="background: #334155; border: 1px solid #475569; color: white; padding: 0.65rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700;">
+          <button id="btnExportCsv" type="button" style="background: #334155; border: 1px solid #475569; color: white; padding: 0.65rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; min-height: 38px;">
             CSV
           </button>
         </div>
       </div>
+
+      <!-- AuthorCard / E-E-A-T Component -->
+      <div style="margin-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.25rem;">
+        <AuthorCard />
+      </div>
     </div>
+
+    <!-- DIRECT DEFINITION & GEO SUMMARY CALLOUT BOX -->
+    <section style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-left: 5px solid #0284c7; border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 1.75rem;">
+      <h2 style="font-size: 1rem; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.04em; margin: 0 0 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+        <span>💡</span> What is an Electron Configuration? (Direct Answer)
+      </h2>
+      <p style="font-size: 0.92rem; color: #334155; margin: 0; line-height: 1.6;">
+        An <strong>electron configuration</strong> describes the distribution of electrons across atomic orbitals in an atom or ion. Governing laws include the <strong>Aufbau principle</strong> (<code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">n + l</code> energy filling sequence), the <strong>Pauli exclusion principle</strong> (maximum 2 antiparallel electrons per spatial orbital), and <strong>Hund's rule</strong> (degenerate orbitals fill singly with parallel spins first).
+      </p>
+    </section>
 
     <!-- QUICK PRESET PILLS CAROUSEL (HIGH-VOLUME EXAM & ANOMALOUS SPECIES) -->
     <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
@@ -134,16 +239,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </div>
 
     <!-- MAIN TWO-COLUMN WORKBENCH -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 2rem; margin-bottom: 2.5rem;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 2rem; margin-bottom: 2.5rem;">
       
       <!-- LEFT COLUMN: User Controls & Input Form -->
-      <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+      <div style="display: flex; flex-direction: column; gap: 1.5rem; min-width: 0;">
         
         <!-- CARD: Input Entity & Charge Modifiers -->
-        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 1.75rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);">
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: clamp(1rem, 3vw, 1.75rem); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); min-width: 0;">
           
           <div style="margin-bottom: 1.25rem;">
-            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.4rem;">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.4rem; flex-wrap: wrap; gap: 0.25rem;">
               <label for="inpElementQuery" style="font-size: 0.82rem; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.05em;">
                 Enter Chemical Symbol, Name, or Z:
               </label>
@@ -162,7 +267,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
           <!-- Ionization Charge Slider & Stepper -->
           <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.25rem;">
               <span style="font-size: 0.78rem; font-weight: 800; color: #334155; text-transform: uppercase;">
                 Ionization Charge State:
               </span>
@@ -171,11 +276,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
               </span>
             </div>
             <div style="display: flex; align-items: center; gap: 0.75rem;">
-              <button id="btnChargeMinus" type="button" style="width: 32px; height: 32px; border-radius: 6px; border: 1px solid #cbd5e1; background: #fff; font-size: 1.1rem; font-weight: 800; cursor: pointer; color: #334155;">&minus;</button>
+              <button id="btnChargeMinus" type="button" style="width: 32px; height: 32px; border-radius: 6px; border: 1px solid #cbd5e1; background: #fff; font-size: 1.1rem; font-weight: 800; cursor: pointer; color: #334155; min-width: 32px;">&minus;</button>
               <input type="range" id="rngCharge" min="-4" max="7" value="0" style="flex: 1; cursor: pointer;" />
-              <button id="btnChargePlus" type="button" style="width: 32px; height: 32px; border-radius: 6px; border: 1px solid #cbd5e1; background: #fff; font-size: 1.1rem; font-weight: 800; cursor: pointer; color: #334155;">+</button>
+              <button id="btnChargePlus" type="button" style="width: 32px; height: 32px; border-radius: 6px; border: 1px solid #cbd5e1; background: #fff; font-size: 1.1rem; font-weight: 800; cursor: pointer; color: #334155; min-width: 32px;">+</button>
             </div>
-            <div style="display: flex; justify-content: space-between; font-size: 0.68rem; color: #94a3b8; font-weight: 600; margin-top: 0.4rem;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.68rem; color: #94a3b8; font-weight: 600; margin-top: 0.4rem; overflow-x: auto;">
               <span>-4 (Anion)</span>
               <span>0 (Neutral)</span>
               <span>+7 (High Cation)</span>
@@ -185,7 +290,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <div id="elementAlert" style="display: none; padding: 0.6rem 0.85rem; border-radius: 6px; background: #fef2f2; border: 1px solid #fecaca; color: #b91c1c; font-size: 0.8rem; font-weight: 600; margin-bottom: 1rem;"></div>
 
           <!-- Quick Metadata Badges -->
-          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.65rem; font-size: 0.8rem;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.65rem; font-size: 0.8rem;">
             <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.5rem 0.75rem;">
               <span style="color: #64748b; font-size: 0.7rem; font-weight: 700; text-transform: uppercase;">Element Block</span>
               <div id="dispMetaBlock" style="font-weight: 800; color: #0f172a;">d-block Transition</div>
@@ -207,7 +312,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
 
         <!-- CARD: The 4 Quantum Numbers of Differentiating Electron -->
-        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 1.75rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);">
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: clamp(1rem, 3vw, 1.75rem); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); min-width: 0;">
           <div style="border-bottom: 2px solid #f1f5f9; padding-bottom: 0.65rem; margin-bottom: 1.25rem;">
             <h2 style="font-size: 0.95rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #0f172a; margin: 0;">
               Valence Differentiating Quantum Set
@@ -215,7 +320,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             <span style="font-size: 0.76rem; color: #64748b;">Quantum coordinates (n, l, m<sub>l</sub>, m<sub>s</sub>) for the last entered electron</span>
           </div>
 
-          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; text-align: center;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(70px, 1fr)); gap: 0.5rem; text-align: center;">
             <div style="background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; padding: 0.75rem 0.25rem;">
               <div style="font-size: 0.7rem; font-weight: 700; color: #0369a1;">Principal (n)</div>
               <div id="qNumN" style="font-size: 1.45rem; font-weight: 900; color: #0284c7;">3</div>
@@ -240,7 +345,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
 
         <!-- CARD: Slater's Effective Nuclear Charge & Solid State -->
-        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 1.75rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);">
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: clamp(1rem, 3vw, 1.75rem); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); min-width: 0;">
           <div style="border-bottom: 2px solid #f1f5f9; padding-bottom: 0.65rem; margin-bottom: 1.25rem;">
             <h2 style="font-size: 0.95rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #0f172a; margin: 0;">
               Slater's Rules &amp; Solid State Physics
@@ -249,7 +354,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </div>
 
           <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; display: flex; justify-content: space-between; align-items: center;">
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.25rem;">
               <div>
                 <div style="font-size: 0.7rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Slater's Effective Charge (Z_eff)</div>
                 <div id="dispSlaterZeff" style="font-size: 1.15rem; font-weight: 800; color: #0f172a; font-family: monospace;">Z_eff = 6.25 (S = 19.75)</div>
@@ -257,7 +362,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
               <span style="font-size: 0.7rem; font-weight: 700; color: #0284c7; background: #e0f2fe; padding: 0.2rem 0.5rem; border-radius: 4px;">Z - S</span>
             </div>
 
-            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; display: flex; justify-content: space-between; align-items: center;">
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.25rem;">
               <div>
                 <div style="font-size: 0.7rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Ground Term Symbol</div>
                 <div id="dispTermSymbol" style="font-size: 1.15rem; font-weight: 800; color: #0f172a; font-family: monospace;">⁵D₄</div>
@@ -265,7 +370,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
               <span style="font-size: 0.7rem; font-weight: 700; color: #64748b;">²ˢ⁺¹L_J</span>
             </div>
 
-            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; display: flex; justify-content: space-between; align-items: center;">
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.25rem;">
               <div>
                 <div style="font-size: 0.7rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Elemental Crystal Lattice</div>
                 <div id="dispCrystalStructure" style="font-size: 0.9rem; font-weight: 800; color: #0f172a;">Body-Centered Cubic (BCC)</div>
@@ -278,16 +383,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
 
       <!-- RIGHT COLUMN: HUD Configurations, Dynamic SVG Hund Orbital Boxes & Trends -->
-      <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+      <div style="display: flex; flex-direction: column; gap: 1.5rem; min-width: 0;">
         
         <!-- Primary Output HUD Card -->
-        <div style="background: #0f172a; border-radius: 14px; padding: 1.75rem 2rem; color: #ffffff; box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.3); border: 1px solid #334155;">
+        <div style="background: #0f172a; border-radius: 14px; padding: clamp(1.25rem, 3vw, 1.75rem); color: #ffffff; box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.3); border: 1px solid #334155; min-width: 0;">
           
           <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.5rem;">
             <span style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #38bdf8;">
               Determined Configuration
             </span>
-            <div style="display: flex; gap: 0.4rem;">
+            <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
               <span id="badgeMagnetism" style="font-size: 0.72rem; font-weight: 800; padding: 2px 8px; border-radius: 9999px; background: #0284c7; color: #ffffff;">
                 Paramagnetic (4 Unpaired e⁻)
               </span>
@@ -302,7 +407,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             <div style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: #94a3b8; margin-bottom: 0.2rem;">
               Noble Gas Condensed Shorthand:
             </div>
-            <div id="dispHudNoble" style="font-size: 1.85rem; font-weight: 900; color: #38bdf8; font-family: ui-monospace, monospace; line-height: 1.2;">
+            <div id="dispHudNoble" style="font-size: clamp(1.4rem, 4vw, 1.85rem); font-weight: 900; color: #38bdf8; font-family: ui-monospace, monospace; line-height: 1.2; word-break: break-all;">
               [Ar] 3d⁶ 4s²
             </div>
           </div>
@@ -318,7 +423,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </div>
 
           <!-- Magnetic Moment & Unpaired Summary -->
-          <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid #334155; display: flex; justify-content: space-between; font-size: 0.8rem; color: #94a3b8; font-family: monospace;">
+          <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid #334155; display: flex; justify-content: space-between; font-size: 0.8rem; color: #94a3b8; font-family: monospace; flex-wrap: wrap; gap: 0.4rem;">
             <span>Spin-Only Moment: <strong id="dispMagneticMoment" style="color: #38bdf8;">4.90 BM</strong></span>
             <span>Total Unpaired e⁻: <strong id="dispUnpairedCount" style="color: #f8fafc;">4</strong></span>
           </div>
@@ -326,32 +431,32 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
 
         <!-- DYNAMIC SVG HUND'S RULE ORBITAL BOX DIAGRAM VIEWER -->
-        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem;">
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: clamp(1rem, 3vw, 1.5rem); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); min-width: 0;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem; flex-wrap: wrap; gap: 0.4rem;">
             <div>
               <div style="font-size: 0.88rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #0f172a;">
                 Dynamic Hund's Rule Orbital Boxes
               </div>
               <span style="font-size: 0.75rem; color: #64748b;">Subshells populated by degenerate m<sub>l</sub> spin states (&uarr;&darr;)</span>
             </div>
-            <button id="btnCopyOrbitalDiagram" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.65rem; border-radius: 5px; font-size: 0.72rem; font-weight: 700; cursor: pointer; color: #334155;">
+            <button id="btnCopyOrbitalDiagram" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.65rem; border-radius: 5px; font-size: 0.72rem; font-weight: 700; cursor: pointer; color: #334155; min-height: 28px;">
               Copy Diagram
             </button>
           </div>
 
           <!-- Dynamic Orbital Container -->
-          <div id="orbitalDiagramContainer" style="display: flex; flex-direction: column; gap: 0.85rem; max-height: 420px; overflow-y: auto; padding: 0.5rem; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
+          <div id="orbitalDiagramContainer" style="display: flex; flex-direction: column; gap: 0.85rem; max-height: 420px; overflow-y: auto; overflow-x: auto; padding: 0.5rem; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
             <!-- Dynamically populated subshell box rows -->
           </div>
         </div>
 
         <!-- CARD: Thermodynamic Ionization & Electron Affinity Trends -->
-        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);">
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: clamp(1rem, 3vw, 1.5rem); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); min-width: 0;">
           <div style="font-size: 0.88rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #0f172a; margin-bottom: 0.85rem;">
             Thermodynamics &amp; Periodic Metrics
           </div>
 
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.65rem; margin-bottom: 1rem;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 120px), 1fr)); gap: 0.65rem; margin-bottom: 1rem;">
             <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.6rem 0.75rem;">
               <span style="color: #64748b; font-size: 0.68rem; font-weight: 700; text-transform: uppercase;">1st IE (kJ/mol)</span>
               <div id="dispIE1" style="font-weight: 800; color: #0f172a; font-family: monospace;">762.5</div>
@@ -382,10 +487,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; border-top: 1px solid #f1f5f9; padding-top: 0.85rem;">
             <span style="font-size: 0.78rem; font-weight: 800; text-transform: uppercase; color: #475569;">Export Options:</span>
             <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
-              <button id="btnCopyResult" type="button" style="background: #0284c7; border: none; padding: 0.3rem 0.65rem; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff;">Copy Shorthand</button>
-              <button id="btnCopyHomework" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.3rem 0.6rem; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #334155;">Copy Steps</button>
-              <button id="btnCopyLatex" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.3rem 0.6rem; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #334155;">LaTeX</button>
-              <button id="toggleCiteBtn" type="button" style="background: #e0f2fe; border: 1px solid #7dd3fc; padding: 0.3rem 0.65rem; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #0369a1;">Cite</button>
+              <button id="btnCopyResult" type="button" style="background: #0284c7; border: none; padding: 0.3rem 0.65rem; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff; min-height: 30px;">Copy Shorthand</button>
+              <button id="btnCopyHomework" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.3rem 0.6rem; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #334155; min-height: 30px;">Copy Steps</button>
+              <button id="btnCopyLatex" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.3rem 0.6rem; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #334155; min-height: 30px;">LaTeX</button>
+              <button id="toggleCiteBtn" type="button" style="background: #e0f2fe; border: 1px solid #7dd3fc; padding: 0.3rem 0.65rem; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #0369a1; min-height: 30px;">Cite</button>
             </div>
           </div>
 
@@ -412,20 +517,20 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <!-- EDITORIAL & METHODOLOGICAL KNOWLEDGE SECTION (E-E-A-T) -->
     <article style="border-top: 1px solid #e2e8f0; padding-top: 3.5rem; line-height: 1.85; color: #334155;">
       
-      <h2 style="font-size: 1.85rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem; letter-spacing: -0.02em;">
+      <h2 style="font-size: clamp(1.4rem, 3.5vw, 1.85rem); font-weight: 800; color: #0f172a; margin-bottom: 1rem; letter-spacing: -0.02em; line-height: 1.3;">
         Theoretical Foundations: Atomic Orbitals &amp; Quantum Physics
       </h2>
       <p>
-        The electronic structure of an isolated atom describes the spatial and energetic distribution of its electrons within the electrostatic potential generated by the atomic nucleus. This distribution is dictated by quantum mechanics through the Schrödinger equation, yielding discrete quantum states characterized by four quantum numbers ($n, l, m_l, m_s$).
+        The electronic structure of an isolated atom describes the spatial and energetic distribution of its electrons within the electrostatic potential generated by the atomic nucleus. This distribution is dictated by quantum mechanics through the Schrödinger equation, yielding discrete quantum states characterized by four quantum numbers (<em>n, l, m_l, m_s</em>).
       </p>
 
       <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
         1. The Three Fundamental Principles of Ground-State Orbital Filling
       </h3>
       <ul style="margin: 0.5rem 0 1.5rem 1.5rem;">
-        <li><strong>Aufbau Principle (Madelung Rule):</strong> Electrons occupy subshells in order of increasing $(n + l)$ energy values ($1s &lt; 2s &lt; 2p &lt; 3s &lt; 3p &lt; 4s &lt; 3d \dots$). When two subshells have the same $(n + l)$ sum, the orbital with the lower principal quantum number $n$ fills first.</li>
-        <li><strong>Pauli Exclusion Principle:</strong> No two electrons in an atom can share the identical set of all four quantum numbers. Since a single spatial orbital is defined by $(n, l, m_l)$, each orbital can hold a maximum of two electrons, which must have antiparallel spins ($m_s = +1/2$ and $-1/2$).</li>
-        <li><strong>Hund's Rule of Maximum Multiplicity:</strong> Within a set of degenerate orbitals (orbitals possessing the identical energy, such as the three $p$ orbitals or five $d$ orbitals), electrons occupy each orbital singly with parallel spins before any pairing occurs, thereby minimizing Coulombic electron-electron repulsion.</li>
+        <li><strong>Aufbau Principle (Madelung Rule):</strong> Electrons occupy subshells in order of increasing <em>(n + l)</em> energy values (1s &lt; 2s &lt; 2p &lt; 3s &lt; 3p &lt; 4s &lt; 3d &hellip;). When two subshells have the same <em>(n + l)</em> sum, the orbital with the lower principal quantum number <em>n</em> fills first.</li>
+        <li><strong>Pauli Exclusion Principle:</strong> No two electrons in an atom can share the identical set of all four quantum numbers. Since a single spatial orbital is defined by <em>(n, l, m_l)</em>, each orbital can hold a maximum of two electrons, which must have antiparallel spins (<em>m_s = +1/2</em> and <em>-1/2</em>).</li>
+        <li><strong>Hund's Rule of Maximum Multiplicity:</strong> Within a set of degenerate orbitals (orbitals possessing identical energy, such as the three <em>p</em> orbitals or five <em>d</em> orbitals), electrons occupy each orbital singly with parallel spins before any pairing occurs, minimizing Coulombic repulsion.</li>
       </ul>
 
       <!-- Worked Benchmark Scenario -->
@@ -439,21 +544,108 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </p>
 
         <p style="margin: 0 0 0.4rem; font-weight: 700; color: #0f172a;">Step 1: Neutral Ground State (Fe, Z = 26)</p>
-        <p style="margin: 0 0 0.75rem; font-size: 0.92rem; color: #475569; font-family: monospace;">
-          Aufbau sequence: 1s² 2s² 2p⁶ 3s² 3p⁶ 4s² 3d⁶<br />
-          Noble Gas Shorthand: [Ar] 3d⁶ 4s²
-        </p>
+        <div style="margin: 0 0 0.75rem; font-size: 0.92rem; color: #475569; font-family: monospace; line-height: 1.6;">
+          <span>Aufbau sequence: 1s² 2s² 2p⁶ 3s² 3p⁶ 4s² 3d⁶</span><br />
+          <span>Noble Gas Shorthand: [Ar] 3d⁶ 4s²</span>
+        </div>
 
         <p style="margin: 0 0 0.4rem; font-weight: 700; color: #0f172a;">Step 2: Ionization to Fe²⁺ (Removal of 2 Electrons)</p>
-        <p style="margin: 0 0 0.75rem; font-size: 0.92rem; color: #475569; font-family: monospace;">
-          Common student error: Stripping from 3d to give [Ar] 3d⁴ 4s² (INCORRECT).<br />
-          Correct Rule: Electrons are removed from the highest principal quantum shell (n = 4) first.<br />
-          Two electrons are lost from 4s: 4s² &rarr; 4s⁰.
-        </p>
+        <div style="margin: 0 0 0.75rem; font-size: 0.92rem; color: #475569; font-family: monospace; line-height: 1.6;">
+          <span>Common student error: Stripping from 3d to give [Ar] 3d⁴ 4s² (INCORRECT).</span><br />
+          <span>Correct Rule: Electrons are removed from the highest principal quantum shell (n = 4) first.</span><br />
+          <span>Two electrons are lost from 4s: 4s² &rarr; 4s⁰.</span>
+        </div>
 
         <p style="margin: 0; font-size: 0.92rem; color: #059669; font-weight: 700;">
           Final Configuration: Fe²⁺ = [Ar] 3d⁶ (Paramagnetic, 4 unpaired electrons).
         </p>
+      </div>
+
+      <!-- IUPAC GROUND-STATE & AUFBAU ANOMALIES BENCHMARK TABLE -->
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2.75rem; margin-bottom: 0.75rem;">
+        3. IUPAC Ground-State Configurations &amp; Aufbau Stability Anomalies
+      </h3>
+      <p style="font-size: 0.9rem; color: #475569; margin-bottom: 1rem;">
+        Representative empirical ground-state benchmarks and subshell promotion anomalies evaluated against IUPAC standards:
+      </p>
+
+      <div style="border: 1px solid #cbd5e1; border-radius: 8px; overflow-x: auto; margin-bottom: 2rem;">
+        <table style="width: 100%; min-width: 650px; border-collapse: collapse; font-size: 0.85rem; text-align: left; background: #ffffff;">
+          <thead style="background: #0f172a; color: white;">
+            <tr>
+              <th style="padding: 0.65rem 0.75rem; border: 1px solid #334155;">Element Name</th>
+              <th style="padding: 0.65rem 0.75rem; border: 1px solid #334155;">Symbol &amp; Z</th>
+              <th style="padding: 0.65rem 0.75rem; border: 1px solid #334155;">Ground Shorthand Notation</th>
+              <th style="padding: 0.65rem 0.75rem; border: 1px solid #334155;">Unpaired e⁻ &amp; Magnetism</th>
+              <th style="padding: 0.65rem 0.75rem; border: 1px solid #334155;">Ground Term Symbol</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Hydrogen</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">H (Z = 1)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; font-weight: 700; color: #0284c7;">1s¹</td>
+              <td style="padding: 0.65rem 0.75rem;">1 (Paramagnetic)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">²S₁/₂</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Carbon</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">C (Z = 6)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; font-weight: 700; color: #0284c7;">[He] 2s² 2p²</td>
+              <td style="padding: 0.65rem 0.75rem;">2 (Paramagnetic)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">³P₀</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Oxygen</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">O (Z = 8)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; font-weight: 700; color: #0284c7;">[He] 2s² 2p⁴</td>
+              <td style="padding: 0.65rem 0.75rem;">2 (Paramagnetic)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">³P₂</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Chromium (Anomaly)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">Cr (Z = 24)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; font-weight: 700; color: #0284c7;">[Ar] 3d⁵ 4s¹</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #dc2626;">6 (Half-filled d-shell)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">⁷S₃</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Iron</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">Fe (Z = 26)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; font-weight: 700; color: #0284c7;">[Ar] 3d⁶ 4s²</td>
+              <td style="padding: 0.65rem 0.75rem;">4 (Paramagnetic)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">⁵D₄</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Copper (Anomaly)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">Cu (Z = 29)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; font-weight: 700; color: #0284c7;">[Ar] 3d¹⁰ 4s¹</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #dc2626;">1 (Full d-shell)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">²S₁/₂</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Palladium (Anomaly)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">Pd (Z = 46)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; font-weight: 700; color: #0284c7;">[Kr] 4d¹⁰ 5s⁰</td>
+              <td style="padding: 0.65rem 0.75rem; color: #059669; font-weight: 700;">0 (Diamagnetic)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">¹S₀</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Gold (Anomaly)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">Au (Z = 79)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; font-weight: 700; color: #0284c7;">[Xe] 4f¹⁴ 5d¹⁰ 6s¹</td>
+              <td style="padding: 0.65rem 0.75rem;">1 (Paramagnetic)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">²S₁/₂</td>
+            </tr>
+            <tr>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Uranium (Actinide)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">U (Z = 92)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; font-weight: 700; color: #0284c7;">[Rn] 5f³ 6d¹ 7s²</td>
+              <td style="padding: 0.65rem 0.75rem;">4 (Paramagnetic)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">⁵L₆</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
       <!-- FAQ Accordion -->
@@ -505,7 +697,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <h3 style="margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 0.5rem;">
         <span>🔗</span> Upstream &amp; Downstream Quantum &amp; Chemical Studios
       </h3>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 1rem;">
         <a href="/sig-figs" style="display: block; padding: 1rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
           <div style="font-weight: 700; font-size: 0.92rem; color: #0ea5e9; margin-bottom: 0.35rem;">Significant Figures Studio &rarr;</div>
           <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">
