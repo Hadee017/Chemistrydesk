@@ -1,82 +1,188 @@
 ---
+// src/pages/isotherm.astro
 import BaseLayout from '../layouts/BaseLayout.astro';
+import AuthorCard from '../components/AuthorCard.astro';
+
+const pageTitle = "Adsorption Isotherm Studio | Langmuir, Freundlich, Temkin & D-R Models | ChemistryDesk";
+const pageDescription = "Fit Langmuir, Freundlich, Temkin, and Dubinin-Radushkevich adsorption isotherms. Batch mass-balance solver, non-linear error metrics (R², RMSE, χ²), Van 't Hoff thermodynamics, and dynamic SVG equilibrium curves.";
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://chemistrycal.com';
+const canonicalUrl = `${siteUrl}/isotherm`;
+
+const schemaData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      "url": siteUrl,
+      "name": "ChemistryDesk",
+      "description": "Precision Scientific Utilities & Computational Laboratory Engines",
+      "inLanguage": "en-US"
+    },
+    {
+      "@type": "WebPage",
+      "@id": `${canonicalUrl}#webpage`,
+      "url": canonicalUrl,
+      "name": pageTitle,
+      "isPartOf": { "@id": `${siteUrl}/#website` },
+      "description": pageDescription,
+      "inLanguage": "en-US",
+      "author": { "@id": `${siteUrl}/#author` }
+    },
+    {
+      "@type": "Person",
+      "@id": `${siteUrl}/#author`,
+      "name": "Bilal Khan",
+      "jobTitle": "Physical & Materials Chemistry Researcher",
+      "description": "Specialist in porous coordination polymers, heterogeneous adsorption kinetics, and computational chemical physics.",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q141699332",
+        "https://orcid.org/0009-0006-3082-7043",
+        "https://www.linkedin.com/in/bilal-khan-bbb259248",
+        "https://doi.org/10.5281/zenodo.23059466",
+        "https://github.com/Hadee017",
+        "https://about.me/bilalkhan01",
+        "https://www.behance.net/bilalkhan"
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${canonicalUrl}#breadcrumb`,
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": siteUrl
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Adsorption Isotherm Studio",
+          "item": canonicalUrl
+        }
+      ]
+    },
+    {
+      "@type": "WebApplication",
+      "@id": `${canonicalUrl}#software`,
+      "name": "ChemistryDesk Adsorption Isotherm Studio",
+      "url": canonicalUrl,
+      "applicationCategory": "EducationalApplication, ScientificApplication",
+      "operatingSystem": "All modern web browsers",
+      "browserRequirements": "Requires JavaScript. Runs 100% offline via Service Worker.",
+      "description": pageDescription,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "creator": { "@id": `${siteUrl}/#author` },
+      "featureList": [
+        "Langmuir Monolayer Fitting & RL Separation Factor",
+        "Freundlich Multilayer Heterogeneity Solver",
+        "Temkin Heat of Sorption Estimation",
+        "Dubinin-Radushkevich Mean Free Energy (E) Calculation",
+        "Van 't Hoff Adsorption Thermodynamics (ΔH°, ΔS°, ΔG°)",
+        "Dynamic SVG Isotherm Overlay & Linearized Diagnostics",
+        "OriginLab and GraphPad Prism CSV Export",
+        "Integrated academic citation drawer (BibTeX, ACS, RSC, Nature, Elsevier, Wiley)"
+      ]
+    },
+    {
+      "@type": "HowTo",
+      "@id": `${canonicalUrl}#howto`,
+      "name": "How to Fit and Evaluate Adsorption Isotherm Models",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "name": "Acquire Equilibrium Data",
+          "text": "Measure equilibrium concentrations (Ce) across varying initial sorbate doses (C0) to calculate uptake capacities (qe = (C0 - Ce)*V / m)."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Execute Linear and Non-Linear Model Regressions",
+          "text": "Fit experimental points to Langmuir, Freundlich, Temkin, and Dubinin-Radushkevich mathematical expressions."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Evaluate Statistical Goodness-of-Fit",
+          "text": "Compare determination coefficients (R²), Root Mean Square Errors (RMSE), and reduced Chi-square (χ²) to identify the primary model."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Diagnose Adsorption Mechanism",
+          "text": "Extract the Langmuir separation factor (RL) for feasibility and the Dubinin-Radushkevich mean free energy (E) to distinguish physisorption (E < 8 kJ/mol) from chemisorption (E > 16 kJ/mol)."
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${canonicalUrl}#faq`,
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the difference between Langmuir and Freundlich adsorption isotherms?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The Langmuir model assumes monolayer adsorption onto a finite number of energetically equivalent, homogeneous sites without transmigration. The Freundlich model is an empirical equation describing reversible, non-ideal multilayer adsorption onto energetically heterogeneous surfaces."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does the separation factor (RL) determine adsorption feasibility?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The dimensionless separation factor RL = 1 / (1 + KL * C0) defines whether adsorption is irreversible (RL = 0), favorable (0 < RL < 1), linear (RL = 1), or unfavorable (RL > 1)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How are thermodynamic parameters (ΔH°, ΔS°, ΔG°) calculated from adsorption isotherms?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "By evaluating the Langmuir affinity constant KL across multiple temperatures, the Van 't Hoff equation ln(KL) = (ΔS°/R) - (ΔH°/RT) allows determination of enthalpy (ΔH°) from the slope and entropy (ΔS°) from the intercept, with Gibbs free energy determined via ΔG° = -RT ln(KL)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why do linear regression transforms introduce mathematical error?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Linear transformations alter the error variance structure of experimental data. For example, in the Type 1 Langmuir plot (Ce/qe vs Ce), low concentration points with small qe receive disproportionate weight. Comparing non-linear metrics such as Root Mean Square Error (RMSE) and Reduced Chi-Square (χ²) alongside R² prevents erroneous conclusions."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How many experimental points are required for a publishable isotherm?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Peer-reviewed journals typically expect a minimum of 5 to 8 distinct equilibrium concentrations spanning from low sub-saturation levels up to the plateau region where adsorbent sites approach saturation."
+          }
+        }
+      ]
+    }
+  ]
+};
 ---
 
-<BaseLayout 
-  title="Adsorption Isotherm Studio | Langmuir, Freundlich, Temkin & D-R Models | ChemistryDesk"
-  description="Fit Langmuir, Freundlich, Temkin, and Dubinin-Radushkevich adsorption isotherms. Batch mass-balance solver, non-linear error metrics (R², RMSE, χ²), Van 't Hoff thermodynamics, and dynamic SVG equilibrium curves."
->
-  <!-- Schema: WebApplication -->
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "ChemistryDesk Adsorption Isotherm Studio",
-    "applicationCategory": "EducationalApplication",
-    "operatingSystem": "All",
-    "browserRequirements": "Requires JavaScript",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    },
-    "featureList": [
-      "Langmuir Monolayer Fitting & RL Separation Factor",
-      "Freundlich Multilayer Heterogeneity Solver",
-      "Temkin Heat of Sorption Estimation",
-      "Dubinin-Radushkevich Mean Free Energy (E) Calculation",
-      "Van 't Hoff Adsorption Thermodynamics (ΔH°, ΔS°, ΔG°)",
-      "Dynamic SVG Isotherm Overlay & Linearized Diagnostics",
-      "OriginLab and GraphPad Prism CSV Export"
-    ]
-  })} />
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(schemaData)}></script>
 
-  <!-- Schema: FAQPage -->
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "What is the difference between Langmuir and Freundlich adsorption isotherms?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "The Langmuir model assumes monolayer adsorption onto a finite number of energetically equivalent, homogeneous sites without transmigration. The Freundlich model is an empirical equation describing reversible, non-ideal multilayer adsorption onto energetically heterogeneous surfaces."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "How does the separation factor (RL) determine adsorption feasibility?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "The dimensionless separation factor RL = 1 / (1 + KL * C0) defines whether adsorption is irreversible (RL = 0), favorable (0 < RL < 1), linear (RL = 1), or unfavorable (RL > 1)."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "How are thermodynamic parameters (ΔH°, ΔS°, ΔG°) calculated from adsorption isotherms?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "By evaluating the Langmuir affinity constant KL across multiple temperatures, the Van 't Hoff equation ln(KL) = (ΔS°/R) - (ΔH°/RT) allows determination of enthalpy (ΔH°) from the slope and entropy (ΔS°) from the intercept, with Gibbs free energy determined via ΔG° = -RT ln(KL)."
-        }
-      }
-    ]
-  })} />
-
-  <main style="max-width: 1100px; margin: 1.5rem auto 3rem auto; padding: 0 1.5rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1e293b;">
+  <main style="max-width: 1100px; margin: 1.5rem auto 3rem auto; padding: 0 1rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1e293b; box-sizing: border-box; overflow-x: hidden;">
     
-    <!-- Breadcrumb Navigation -->
+    <!-- Validated 2-Tier Breadcrumb Navigation -->
     <nav style="font-size: 0.8rem; color: #64748b; margin-bottom: 1.25rem;">
       <a href="/" style="color: #0284c7; text-decoration: none; font-weight: 600;">Home</a> &rsaquo; 
-      <span style="color: #94a3b8;"> Materials &amp; Environmental</span> &rsaquo; 
       <span style="color: #0f172a; font-weight: 700;">Adsorption Isotherm Studio</span>
     </nav>
 
     <!-- Header Section -->
-    <div style="border-bottom: 1px solid #e2e8f0; padding-bottom: 1.75rem; margin-bottom: 2rem;">
-      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+    <div style="border-bottom: 1px solid #e2e8f0; padding-bottom: 1.75rem; margin-bottom: 1.75rem;">
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; flex-wrap: wrap;">
         <span style="font-size: 2.5rem;">🧲</span>
         <div>
-          <h1 style="font-size: 2.25rem; font-weight: 800; color: #0f172a; letter-spacing: -0.025em; margin: 0;">
+          <h1 style="font-size: clamp(1.6rem, 4vw, 2.25rem); font-weight: 800; color: #0f172a; letter-spacing: -0.025em; margin: 0; line-height: 1.2;">
             Adsorption Isotherm Studio
           </h1>
           <p style="color: #64748b; font-size: 0.95rem; margin-top: 0.25rem; margin-bottom: 0;">
@@ -89,19 +195,24 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <div style="margin-top: 1.25rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
           <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Load Benchmark:</span>
-          <button type="button" class="preset-btn" data-preset="mb" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0.35rem 0.65rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #0284c7;">Methylene Blue / Biochar</button>
-          <button type="button" class="preset-btn" data-preset="paraquat" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0.35rem 0.65rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #0284c7;">Paraquat / HKUST-1 MOF</button>
-          <button type="button" class="preset-btn" data-preset="lead" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0.35rem 0.65rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #0284c7;">Pb(II) / α-ZrP</button>
+          <button type="button" class="preset-btn" data-preset="mb" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0.35rem 0.65rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #0284c7; min-height: 28px;">Methylene Blue / Biochar</button>
+          <button type="button" class="preset-btn" data-preset="paraquat" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0.35rem 0.65rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #0284c7; min-height: 28px;">Paraquat / HKUST-1 MOF</button>
+          <button type="button" class="preset-btn" data-preset="lead" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0.35rem 0.65rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #0284c7; min-height: 28px;">Pb(II) / α-ZrP</button>
         </div>
 
         <div style="display: flex; gap: 0.45rem; flex-wrap: wrap;">
-          <button id="btnCopyShareUrl" type="button" style="background: #0284c7; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff; display: inline-flex; align-items: center; gap: 0.3rem;">🔗 Share Link</button>
-          <button id="btnCopySummary" type="button" style="background: #10b981; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff; display: inline-flex; align-items: center; gap: 0.3rem;">📋 Copy Results</button>
-          <button id="btnCopyMethods" type="button" style="background: #6366f1; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff; display: inline-flex; align-items: center; gap: 0.3rem;">📝 Methods Text</button>
-          <button id="btnExportCsv" type="button" style="background: #0f172a; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff;">📥 CSV</button>
-          <button id="btnCopyLatex" type="button" style="background: #475569; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff;">LaTeX</button>
-          <button id="toggleCiteBtn" type="button" style="background: #e0f2fe; border: 1px solid #bae6fd; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #0369a1;">📖 Cite</button>
+          <button id="btnCopyShareUrl" type="button" style="background: #0284c7; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff; display: inline-flex; align-items: center; gap: 0.3rem; min-height: 30px;">🔗 Share Link</button>
+          <button id="btnCopySummary" type="button" style="background: #10b981; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff; display: inline-flex; align-items: center; gap: 0.3rem; min-height: 30px;">📋 Copy Results</button>
+          <button id="btnCopyMethods" type="button" style="background: #6366f1; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff; display: inline-flex; align-items: center; gap: 0.3rem; min-height: 30px;">📝 Methods Text</button>
+          <button id="btnExportCsv" type="button" style="background: #0f172a; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff; min-height: 30px;">📥 CSV</button>
+          <button id="btnCopyLatex" type="button" style="background: #475569; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff; min-height: 30px;">LaTeX</button>
+          <button id="toggleCiteBtn" type="button" style="background: #e0f2fe; border: 1px solid #bae6fd; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #0369a1; min-height: 30px;">📖 Cite</button>
         </div>
+      </div>
+
+      <!-- AuthorCard / E-E-A-T Component -->
+      <div style="margin-top: 1.5rem; border-top: 1px solid #f1f5f9; padding-top: 1.25rem;">
+        <AuthorCard />
       </div>
 
       <!-- Citation Drawer -->
@@ -121,20 +232,30 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
     </div>
 
+    <!-- DIRECT DEFINITION & GEO SUMMARY CALLOUT BOX -->
+    <section style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-left: 5px solid #0284c7; border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 1.75rem;">
+      <h2 style="font-size: 1rem; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.04em; margin: 0 0 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+        <span>💡</span> What is an Adsorption Isotherm? (Direct Answer)
+      </h2>
+      <p style="font-size: 0.92rem; color: #334155; margin: 0; line-height: 1.6;">
+        An <strong>adsorption isotherm</strong> models the equilibrium relationship between the amount of sorbate adsorbed per unit mass of sorbent (<code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">q_e</code>) and the residual concentration in liquid solution (<code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">C_e</code>) at constant temperature. <strong>Langmuir</strong> assumes monolayer coverage on identical sites, <strong>Freundlich</strong> describes multilayer uptake on heterogeneous surfaces, and <strong>Dubinin-Radushkevich (D-R)</strong> extracts the mean free energy (<code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">E</code>) to distinguish physisorption (<code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">E &lt; 8 kJ/mol</code>) from chemisorption.
+      </p>
+    </section>
+
     <!-- MAIN INTERACTIVE STUDIO WORKSPACE -->
     <div style="display: grid; grid-template-columns: 1fr; gap: 2rem; margin-bottom: 2.5rem;">
       
       <!-- CONTROLS & SPREADSHEET TABLE CARD -->
-      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: clamp(1rem, 3vw, 1.5rem); box-shadow: 0 1px 3px rgba(0,0,0,0.05); min-width: 0;">
         
         <!-- Regime & Unit Selectors Bar -->
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 1rem;">
           
-          <div style="background: #f1f5f9; padding: 3px; border-radius: 8px; display: inline-flex;">
-            <button id="btnModeBatch" type="button" style="background: #0284c7; color: #ffffff; border: none; padding: 0.45rem 0.9rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer;">
+          <div style="background: #f1f5f9; padding: 3px; border-radius: 8px; display: inline-flex; flex-wrap: wrap; gap: 2px;">
+            <button id="btnModeBatch" type="button" style="background: #0284c7; color: #ffffff; border: none; padding: 0.45rem 0.9rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; min-height: 32px;">
               🧪 Raw Batch Mode (C₀, Cₑ, V, m)
             </button>
-            <button id="btnModeDirect" type="button" style="background: transparent; color: #64748b; border: none; padding: 0.45rem 0.9rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer;">
+            <button id="btnModeDirect" type="button" style="background: transparent; color: #64748b; border: none; padding: 0.45rem 0.9rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; min-height: 32px;">
               ⚡ Direct Equilibrium (Cₑ vs qₑ)
             </button>
           </div>
@@ -157,7 +278,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
               </select>
             </div>
 
-            <div id="batchVolMassSelectors" style="display: flex; gap: 0.75rem;">
+            <div id="batchVolMassSelectors" style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
               <div>
                 <label style="font-size: 0.72rem; font-weight: 700; color: #64748b; display: block;">Flask Vol (V):</label>
                 <select id="selVolUnit" style="padding: 0.35rem 0.5rem; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.82rem; font-weight: 600; background: #fff;">
@@ -181,11 +302,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <!-- Spreadsheet Action Header -->
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
           <div style="display: flex; gap: 0.5rem;">
-            <button id="btnAddRowBtn" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer; color: #0f172a;">➕ Add Row</button>
-            <button id="btnClearTableBtn" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer; color: #dc2626;">🗑️ Clear</button>
+            <button id="btnAddRowBtn" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer; color: #0f172a; min-height: 30px;">➕ Add Row</button>
+            <button id="btnClearTableBtn" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer; color: #dc2626; min-height: 30px;">🗑️ Clear</button>
           </div>
 
-          <label style="background: #e0f2fe; border: 1px solid #bae6fd; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer; color: #0284c7; display: inline-flex; align-items: center; gap: 0.35rem;">
+          <label style="background: #e0f2fe; border: 1px solid #bae6fd; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer; color: #0284c7; display: inline-flex; align-items: center; gap: 0.35rem; min-height: 30px;">
             <span>📂 Upload CSV / TSV</span>
             <input type="file" id="fileUploadInput" accept=".csv, .tsv, .txt" style="display: none;" />
           </label>
@@ -193,7 +314,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
         <!-- Spreadsheet Grid Table -->
         <div style="border: 1px solid #cbd5e1; border-radius: 8px; overflow-x: auto; margin-bottom: 1rem;">
-          <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left;">
+          <table style="width: 100%; min-width: 580px; border-collapse: collapse; font-size: 0.85rem; text-align: left;">
             <thead style="background: #f8fafc; border-bottom: 1.5px solid #cbd5e1;">
               <tr id="tableHeaderRow">
                 <th style="padding: 0.6rem 0.75rem; width: 45px; text-align: center; color: #64748b;">#</th>
@@ -213,14 +334,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
 
       <!-- DUAL-PANEL RESULTS: TOURNAMENT SUMMARY + DYNAMIC SVG PLOT WITH TOGGLES -->
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 2rem;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr)); gap: 2rem;">
         
         <!-- 4-Model Tournament & Mechanism Verdict -->
-        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; flex-direction: column;">
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: clamp(1rem, 3vw, 1.5rem); box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; flex-direction: column; min-width: 0;">
           
           <div style="margin-bottom: 1rem;">
             <span style="font-size: 0.75rem; font-weight: 800; color: #0284c7; text-transform: uppercase; letter-spacing: 0.05em;">Best-Fit Equilibrium Model</span>
-            <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.4rem;">
               <h2 id="bestModelTitle" style="font-size: 1.6rem; font-weight: 800; color: #0f172a; margin: 0.25rem 0 0 0;">Langmuir Model</h2>
               <span id="bestModelR2Badge" style="background: #e0f2fe; color: #0369a1; padding: 3px 8px; border-radius: 9999px; font-size: 0.8rem; font-weight: 800; font-family: monospace;">R² = 0.9985</span>
             </div>
@@ -235,8 +356,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </div>
 
           <!-- 4-Model Statistical Comparison Matrix -->
-          <div style="border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden; margin-bottom: 1.25rem;">
-            <table style="width: 100%; border-collapse: collapse; font-size: 0.82rem; text-align: left;">
+          <div style="border: 1px solid #cbd5e1; border-radius: 8px; overflow-x: auto; margin-bottom: 1.25rem;">
+            <table style="width: 100%; min-width: 320px; border-collapse: collapse; font-size: 0.82rem; text-align: left;">
               <thead style="background: #f8fafc; border-bottom: 1px solid #cbd5e1;">
                 <tr>
                   <th style="padding: 0.5rem 0.65rem; color: #475569; font-weight: 700;">Model</th>
@@ -255,29 +376,29 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             <span style="font-size: 0.75rem; font-weight: 800; color: #475569; text-transform: uppercase; display: block; margin-bottom: 0.5rem;">
               Extracted Parameters &amp; Constants:
             </span>
-            <div id="extractedParamsGrid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-size: 0.82rem;">
+            <div id="extractedParamsGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.75rem; font-size: 0.82rem;">
             </div>
           </div>
 
         </div>
 
         <!-- Dynamic SVG Visualizer with Plot Mode Toggles & Save Graph -->
-        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; flex-direction: column;">
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: clamp(1rem, 3vw, 1.5rem); box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; flex-direction: column; min-width: 0;">
           
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
-            <div style="background: #f1f5f9; padding: 2px; border-radius: 6px; display: inline-flex; gap: 2px;">
-              <button type="button" class="plot-view-btn" data-view="equilibrium" style="background: #0284c7; color: #fff; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.72rem; font-weight: 700; cursor: pointer;">qₑ vs Cₑ</button>
-              <button type="button" class="plot-view-btn" data-view="langmuir" style="background: transparent; color: #64748b; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.72rem; font-weight: 700; cursor: pointer;">Cₑ/qₑ vs Cₑ</button>
-              <button type="button" class="plot-view-btn" data-view="freundlich" style="background: transparent; color: #64748b; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.72rem; font-weight: 700; cursor: pointer;">ln(qₑ) vs ln(Cₑ)</button>
-              <button type="button" class="plot-view-btn" data-view="dr" style="background: transparent; color: #64748b; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.72rem; font-weight: 700; cursor: pointer;">ln(qₑ) vs ε²</button>
+            <div style="background: #f1f5f9; padding: 2px; border-radius: 6px; display: inline-flex; gap: 2px; flex-wrap: wrap;">
+              <button type="button" class="plot-view-btn" data-view="equilibrium" style="background: #0284c7; color: #fff; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.72rem; font-weight: 700; cursor: pointer; min-height: 26px;">qₑ vs Cₑ</button>
+              <button type="button" class="plot-view-btn" data-view="langmuir" style="background: transparent; color: #64748b; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.72rem; font-weight: 700; cursor: pointer; min-height: 26px;">Cₑ/qₑ vs Cₑ</button>
+              <button type="button" class="plot-view-btn" data-view="freundlich" style="background: transparent; color: #64748b; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.72rem; font-weight: 700; cursor: pointer; min-height: 26px;">ln(qₑ) vs ln(Cₑ)</button>
+              <button type="button" class="plot-view-btn" data-view="dr" style="background: transparent; color: #64748b; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.72rem; font-weight: 700; cursor: pointer; min-height: 26px;">ln(qₑ) vs ε²</button>
             </div>
 
-            <button id="btnDownloadSvg" type="button" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0.25rem 0.6rem; font-size: 0.72rem; font-weight: 700; cursor: pointer; color: #334155; display: inline-flex; align-items: center; gap: 0.25rem;">
+            <button id="btnDownloadSvg" type="button" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0.25rem 0.6rem; font-size: 0.72rem; font-weight: 700; cursor: pointer; color: #334155; display: inline-flex; align-items: center; gap: 0.25rem; min-height: 26px;">
               <span>💾</span> Save Graph (SVG)
             </button>
           </div>
 
-          <div id="plotContainer" style="flex: 1; min-height: 280px; position: relative; border: 1px solid #f1f5f9; border-radius: 8px; background: #fafafa; display: flex; align-items: center; justify-content: center;">
+          <div id="plotContainer" style="flex: 1; min-height: 280px; position: relative; border: 1px solid #f1f5f9; border-radius: 8px; background: #fafafa; display: flex; align-items: center; justify-content: center; overflow: hidden;">
             <svg id="isothermSvg" viewBox="0 0 500 320" style="width: 100%; height: 100%; display: block;"></svg>
           </div>
 
@@ -301,7 +422,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
 
       <!-- VAN 'T HOFF THERMODYNAMICS MODULE -->
-      <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+      <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: clamp(1rem, 3vw, 1.5rem); box-shadow: 0 1px 3px rgba(0,0,0,0.05); min-width: 0;">
         <details style="cursor: pointer;">
           <summary style="font-size: 1.05rem; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 0.5rem; user-select: none;">
             <span>🌡️</span> Multi-Temperature Van 't Hoff Adsorption Thermodynamics (&Delta;H&deg;, &Delta;S&deg;, &Delta;G&deg;)
@@ -312,7 +433,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
               Enter the Langmuir affinity constant (K<sub>L</sub>) obtained from isotherms measured at different temperatures to determine spontaneity, enthalpy of adsorption, and entropy.
             </p>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 1.25rem;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 1.5rem; margin-bottom: 1.25rem;">
               
               <div style="display: flex; flex-direction: column; gap: 0.5rem;">
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; font-size: 0.75rem; font-weight: 700; color: #475569;">
@@ -370,7 +491,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <!-- EDITORIAL & METHODOLOGICAL KNOWLEDGE SECTION (E-E-A-T) -->
     <article style="border-top: 1px solid #e2e8f0; padding-top: 3.5rem; line-height: 1.85; color: #334155;">
       
-      <h2 style="font-size: 1.85rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem; letter-spacing: -0.02em;">
+      <h2 style="font-size: clamp(1.4rem, 3.5vw, 1.85rem); font-weight: 800; color: #0f172a; margin-bottom: 1rem; letter-spacing: -0.02em; line-height: 1.3;">
         Theoretical Principles of Liquid-Phase Adsorption Isotherms
       </h2>
       <p>
@@ -383,20 +504,20 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <p>
         Formulated by Irving Langmuir in 1918, the model posits that adsorption occurs on energetically uniform, identical localized sites with zero lateral interaction between adjacent adsorbed species. Once a molecule occupies a site, no further sorption can take place at that locus:
       </p>
-      <div style="background: #f8fafc; border-left: 4px solid #0284c7; padding: 1rem; margin: 1.25rem 0; font-family: ui-monospace, monospace; font-size: 0.95rem;">
-        Non-Linear: qe = (qmax * KL * Ce) / (1 + KL * Ce)<br />
-        Linear (Type 1): Ce / qe = (1 / (qmax * KL)) + (Ce / qmax)
+      <div style="background: #f8fafc; border-left: 4px solid #0284c7; padding: 1rem; margin: 1.25rem 0; font-family: ui-monospace, monospace; font-size: 0.95rem; overflow-x: auto; line-height: 1.6;">
+        <span>Non-Linear: qe = (qmax * KL * Ce) / (1 + KL * Ce)</span><br />
+        <span>Linear (Type 1): Ce / qe = (1 / (qmax * KL)) + (Ce / qmax)</span>
       </div>
       <p>
         The essential feasibility of the Langmuir system is expressed via the dimensionless equilibrium parameter or separation factor (R<sub>L</sub>):
       </p>
-      <div style="background: #f8fafc; border-left: 4px solid #0284c7; padding: 1rem; margin: 1.25rem 0; font-family: ui-monospace, monospace; font-size: 0.95rem;">
-        RL = 1 / (1 + KL * C0)
+      <div style="background: #f8fafc; border-left: 4px solid #0284c7; padding: 1rem; margin: 1.25rem 0; font-family: ui-monospace, monospace; font-size: 0.95rem; overflow-x: auto;">
+        <span>RL = 1 / (1 + KL * C0)</span>
       </div>
       <p>
         Where C<sub>0</sub> is the initial concentration. The value of R<sub>L</sub> indicates the shape of the isotherm:
       </p>
-      <ul>
+      <ul style="margin: 0.5rem 0 1.5rem 1.5rem;">
         <li><strong>R<sub>L</sub> &gt; 1:</strong> Unfavorable adsorption kinetics.</li>
         <li><strong>R<sub>L</sub> = 1:</strong> Linear adsorption (no preferential affinity).</li>
         <li><strong>0 &lt; R<sub>L</sub> &lt; 1:</strong> Favorable adsorption mechanism.</li>
@@ -409,9 +530,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <p>
         The Freundlich equation is an empirical formulation that accounts for non-ideal, reversible sorption across heterogeneous surfaces with an exponential energy distribution:
       </p>
-      <div style="background: #f8fafc; border-left: 4px solid #0284c7; padding: 1rem; margin: 1.25rem 0; font-family: ui-monospace, monospace; font-size: 0.95rem;">
-        Non-Linear: qe = KF * (Ce)^(1/n)<br />
-        Linear: ln(qe) = ln(KF) + (1/n) * ln(Ce)
+      <div style="background: #f8fafc; border-left: 4px solid #0284c7; padding: 1rem; margin: 1.25rem 0; font-family: ui-monospace, monospace; font-size: 0.95rem; overflow-x: auto; line-height: 1.6;">
+        <span>Non-Linear: qe = KF * (Ce)^(1/n)</span><br />
+        <span>Linear: ln(qe) = ln(KF) + (1/n) * ln(Ce)</span>
       </div>
       <p>
         Here, K<sub>F</sub> denotes the relative sorption capacity, while 1/n is the heterogeneity factor. When 1/n &lt; 1, adsorption is normal and favorable; values of n between 2 and 10 represent excellent adsorption intensity.
@@ -423,14 +544,80 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <p>
         The Dubinin-Radushkevich (D-R) isotherm does not assume a homogeneous surface or constant sorption potential. By applying the Polanyi potential (&epsilon; = R T ln(1 + 1/C<sub>e</sub>)), it extracts the mean free energy of adsorption per molecule (E), diagnosing the fundamental sorption mechanism:
       </p>
-      <div style="background: #f8fafc; border-left: 4px solid #0284c7; padding: 1rem; margin: 1.25rem 0; font-family: ui-monospace, monospace; font-size: 0.95rem;">
-        E = 1 / sqrt(2 * beta) [kJ/mol]
+      <div style="background: #f8fafc; border-left: 4px solid #0284c7; padding: 1rem; margin: 1.25rem 0; font-family: ui-monospace, monospace; font-size: 0.95rem; overflow-x: auto;">
+        <span>E = 1 / sqrt(2 * beta) [kJ/mol]</span>
       </div>
-      <ul>
+      <ul style="margin: 0.5rem 0 1.5rem 1.5rem;">
         <li><strong>E &lt; 8 kJ/mol:</strong> Physical adsorption governed by van der Waals dispersion forces.</li>
         <li><strong>8 &le; E &le; 16 kJ/mol:</strong> Ion-exchange or electrostatic coordination.</li>
         <li><strong>E &gt; 16 kJ/mol:</strong> Chemical adsorption (chemisorption) with covalent/coordinate bonding.</li>
       </ul>
+
+      <!-- IUPAC ADSORPTION ISOTHERM CLASSIFICATION BENCHMARK TABLE -->
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2.75rem; margin-bottom: 0.75rem;">
+        4. IUPAC Classification of Adsorption Isotherms &amp; Empirical Material Benchmarks
+      </h3>
+      <p style="font-size: 0.9rem; color: #475569; margin-bottom: 1rem;">
+        Standard IUPAC classification of physisorption isotherms (Types I through VI) and typical benchmark parameters:
+      </p>
+
+      <div style="border: 1px solid #cbd5e1; border-radius: 8px; overflow-x: auto; margin-bottom: 2rem;">
+        <table style="width: 100%; min-width: 650px; border-collapse: collapse; font-size: 0.85rem; text-align: left; background: #ffffff;">
+          <thead style="background: #0f172a; color: white;">
+            <tr>
+              <th style="padding: 0.65rem 0.75rem; border: 1px solid #334155;">IUPAC Isotherm Type</th>
+              <th style="padding: 0.65rem 0.75rem; border: 1px solid #334155;">Pore Architecture</th>
+              <th style="padding: 0.65rem 0.75rem; border: 1px solid #334155;">Representative Adsorbent</th>
+              <th style="padding: 0.65rem 0.75rem; border: 1px solid #334155;">Best Mathematical Model</th>
+              <th style="padding: 0.65rem 0.75rem; border: 1px solid #334155;">Key Mechanistic Feature</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Type I (Langmuirian)</td>
+              <td style="padding: 0.65rem 0.75rem;">Microporous (&lt; 2 nm)</td>
+              <td style="padding: 0.65rem 0.75rem;">Zeolites, HKUST-1 MOFs</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">Langmuir</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">Monolayer saturation at low Ce</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Type II (Sigmoidal)</td>
+              <td style="padding: 0.65rem 0.75rem;">Non-porous or Macroporous (&gt; 50 nm)</td>
+              <td style="padding: 0.65rem 0.75rem;">α-Alumina, Fumed Silica</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">BET / Freundlich</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">Unrestricted multilayer formation</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Type III (Convex)</td>
+              <td style="padding: 0.65rem 0.75rem;">Non-porous / Macroporous</td>
+              <td style="padding: 0.65rem 0.75rem;">Water vapor on graphitized carbon</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">Frenkel-Halsey-Hill</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">Weak sorbate-adsorbent interactions</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Type IV (Hysteresis)</td>
+              <td style="padding: 0.65rem 0.75rem;">Mesoporous (2 - 50 nm)</td>
+              <td style="padding: 0.65rem 0.75rem;">MCM-41, SBA-15 Silica</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">BJH / Temkin</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">Capillary condensation with hysteresis loop</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Type V (Porous Convex)</td>
+              <td style="padding: 0.65rem 0.75rem;">Mesoporous / Microporous</td>
+              <td style="padding: 0.65rem 0.75rem;">Activated carbon water uptake</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">Dubinin-Astakhov</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">Weak interaction with capillary condensation</td>
+            </tr>
+            <tr>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Type VI (Stepped)</td>
+              <td style="padding: 0.65rem 0.75rem;">Uniform non-porous surface</td>
+              <td style="padding: 0.65rem 0.75rem;">Noble gases on exfoliated graphite</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">Stepwise Layer-by-Layer</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">Layer-by-layer adsorption transitions</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       <!-- FAQs Accordion -->
       <h3 style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-top: 3rem; margin-bottom: 1.25rem;">
@@ -451,9 +638,54 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             Peer-reviewed journals typically expect a minimum of 5 to 8 distinct equilibrium concentrations spanning from low sub-saturation levels up to the plateau region where adsorbent sites approach saturation.
           </p>
         </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What is the difference between Langmuir and Freundlich adsorption isotherms?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            The Langmuir model assumes monolayer adsorption onto a finite number of energetically equivalent, homogeneous sites without transmigration. The Freundlich model is an empirical equation describing reversible, non-ideal multilayer adsorption onto energetically heterogeneous surfaces.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How does the separation factor (RL) determine adsorption feasibility?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            The dimensionless separation factor RL = 1 / (1 + KL * C0) defines whether adsorption is irreversible (RL = 0), favorable (0 &lt; RL &lt; 1), linear (RL = 1), or unfavorable (RL &gt; 1).
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How are thermodynamic parameters (ΔH°, ΔS°, ΔG°) calculated from adsorption isotherms?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            By evaluating the Langmuir affinity constant KL across multiple temperatures, the Van 't Hoff equation ln(KL) = (ΔS°/R) - (ΔH°/RT) allows determination of enthalpy (ΔH°) from the slope and entropy (ΔS°) from the intercept, with Gibbs free energy determined via ΔG° = -RT ln(KL).
+          </p>
+        </details>
       </div>
 
     </article>
+
+    <!-- Related Analytical Studios -->
+    <section style="max-width: 900px; margin: 3rem auto 1.5rem; padding: 1.25rem 1.5rem; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; box-sizing: border-box;">
+      <h3 style="margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 0.5rem;">
+        <span>🔗</span> Complementary Analytical Studios
+      </h3>
+      <p style="margin: 0 0 1rem; font-size: 0.85rem; color: #64748b; line-height: 1.4;">
+        Connect your liquid-phase equilibrium data with specific surface area measurements and reaction degradation kinetics:
+      </p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 1rem;">
+        <a href="/bet" style="display: block; padding: 1rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
+          <div style="font-weight: 700; font-size: 0.92rem; color: #059669; margin-bottom: 0.35rem;">BET Surface Area Analyzer &rarr;</div>
+          <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">
+            Measure specific surface area (SBET), monolayer volume (Vm), and pore structure via 77 K N₂ gas adsorption.
+          </div>
+        </a>
+        <a href="/spectro" style="display: block; padding: 1rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
+          <div style="font-weight: 700; font-size: 0.92rem; color: #7c3aed; margin-bottom: 0.35rem;">UV-Vis &amp; Chemical Kinetics Studio &rarr;</div>
+          <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">
+            Determine unknown equilibrium concentrations (Ce) via Beer-Lambert calibration curves and solve degradation rates.
+          </div>
+        </a>
+      </div>
+    </section>
 
   </main>
 
@@ -1151,13 +1383,13 @@ Mechanism Verdict: ${lastTournamentResult.adsorptionMechanism}
 
     const citations: Record<string, string> = {
       bibtex: `@software{khan_chemistrydesk_isotherm_${currentYear},
-  author       = {Khan, Bilal},
-  title        = {ChemistryDesk: Adsorption Isotherm Studio (Langmuir, Freundlich, Temkin, D-R)},
-  year         = {${currentYear}},
-  version      = {v1.0.1},
-  publisher    = {Zenodo},
-  doi          = {${doi}},
-  url          = {https://chemistrycal.com/isotherm}
+  author        = {Khan, Bilal},
+  title         = {ChemistryDesk: Adsorption Isotherm Studio (Langmuir, Freundlich, Temkin, D-R)},
+  year          = {${currentYear}},
+  version       = {v1.0.1},
+  publisher     = {Zenodo},
+  doi           = {${doi}},
+  url           = {https://chemistrycal.com/isotherm}
 }`,
       acs: `Khan, B. ChemistryDesk: Adsorption Isotherm Studio, version 1.0.1; Zenodo, ${currentYear}. https://doi.org/${doi}.`,
       rsc: `B. Khan, ChemistryDesk: Adsorption Isotherm Studio, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`,
@@ -1217,28 +1449,4 @@ Mechanism Verdict: ${lastTournamentResult.adsorptionMechanism}
     updateInlineCite();
     initializeData();
   </script>
-
-  <!-- Related Analytical Studios -->
-  <section style="max-width: 900px; margin: 3rem auto 1.5rem; padding: 1.25rem 1.5rem; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; box-sizing: border-box;">
-    <h3 style="margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 0.5rem;">
-      <span>🔗</span> Complementary Analytical Studios
-    </h3>
-    <p style="margin: 0 0 1rem; font-size: 0.85rem; color: #64748b; line-height: 1.4;">
-      Connect your liquid-phase equilibrium data with specific surface area measurements and reaction degradation kinetics:
-    </p>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
-      <a href="/bet" style="display: block; padding: 1rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
-        <div style="font-weight: 700; font-size: 0.92rem; color: #059669; margin-bottom: 0.35rem;">BET Surface Area Analyzer &rarr;</div>
-        <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">
-          Measure specific surface area (SBET), monolayer volume (Vm), and pore structure via 77 K N₂ gas adsorption.
-        </div>
-      </a>
-      <a href="/spectro" style="display: block; padding: 1rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
-        <div style="font-weight: 700; font-size: 0.92rem; color: #7c3aed; margin-bottom: 0.35rem;">UV-Vis &amp; Chemical Kinetics Studio &rarr;</div>
-        <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">
-          Determine unknown equilibrium concentrations (Ce) via Beer-Lambert calibration curves and solve degradation rates.
-        </div>
-      </a>
-    </div>
-  </section>
 </BaseLayout>
