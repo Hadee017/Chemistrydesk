@@ -1,99 +1,189 @@
 ---
+// src/pages/sig-figs.astro
 import BaseLayout from '../layouts/BaseLayout.astro';
+import AuthorCard from '../components/AuthorCard.astro';
+
+const pageTitle = "Significant Figures Calculator | Sig Fig Counter, Rounder & Expression Solver | ChemistryDesk";
+const pageDescription = "Universal significant figures studio. Count sig figs with dynamic visual digit anatomy, solve multi-step expressions with intermediate precision audits, and round to target scientific precision.";
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://chemistrycal.com';
+const canonicalUrl = `${siteUrl}/sig-figs`;
+
+const schemaData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      "url": siteUrl,
+      "name": "ChemistryDesk",
+      "description": "Precision Scientific Utilities & Computational Laboratory Engines",
+      "inLanguage": "en-US"
+    },
+    {
+      "@type": "WebPage",
+      "@id": `${canonicalUrl}#webpage`,
+      "url": canonicalUrl,
+      "name": pageTitle,
+      "isPartOf": { "@id": `${siteUrl}/#website` },
+      "description": pageDescription,
+      "inLanguage": "en-US",
+      "author": { "@id": `${siteUrl}/#author` }
+    },
+    {
+      "@type": "Person",
+      "@id": `${siteUrl}/#author`,
+      "name": "Bilal Khan",
+      "jobTitle": "Physical & Materials Chemistry Researcher",
+      "description": "Specialist in porous coordination polymers, heterogeneous adsorption kinetics, and computational chemical physics.",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q141699332",
+        "https://orcid.org/0009-0006-3082-7043",
+        "https://www.linkedin.com/in/bilal-khan-bbb259248",
+        "https://doi.org/10.5281/zenodo.23059466",
+        "https://github.com/Hadee017",
+        "https://about.me/bilalkhan01",
+        "https://www.behance.net/bilalkhan"
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${canonicalUrl}#breadcrumb`,
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": siteUrl
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Significant Figures Studio",
+          "item": canonicalUrl
+        }
+      ]
+    },
+    {
+      "@type": "WebApplication",
+      "@id": `${canonicalUrl}#software`,
+      "name": "ChemistryDesk Significant Figures & Scientific Precision Studio",
+      "url": canonicalUrl,
+      "applicationCategory": "EducationalApplication, ScientificApplication",
+      "operatingSystem": "All modern web browsers",
+      "browserRequirements": "Requires JavaScript. Runs 100% offline via Service Worker.",
+      "description": pageDescription,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "creator": { "@id": `${siteUrl}/#author` },
+      "featureList": [
+        "Dynamic Visual Digit Anatomy with Color-Coded Role Classification",
+        "3-in-1 Modes: Counter/Inspector, Expression Solver, and Precision Rounder",
+        "Intermediate Step Tracking for Mixed Operations (+, -, *, /)",
+        "Scientific, Engineering, and E-Notation Converters",
+        "1-Click Copy Results, Paste Input, Homework Derivation Steps, and LaTeX",
+        "URL State Sharing and CSV Export",
+        "Integrated academic citation drawer (BibTeX, ACS, RSC, Nature)"
+      ]
+    },
+    {
+      "@type": "HowTo",
+      "@id": `${canonicalUrl}#howto`,
+      "name": "How to Determine and Round Significant Figures in Scientific Calculations",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "name": "Identify Non-Zero Digits and Captive Zeros",
+          "text": "Count all non-zero numbers and any zeros trapped between non-zero digits as unconditionally significant."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Evaluate Leading and Trailing Zeros",
+          "text": "Discard leading zeros as scale placeholders. Count trailing zeros as significant only if an explicit decimal point is present."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Apply Arithmetic Propagation Rules",
+          "text": "For addition and subtraction, round to the least decimal places. For multiplication and division, round to the fewest total significant figures."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Retain Intermediate Precision in Mixed Operations",
+          "text": "Carry unrounded values through multi-step calculations, tracking limiting significant figures at each step before performing final rounding."
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${canonicalUrl}#faq`,
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What are the five golden rules of significant figures?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "1. All non-zero digits (1-9) are always significant. 2. Captive zeros trapped between non-zero digits are always significant. 3. Leading zeros preceding the first non-zero digit are never significant placeholders. 4. Trailing zeros are significant only if the number contains a decimal point. 5. In scientific notation (m x 10^n), all digits in the mantissa are significant while the power of 10 provides order of magnitude."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How many significant figures are in 100 versus 100.?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The number 100 has 1 significant figure because trailing zeros without an explicit decimal point are treated as ambiguous scale placeholders. In contrast, 100. (with a terminal decimal point) has 3 significant figures, indicating that the measurement is precise down to the units position."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why do addition and multiplication use different significant figure rules?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Addition and subtraction propagate absolute uncertainty, which means the final result is limited by the measurement with the fewest decimal places (least decimal precision). Multiplication and division propagate relative percentage uncertainty, meaning the final answer is limited by the measurement with the fewest total significant figures."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do you handle significant figures in mixed multi-step calculations?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "In mixed multi-step operations following PEMDAS, follow intermediate rules without rounding early to avoid rounding bias. Keep track of the limiting decimal places in addition/subtraction steps, and then use that intermediate precision count to determine the limiting significant figures in subsequent multiplication/division steps."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Are exact numbers subject to significant figure rules?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Exact numbers derived from counting discrete objects (e.g., 12 test tubes) or defined unit conversions (e.g., exactly 1000 mL = 1 L, or 1 inch = 2.54 cm) possess an infinite number of significant figures and never limit the precision of a calculation."
+          }
+        }
+      ]
+    }
+  ]
+};
 ---
 
-<BaseLayout
-  title="Significant Figures Calculator | Sig Fig Counter, Rounder & Expression Solver | ChemistryDesk"
-  description="Universal significant figures studio. Count sig figs with dynamic visual digit anatomy, solve multi-step expressions with intermediate precision audits, and round to target scientific precision."
->
-  <!-- Schema: WebApplication -->
-  <script is:inline type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "ChemistryDesk Significant Figures & Scientific Precision Studio",
-    "applicationCategory": "EducationalApplication",
-    "operatingSystem": "All",
-    "browserRequirements": "Requires JavaScript",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    },
-    "featureList": [
-      "Dynamic Visual Digit Anatomy with Color-Coded Role Classification",
-      "3-in-1 Modes: Counter/Inspector, Expression Solver, and Precision Rounder",
-      "Intermediate Step Tracking for Mixed Operations (+, -, *, /)",
-      "Scientific, Engineering, and E-Notation Converters",
-      "1-Click Copy Results, Paste Input, Homework Derivation Steps, and LaTeX",
-      "URL State Sharing and CSV Export"
-    ]
-  })}></script>
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(schemaData)}></script>
 
-  <!-- Schema: FAQPage -->
-  <script is:inline type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "What are the five golden rules of significant figures?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "1. All non-zero digits (1-9) are always significant. 2. Captive zeros trapped between non-zero digits are always significant. 3. Leading zeros preceding the first non-zero digit are never significant placeholders. 4. Trailing zeros are significant only if the number contains a decimal point. 5. In scientific notation (m x 10^n), all digits in the mantissa are significant while the power of 10 provides order of magnitude."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "How many significant figures are in 100 versus 100.?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "The number 100 has 1 significant figure because trailing zeros without an explicit decimal point are treated as ambiguous scale placeholders. In contrast, 100. (with a terminal decimal point) has 3 significant figures, indicating that the measurement is precise down to the units position."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Why do addition and multiplication use different significant figure rules?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Addition and subtraction propagate absolute uncertainty, which means the final result is limited by the measurement with the fewest decimal places (least decimal precision). Multiplication and division propagate relative percentage uncertainty, meaning the final answer is limited by the measurement with the fewest total significant figures."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "How do you handle significant figures in mixed multi-step calculations?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "In mixed multi-step operations following PEMDAS, follow intermediate rules without rounding early to avoid rounding bias. Keep track of the limiting decimal places in addition/subtraction steps, and then use that intermediate precision count to determine the limiting significant figures in subsequent multiplication/division steps."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Are exact numbers subject to significant figure rules?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "No. Exact numbers derived from counting discrete objects (e.g., 12 test tubes) or defined unit conversions (e.g., exactly 1000 mL = 1 L, or 1 inch = 2.54 cm) possess an infinite number of significant figures and never limit the precision of a calculation."
-        }
-      }
-    ]
-  })}></script>
-
-  <main style="max-width: 1140px; margin: 1.5rem auto 4rem auto; padding: 0 1.5rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #0f172a;">
+  <main style="max-width: 1140px; margin: 1.5rem auto 4rem auto; padding: 0 1rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #0f172a; box-sizing: border-box; overflow-x: hidden;">
     
-    <!-- Navigation Breadcrumbs -->
+    <!-- Validated 2-Tier Breadcrumb Navigation -->
     <nav style="font-size: 0.85rem; color: #475569; margin-bottom: 1.25rem;">
       <a href="/" style="color: #0284c7; text-decoration: none; font-weight: 600;">Home</a> &rsaquo; 
-      <span style="color: #64748b;"> General &amp; Quantitative Chemistry</span> &rsaquo; 
       <span style="color: #0f172a; font-weight: 700;">Significant Figures Studio</span>
     </nav>
 
     <!-- Header Hero Card -->
-    <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 16px; padding: 2rem; margin-bottom: 2rem; color: #ffffff; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.15);">
+    <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 16px; padding: clamp(1.25rem, 3vw, 2rem); margin-bottom: 1.75rem; color: #ffffff; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.15);">
       <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.5rem;">
         <div style="max-width: 760px;">
           <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); padding: 0.3rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem;">
             <span>Precision &amp; Error Propagation Core &bull; ASTM / IUPAC Rules</span>
           </div>
-          <h1 style="font-size: 2.35rem; font-weight: 800; color: #ffffff; letter-spacing: -0.025em; margin: 0; line-height: 1.2;">
+          <h1 style="font-size: clamp(1.6rem, 4vw, 2.35rem); font-weight: 800; color: #ffffff; letter-spacing: -0.025em; margin: 0; line-height: 1.2;">
             Significant Figures Studio
           </h1>
           <p style="color: #cbd5e1; font-size: 1rem; margin-top: 0.65rem; margin-bottom: 0; line-height: 1.6;">
@@ -101,18 +191,33 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </p>
         </div>
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-          <button id="btnResetDefault" type="button" style="background: #334155; border: 1px solid #475569; color: #f8fafc; padding: 0.65rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700;">
+          <button id="btnResetDefault" type="button" style="background: #334155; border: 1px solid #475569; color: #f8fafc; padding: 0.65rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; min-height: 38px;">
             Reset
           </button>
-          <button id="btnShareUrl" type="button" style="background: #0284c7; border: none; color: white; padding: 0.65rem 1.15rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 0.4rem;">
+          <button id="btnShareUrl" type="button" style="background: #0284c7; border: none; color: white; padding: 0.65rem 1.15rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 0.4rem; min-height: 38px;">
             <span>Share Link</span>
           </button>
-          <button id="btnExportCsv" type="button" style="background: #334155; border: 1px solid #475569; color: white; padding: 0.65rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700;">
+          <button id="btnExportCsv" type="button" style="background: #334155; border: 1px solid #475569; color: white; padding: 0.65rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; min-height: 38px;">
             CSV
           </button>
         </div>
       </div>
+
+      <!-- AuthorCard / E-E-A-T Component -->
+      <div style="margin-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.25rem;">
+        <AuthorCard />
+      </div>
     </div>
+
+    <!-- DIRECT DEFINITION & GEO SUMMARY CALLOUT BOX -->
+    <section style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-left: 5px solid #0284c7; border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 1.75rem;">
+      <h2 style="font-size: 1rem; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.04em; margin: 0 0 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+        <span>💡</span> What Are Significant Figures? (Direct Answer)
+      </h2>
+      <p style="font-size: 0.92rem; color: #334155; margin: 0; line-height: 1.6;">
+        <strong>Significant figures (sig figs)</strong> are the meaningful digits in a measured value that reflect the precision of an experimental apparatus. They comprise all certain digits plus one estimated final digit. In calculations, addition/subtraction results are limited by <strong>fewest decimal places</strong>, while multiplication/division results are limited by <strong>fewest total significant figures</strong>.
+      </p>
+    </section>
 
     <!-- QUICK PRESET PILLS CAROUSEL (HIGH-VOLUME EXAM & LAB BENCHMARKS) -->
     <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
@@ -132,29 +237,29 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     <!-- 3-MODE TAB NAVIGATION BAR -->
     <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; flex-wrap: wrap;">
-      <button id="tabBtnCount" type="button" class="mode-tab active" style="padding: 0.65rem 1.25rem; font-size: 0.9rem; font-weight: 800; border-radius: 8px; border: none; background: #0284c7; color: #ffffff; cursor: pointer;">
+      <button id="tabBtnCount" type="button" class="mode-tab active" style="padding: 0.65rem 1.25rem; font-size: 0.9rem; font-weight: 800; border-radius: 8px; border: none; background: #0284c7; color: #ffffff; cursor: pointer; min-height: 40px;">
         1. Count &amp; Rule Inspector
       </button>
-      <button id="tabBtnExpr" type="button" class="mode-tab" style="padding: 0.65rem 1.25rem; font-size: 0.9rem; font-weight: 700; border-radius: 8px; border: 1px solid #cbd5e1; background: #ffffff; color: #475569; cursor: pointer;">
+      <button id="tabBtnExpr" type="button" class="mode-tab" style="padding: 0.65rem 1.25rem; font-size: 0.9rem; font-weight: 700; border-radius: 8px; border: 1px solid #cbd5e1; background: #ffffff; color: #475569; cursor: pointer; min-height: 40px;">
         2. Arithmetic &amp; Lab Expressions
       </button>
-      <button id="tabBtnRound" type="button" class="mode-tab" style="padding: 0.65rem 1.25rem; font-size: 0.9rem; font-weight: 700; border-radius: 8px; border: 1px solid #cbd5e1; background: #ffffff; color: #475569; cursor: pointer;">
+      <button id="tabBtnRound" type="button" class="mode-tab" style="padding: 0.65rem 1.25rem; font-size: 0.9rem; font-weight: 700; border-radius: 8px; border: 1px solid #cbd5e1; background: #ffffff; color: #475569; cursor: pointer; min-height: 40px;">
         3. Round to Target Precision
       </button>
     </div>
 
     <!-- MAIN TWO-COLUMN WORKBENCH -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 2rem; margin-bottom: 2.5rem;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 2rem; margin-bottom: 2.5rem;">
       
       <!-- LEFT COLUMN: User Inputs & Interactive Controls -->
-      <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+      <div style="display: flex; flex-direction: column; gap: 1.5rem; min-width: 0;">
         
         <!-- CARD: Input Workbench -->
-        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 1.75rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);">
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: clamp(1rem, 3vw, 1.75rem); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); min-width: 0;">
           
           <!-- Mode 1: Counter / Inspector Input -->
           <div id="panelCountInput">
-            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.4rem;">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.4rem; flex-wrap: wrap; gap: 0.25rem;">
               <label for="inpCountVal" style="font-size: 0.82rem; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.05em;">
                 Enter Any Real Number:
               </label>
@@ -176,7 +281,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
           <!-- Mode 2: Arithmetic Expression Input -->
           <div id="panelExprInput" style="display: none;">
-            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.4rem;">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.4rem; flex-wrap: wrap; gap: 0.25rem;">
               <label for="inpExprVal" style="font-size: 0.82rem; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.05em;">
                 Enter Chemical / Math Expression:
               </label>
@@ -225,7 +330,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <div id="sigFigAlert" style="display: none; margin-top: 0.75rem; padding: 0.6rem 0.85rem; border-radius: 6px; background: #fef2f2; border: 1px solid #fecaca; color: #b91c1c; font-size: 0.8rem; font-weight: 600;"></div>
 
           <!-- Quick Helpers -->
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.85rem; font-size: 0.78rem; color: #64748b; font-weight: 600;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.85rem; font-size: 0.78rem; color: #64748b; font-weight: 600; flex-wrap: wrap; gap: 0.25rem;">
             <span>Precision Mode: <strong id="lblPrecisionMode" style="color: #0f172a;">Direct Inspection</strong></span>
             <span>Scientific Base: <strong style="color: #0284c7; font-family: monospace;">Base 10</strong></span>
           </div>
@@ -233,7 +338,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
 
         <!-- CARD: Notations & Alternative Forms -->
-        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 1.75rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);">
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: clamp(1rem, 3vw, 1.75rem); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); min-width: 0;">
           <div style="border-bottom: 2px solid #f1f5f9; padding-bottom: 0.65rem; margin-bottom: 1.25rem;">
             <h2 style="font-size: 0.95rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #0f172a; margin: 0;">
               Precision &amp; Notation Transformers
@@ -242,28 +347,28 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </div>
 
           <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; display: flex; justify-content: space-between; align-items: center;">
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
               <div>
                 <div style="font-size: 0.7rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Scientific Notation</div>
-                <div id="dispSciNotation" style="font-size: 1.05rem; font-weight: 800; color: #0f172a; font-family: monospace;">5.020 &times; 10⁻³</div>
+                <div id="dispSciNotation" style="font-size: 1.05rem; font-weight: 800; color: #0f172a; font-family: monospace; word-break: break-all;">5.020 &times; 10⁻³</div>
               </div>
-              <button class="btn-copy-mini" data-target="dispSciNotation" style="padding: 0.3rem 0.6rem; font-size: 0.72rem; font-weight: 700; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; cursor: pointer;">Copy</button>
+              <button class="btn-copy-mini" data-target="dispSciNotation" style="padding: 0.3rem 0.6rem; font-size: 0.72rem; font-weight: 700; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; cursor: pointer; min-height: 28px;">Copy</button>
             </div>
 
-            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; display: flex; justify-content: space-between; align-items: center;">
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
               <div>
                 <div style="font-size: 0.7rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Engineering Notation (3k)</div>
-                <div id="dispEngNotation" style="font-size: 1.05rem; font-weight: 800; color: #0f172a; font-family: monospace;">5.020 &times; 10⁻³</div>
+                <div id="dispEngNotation" style="font-size: 1.05rem; font-weight: 800; color: #0f172a; font-family: monospace; word-break: break-all;">5.020 &times; 10⁻³</div>
               </div>
-              <button class="btn-copy-mini" data-target="dispEngNotation" style="padding: 0.3rem 0.6rem; font-size: 0.72rem; font-weight: 700; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; cursor: pointer;">Copy</button>
+              <button class="btn-copy-mini" data-target="dispEngNotation" style="padding: 0.3rem 0.6rem; font-size: 0.72rem; font-weight: 700; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; cursor: pointer; min-height: 28px;">Copy</button>
             </div>
 
-            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; display: flex; justify-content: space-between; align-items: center;">
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
               <div>
                 <div style="font-size: 0.7rem; font-weight: 700; color: #64748b; text-transform: uppercase;">E-Notation (Lab Instruments)</div>
-                <div id="dispENotation" style="font-size: 1.05rem; font-weight: 800; color: #0f172a; font-family: monospace;">5.020E-3</div>
+                <div id="dispENotation" style="font-size: 1.05rem; font-weight: 800; color: #0f172a; font-family: monospace; word-break: break-all;">5.020E-3</div>
               </div>
-              <button class="btn-copy-mini" data-target="dispENotation" style="padding: 0.3rem 0.6rem; font-size: 0.72rem; font-weight: 700; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; cursor: pointer;">Copy</button>
+              <button class="btn-copy-mini" data-target="dispENotation" style="padding: 0.3rem 0.6rem; font-size: 0.72rem; font-weight: 700; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; cursor: pointer; min-height: 28px;">Copy</button>
             </div>
           </div>
 
@@ -272,12 +377,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
 
       <!-- RIGHT COLUMN: HUD Results, Visual Digit Anatomy & Step-by-Step Audit -->
-      <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+      <div style="display: flex; flex-direction: column; gap: 1.5rem; min-width: 0;">
         
         <!-- Primary Output HUD Card -->
-        <div style="background: #0f172a; border-radius: 14px; padding: 1.75rem 2rem; color: #ffffff; box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.3); border: 1px solid #334155;">
+        <div style="background: #0f172a; border-radius: 14px; padding: clamp(1.25rem, 3vw, 1.75rem); color: #ffffff; box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.3); border: 1px solid #334155; min-width: 0;">
           
-          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+          <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.4rem;">
             <span style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #38bdf8;">
               Determined Precision
             </span>
@@ -286,7 +391,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             </span>
           </div>
 
-          <div id="dispHudMain" style="font-size: 3rem; font-weight: 900; color: #38bdf8; margin: 0.5rem 0; font-family: ui-monospace, monospace; line-height: 1.1;">
+          <div id="dispHudMain" style="font-size: clamp(2rem, 5vw, 3rem); font-weight: 900; color: #38bdf8; margin: 0.5rem 0; font-family: ui-monospace, monospace; line-height: 1.1; word-break: break-all;">
             4 <span style="font-size: 1.45rem; color: #94a3b8; font-weight: 700;">Sig Figs</span>
           </div>
 
@@ -307,7 +412,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
 
         <!-- Step-by-Step Intermediate Analysis & Applied Rules Card -->
-        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);">
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: clamp(1rem, 3vw, 1.5rem); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); min-width: 0;">
           <div style="font-size: 0.88rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #0f172a; margin-bottom: 0.85rem;">
             Step-by-Step Rule Audit &amp; Derivations
           </div>
@@ -320,10 +425,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.25rem; border-top: 1px solid #f1f5f9; padding-top: 1rem;">
             <span style="font-size: 0.78rem; font-weight: 800; text-transform: uppercase; color: #475569;">Export Options:</span>
             <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
-              <button id="btnCopyResult" type="button" style="background: #0284c7; border: none; padding: 0.3rem 0.65rem; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff;">Copy Answer</button>
-              <button id="btnCopyHomework" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.3rem 0.6rem; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #334155;">Copy Steps</button>
-              <button id="btnCopyLatex" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.3rem 0.6rem; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #334155;">LaTeX</button>
-              <button id="toggleCiteBtn" type="button" style="background: #e0f2fe; border: 1px solid #7dd3fc; padding: 0.3rem 0.65rem; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #0369a1;">Cite</button>
+              <button id="btnCopyResult" type="button" style="background: #0284c7; border: none; padding: 0.3rem 0.65rem; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff; min-height: 30px;">Copy Answer</button>
+              <button id="btnCopyHomework" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.3rem 0.6rem; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #334155; min-height: 30px;">Copy Steps</button>
+              <button id="btnCopyLatex" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.3rem 0.6rem; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #334155; min-height: 30px;">LaTeX</button>
+              <button id="toggleCiteBtn" type="button" style="background: #e0f2fe; border: 1px solid #7dd3fc; padding: 0.3rem 0.65rem; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #0369a1; min-height: 30px;">Cite</button>
             </div>
           </div>
 
@@ -350,7 +455,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <!-- EDITORIAL & METHODOLOGICAL KNOWLEDGE SECTION (E-E-A-T) -->
     <article style="border-top: 1px solid #e2e8f0; padding-top: 3.5rem; line-height: 1.85; color: #334155;">
       
-      <h2 style="font-size: 1.85rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem; letter-spacing: -0.02em;">
+      <h2 style="font-size: clamp(1.4rem, 3.5vw, 1.85rem); font-weight: 800; color: #0f172a; margin-bottom: 1rem; letter-spacing: -0.02em; line-height: 1.3;">
         Theoretical Foundations: Significant Figures &amp; Experimental Precision
       </h2>
       <p>
@@ -395,6 +500,79 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <p style="margin: 0; font-size: 0.92rem; color: #059669; font-weight: 700;">
           Final Reported Answer: &rho; = 1.34 g/mL (3 Significant Figures).
         </p>
+      </div>
+
+      <!-- NIST / ASTM APPARATUS TOLERANCE & SIG FIG BENCHMARK TABLE -->
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2.75rem; margin-bottom: 0.75rem;">
+        3. NIST &amp; ASTM Laboratory Apparatus Tolerances &amp; Measurement Sig Figs
+      </h3>
+      <p style="font-size: 0.9rem; color: #475569; margin-bottom: 1rem;">
+        Standard tolerances and recorded significant figures across common analytical laboratory apparatus:
+      </p>
+
+      <div style="border: 1px solid #cbd5e1; border-radius: 8px; overflow-x: auto; margin-bottom: 2rem;">
+        <table style="width: 100%; min-width: 650px; border-collapse: collapse; font-size: 0.85rem; text-align: left; background: #ffffff;">
+          <thead style="background: #0f172a; color: white;">
+            <tr>
+              <th style="padding: 0.65rem 0.75rem; border: 1px solid #334155;">Laboratory Apparatus</th>
+              <th style="padding: 0.65rem 0.75rem; border: 1px solid #334155;">Nominal Capacity</th>
+              <th style="padding: 0.65rem 0.75rem; border: 1px solid #334155;">NIST / ASTM Tolerance</th>
+              <th style="padding: 0.65rem 0.75rem; border: 1px solid #334155;">Typical Recorded Reading</th>
+              <th style="padding: 0.65rem 0.75rem; border: 1px solid #334155;">Significant Figures</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Analytical Balance (4-Place)</td>
+              <td style="padding: 0.65rem 0.75rem;">200 g</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">&plusmn; 0.0001 g</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">12.4582 g</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">6 Sig Figs</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Top-Loading Balance (2-Place)</td>
+              <td style="padding: 0.65rem 0.75rem;">1200 g</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">&plusmn; 0.01 g</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">45.20 g</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">4 Sig Figs</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Class A Volumetric Flask</td>
+              <td style="padding: 0.65rem 0.75rem;">250 mL</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">&plusmn; 0.12 mL</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">250.00 mL</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">5 Sig Figs</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Class A Transfer Pipette</td>
+              <td style="padding: 0.65rem 0.75rem;">25 mL</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">&plusmn; 0.03 mL</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">25.00 mL</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">4 Sig Figs</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Class A Glass Burette</td>
+              <td style="padding: 0.65rem 0.75rem;">50 mL</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">&plusmn; 0.05 mL</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">34.25 mL</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">4 Sig Figs</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Graduated Cylinder</td>
+              <td style="padding: 0.65rem 0.75rem;">100 mL</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">&plusmn; 0.5 mL</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">48.5 mL</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">3 Sig Figs</td>
+            </tr>
+            <tr>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Laboratory Thermometer</td>
+              <td style="padding: 0.65rem 0.75rem;">-10 to 110 &deg;C</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">&plusmn; 0.1 &deg;C</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">24.8 &deg;C</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">3 Sig Figs</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
       <!-- FAQ Accordion -->
@@ -446,7 +624,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <h3 style="margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 0.5rem;">
         <span>🔗</span> Upstream &amp; Downstream Quantitative Studios
       </h3>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 1rem;">
         <a href="/molar-mass" style="display: block; padding: 1rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
           <div style="font-weight: 700; font-size: 0.92rem; color: #f59e0b; margin-bottom: 0.35rem;">Molar Mass &amp; Elemental Studio &rarr;</div>
           <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">
