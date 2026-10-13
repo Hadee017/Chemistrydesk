@@ -36,7 +36,10 @@ const schemaData = {
       "jobTitle": "Physical & Materials Chemistry Researcher",
       "description": "Specialist in porous coordination polymers, heterogeneous adsorption kinetics, and computational chemical physics.",
       "sameAs": [
+        "https://www.wikidata.org/wiki/Q141699332",
         "https://orcid.org/0009-0006-3082-7043",
+        "https://www.linkedin.com/in/bilal-khan-bbb259248",
+        "https://doi.org/10.5281/zenodo.23059466",
         "https://github.com/Hadee017",
         "https://about.me/bilalkhan01",
         "https://www.behance.net/bilalkhan"
@@ -55,7 +58,7 @@ const schemaData = {
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "Stoichiometry & Reaction Yield Engine",
+          "name": "Stoichiometry Studio",
           "item": canonicalUrl
         }
       ]
@@ -170,7 +173,7 @@ const schemaData = {
     <!-- Validated 2-Tier Breadcrumb Navigation -->
     <nav style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.25rem;">
       <a href="/" style="color: #0284c7; text-decoration: none; font-weight: 600;">Home</a> &rsaquo; 
-      <span style="color: #0f172a; font-weight: 700;">Stoichiometry &amp; Yield Engine</span>
+      <span style="color: #0f172a; font-weight: 700;">Stoichiometry Studio</span>
     </nav>
 
     <!-- Header Section -->
@@ -193,18 +196,18 @@ const schemaData = {
       <div style="margin-top: 1.25rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
           <span style="font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase;">Presets:</span>
-          <button type="button" class="preset-rxn-btn" data-rxn="C3H8 + O2 -> CO2 + H2O" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; padding: 0.35rem 0.65rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #38bdf8;">Propane Combustion</button>
-          <button type="button" class="preset-rxn-btn" data-rxn="Al + HCl -> AlCl3 + H2" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; padding: 0.35rem 0.65rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #38bdf8;">Al + HCl Redox</button>
-          <button type="button" class="preset-rxn-btn" data-rxn="FeCl3 + NaOH -> Fe(OH)3 + NaCl" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; padding: 0.35rem 0.65rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #38bdf8;">Precipitation</button>
-          <button type="button" class="preset-rxn-btn" data-rxn="N2 + H2 -> NH3" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; padding: 0.35rem 0.65rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #38bdf8;">Haber Synthesis</button>
+          <button type="button" class="preset-rxn-btn" data-rxn="C3H8 + O2 -> CO2 + H2O" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; padding: 0.35rem 0.65rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #38bdf8; min-height: 32px;">Propane Combustion</button>
+          <button type="button" class="preset-rxn-btn" data-rxn="Al + HCl -> AlCl3 + H2" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; padding: 0.35rem 0.65rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #38bdf8; min-height: 32px;">Al + HCl Redox</button>
+          <button type="button" class="preset-rxn-btn" data-rxn="FeCl3 + NaOH -> Fe(OH)3 + NaCl" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; padding: 0.35rem 0.65rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #38bdf8; min-height: 32px;">Precipitation</button>
+          <button type="button" class="preset-rxn-btn" data-rxn="N2 + H2 -> NH3" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; padding: 0.35rem 0.65rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #38bdf8; min-height: 32px;">Haber Synthesis</button>
         </div>
 
         <div style="display: flex; gap: 0.45rem; flex-wrap: wrap;">
-          <button id="btnCopyShareUrl" type="button" style="background: #0284c7; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff; display: inline-flex; align-items: center; gap: 0.3rem; min-height: 32px;">🔗 Share Link</button>
-          <button id="btnCopyReport" type="button" style="background: #10b981; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff; display: inline-flex; align-items: center; gap: 0.3rem; min-height: 32px;">📋 Copy Report</button>
-          <button id="btnExportCsv" type="button" style="background: #334155; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff; min-height: 32px;">📥 CSV</button>
-          <button id="btnCopyLatex" type="button" style="background: #475569; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff; min-height: 32px;">LaTeX</button>
-          <button id="toggleCiteBtn" type="button" style="background: #e0f2fe; border: 1px solid #bae6fd; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #0369a1; min-height: 32px;">📖 Cite</button>
+          <button id="btnCopyShareUrl" type="button" style="background: #0284c7; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff; display: inline-flex; align-items: center; gap: 0.3rem; min-height: 34px;">🔗 Share Link</button>
+          <button id="btnCopyReport" type="button" style="background: #10b981; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff; display: inline-flex; align-items: center; gap: 0.3rem; min-height: 34px;">📋 Copy Report</button>
+          <button id="btnExportCsv" type="button" style="background: #334155; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff; min-height: 34px;">📥 CSV</button>
+          <button id="btnCopyLatex" type="button" style="background: #475569; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff; min-height: 34px;">LaTeX</button>
+          <button id="toggleCiteBtn" type="button" style="background: #e0f2fe; border: 1px solid #bae6fd; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #0369a1; min-height: 34px;">📖 Cite</button>
         </div>
       </div>
 
@@ -287,7 +290,7 @@ const schemaData = {
         </div>
 
         <!-- Dynamic Grid Table -->
-        <div style="border: 1px solid #cbd5e1; border-radius: 8px; overflow-x: auto; margin-bottom: 1.25rem;">
+        <div style="border: 1px solid #cbd5e1; border-radius: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 1.25rem;">
           <table style="width: 100%; min-width: 600px; border-collapse: collapse; font-size: 0.85rem; text-align: left;">
             <thead style="background: #f8fafc; border-bottom: 1.5px solid #cbd5e1;">
               <tr>
