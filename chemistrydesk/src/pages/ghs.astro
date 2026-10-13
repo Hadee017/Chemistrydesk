@@ -1,92 +1,204 @@
 ---
+// src/pages/ghs.astro
 import BaseLayout from '../layouts/BaseLayout.astro';
+import AuthorCard from '../components/AuthorCard.astro';
 import { 
   GHS_HAZARD_STATEMENTS, 
   GHS_PRECAUTIONARY_STATEMENTS, 
   GHS_PICTOGRAMS, 
   GHS_GENERIC_CUTOFFS 
 } from '../utils/chemicalLookup';
+
+const pageTitle = "GHS Hazard & Chemical Safety Studio | Universal 110M+ Reagent Lookup | ChemistryDesk";
+const pageDescription = "Universal GHS chemical safety engine. Live lookup for 110M+ compounds via PubChem, full UN Rev. 10 H & P code index, mixture concentration cut-off calculator, and printable OSHA secondary container labels.";
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://chemistrycal.com';
+const canonicalUrl = `${siteUrl}/ghs`;
+
+const schemaData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      "url": siteUrl,
+      "name": "ChemistryDesk",
+      "description": "Precision Scientific Utilities & Computational Laboratory Engines",
+      "inLanguage": "en-US"
+    },
+    {
+      "@type": "WebPage",
+      "@id": `${canonicalUrl}#webpage`,
+      "url": canonicalUrl,
+      "name": pageTitle,
+      "isPartOf": { "@id": `${siteUrl}/#website` },
+      "description": pageDescription,
+      "inLanguage": "en-US",
+      "author": { "@id": `${siteUrl}/#author` }
+    },
+    {
+      "@type": "Person",
+      "@id": `${siteUrl}/#author`,
+      "name": "Bilal Khan",
+      "jobTitle": "Physical & Materials Chemistry Researcher",
+      "description": "Specialist in porous coordination polymers, heterogeneous adsorption kinetics, and computational chemical physics.",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q141699332",
+        "https://orcid.org/0009-0006-3082-7043",
+        "https://www.linkedin.com/in/bilal-khan-bbb259248",
+        "https://doi.org/10.5281/zenodo.23059466",
+        "https://github.com/Hadee017",
+        "https://about.me/bilalkhan01",
+        "https://www.behance.net/bilalkhan"
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${canonicalUrl}#breadcrumb`,
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": siteUrl
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "GHS Safety Studio",
+          "item": canonicalUrl
+        }
+      ]
+    },
+    {
+      "@type": "WebApplication",
+      "@id": `${canonicalUrl}#software`,
+      "name": "ChemistryDesk Universal GHS Hazard & Chemical Safety Studio",
+      "url": canonicalUrl,
+      "applicationCategory": "EducationalApplication, ScientificApplication",
+      "operatingSystem": "All modern web browsers",
+      "browserRequirements": "Requires JavaScript. Runs 100% offline via Service Worker.",
+      "description": pageDescription,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "creator": { "@id": `${siteUrl}/#author` },
+      "featureList": [
+        "Universal 110M+ Compound Lookup with Live PubChem Resolution",
+        "Complete UN GHS Rev. 10 H and P Code Index with Real-Time Filtering",
+        "Mixture Generic Concentration Cut-Off Calculator",
+        "Interactive 9-Pictogram Filter Bar with High-Resolution SVGs",
+        "Printable OSHA HazCom Secondary Container Label Generator",
+        "COSHH Protocol Summary Copy & 1-Click LaTeX Equations",
+        "Integrated academic citation drawer (BibTeX, ACS, RSC, Nature, Elsevier, Wiley)"
+      ]
+    },
+    {
+      "@type": "DefinedTermSet",
+      "@id": `${canonicalUrl}#definedterms`,
+      "name": "Globally Harmonized System of Classification and Labelling of Chemicals (GHS) Statements",
+      "hasDefinedTerm": Object.values(GHS_HAZARD_STATEMENTS).slice(0, 15).map(h => ({
+        "@type": "DefinedTerm",
+        "termCode": h.code,
+        "name": `${h.code}: ${h.statement}`,
+        "description": h.classCategory || h.statement
+      }))
+    },
+    {
+      "@type": "HowTo",
+      "@id": `${canonicalUrl}#howto`,
+      "name": "How to Classify Chemical Hazards and Prepare OSHA Secondary Container Labels",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "name": "Identify Chemical Entity & CAS Number",
+          "text": "Search the substance by common name, IUPAC nomenclature, or CAS registry number to resolve core chemical properties."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Assign Signal Word & GHS Pictograms",
+          "text": "Identify the primary signal word (Danger or Warning based on precedence) and map all mandatory physical, health, and environmental pictograms."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Evaluate Mixture Cut-Off Concentrations",
+          "text": "If preparing an aqueous or solvent dilution, verify whether solute concentration exceeds generic cut-off thresholds (e.g. 0.1%, 1.0%, 3.0%)."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Generate Standard Secondary Container Label",
+          "text": "Compile the product identifier, signal word, hazard summary, and active pictograms onto an OSHA HazCom secondary container label."
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${canonicalUrl}#faq`,
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What are GHS Hazard (H) and Precautionary (P) statements?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Hazard Statements (H-codes) are standardized phrases describing the nature and severity of chemical hazards (H200 Physical, H300 Health, H400 Environmental). Precautionary Statements (P-codes) describe recommended measures to minimize or prevent adverse effects from chemical exposure (P100 General, P200 Prevention, P300 Response, P400 Storage, P500 Disposal)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the concentration cut-off limit for chemical mixtures under GHS?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The generic concentration cut-off is the threshold concentration of a hazardous ingredient in a mixture that triggers mandatory GHS hazard classification on container labels (e.g., ≥0.1% for Carcinogens, Mutagens, and Reproductive toxins, ≥1.0% for Acute Toxins, and ≥3.0% for Category 1 Skin Corrosives)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What information is mandatory on an OSHA GHS secondary container label?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "An OSHA HazCom 2012 secondary container label must clearly display the Product Identifier (chemical/solution name), Signal Word (DANGER or WARNING), Hazard Statements, relevant GHS Pictograms, and Precautionary advice."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "When is a secondary container label legally required in a laboratory?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Under OSHA HazCom 2012, if a prepared solution or chemical is transferred from its manufacturer bottle into a secondary vessel (e.g. Schott bottle, beaker, volumetric flask) and is not used immediately during the work shift by the person who transferred it, a secondary container label is legally required."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the difference between DANGER and WARNING signal words?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "DANGER is reserved for severe hazard categories (e.g., Fatal if swallowed, Severe skin burns, Carcinogen Category 1). WARNING is assigned to less severe hazard categories (e.g., Harmful if swallowed, Skin irritation, Suspected carcinogen Category 2)."
+          }
+        }
+      ]
+    }
+  ]
+};
 ---
 
-<BaseLayout 
-  title="GHS Hazard & Chemical Safety Studio | Universal 110M+ Reagent Lookup | ChemistryDesk"
-  description="Universal GHS chemical safety engine. Live lookup for 110M+ compounds via PubChem, full UN Rev. 10 H & P code index, mixture concentration cut-off calculator, and printable OSHA secondary container labels."
->
-  <!-- Schema: WebApplication -->
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "ChemistryDesk Universal GHS Hazard & Chemical Safety Studio",
-    "applicationCategory": "EducationalApplication",
-    "operatingSystem": "All",
-    "browserRequirements": "Requires JavaScript",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    }
-  })} />
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(schemaData)}></script>
 
-  <!-- Schema: DefinedTermSet (Maps H and P codes for Google Rich Snippets) -->
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "DefinedTermSet",
-    "name": "Globally Harmonized System of Classification and Labelling of Chemicals (GHS) Statements",
-    "hasDefinedTerm": Object.values(GHS_HAZARD_STATEMENTS).slice(0, 15).map(h => ({
-      "@type": "DefinedTerm",
-      "termCode": h.code,
-      "name": `${h.code}: ${h.statement}`,
-      "description": h.classCategory || h.statement
-    }))
-  })} />
-
-  <!-- Schema: FAQPage -->
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "What are GHS Hazard (H) and Precautionary (P) statements?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Hazard Statements (H-codes) are standardized phrases describing the nature and severity of chemical hazards (H200 Physical, H300 Health, H400 Environmental). Precautionary Statements (P-codes) describe recommended measures to minimize or prevent adverse effects from chemical exposure (P100 General, P200 Prevention, P300 Response, P400 Storage, P500 Disposal)."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "What is the concentration cut-off limit for chemical mixtures under GHS?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "The generic concentration cut-off is the threshold concentration of a hazardous ingredient in a mixture that triggers mandatory GHS hazard classification on container labels (e.g., ≥0.1% for Carcinogens, Mutagens, and Reproductive toxins, ≥1.0% for Acute Toxins, and ≥3.0% for Category 1 Skin Corrosives)."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "What information is mandatory on an OSHA GHS secondary container label?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "An OSHA HazCom 2012 secondary container label must clearly display the Product Identifier (chemical/solution name), Signal Word (DANGER or WARNING), Hazard Statements, relevant GHS Pictograms, and Precautionary advice."
-        }
-      }
-    ]
-  })} />
-
-  <main style="max-width: 1060px; margin: 1.5rem auto 3rem auto; padding: 0 1.5rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1e293b;">
+  <main style="max-width: 1060px; margin: 1.5rem auto 3rem auto; padding: 0 1rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1e293b; box-sizing: border-box; overflow-x: hidden;">
     
-    <!-- Breadcrumb Navigation -->
+    <!-- Validated 2-Tier Breadcrumb Navigation -->
     <nav style="font-size: 0.8rem; color: #64748b; margin-bottom: 1.25rem;">
       <a href="/" style="color: #dc2626; text-decoration: none; font-weight: 600;">Home</a> &rsaquo; 
-      <span style="color: #94a3b8;"> Lab Safety &amp; Compliance</span> &rsaquo; 
       <span style="color: #0f172a; font-weight: 700;">GHS Safety Studio</span>
     </nav>
 
     <!-- Header Section -->
-    <div style="border-bottom: 1px solid #e2e8f0; padding-bottom: 1.75rem; margin-bottom: 2rem;">
-      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+    <div style="border-bottom: 1px solid #e2e8f0; padding-bottom: 1.75rem; margin-bottom: 1.75rem;">
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; flex-wrap: wrap;">
         <span style="font-size: 2.5rem;">⚠️</span>
         <div>
-          <h1 style="font-size: 2.25rem; font-weight: 800; color: #0f172a; letter-spacing: -0.025em; margin: 0;">
+          <h1 style="font-size: clamp(1.6rem, 4vw, 2.25rem); font-weight: 800; color: #0f172a; letter-spacing: -0.025em; margin: 0; line-height: 1.2;">
             GHS Hazard &amp; Chemical Safety Studio
           </h1>
           <p style="color: #64748b; font-size: 0.95rem; margin-top: 0.25rem; margin-bottom: 0;">
@@ -95,24 +207,32 @@ import {
         </div>
       </div>
 
+      <!-- AuthorCard / E-E-A-T Component -->
+      <div style="margin-top: 1.5rem; border-top: 1px solid #f1f5f9; padding-top: 1.25rem;">
+        <AuthorCard />
+      </div>
+
       <!-- Segmented Mode Switcher -->
       <div style="margin-top: 1.5rem; display: flex; align-items: center; justify-content: flex-start;">
         <div style="background: #e2e8f0; padding: 4px; border-radius: 10px; display: inline-flex; gap: 4px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.06); flex-wrap: wrap;">
           <button 
             id="modeReagentBtn" 
-            style="background: #dc2626; color: #ffffff; border: none; padding: 0.65rem 1.25rem; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: all 0.2s ease;"
+            type="button"
+            style="background: #dc2626; color: #ffffff; border: none; padding: 0.65rem 1.25rem; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: all 0.2s ease; min-height: 38px;"
           >
             <span>🔍</span> 110M+ Compound &amp; SDS Finder
           </button>
           <button 
             id="modeStatementsBtn" 
-            style="background: transparent; color: #475569; border: none; padding: 0.65rem 1.25rem; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s ease;"
+            type="button"
+            style="background: transparent; color: #475569; border: none; padding: 0.65rem 1.25rem; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s ease; min-height: 38px;"
           >
             <span>📑</span> H &amp; P Statement Matrix
           </button>
           <button 
             id="modeCutoffBtn" 
-            style="background: transparent; color: #475569; border: none; padding: 0.65rem 1.25rem; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s ease;"
+            type="button"
+            style="background: transparent; color: #475569; border: none; padding: 0.65rem 1.25rem; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s ease; min-height: 38px;"
           >
             <span>⚖️</span> Mixture Cut-Off Limit Solver
           </button>
@@ -120,13 +240,23 @@ import {
       </div>
     </div>
 
+    <!-- DIRECT DEFINITION & GEO SUMMARY CALLOUT BOX -->
+    <section style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-left: 5px solid #dc2626; border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 1.75rem;">
+      <h2 style="font-size: 1rem; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.04em; margin: 0 0 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+        <span>💡</span> What is the Globally Harmonized System (GHS)? (Direct Answer)
+      </h2>
+      <p style="font-size: 0.92rem; color: #334155; margin: 0; line-height: 1.6;">
+        The <strong>Globally Harmonized System (GHS)</strong> is an international standard created by the United Nations for classifying and labeling hazardous chemicals. It unifies chemical communication across <strong>9 standardized pictograms</strong>, two signal words (<strong>DANGER</strong> for severe risks; <strong>WARNING</strong> for moderate risks), standardized Hazard Statements (<code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">H-codes</code>), and Precautionary Statements (<code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">P-codes</code>).
+      </p>
+    </section>
+
     <!-- ============================================================ -->
     <!-- MODE 1: UNIVERSAL 110M+ COMPOUND & SDS RESOLVER              -->
     <!-- ============================================================ -->
     <div id="reagentModeSection">
       
       <!-- Free-Form Universal Search Bar -->
-      <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.04);">
+      <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: clamp(1rem, 3vw, 1.5rem); margin-bottom: 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.04); min-width: 0;">
         <label style="display: block; font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #334155; margin-bottom: 0.5rem;">
           Universal Chemical Search (Name, Formula, or CAS Number)
         </label>
@@ -136,61 +266,63 @@ import {
             id="chemSearchInput" 
             placeholder="Type any compound (e.g. Copper Sulfate, Paraquat, HCl, KMnO4, C6H12O6)..." 
             value="Copper(II) Sulfate Pentahydrate"
-            style="flex: 1; min-width: 260px; padding: 0.75rem 1rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 1rem; font-weight: 600; outline: none; transition: border-color 0.2s;" 
+            style="flex: 1; min-width: 240px; padding: 0.75rem 1rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 1rem; font-weight: 600; outline: none; transition: border-color 0.2s;" 
           />
           <button 
             id="btnExecuteSearch" 
             type="button" 
-            style="background: #dc2626; color: #ffffff; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-size: 0.95rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);"
+            style="background: #dc2626; color: #ffffff; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-size: 0.95rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); min-height: 42px;"
           >
             <span>⚡</span> Search 110M+
           </button>
         </div>
-        <div id="searchStatusText" style="margin-top: 0.5rem; font-size: 0.78rem; color: #64748b; display: flex; justify-content: space-between;">
+        <div id="searchStatusText" style="margin-top: 0.5rem; font-size: 0.78rem; color: #64748b; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.25rem;">
           <span>Instant local benchmark cache active. Exotic compounds query live NCBI PubChem API.</span>
           <span id="lookupSpeedBadge" style="font-weight: 700; color: #059669;">Ready</span>
         </div>
       </div>
 
       <!-- Live Chemical Dossier Card -->
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 2rem; margin-bottom: 3rem;">
         
         <!-- Entity Identity & Chemical Specifications -->
-        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: clamp(1rem, 3vw, 1.75rem); box-shadow: 0 1px 3px rgba(0,0,0,0.05); min-width: 0;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
             <div>
               <span style="font-size: 0.75rem; font-weight: 800; color: #dc2626; text-transform: uppercase; letter-spacing: 0.05em;">Resolved Chemical Entity</span>
-              <h2 id="dossierName" style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin: 0.25rem 0 0 0;">Copper(II) Sulfate Pentahydrate</h2>
+              <h2 id="dossierName" style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin: 0.25rem 0 0 0; word-break: break-all;">Copper(II) Sulfate Pentahydrate</h2>
             </div>
             <span id="dossierSignalBadge" style="background: #fee2e2; color: #991b1b; padding: 4px 10px; border-radius: 9999px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase;">
               DANGER
             </span>
           </div>
 
-          <table style="width: 100%; font-size: 0.88rem; border-collapse: collapse; margin-bottom: 1.25rem;">
-            <tbody>
-              <tr style="border-bottom: 1px solid #f1f5f9;">
-                <td style="padding: 0.5rem 0; color: #64748b; font-weight: 600;">Formula:</td>
-                <td id="dossierFormula" style="padding: 0.5rem 0; text-align: right; font-weight: 800; font-family: monospace; color: #0f172a;">CuSO4 · 5H2O</td>
-              </tr>
-              <tr style="border-bottom: 1px solid #f1f5f9;">
-                <td style="padding: 0.5rem 0; color: #64748b; font-weight: 600;">Anhydrous Molecular Weight:</td>
-                <td id="dossierMwAnh" style="padding: 0.5rem 0; text-align: right; font-weight: 800; color: #0f172a;">159.610 g/mol</td>
-              </tr>
-              <tr style="border-bottom: 1px solid #f1f5f9;">
-                <td style="padding: 0.5rem 0; color: #64748b; font-weight: 600;">Hydrate Waters (· nH₂O):</td>
-                <td id="dossierHydrateN" style="padding: 0.5rem 0; text-align: right; font-weight: 800; color: #0284c7;">5 (Pentahydrate)</td>
-              </tr>
-              <tr style="border-bottom: 1px solid #f1f5f9;">
-                <td style="padding: 0.5rem 0; color: #64748b; font-weight: 600;">Effective Formula Weight:</td>
-                <td id="dossierMwEff" style="padding: 0.5rem 0; text-align: right; font-weight: 800; color: #dc2626;">249.685 g/mol</td>
-              </tr>
-              <tr>
-                <td style="padding: 0.5rem 0; color: #64748b; font-weight: 600;">CAS Registry Number:</td>
-                <td id="dossierCas" style="padding: 0.5rem 0; text-align: right; font-weight: 700; color: #475569;">7758-99-8</td>
-              </tr>
-            </tbody>
-          </table>
+          <div style="border: 1px solid #f1f5f9; border-radius: 8px; overflow-x: auto; margin-bottom: 1.25rem;">
+            <table style="width: 100%; min-width: 280px; font-size: 0.88rem; border-collapse: collapse;">
+              <tbody>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                  <td style="padding: 0.5rem 0.5rem; color: #64748b; font-weight: 600;">Formula:</td>
+                  <td id="dossierFormula" style="padding: 0.5rem 0.5rem; text-align: right; font-weight: 800; font-family: monospace; color: #0f172a;">CuSO4 · 5H2O</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                  <td style="padding: 0.5rem 0.5rem; color: #64748b; font-weight: 600;">Anhydrous Molecular Weight:</td>
+                  <td id="dossierMwAnh" style="padding: 0.5rem 0.5rem; text-align: right; font-weight: 800; color: #0f172a;">159.610 g/mol</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                  <td style="padding: 0.5rem 0.5rem; color: #64748b; font-weight: 600;">Hydrate Waters (· nH₂O):</td>
+                  <td id="dossierHydrateN" style="padding: 0.5rem 0.5rem; text-align: right; font-weight: 800; color: #0284c7;">5 (Pentahydrate)</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                  <td style="padding: 0.5rem 0.5rem; color: #64748b; font-weight: 600;">Effective Formula Weight:</td>
+                  <td id="dossierMwEff" style="padding: 0.5rem 0.5rem; text-align: right; font-weight: 800; color: #dc2626;">249.685 g/mol</td>
+                </tr>
+                <tr>
+                  <td style="padding: 0.5rem 0.5rem; color: #64748b; font-weight: 600;">CAS Registry Number:</td>
+                  <td id="dossierCas" style="padding: 0.5rem 0.5rem; text-align: right; font-weight: 700; color: #475569;">7758-99-8</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
           <!-- Official Active Pictograms Visuals -->
           <div style="margin-top: 1rem; border-top: 1px solid #f1f5f9; padding-top: 1rem;">
@@ -204,17 +336,17 @@ import {
         </div>
 
         <!-- Hazard & Precautionary Statements Panel -->
-        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        <div style="display: flex; flex-direction: column; gap: 1.5rem; min-width: 0;">
           
-          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); flex: 1;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: clamp(1rem, 3vw, 1.5rem); box-shadow: 0 1px 3px rgba(0,0,0,0.05); flex: 1; min-width: 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.4rem;">
               <h3 style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #475569; margin: 0;">
                 GHS Classifications &amp; Protocols
               </h3>
               <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
-                <button id="btnCopyRiskSummary" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.25rem 0.55rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #334155;">📋 Copy COSHH</button>
-                <button id="btnPrintOshaLabel" type="button" style="background: #dc2626; border: none; padding: 0.25rem 0.65rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: white;">🖨️ Print OSHA Label</button>
-                <button id="toggleCiteBtn" type="button" style="background: #fee2e2; border: 1px solid #fecaca; padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #991b1b; display: inline-flex; align-items: center; gap: 0.35rem;"><span>📖</span> Cite</button>
+                <button id="btnCopyRiskSummary" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.25rem 0.55rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #334155; min-height: 28px;">📋 Copy COSHH</button>
+                <button id="btnPrintOshaLabel" type="button" style="background: #dc2626; border: none; padding: 0.25rem 0.65rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: white; min-height: 28px;">🖨️ Print OSHA Label</button>
+                <button id="toggleCiteBtn" type="button" style="background: #fee2e2; border: 1px solid #fecaca; padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #991b1b; display: inline-flex; align-items: center; gap: 0.35rem; min-height: 28px;"><span>📖</span> Cite</button>
               </div>
             </div>
 
@@ -238,7 +370,7 @@ import {
             </div>
 
             <!-- Summary Statement Box -->
-            <div id="dossierSummaryBox" style="background: #f8fafc; border-left: 4px solid #dc2626; padding: 0.75rem 1rem; border-radius: 0 6px 6px 0; font-size: 0.85rem; color: #334155; margin-bottom: 1rem;">
+            <div id="dossierSummaryBox" style="background: #f8fafc; border-left: 4px solid #dc2626; padding: 0.75rem 1rem; border-radius: 0 6px 6px 0; font-size: 0.85rem; color: #334155; margin-bottom: 1rem; line-height: 1.5;">
               Harmful if swallowed. Causes serious eye damage. Very toxic to aquatic life.
             </div>
 
@@ -268,7 +400,7 @@ import {
     <!-- MODE 2: COMPLETE UN GHS H & P STATEMENT MATRIX               -->
     <!-- ============================================================ -->
     <div id="statementsModeSection" style="display: none; margin-bottom: 3rem;">
-      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.75rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: clamp(1rem, 3vw, 1.75rem); margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); min-width: 0;">
         
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
           <div>
@@ -281,12 +413,12 @@ import {
           </div>
 
           <!-- Code Filter Input -->
-          <div style="display: flex; gap: 0.5rem; align-items: center;">
+          <div style="display: flex; gap: 0.5rem; align-items: center; width: 100%; max-width: 300px;">
             <input 
               type="text" 
               id="statementFilterInput" 
               placeholder="Search code (e.g. H314, P280, eye, flame)..." 
-              style="padding: 0.45rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem; font-weight: 600; width: 250px;" 
+              style="padding: 0.45rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem; font-weight: 600; width: 100%;" 
             />
           </div>
         </div>
@@ -311,7 +443,7 @@ import {
             <button 
               id="btnClearPicFilter" 
               type="button" 
-              style="padding: 0 0.75rem; font-size: 0.75rem; font-weight: 700; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; cursor: pointer; color: #64748b;"
+              style="padding: 0 0.75rem; font-size: 0.75rem; font-weight: 700; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; cursor: pointer; color: #64748b; min-height: 44px;"
             >
               Reset Filter
             </button>
@@ -319,8 +451,8 @@ import {
         </div>
 
         <!-- Statements Table -->
-        <div style="border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden; max-height: 460px; overflow-y: auto;">
-          <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left;">
+        <div style="border: 1px solid #cbd5e1; border-radius: 8px; overflow-x: auto; max-height: 460px; overflow-y: auto;">
+          <table style="width: 100%; min-width: 580px; border-collapse: collapse; font-size: 0.85rem; text-align: left;">
             <thead style="background: #f8fafc; border-bottom: 1.5px solid #cbd5e1; position: sticky; top: 0; z-index: 1;">
               <tr>
                 <th style="padding: 0.6rem 0.75rem; color: #334155; font-weight: 700; width: 85px;">Code</th>
@@ -342,7 +474,7 @@ import {
     <!-- MODE 3: MIXTURE CONCENTRATION CUT-OFF LIMIT SOLVER           -->
     <!-- ============================================================ -->
     <div id="cutoffModeSection" style="display: none; margin-bottom: 3rem;">
-      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.75rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: clamp(1rem, 3vw, 1.75rem); margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); min-width: 0;">
         
         <h2 style="font-size: 1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; margin: 0 0 0.25rem 0;">
           Mixture Generic Concentration Cut-Off Calculator
@@ -351,9 +483,9 @@ import {
           Under UN GHS guidelines, dangerous goods in aqueous or solvent mixtures only legally trigger label pictograms when exceeding generic cut-off thresholds.
         </p>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
           <div>
-            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
+            <label for="inpCutoffConc" style="display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">
               PREPARED SOLUTE CONCENTRATION (WT% OR VOL%)
             </label>
             <div style="display: flex;">
@@ -379,8 +511,8 @@ import {
         </div>
 
         <!-- Cut-Off Rules Evaluation Table -->
-        <div style="border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden;">
-          <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left;">
+        <div style="border: 1px solid #cbd5e1; border-radius: 8px; overflow-x: auto;">
+          <table style="width: 100%; min-width: 520px; border-collapse: collapse; font-size: 0.85rem; text-align: left;">
             <thead style="background: #f8fafc; border-bottom: 1.5px solid #cbd5e1;">
               <tr>
                 <th style="padding: 0.6rem 0.75rem; color: #334155; font-weight: 700;">Hazard Class &amp; Category</th>
@@ -401,7 +533,7 @@ import {
     <!-- EDITORIAL & SCIENTIFIC REGULATORY ARTICLE -->
     <article style="border-top: 1px solid #e2e8f0; padding-top: 3.5rem; line-height: 1.85; color: #334155;">
       
-      <h2 style="font-size: 1.85rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem; letter-spacing: -0.02em;">
+      <h2 style="font-size: clamp(1.4rem, 3.5vw, 1.85rem); font-weight: 800; color: #0f172a; margin-bottom: 1rem; letter-spacing: -0.02em; line-height: 1.3;">
         Regulatory Principles of the Globally Harmonized System (GHS Rev. 10)
       </h2>
       <p>
@@ -409,12 +541,12 @@ import {
       </p>
       
       <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
-        The Anatomy of GHS Codes: H-Codes vs. P-Codes
+        1. The Anatomy of GHS Codes: H-Codes vs. P-Codes
       </h3>
       <p>
         Hazard statements are alphanumeric codes consisting of the letter <strong>H</strong> followed by three digits:
       </p>
-      <ul>
+      <ul style="margin: 0.5rem 0 1.5rem 1.5rem;">
         <li><strong>H200–H299:</strong> Physical Hazards (Explosives, Flammables, Self-Reactives, Pyrophorics, Oxidizers, Corrosive to Metals).</li>
         <li><strong>H300–H399:</strong> Health Hazards (Acute Oral/Dermal Toxicity, Skin Corrosion, Eye Damage, Mutagenicity, Carcinogenicity, Reproductive Toxicity, STOT).</li>
         <li><strong>H400–H499:</strong> Environmental Hazards (Acute and Chronic Aquatic Toxicity, Ozone Depletion).</li>
@@ -422,13 +554,86 @@ import {
       <p>
         Precautionary statements follow the letter <strong>P</strong> followed by three digits:
       </p>
-      <ul>
+      <ul style="margin: 0.5rem 0 1.5rem 1.5rem;">
         <li><strong>P100 Series:</strong> General precautions (keep out of reach of children, read label).</li>
         <li><strong>P200 Series:</strong> Prevention measures (wear PPE, avoid open flames, use in well-ventilated areas).</li>
         <li><strong>P300 Series:</strong> Response protocols (first aid, eye rinsing, poison center contact).</li>
         <li><strong>P400 Series:</strong> Safe storage protocols (keep locked, store in cool, ventilated area).</li>
         <li><strong>P500 Series:</strong> Proper hazardous waste disposal procedures.</li>
       </ul>
+
+      <!-- UN GHS HAZARD CLASSIFICATION BENCHMARK TABLE -->
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2.75rem; margin-bottom: 0.75rem;">
+        2. UN GHS Revision 10 Hazard Classification &amp; Pictogram Reference Matrix
+      </h3>
+      <p style="font-size: 0.9rem; color: #475569; margin-bottom: 1rem;">
+        Complete standard classification matrix covering hazard domains, assigned pictograms, and signal word precedence:
+      </p>
+
+      <div style="border: 1px solid #cbd5e1; border-radius: 8px; overflow-x: auto; margin-bottom: 2rem;">
+        <table style="width: 100%; min-width: 650px; border-collapse: collapse; font-size: 0.85rem; text-align: left; background: #ffffff;">
+          <thead style="background: #0f172a; color: white;">
+            <tr>
+              <th style="padding: 0.65rem 0.75rem; border: 1px solid #334155;">Hazard Class &amp; Category</th>
+              <th style="padding: 0.65rem 0.75rem; border: 1px solid #334155;">GHS Pictogram Symbol</th>
+              <th style="padding: 0.65rem 0.75rem; border: 1px solid #334155;">Mandatory Signal Word</th>
+              <th style="padding: 0.65rem 0.75rem; border: 1px solid #334155;">Generic Concentration Cut-off</th>
+              <th style="padding: 0.65rem 0.75rem; border: 1px solid #334155;">Governing H-Statement Range</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Flammable Liquids (Cat. 1, 2)</td>
+              <td style="padding: 0.65rem 0.75rem;">Flame (GHS02)</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 800; color: #dc2626;">DANGER</td>
+              <td style="padding: 0.65rem 0.75rem;">&ge; 1.0%</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">H224, H225</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Oxidizing Liquids &amp; Solids</td>
+              <td style="padding: 0.65rem 0.75rem;">Flame Over Circle (GHS03)</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 800; color: #dc2626;">DANGER / WARNING</td>
+              <td style="padding: 0.65rem 0.75rem;">&ge; 1.0%</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">H271, H272</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Acute Toxicity (Cat. 1, 2, 3)</td>
+              <td style="padding: 0.65rem 0.75rem;">Skull &amp; Crossbones (GHS06)</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 800; color: #dc2626;">DANGER</td>
+              <td style="padding: 0.65rem 0.75rem;">&ge; 0.1% - 1.0%</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">H300, H310, H330</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Skin Corrosion (Cat. 1A, 1B, 1C)</td>
+              <td style="padding: 0.65rem 0.75rem;">Corrosion (GHS05)</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 800; color: #dc2626;">DANGER</td>
+              <td style="padding: 0.65rem 0.75rem;">&ge; 3.0% (Corrosive)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">H314</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Carcinogenicity (Cat. 1A, 1B)</td>
+              <td style="padding: 0.65rem 0.75rem;">Health Hazard (GHS08)</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 800; color: #dc2626;">DANGER</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 800; color: #dc2626;">&ge; 0.1%</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">H350</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Skin Irritation (Cat. 2)</td>
+              <td style="padding: 0.65rem 0.75rem;">Exclamation Mark (GHS07)</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 800; color: #d97706;">WARNING</td>
+              <td style="padding: 0.65rem 0.75rem;">&ge; 1.0%</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">H315</td>
+            </tr>
+            <tr>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Aquatic Acute &amp; Chronic (Cat. 1)</td>
+              <td style="padding: 0.65rem 0.75rem;">Environment (GHS09)</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 800; color: #d97706;">WARNING</td>
+              <td style="padding: 0.65rem 0.75rem;">&ge; 0.1% - 1.0%</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">H400, H410</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       <!-- FAQ ACCORDION SECTION -->
       <h3 style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-top: 3rem; margin-bottom: 1.25rem;">
@@ -854,13 +1059,13 @@ Summary: ${currentEntity.ghs?.summary || 'N/A'}`;
 
     const ghsCitations: Record<string, string> = {
       bibtex: `@software{khan_chemistrydesk_ghs_${currentYear},
-  author       = {Khan, Bilal},
-  title        = {ChemistryDesk: GHS Hazard & Chemical Safety Studio},
-  year         = {${currentYear}},
-  version      = {v1.0.1},
-  publisher    = {Zenodo},
-  doi          = {${doi}},
-  url          = {https://chemistrycal.com/ghs}
+  author        = {Khan, Bilal},
+  title         = {ChemistryDesk: GHS Hazard & Chemical Safety Studio},
+  year          = {${currentYear}},
+  version       = {v1.0.1},
+  publisher     = {Zenodo},
+  doi           = {${doi}},
+  url           = {https://chemistrycal.com/ghs}
 }`,
       acs: `Khan, B. ChemistryDesk: GHS Hazard & Chemical Safety Studio, version 1.0.1; Zenodo, ${currentYear}. https://doi.org/${doi}.`,
       rsc: `B. Khan, ChemistryDesk: GHS Hazard & Chemical Safety Studio, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`,
@@ -939,7 +1144,7 @@ Summary: ${currentEntity.ghs?.summary || 'N/A'}`;
     <p style="margin: 0 0 1rem; font-size: 0.85rem; color: #64748b; line-height: 1.4;">
       Connect your safety hazard assessment with quantitative solution preparation and spectroscopic analysis:
     </p>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 1rem;">
       <a href="/molarity" style="display: block; padding: 1rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
         <div style="font-weight: 700; font-size: 0.92rem; color: #dc2626; margin-bottom: 0.35rem;">Solution Molarity Studio &rarr;</div>
         <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">
