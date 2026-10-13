@@ -5,3 +5,4 @@
 
 A modern, offline-capable suite of benchtop chemistry calculators and reference tools designed for rapid lab calculations, solution prep, and material characterization.
 https://about.me/chemistrycal
+https://www.behance.net/gallery/257033797/ChemistryDesk-Offline-Scientific-App
