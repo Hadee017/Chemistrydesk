@@ -1,0 +1,1116 @@
+---
+// src/pages/adsorption-column.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AuthorCard from '../components/AuthorCard.astro';
+
+const pageTitle = "Adsorption Column & Gas Separation Studio | Breakthrough Curves, IAST & Ergun | ChemistryDesk";
+const pageDescription = "Fixed-bed adsorption column breakthrough predictor (Thomas, Yoon-Nelson & Bohart-Adams), IAST binary gas selectivity engine (CO2/N2, CH4/CO2, O2/N2), and Ergun packed bed pressure drop calculator with fluidization velocity.";
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://chemistrycal.com';
+const canonicalUrl = `${siteUrl}/adsorption-column`;
+
+const schemaData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      "url": siteUrl,
+      "name": "ChemistryDesk",
+      "description": "Precision Scientific Utilities & Computational Laboratory Engines",
+      "inLanguage": "en-US"
+    },
+    {
+      "@type": "WebPage",
+      "@id": `${canonicalUrl}#webpage`,
+      "url": canonicalUrl,
+      "name": pageTitle,
+      "isPartOf": { "@id": `${siteUrl}/#website` },
+      "description": pageDescription,
+      "inLanguage": "en-US",
+      "author": { "@id": `${siteUrl}/#author` }
+    },
+    {
+      "@type": "Person",
+      "@id": `${siteUrl}/#author`,
+      "name": "Bilal Khan",
+      "jobTitle": "Physical & Materials Chemistry Researcher",
+      "description": "Specialist in porous coordination polymers, heterogeneous adsorption kinetics, and computational chemical physics.",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q141699332",
+        "https://orcid.org/0009-0006-3082-7043",
+        "https://www.linkedin.com/in/bilal-khan-bbb259248",
+        "https://doi.org/10.5281/zenodo.23059466",
+        "https://github.com/Hadee017",
+        "https://about.me/bilalkhan01",
+        "https://www.behance.net/bilalkhan"
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${canonicalUrl}#breadcrumb`,
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": siteUrl
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Adsorption Column Studio",
+          "item": canonicalUrl
+        }
+      ]
+    },
+    {
+      "@type": "WebApplication",
+      "@id": `${canonicalUrl}#software`,
+      "name": "ChemistryDesk Adsorption Column & Gas Separation Studio",
+      "url": canonicalUrl,
+      "applicationCategory": "EducationalApplication, ScientificApplication",
+      "operatingSystem": "All modern web browsers",
+      "browserRequirements": "Requires JavaScript. Runs 100% offline via Service Worker.",
+      "description": pageDescription,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "creator": { "@id": `${siteUrl}/#author` },
+      "featureList": [
+        "Dynamic Fixed-Bed Breakthrough Curve Predictor (Thomas, Yoon-Nelson, and Bohart-Adams)",
+        "Breakthrough Time (tb @ 5%) and Bed Exhaustion Time (ts @ 95%) Determination",
+        "Mass Transfer Zone (MTZ) Length & Sorbent Fractional Utilization (η)",
+        "IAST Binary Competitive Gas Separation Selectivity Engine (CO2/N2, CH4/CO2, O2/N2)",
+        "Packed Bed Hydrodynamic Pressure Drop via Full Ergun Equation (kPa, bar, psi)",
+        "Minimum Fluidization Velocity (u_mf) via Wen & Yu Formulation",
+        "Dynamic SVG Breakthrough Sigmoid Curve Plotter with SVG Export",
+        "Pre-Calibrated Benchmarks (Zeolite 13X, HKUST-1 MOF, Biochar, CMS)",
+        "Integrated academic citation drawer (BibTeX, ACS, RSC, Nature, Elsevier, Wiley)"
+      ]
+    },
+    {
+      "@type": "HowTo",
+      "@id": `${canonicalUrl}#howto`,
+      "name": "How to Model Fixed-Bed Breakthrough Curves and Gas Selectivity",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "name": "Specify Column Geometry & Flow Velocity",
+          "text": "Input the inner column diameter, bed length, volumetric feed flow rate, and sorbent packing mass."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Import Equilibrium Capacity & Kinetic Parameters",
+          "text": "Provide the inlet feed concentration (C0), solid equilibrium saturation capacity (q0) from Langmuir isotherms, and the rate constant."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Evaluate Dynamic Breakthrough Metrics",
+          "text": "Extract the breakthrough time at 5% effluent leak (tb), exhaustion time at 95% saturation (ts), and the fractional length of the mass transfer zone (MTZ)."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Calculate Gas Separation Selectivity",
+          "text": "For binary gas separations (PSA/VPSA), apply competitive Langmuir/IAST formulations to determine binary separation factors (α_A/B)."
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${canonicalUrl}#faq`,
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the difference between breakthrough time and exhaustion time in an adsorption column?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Breakthrough time (tb) is the point at which the effluent adsorbate concentration reaches an allowable threshold (typically 5% of feed concentration, Ct/C0 = 0.05), signalling that the bed must be regenerated. Exhaustion time (ts) is when the bed is nearly saturated (typically Ct/C0 = 0.95)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does the Bohart-Adams model differ from the Thomas breakthrough model?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The Bohart-Adams model is grounded on surface reaction theory and is particularly accurate for describing the initial quasi-steady breakthrough region (Ct/C0 < 0.15) where intraparticle diffusion does not yet dominate. The Thomas model describes the entire symmetric sigmoid curve using second-order Langmuir kinetics."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the Mass Transfer Zone (MTZ) in a packed adsorption bed?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The Mass Transfer Zone (MTZ) is the active dynamic length of the packed bed where active adsorption is taking place, bounded between the breakthrough concentration (5%) and saturation concentration (95%). A narrower MTZ indicates fast mass transfer kinetics and higher bed utilization efficiency."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How is binary gas separation selectivity (IAST) calculated in PSA systems?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Adsorption selectivity (α_A/B) is the ratio of mole fractions of components A and B in the adsorbed phase divided by their mole fractions in the gas phase: α_A/B = (qA / yA) / (qB / yB). Under competitive Langmuir conditions, it simplifies to (qm,A * KA) / (qm,B * KB)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why is the Minimum Fluidization Velocity (u_mf) critical in packed bed column design?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "If the superficial upward gas velocity exceeds the minimum fluidization velocity (u_mf), the drag force on the adsorbent pellets balances their buoyant weight, causing the packed bed to fluidize. This leads to pellet attrition, severe channeling, and lost separation efficiency."
+          }
+        }
+      ]
+    }
+  ]
+};
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(schemaData)}></script>
+
+  <!-- Non-Intrusive Notification Toast -->
+  <div id="toastNotification" style="display: none; position: fixed; bottom: 1.5rem; right: 1.5rem; background: #0f172a; color: #ffffff; padding: 0.65rem 1.25rem; border-radius: 8px; font-size: 0.85rem; font-weight: 700; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3); z-index: 10000; align-items: center; gap: 0.5rem; border: 1px solid #334155;">
+    <span id="toastMessage">Action completed</span>
+  </div>
+
+  <main style="max-width: 1100px; margin: 1.5rem auto 3rem auto; padding: 0 1rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1e293b; box-sizing: border-box; overflow-x: hidden;">
+    
+    <!-- Validated 2-Tier Breadcrumb Navigation -->
+    <nav style="font-size: 0.82rem; color: #64748b; margin-bottom: 1.25rem;">
+      <a href="/" style="color: #0d9488; text-decoration: none; font-weight: 600;">Home</a> &rsaquo; 
+      <span style="color: #0f172a; font-weight: 700;">Adsorption Column Studio</span>
+    </nav>
+
+    <!-- Header Section -->
+    <div style="border-bottom: 1px solid #e2e8f0; padding-bottom: 1.75rem; margin-bottom: 1.75rem;">
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; flex-wrap: wrap;">
+        <span style="font-size: 2.5rem;">🗼</span>
+        <div>
+          <h1 style="font-size: clamp(1.6rem, 4vw, 2.25rem); font-weight: 800; color: #0f172a; letter-spacing: -0.025em; margin: 0; line-height: 1.2;">
+            Adsorption Column &amp; Gas Separation Studio
+          </h1>
+          <p style="color: #64748b; font-size: 0.95rem; margin-top: 0.25rem; margin-bottom: 0;">
+            Fixed-bed breakthrough curve modeling (Thomas, Yoon-Nelson &amp; Bohart-Adams), binary competitive gas selectivity (IAST), and Ergun packed bed pressure drop calculations.
+          </p>
+        </div>
+      </div>
+
+      <!-- Quick Preset & Action Bar -->
+      <div style="margin-top: 1.25rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+        <div style="display: flex; gap: 0.45rem; flex-wrap: wrap; align-items: center;">
+          <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Benchmarks:</span>
+          <button type="button" class="preset-btn" data-preset="co2_zeolite" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0.35rem 0.65rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #0d9488;">CO₂/N₂ on Zeolite 13X</button>
+          <button type="button" class="preset-btn" data-preset="ch4_mof" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0.35rem 0.65rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #0d9488;">Biogas CO₂/CH₄ on MOF</button>
+          <button type="button" class="preset-btn" data-preset="o2_cms" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0.35rem 0.65rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #0d9488;">O₂/N₂ on Carbon Sieve</button>
+          <button type="button" class="preset-btn" data-preset="mb_carbon" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0.35rem 0.65rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #0d9488;">Aqueous Dye / Biochar</button>
+        </div>
+
+        <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+          <button id="btnCopyShareUrl" type="button" style="background: #0d9488; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff;">🔗 Share Link</button>
+          <button id="btnExportCsv" type="button" style="background: #0f172a; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff;">📥 Curve CSV</button>
+          <button id="btnCopyLatex" type="button" style="background: #475569; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #ffffff;">LaTeX</button>
+          <button id="toggleCiteBtn" type="button" style="background: #ccfbf1; border: 1px solid #99f6e4; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #0f766e;">📖 Cite</button>
+        </div>
+      </div>
+
+      <!-- AuthorCard / E-E-A-T Component -->
+      <div style="margin-top: 1.5rem; border-top: 1px solid #f1f5f9; padding-top: 1.25rem;">
+        <AuthorCard />
+      </div>
+
+      <!-- Citation Drawer -->
+      <div id="citeDrawer" style="display: none; margin-top: 1rem; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 0.85rem; background: #f8fafc;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.4rem;">
+          <div style="display: flex; gap: 0.3rem; flex-wrap: wrap;">
+            <button type="button" class="inline-cite-tab" data-format="bibtex" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 700; border-radius: 5px; border: 1px solid #0f172a; background: #0f172a; color: #fff; cursor: pointer;">BibTeX</button>
+            <button type="button" class="inline-cite-tab" data-format="acs" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">ACS</button>
+            <button type="button" class="inline-cite-tab" data-format="rsc" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">RSC</button>
+            <button type="button" class="inline-cite-tab" data-format="nature" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Nature</button>
+            <button type="button" class="inline-cite-tab" data-format="elsevier" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Elsevier</button>
+            <button type="button" class="inline-cite-tab" data-format="wiley" style="padding: 0.25rem 0.55rem; font-size: 0.72rem; font-weight: 600; border-radius: 5px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Wiley</button>
+          </div>
+          <button id="inlineCopyCiteBtn" type="button" style="padding: 0.25rem 0.65rem; font-size: 0.75rem; font-weight: 700; border-radius: 5px; background: #0d9488; color: #fff; border: none; cursor: pointer;">📋 Copy</button>
+        </div>
+        <pre id="inlineCiteOutput" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.75rem; font-size: 0.75rem; font-family: ui-monospace, monospace; color: #0f172a; white-space: pre-wrap; word-break: break-all; margin: 0; line-height: 1.45;"></pre>
+      </div>
+
+      <!-- Segmented Mode Switcher -->
+      <div style="margin-top: 1.5rem; display: flex; align-items: center; justify-content: flex-start;">
+        <div style="background: #e2e8f0; padding: 4px; border-radius: 10px; display: inline-flex; gap: 4px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.06); flex-wrap: wrap;">
+          <button 
+            id="modeBreakthroughBtn" 
+            type="button"
+            style="background: #0d9488; color: #ffffff; border: none; padding: 0.65rem 1.25rem; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: all 0.2s ease; min-height: 38px;"
+          >
+            <span>📈</span> Fixed-Bed Breakthrough Predictor
+          </button>
+          <button 
+            id="modeSelectivityBtn" 
+            type="button"
+            style="background: transparent; color: #475569; border: none; padding: 0.65rem 1.25rem; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s ease; min-height: 38px;"
+          >
+            <span>⚖️</span> Binary Gas Selectivity (IAST)
+          </button>
+          <button 
+            id="modeErgunBtn" 
+            type="button"
+            style="background: transparent; color: #475569; border: none; padding: 0.65rem 1.25rem; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s ease; min-height: 38px;"
+          >
+            <span>💨</span> Packed Bed Ergun &amp; Fluidization
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIRECT DEFINITION & AEO/GEO CALLOUT BOX -->
+    <section style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-left: 5px solid #0d9488; border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 1.75rem;">
+      <h2 style="font-size: 1rem; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.04em; margin: 0 0 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+        <span>💡</span> What is a Breakthrough Curve in Fixed-Bed Adsorption? (Direct Answer)
+      </h2>
+      <p style="font-size: 0.92rem; color: #334155; margin: 0; line-height: 1.6;">
+        A <strong>breakthrough curve</strong> plots the normalized effluent concentration (<code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">C_t / C_0</code>) of an adsorbate over time as a fluid mixture flows continuously through a packed adsorbent bed. It characterizes the movement of the <strong>Mass Transfer Zone (MTZ)</strong> from bed inlet to outlet. The operation point where effluent reaches 5% (<code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">t_b</code>) defines the breakthrough time, marking the end of the operational adsorption cycle.
+      </p>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- MODULE 1: FIXED-BED BREAKTHROUGH PREDICTOR                   -->
+    <!-- ============================================================ -->
+    <div id="breakthroughModeSection">
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 1.75rem; margin-bottom: 2.5rem;">
+        
+        <!-- Controls & Input Form -->
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: clamp(1rem, 3vw, 1.5rem); box-shadow: 0 1px 3px rgba(0,0,0,0.04); min-width: 0;">
+          
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.4rem;">
+            <h2 style="font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; margin: 0;">
+              Column Operating Parameters
+            </h2>
+            <div style="display: flex; align-items: center; gap: 0.25rem;">
+              <label for="selBreakthroughModel" style="font-size: 0.72rem; font-weight: 700; color: #64748b;">MODEL:</label>
+              <select id="selBreakthroughModel" style="font-size: 0.75rem; font-weight: 700; padding: 2px 6px; border: 1px solid #cbd5e1; border-radius: 4px; background: #fff; color: #0d9488;">
+                <option value="thomas" selected>Thomas Model</option>
+                <option value="bohart_adams">Bohart-Adams Model</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
+            <div>
+              <label for="inpFeedConc" style="display: block; font-size: 0.75rem; font-weight: 700; color: #334155; margin-bottom: 0.25rem;">FEED CONC C₀ (mg/L)</label>
+              <input type="number" id="inpFeedConc" value="100" step="any" style="width: 100%; padding: 0.45rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; font-weight: 700; box-sizing: border-box;" />
+            </div>
+            <div>
+              <label for="inpFlowRate" style="display: block; font-size: 0.75rem; font-weight: 700; color: #334155; margin-bottom: 0.25rem;">FLOW RATE Q (mL/min)</label>
+              <input type="number" id="inpFlowRate" value="10" step="any" style="width: 100%; padding: 0.45rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; font-weight: 700; box-sizing: border-box;" />
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
+            <div>
+              <label for="inpBedMass" style="display: block; font-size: 0.75rem; font-weight: 700; color: #334155; margin-bottom: 0.25rem;">SORBENT MASS m (g)</label>
+              <input type="number" id="inpBedMass" value="20" step="any" style="width: 100%; padding: 0.45rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; font-weight: 700; box-sizing: border-box;" />
+            </div>
+            <div>
+              <label for="inpBedLength" style="display: block; font-size: 0.75rem; font-weight: 700; color: #334155; margin-bottom: 0.25rem;">BED LENGTH Z (cm)</label>
+              <input type="number" id="inpBedLength" value="15" step="any" style="width: 100%; padding: 0.45rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; font-weight: 700; box-sizing: border-box;" />
+            </div>
+          </div>
+
+          <div style="border-top: 1px dashed #cbd5e1; padding-top: 0.75rem; margin-bottom: 1rem;">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem;">
+              <span style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: #0d9488;">
+                Equilibrium &amp; Kinetic Constants:
+              </span>
+              <a href="/isotherm" style="font-size: 0.7rem; color: #0284c7; text-decoration: none; font-weight: 700;">From Isotherm Studio ↗</a>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+              <div>
+                <label id="lblCap" for="inpCapQ0" style="display: block; font-size: 0.75rem; font-weight: 700; color: #334155; margin-bottom: 0.25rem;">CAPACITY q₀ (mg/g)</label>
+                <input type="number" id="inpCapQ0" value="85" step="any" style="width: 100%; padding: 0.45rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; font-weight: 700; box-sizing: border-box;" />
+              </div>
+              <div>
+                <label id="lblRateConst" for="inpKRate" style="display: block; font-size: 0.75rem; font-weight: 700; color: #334155; margin-bottom: 0.25rem;">k_Th (mL/(min·mg))</label>
+                <input type="number" id="inpKRate" value="0.0008" step="any" style="width: 100%; padding: 0.45rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; font-weight: 700; box-sizing: border-box;" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Output Metrics Panel -->
+          <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 0.85rem;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; font-size: 0.82rem;">
+              <div>
+                <span style="font-size: 0.7rem; color: #64748b; display: block;">Breakthrough (tb @ 5%):</span>
+                <strong id="outTb" style="color: #0f766e; font-size: 1.05rem;">-- min</strong>
+              </div>
+              <div>
+                <span style="font-size: 0.7rem; color: #64748b; display: block;">Exhaustion (ts @ 95%):</span>
+                <strong id="outTs" style="color: #0f172a; font-size: 1.05rem;">-- min</strong>
+              </div>
+              <div>
+                <span style="font-size: 0.7rem; color: #64748b; display: block;">MTZ Length:</span>
+                <strong id="outMtz" style="color: #0d9488; font-size: 0.95rem;">-- cm</strong>
+              </div>
+              <div>
+                <span style="font-size: 0.7rem; color: #64748b; display: block;">Bed Utilization (η):</span>
+                <strong id="outEta" style="color: #047857; font-size: 0.95rem;">-- %</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dynamic SVG Breakthrough Curve Visualizer -->
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: clamp(1rem, 3vw, 1.5rem); box-shadow: 0 1px 3px rgba(0,0,0,0.04); display: flex; flex-direction: column; min-width: 0;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
+            <h3 id="curveTitleText" style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #475569; margin: 0;">
+              Dynamic Breakthrough Sigmoid (C_t / C_0 vs. Time)
+            </h3>
+            <button id="btnDownloadCurveSvg" type="button" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0.25rem 0.6rem; font-size: 0.72rem; font-weight: 700; cursor: pointer; color: #334155;">
+              💾 Save Curve SVG
+            </button>
+          </div>
+
+          <div style="flex: 1; min-height: 280px; position: relative; border: 1px solid #f1f5f9; border-radius: 8px; background: #fafafa; display: flex; align-items: center; justify-content: center; overflow-x: auto; -webkit-overflow-scrolling: touch;">
+            <svg id="breakthroughSvg" viewBox="0 0 500 300" style="width: 100%; height: 100%; min-width: 320px; display: block;"></svg>
+          </div>
+
+          <div style="margin-top: 0.65rem; display: flex; justify-content: center; gap: 1rem; font-size: 0.75rem;">
+            <div style="display: flex; align-items: center; gap: 0.35rem;">
+              <span style="width: 14px; height: 3px; background: #0d9488; display: inline-block;"></span>
+              <span style="font-weight: 600;">Effluent C_t / C_0</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.35rem;">
+              <span style="width: 14px; height: 1.5px; background: #ef4444; border-top: 1.5px dashed #ef4444; display: inline-block;"></span>
+              <span style="font-weight: 600;">5% Breakthrough Threshold</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- MODULE 2: BINARY GAS SEPARATION SELECTIVITY (IAST)           -->
+    <!-- ============================================================ -->
+    <div id="selectivityModeSection" style="display: none; margin-bottom: 2.5rem;">
+      <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: clamp(1rem, 3vw, 1.5rem); box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+        <h2 style="font-size: 1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #0f172a; margin: 0 0 0.5rem 0;">
+          Binary Competitive Gas Separation Selectivity Engine
+        </h2>
+        <p style="font-size: 0.85rem; color: #64748b; margin: 0 0 1.25rem 0;">
+          Calculate competitive adsorption uptake and separation factor (&alpha;<sub>A/B</sub>) from pure-component Langmuir isotherm parameters:
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+          
+          <!-- Gas A (Target / Strongly Adsorbed) -->
+          <div style="border: 1px solid #cbd5e1; border-radius: 8px; padding: 1rem; background: #f0fdfa;">
+            <span id="labelGasA" style="font-size: 0.78rem; font-weight: 800; color: #0d9488; text-transform: uppercase; display: block; margin-bottom: 0.5rem;">
+              Component A (e.g., CO₂, Strongly Adsorbed)
+            </span>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.5rem;">
+              <div>
+                <label for="inpQmA" style="font-size: 0.7rem; font-weight: 700; color: #475569; display: block;">q_max,A (mmol/g)</label>
+                <input type="number" id="inpQmA" value="4.50" step="any" style="width: 100%; padding: 0.4rem; border: 1px solid #cbd5e1; border-radius: 4px; font-weight: 700;" />
+              </div>
+              <div>
+                <label for="inpKa" style="font-size: 0.7rem; font-weight: 700; color: #475569; display: block;">K_A (bar⁻¹)</label>
+                <input type="number" id="inpKa" value="2.80" step="any" style="width: 100%; padding: 0.4rem; border: 1px solid #cbd5e1; border-radius: 4px; font-weight: 700;" />
+              </div>
+            </div>
+            <div>
+              <label for="inpYa" style="font-size: 0.7rem; font-weight: 700; color: #475569; display: block;">Gas Mole Fraction y_A (0 to 1)</label>
+              <input type="number" id="inpYa" value="0.15" step="0.01" min="0" max="1" style="width: 100%; padding: 0.4rem; border: 1px solid #cbd5e1; border-radius: 4px; font-weight: 700;" />
+            </div>
+          </div>
+
+          <!-- Gas B (Carrier / Weakly Adsorbed) -->
+          <div style="border: 1px solid #cbd5e1; border-radius: 8px; padding: 1rem; background: #f8fafc;">
+            <span id="labelGasB" style="font-size: 0.78rem; font-weight: 800; color: #475569; text-transform: uppercase; display: block; margin-bottom: 0.5rem;">
+              Component B (e.g., N₂ or CH₄, Weakly Adsorbed)
+            </span>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.5rem;">
+              <div>
+                <label for="inpQmB" style="font-size: 0.7rem; font-weight: 700; color: #475569; display: block;">q_max,B (mmol/g)</label>
+                <input type="number" id="inpQmB" value="1.80" step="any" style="width: 100%; padding: 0.4rem; border: 1px solid #cbd5e1; border-radius: 4px; font-weight: 700;" />
+              </div>
+              <div>
+                <label for="inpKb" style="font-size: 0.7rem; font-weight: 700; color: #475569; display: block;">K_B (bar⁻¹)</label>
+                <input type="number" id="inpKb" value="0.12" step="any" style="width: 100%; padding: 0.4rem; border: 1px solid #cbd5e1; border-radius: 4px; font-weight: 700;" />
+              </div>
+            </div>
+            <div>
+              <label style="font-size: 0.7rem; font-weight: 700; color: #475569; display: block;">Gas Mole Fraction y_B (Computed)</label>
+              <input type="text" id="outYb" value="0.85" disabled style="width: 100%; padding: 0.4rem; border: 1px solid #cbd5e1; border-radius: 4px; font-weight: 700; background: #e2e8f0; color: #64748b;" />
+            </div>
+          </div>
+
+          <!-- Operating Pressure & Result -->
+          <div style="border: 1px solid #cbd5e1; border-radius: 8px; padding: 1rem; background: #ffffff; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <label for="inpTotalP" style="font-size: 0.7rem; font-weight: 700; color: #475569; display: block;">TOTAL SYSTEM PRESSURE P (bar)</label>
+              <input type="number" id="inpTotalP" value="1.0" step="any" style="width: 100%; padding: 0.4rem; border: 1.5px solid #cbd5e1; border-radius: 4px; font-weight: 700;" />
+            </div>
+
+            <div style="margin-top: 0.75rem; padding: 0.75rem; background: #f0fdfa; border-radius: 6px; border: 1px solid #99f6e4;">
+              <span style="font-size: 0.7rem; font-weight: 800; color: #0f766e; text-transform: uppercase; display: block;">Separation Selectivity (α_A/B):</span>
+              <strong id="outSelectivity" style="font-size: 1.5rem; color: #0d9488; display: block; margin: 2px 0;">--</strong>
+              <div style="font-size: 0.72rem; color: #475569;">
+                Loading A: <strong id="outLoadA">--</strong> mmol/g | Loading B: <strong id="outLoadB">--</strong> mmol/g
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- MODULE 3: PACKED BED ERGUN PRESSURE DROP & FLUIDIZATION      -->
+    <!-- ============================================================ -->
+    <div id="ergunModeSection" style="display: none; margin-bottom: 2.5rem;">
+      <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: clamp(1rem, 3vw, 1.5rem); box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+        <h2 style="font-size: 1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #0f172a; margin: 0 0 0.5rem 0;">
+          Packed Bed Ergun Hydrodynamic &amp; Fluidization Solver
+        </h2>
+        <p style="font-size: 0.85rem; color: #64748b; margin: 0 0 1.25rem 0;">
+          Couples column diameter and gas flow rate to evaluate viscous/inertial pressure drop and minimum fluidization velocity (u_mf):
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 1rem; margin-bottom: 1.25rem;">
+          <div>
+            <label for="inpColDiameter" style="font-size: 0.75rem; font-weight: 700; color: #334155; display: block; margin-bottom: 0.25rem;">COLUMN INNER DIA. D (cm)</label>
+            <input type="number" id="inpColDiameter" value="5.0" step="any" style="width: 100%; padding: 0.45rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-weight: 700; box-sizing: border-box;" />
+          </div>
+          <div>
+            <label for="inpErgunL" style="font-size: 0.75rem; font-weight: 700; color: #334155; display: block; margin-bottom: 0.25rem;">BED LENGTH L (m)</label>
+            <input type="number" id="inpErgunL" value="1.0" step="any" style="width: 100%; padding: 0.45rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-weight: 700; box-sizing: border-box;" />
+          </div>
+          <div>
+            <label for="inpErgunFlowLmin" style="font-size: 0.75rem; font-weight: 700; color: #334155; display: block; margin-bottom: 0.25rem;">GAS FLOW RATE Q (L/min)</label>
+            <input type="number" id="inpErgunFlowLmin" value="18.0" step="any" style="width: 100%; padding: 0.45rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-weight: 700; box-sizing: border-box;" />
+          </div>
+          <div>
+            <label for="inpErgunDp" style="font-size: 0.75rem; font-weight: 700; color: #334155; display: block; margin-bottom: 0.25rem;">PELLET DIAMETER dp (mm)</label>
+            <input type="number" id="inpErgunDp" value="2.0" step="any" style="width: 100%; padding: 0.45rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-weight: 700; box-sizing: border-box;" />
+          </div>
+          <div>
+            <label for="inpErgunVoid" style="font-size: 0.75rem; font-weight: 700; color: #334155; display: block; margin-bottom: 0.25rem;">BED VOID FRACTION ε (0 to 1)</label>
+            <input type="number" id="inpErgunVoid" value="0.38" step="0.01" style="width: 100%; padding: 0.45rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-weight: 700; box-sizing: border-box;" />
+          </div>
+        </div>
+
+        <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1.15rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 1rem;">
+          <div>
+            <span style="font-size: 0.72rem; font-weight: 800; color: #475569; text-transform: uppercase;">Total Bed Pressure Drop (ΔP):</span>
+            <div id="outDeltaP" style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 0.25rem;">-- kPa</div>
+            <div id="outDeltaPSub" style="font-size: 0.75rem; color: #64748b; font-weight: 600;">-- bar | -- psi</div>
+          </div>
+          <div>
+            <span style="font-size: 0.72rem; font-weight: 800; color: #475569; text-transform: uppercase;">Superficial Velocity (u):</span>
+            <div id="outSuperficialU" style="font-size: 1.15rem; font-weight: 700; color: #0d9488; margin-top: 0.25rem;">-- m/s</div>
+            <div id="outGradP" style="font-size: 0.75rem; color: #64748b;">Gradient: -- kPa/m</div>
+          </div>
+          <div>
+            <span style="font-size: 0.72rem; font-weight: 800; color: #475569; text-transform: uppercase;">Minimum Fluidization (u_mf):</span>
+            <div id="outUmf" style="font-size: 1.15rem; font-weight: 700; color: #0f172a; margin-top: 0.25rem;">-- m/s</div>
+            <div id="outFluidStatus" style="font-size: 0.75rem; font-weight: 700; color: #059669;">Stable Packed Bed</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EDITORIAL & SCIENTIFIC DERIVATION ARTICLE -->
+    <article style="border-top: 1px solid #e2e8f0; padding-top: 3.5rem; line-height: 1.85; color: #334155;">
+      
+      <h2 style="font-size: clamp(1.4rem, 3.5vw, 1.85rem); font-weight: 800; color: #0f172a; margin-bottom: 1rem; letter-spacing: -0.02em; line-height: 1.3;">
+        Mathematical Principles of Continuous Fixed-Bed Adsorption &amp; Gas Separation
+      </h2>
+      <p>
+        While batch adsorption isotherm modeling describes thermodynamic equilibrium saturation in a closed vessel, real-world chemical separation units (such as industrial water treatment filters, Pressure Swing Adsorption (PSA) columns, and carbon capture beds) operate under continuous dynamic flow. As the fluid phase flows through the packed porous sorbent, a transient concentration wave known as the <strong>Mass Transfer Zone (MTZ)</strong> moves through the column.
+      </p>
+
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
+        1. The Thomas Breakthrough Model
+      </h3>
+      <p>
+        The Thomas model is one of the most widely applied analytical expressions for describing fixed-bed column breakthrough dynamics. It presumes plug-flow hydrodynamics with negligible axial dispersion and second-order Langmuir kinetics:
+      </p>
+      <div style="background: #f8fafc; border-left: 4px solid #0d9488; padding: 1rem; margin: 1.25rem 0; font-family: ui-monospace, monospace; font-size: 0.95rem; overflow-x: auto; line-height: 1.6;">
+        <span>C_t / C_0 = 1 / [ 1 + exp( (k_Th * q_0 * m / Q) - k_Th * C_0 * t ) ]</span>
+      </div>
+      <p>
+        Where <em>C_t</em> is effluent concentration at time <em>t</em>, <em>C_0</em> is inlet concentration, <em>k_Th</em> is the Thomas rate constant (mL/(min·mg)), <em>q_0</em> is the maximum solid uptake capacity (mg/g), <em>m</em> is adsorbent mass, and <em>Q</em> is volumetric flow rate.
+      </p>
+
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
+        2. The Bohart-Adams Model (Surface Reaction Kinetics)
+      </h3>
+      <p>
+        Formulated for describing fixed-bed chlorine and gas breakthrough, the Bohart-Adams model applies to the initial region of the breakthrough curve (<em>C_t / C_0 &lt; 0.15</em>):
+      </p>
+      <div style="background: #f8fafc; border-left: 4px solid #0d9488; padding: 1rem; margin: 1.25rem 0; font-family: ui-monospace, monospace; font-size: 0.95rem; overflow-x: auto; line-height: 1.6;">
+        <span>ln(C_t / C_0) = k_BA · C_0 · t - (k_BA · N_0 · Z) / u</span>
+      </div>
+      <p>
+        Where <em>k_BA</em> is the kinetic constant (L/(mg·min)), <em>N_0</em> is the volumetric saturation capacity (mg/L or mg/cm³), <em>Z</em> is the bed depth (cm), and <em>u</em> is linear superficial fluid velocity (cm/min).
+      </p>
+
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
+        3. Mass Transfer Zone (MTZ) &amp; Bed Efficiency
+      </h3>
+      <p>
+        The dynamic performance of an adsorption column is governed by the length of the Mass Transfer Zone (MTZ). The breakthrough time (<em>t_b</em>) is typically designated when effluent leakage reaches 5% (<em>C_t/C_0 = 0.05</em>), while saturation (<em>t_s</em>) occurs at 95% (<em>C_t/C_0 = 0.95</em>):
+      </p>
+      <div style="background: #f8fafc; border-left: 4px solid #0d9488; padding: 1rem; margin: 1.25rem 0; font-family: ui-monospace, monospace; font-size: 0.95rem; overflow-x: auto; line-height: 1.6;">
+        <span>L_MTZ = Z · [ (t_s - t_b) / t_s ]</span>
+      </div>
+      <p>
+        A narrow MTZ indicates rapid intraparticle diffusion and minimal mass transfer resistance, maximizing the fraction of the bed utilized before breakthrough occurs.
+      </p>
+
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
+        4. Binary Gas Separation Selectivity in PSA/VPSA
+      </h3>
+      <p>
+        In Pressure Swing Adsorption (PSA) processes for carbon capture or biogas upgrading, the competitive adsorption selectivity (&alpha;<sub>A/B</sub>) quantifies the affinity of component A over component B:
+      </p>
+      <div style="background: #f8fafc; border-left: 4px solid #0d9488; padding: 1rem; margin: 1.25rem 0; font-family: ui-monospace, monospace; font-size: 0.95rem; overflow-x: auto; line-height: 1.6;">
+        <span>α_A/B = (q_A / y_A) / (q_B / y_B)</span>
+      </div>
+
+      <!-- FAQ Accordion -->
+      <h3 style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-top: 3rem; margin-bottom: 1.25rem;">
+        Frequently Asked Questions: Adsorption Column Dynamics &amp; Gas Separation
+      </h3>
+
+      <div style="display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 2rem;">
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What is the difference between breakthrough time and exhaustion time?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Breakthrough time (t_b) is the point at which the effluent adsorbate concentration reaches an allowable limit (typically 5% of feed concentration, Ct/C0 = 0.05). Exhaustion time (t_s) is when the bed is nearly saturated (typically Ct/C0 = 0.95).
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How does column bed depth affect breakthrough time?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Increasing bed depth (Z) proportionally increases the sorbent mass and fluid residence time (Empty Bed Contact Time, EBCT). This extends breakthrough time and gives the mass transfer zone more distance to fully develop.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Why is pressure drop crucial in Pressure Swing Adsorption (PSA)?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Excessive pressure drop across packed pellet beds (calculated via the Ergun equation) creates parasitic energy losses in feed compressors and vacuum pumps, while high superficial gas velocities risk fluidizing or crushing adsorbent pellets.
+          </p>
+        </details>
+      </div>
+
+    </article>
+
+    <!-- Cross-Linking Hub back to Isotherm Studio -->
+    <section style="max-width: 900px; margin: 3rem auto 1.5rem; padding: 1.25rem 1.5rem; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; box-sizing: border-box;">
+      <h3 style="margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 0.5rem;">
+        <span>🔗</span> Upstream Equilibrium &amp; Porosity Suites
+      </h3>
+      <p style="margin: 0 0 1rem; font-size: 0.85rem; color: #64748b; line-height: 1.4;">
+        Connect continuous column modeling with batch equilibrium isotherms and BET surface area measurements:
+      </p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 1rem;">
+        <a href="/isotherm" style="display: block; padding: 1rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
+          <div style="font-weight: 700; font-size: 0.92rem; color: #0284c7; margin-bottom: 0.35rem;">Adsorption Isotherm Studio &rarr;</div>
+          <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">
+            Fit batch equilibrium points to Langmuir, Freundlich, and D-R models to extract q_max and affinity constants.
+          </div>
+        </a>
+        <a href="/bet" style="display: block; padding: 1rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
+          <div style="font-weight: 700; font-size: 0.92rem; color: #059669; margin-bottom: 0.35rem;">BET Surface Area Analyzer &rarr;</div>
+          <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">
+            Measure specific surface area (m²/g) and pore volume distribution from 77 K N₂ adsorption isotherms.
+          </div>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Interactive JavaScript Engine -->
+  <script>
+    // TOAST HELPER
+    const toastEl = document.getElementById('toastNotification')!;
+    const toastMsg = document.getElementById('toastMessage')!;
+    let toastTimeout: any = null;
+
+    function showToast(msg: string) {
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastMsg.textContent = msg;
+      toastEl.style.display = 'flex';
+      toastTimeout = setTimeout(() => { toastEl.style.display = 'none'; }, 2200);
+    }
+
+    // MODE SWITCHER
+    const modeBreakthroughBtn = document.getElementById('modeBreakthroughBtn')!;
+    const modeSelectivityBtn = document.getElementById('modeSelectivityBtn')!;
+    const modeErgunBtn = document.getElementById('modeErgunBtn')!;
+    const secBreakthrough = document.getElementById('breakthroughModeSection')!;
+    const secSelectivity = document.getElementById('selectivityModeSection')!;
+    const secErgun = document.getElementById('ergunModeSection')!;
+
+    function setTabStyles(activeBtn: HTMLElement) {
+      [modeBreakthroughBtn, modeSelectivityBtn, modeErgunBtn].forEach(b => {
+        b.style.background = 'transparent';
+        b.style.color = '#475569';
+        b.style.boxShadow = 'none';
+      });
+      activeBtn.style.background = '#0d9488';
+      activeBtn.style.color = '#ffffff';
+      activeBtn.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+    }
+
+    modeBreakthroughBtn.addEventListener('click', () => {
+      secBreakthrough.style.display = 'block';
+      secSelectivity.style.display = 'none';
+      secErgun.style.display = 'none';
+      setTabStyles(modeBreakthroughBtn);
+    });
+
+    modeSelectivityBtn.addEventListener('click', () => {
+      secBreakthrough.style.display = 'none';
+      secSelectivity.style.display = 'block';
+      secErgun.style.display = 'none';
+      setTabStyles(modeSelectivityBtn);
+      runSelectivityEngine();
+    });
+
+    modeErgunBtn.addEventListener('click', () => {
+      secBreakthrough.style.display = 'none';
+      secSelectivity.style.display = 'none';
+      secErgun.style.display = 'block';
+      setTabStyles(modeErgunBtn);
+      runErgunEngine();
+    });
+
+    // ============================================================
+    // MODULE 1: BREAKTHROUGH SOLVER (THOMAS & BOHART-ADAMS)
+    // ============================================================
+    const inpC0 = document.getElementById('inpFeedConc') as HTMLInputElement;
+    const inpQ = document.getElementById('inpFlowRate') as HTMLInputElement;
+    const inpM = document.getElementById('inpBedMass') as HTMLInputElement;
+    const inpZ = document.getElementById('inpBedLength') as HTMLInputElement;
+    const inpCapQ0 = document.getElementById('inpCapQ0') as HTMLInputElement;
+    const inpKRate = document.getElementById('inpKRate') as HTMLInputElement;
+    const selModel = document.getElementById('selBreakthroughModel') as HTMLSelectElement;
+    const lblCap = document.getElementById('lblCap')!;
+    const lblRateConst = document.getElementById('lblRateConst')!;
+    const curveTitleText = document.getElementById('curveTitleText')!;
+
+    let currentBreakthroughPoints: Array<{ t: number; ratio: number }> = [];
+
+    function handleModelSwitch() {
+      const mode = selModel.value;
+      if (mode === 'thomas') {
+        lblCap.textContent = 'CAPACITY q₀ (mg/g)';
+        lblRateConst.textContent = 'k_Th (mL/(min·mg))';
+        curveTitleText.textContent = 'Thomas Dynamic Breakthrough Sigmoid (C_t / C_0 vs. Time)';
+      } else {
+        lblCap.textContent = 'SATURATION N₀ (mg/L)';
+        lblRateConst.textContent = 'k_BA (L/(mg·min))';
+        curveTitleText.textContent = 'Bohart-Adams Quasi-Steady Breakthrough Wave';
+      }
+      runBreakthroughEngine();
+    }
+
+    selModel.addEventListener('change', handleModelSwitch);
+
+    function runBreakthroughEngine() {
+      const c0 = parseFloat(inpC0.value) || 100;
+      const Q = parseFloat(inpQ.value) || 10;
+      const m = parseFloat(inpM.value) || 20;
+      const Z = parseFloat(inpZ.value) || 15;
+      const capVal = parseFloat(inpCapQ0.value) || 85;
+      const kVal = parseFloat(inpKRate.value) || 0.0008;
+      const modelMode = selModel.value;
+
+      if (c0 <= 0 || Q <= 0 || m <= 0 || capVal <= 0 || kVal <= 0) return;
+
+      let tb = 0;
+      let ts = 0;
+
+      if (modelMode === 'thomas') {
+        // Thomas: tau = q0 * m / (c0 * Q)
+        const tau = (capVal * m) / (c0 * Q);
+        tb = Math.max(0, tau - (2.9444 / (kVal * c0)));
+        ts = tau + (2.9444 / (kVal * c0));
+      } else {
+        // Bohart-Adams: ln(Ct/C0) = kBA*C0*t - (kBA*N0*Z / u)
+        // cross-sectional area approx from m and Z with packing density ~ 0.65 g/cm3
+        const bedArea = (m / 0.65) / Z; // cm2
+        const linearU = Q / (bedArea || 1); // cm/min
+        // At Ct/C0 = 0.05: ln(0.05) ≈ -2.9957
+        tb = Math.max(0, ((kVal * capVal * Z / linearU) - 2.9957) / (kVal * c0));
+        // At Ct/C0 = 0.95: ln(0.95) ≈ -0.05129
+        ts = Math.max(tb * 1.2, ((kVal * capVal * Z / linearU) - 0.05129) / (kVal * c0));
+      }
+
+      const mtz = ts > 0 ? Z * Math.max(0, (ts - tb) / ts) : 0;
+      const eta = ts > 0 ? Math.min(100, (tb / ts) * 100) : 0;
+
+      document.getElementById('outTb')!.textContent = `${tb.toFixed(1)} min`;
+      document.getElementById('outTs')!.textContent = `${ts.toFixed(1)} min`;
+      document.getElementById('outMtz')!.textContent = `${mtz.toFixed(2)} cm`;
+      document.getElementById('outEta')!.textContent = `${eta.toFixed(1)} %`;
+
+      // Generate Points for SVG
+      const maxT = Math.max(ts * 1.3, 15);
+      const pts: Array<{ t: number; ratio: number }> = [];
+      const steps = 60;
+
+      for (let i = 0; i <= steps; i++) {
+        const t = (maxT / steps) * i;
+        let ratio = 0;
+        if (modelMode === 'thomas') {
+          const arg = (kVal * capVal * m / Q) - (kVal * c0 * t);
+          ratio = 1 / (1 + Math.exp(Math.max(-20, Math.min(20, arg))));
+        } else {
+          const bedArea = (m / 0.65) / Z;
+          const linearU = Q / (bedArea || 1);
+          const lnRatio = (kVal * c0 * t) - (kVal * capVal * Z / linearU);
+          ratio = Math.min(1.0, Math.exp(Math.max(-25, Math.min(0, lnRatio))));
+        }
+        pts.push({ t, ratio });
+      }
+
+      currentBreakthroughPoints = pts;
+      renderBreakthroughSvg(pts, maxT, tb, ts);
+    }
+
+    function renderBreakthroughSvg(pts: Array<{ t: number; ratio: number }>, maxT: number, tb: number, ts: number) {
+      const svg = document.getElementById('breakthroughSvg')!;
+      const w = 500, h = 300, padL = 50, padR = 25, padT = 20, padB = 35;
+      const width = w - padL - padR;
+      const height = h - padT - padB;
+
+      const scX = (t: number) => padL + (t / maxT) * width;
+      const scY = (r: number) => padT + height - (r * height);
+
+      let svgHtml = `
+        <line x1="${padL}" y1="${padT + height}" x2="${padL + width}" y2="${padT + height}" stroke="#cbd5e1" stroke-width="2"/>
+        <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT + height}" stroke="#cbd5e1" stroke-width="2"/>
+        <text x="${w / 2}" y="${h - 8}" text-anchor="middle" font-size="11" fill="#475569" font-weight="bold">Time (min)</text>
+        <text x="14" y="${h / 2}" text-anchor="middle" font-size="11" fill="#475569" font-weight="bold" transform="rotate(-90 14 ${h / 2})">C_t / C_0</text>
+      `;
+
+      svgHtml += `<line x1="${padL}" y1="${scY(0.05)}" x2="${padL + width}" y2="${scY(0.05)}" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" />`;
+
+      for (let i = 0; i <= 4; i++) {
+        const tVal = (maxT / 4) * i;
+        const rVal = i * 0.25;
+        svgHtml += `
+          <text x="${scX(tVal)}" y="${h - padB + 14}" text-anchor="middle" font-size="9" fill="#94a3b8">${tVal.toFixed(0)}</text>
+          <text x="${padL - 6}" y="${scY(rVal) + 3}" text-anchor="end" font-size="9" fill="#94a3b8">${rVal.toFixed(2)}</text>
+        `;
+      }
+
+      let d = '';
+      pts.forEach((p, idx) => {
+        d += (idx === 0 ? `M ${scX(p.t)} ${scY(p.ratio)}` : ` L ${scX(p.t)} ${scY(p.ratio)}`);
+      });
+      svgHtml += `<path d="${d}" fill="none" stroke="#0d9488" stroke-width="3" />`;
+
+      if (tb > 0 && tb < maxT) {
+        svgHtml += `<circle cx="${scX(tb)}" cy="${scY(0.05)}" r="4.5" fill="#ef4444" stroke="#ffffff" stroke-width="1.5" />`;
+      }
+
+      svg.innerHTML = svgHtml;
+    }
+
+    [inpC0, inpQ, inpM, inpZ, inpCapQ0, inpKRate].forEach(inp => {
+      inp.addEventListener('input', runBreakthroughEngine);
+    });
+
+    // Check URL parameters for direct import from /isotherm
+    function checkUrlImport() {
+      const p = new URLSearchParams(window.location.search);
+      if (p.has('q0')) inpCapQ0.value = p.get('q0')!;
+      if (p.has('kTh')) inpKRate.value = p.get('kTh')!;
+      if (p.has('c0')) inpC0.value = p.get('c0')!;
+    }
+
+    // ============================================================
+    // MODULE 2: BINARY GAS SELECTIVITY SOLVER (IAST)
+    // ============================================================
+    const inpQmA = document.getElementById('inpQmA') as HTMLInputElement;
+    const inpKa = document.getElementById('inpKa') as HTMLInputElement;
+    const inpYa = document.getElementById('inpYa') as HTMLInputElement;
+    const inpQmB = document.getElementById('inpQmB') as HTMLInputElement;
+    const inpKb = document.getElementById('inpKb') as HTMLInputElement;
+    const inpTotalP = document.getElementById('inpTotalP') as HTMLInputElement;
+
+    function runSelectivityEngine() {
+      const qmA = parseFloat(inpQmA.value) || 4.5;
+      const Ka = parseFloat(inpKa.value) || 2.8;
+      let yA = parseFloat(inpYa.value) || 0.15;
+      yA = Math.max(0.001, Math.min(0.999, yA));
+      const yB = 1.0 - yA;
+      (document.getElementById('outYb') as HTMLInputElement).value = yB.toFixed(3);
+
+      const qmB = parseFloat(inpQmB.value) || 1.8;
+      const Kb = parseFloat(inpKb.value) || 0.12;
+      const P = parseFloat(inpTotalP.value) || 1.0;
+
+      const denom = 1 + (Ka * P * yA) + (Kb * P * yB);
+      const qA = (qmA * Ka * P * yA) / denom;
+      const qB = (qmB * Kb * P * yB) / denom;
+
+      const alpha = (qA / yA) / (qB / yB);
+
+      document.getElementById('outSelectivity')!.textContent = alpha.toFixed(1);
+      document.getElementById('outLoadA')!.textContent = qA.toFixed(2);
+      document.getElementById('outLoadB')!.textContent = qB.toFixed(2);
+    }
+
+    [inpQmA, inpKa, inpYa, inpQmB, inpKb, inpTotalP].forEach(inp => {
+      inp.addEventListener('input', runSelectivityEngine);
+    });
+
+    // ============================================================
+    // MODULE 3: PACKED BED ERGUN & MINIMUM FLUIDIZATION (u_mf)
+    // ============================================================
+    const inpColDiameter = document.getElementById('inpColDiameter') as HTMLInputElement;
+    const inpErgunL = document.getElementById('inpErgunL') as HTMLInputElement;
+    const inpErgunFlowLmin = document.getElementById('inpErgunFlowLmin') as HTMLInputElement;
+    const inpErgunDp = document.getElementById('inpErgunDp') as HTMLInputElement;
+    const inpErgunVoid = document.getElementById('inpErgunVoid') as HTMLInputElement;
+
+    function runErgunEngine() {
+      const D_cm = parseFloat(inpColDiameter.value) || 5.0;
+      const D_m = D_cm / 100;
+      const L_m = parseFloat(inpErgunL.value) || 1.0;
+      const Q_Lmin = parseFloat(inpErgunFlowLmin.value) || 18.0;
+      const Q_m3s = (Q_Lmin / 1000) / 60; // m3/s
+
+      const dp_mm = parseFloat(inpErgunDp.value) || 2.0;
+      const dp_m = dp_mm / 1000;
+      const eps = parseFloat(inpErgunVoid.value) || 0.38;
+
+      if (D_m <= 0 || L_m <= 0 || dp_m <= 0 || eps <= 0 || eps >= 1) return;
+
+      // Column cross-sectional area
+      const area = Math.PI * Math.pow(D_m / 2, 2);
+      const u = Q_m3s / area; // Superficial velocity m/s
+
+      const rho_gas = 1.20; // kg/m3 (Air 20C)
+      const mu_gas = 1.81e-5; // Pa·s
+      const rho_solid = 1150; // kg/m3 (Typical porous zeolite/carbon pellet)
+      const g = 9.80665; // m/s2
+
+      // Ergun: dP/L = 150 * mu * (1-eps)^2 / (dp^2 * eps^3) * u + 1.75 * rho * (1-eps) / (dp * eps^3) * u^2
+      const termVisc = (150 * mu_gas * Math.pow(1 - eps, 2) / (Math.pow(dp_m, 2) * Math.pow(eps, 3))) * u;
+      const termInert = (1.75 * rho_gas * (1 - eps) / (dp_m * Math.pow(eps, 3))) * Math.pow(u, 2);
+
+      const gradP_Pa = termVisc + termInert; // Pa/m
+      const totalP_Pa = gradP_Pa * L_m;
+      const totalP_kPa = totalP_Pa / 1000;
+      const totalP_bar = totalP_Pa / 100000;
+      const totalP_psi = totalP_kPa * 0.145038;
+
+      document.getElementById('outDeltaP')!.textContent = `${totalP_kPa.toFixed(2)} kPa`;
+      document.getElementById('outDeltaPSub')!.textContent = `${totalP_bar.toFixed(4)} bar | ${totalP_psi.toFixed(2)} psi`;
+      document.getElementById('outSuperficialU')!.textContent = `${u.toFixed(3)} m/s`;
+      document.getElementById('outGradP')!.textContent = `Gradient: ${(gradP_Pa / 1000).toFixed(2)} kPa/m`;
+
+      // Minimum Fluidization Velocity via Wen & Yu (1966) Correlation:
+      // Re_mf = sqrt(33.7^2 + 0.0408 * Ar) - 33.7
+      // Archimedes number Ar = dp^3 * rho_gas * (rho_solid - rho_gas) * g / mu_gas^2
+      const Ar = (Math.pow(dp_m, 3) * rho_gas * (rho_solid - rho_gas) * g) / Math.pow(mu_gas, 2);
+      const Re_mf = Math.sqrt(Math.pow(33.7, 2) + 0.0408 * Ar) - 33.7;
+      const u_mf = (Re_mf * mu_gas) / (dp_m * rho_gas);
+
+      document.getElementById('outUmf')!.textContent = `${u_mf.toFixed(3)} m/s`;
+
+      const fluidStatus = document.getElementById('outFluidStatus')!;
+      if (u >= u_mf) {
+        fluidStatus.textContent = '⚠️ Risk of Bed Fluidization (u ≥ u_mf)';
+        fluidStatus.style.color = '#dc2626';
+      } else if (u >= u_mf * 0.75) {
+        fluidStatus.textContent = 'Caution: Approaching Fluidization (u > 0.75 u_mf)';
+        fluidStatus.style.color = '#d97706';
+      } else {
+        fluidStatus.textContent = 'Stable Fixed Packed Bed (u < u_mf)';
+        fluidStatus.style.color = '#059669';
+      }
+    }
+
+    [inpColDiameter, inpErgunL, inpErgunFlowLmin, inpErgunDp, inpErgunVoid].forEach(inp => {
+      inp.addEventListener('input', runErgunEngine);
+    });
+
+    // ============================================================
+    // BENCHMARK PRESETS (CO2/N2, CO2/CH4, O2/N2 CMS, DYE/CARBON)
+    // ============================================================
+    document.querySelectorAll('.preset-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const pKey = (e.currentTarget as HTMLElement).dataset.preset;
+        if (pKey === 'co2_zeolite') {
+          inpC0.value = '150'; inpQ.value = '25'; inpM.value = '50'; inpZ.value = '30';
+          inpCapQ0.value = '110'; inpKRate.value = '0.0012';
+          inpQmA.value = '4.8'; inpKa.value = '3.5'; inpYa.value = '0.15';
+          inpQmB.value = '1.4'; inpKb.value = '0.08';
+          document.getElementById('labelGasA')!.textContent = 'Component A (CO₂, Strongly Adsorbed)';
+          document.getElementById('labelGasB')!.textContent = 'Component B (N₂, Carrier Gas)';
+        } else if (pKey === 'ch4_mof') {
+          inpC0.value = '400'; inpQ.value = '50'; inpM.value = '40'; inpZ.value = '25';
+          inpCapQ0.value = '145'; inpKRate.value = '0.0006';
+          inpQmA.value = '6.2'; inpKa.value = '1.9'; inpYa.value = '0.40';
+          inpQmB.value = '2.1'; inpKb.value = '0.15';
+          document.getElementById('labelGasA')!.textContent = 'Component A (CO₂, Acid Gas)';
+          document.getElementById('labelGasB')!.textContent = 'Component B (CH₄, Biomethane)';
+        } else if (pKey === 'o2_cms') {
+          inpC0.value = '250'; inpQ.value = '30'; inpM.value = '60'; inpZ.value = '40';
+          inpCapQ0.value = '75'; inpKRate.value = '0.0018';
+          inpQmA.value = '2.4'; inpKa.value = '2.1'; inpYa.value = '0.21';
+          inpQmB.value = '1.6'; inpKb.value = '0.35';
+          document.getElementById('labelGasA')!.textContent = 'Component A (O₂, Kinetic Uptake)';
+          document.getElementById('labelGasB')!.textContent = 'Component B (N₂, Retained Stream)';
+        } else if (pKey === 'mb_carbon') {
+          inpC0.value = '50'; inpQ.value = '5'; inpM.value = '10'; inpZ.value = '10';
+          inpCapQ0.value = '220'; inpKRate.value = '0.0025';
+        }
+        runBreakthroughEngine();
+        runSelectivityEngine();
+        runErgunEngine();
+        showToast('✅ Loaded benchmark profile');
+      });
+    });
+
+    // ============================================================
+    // EXPORTS & CITATIONS
+    // ============================================================
+    document.getElementById('btnExportCsv')?.addEventListener('click', () => {
+      if (!currentBreakthroughPoints.length) return;
+      let csv = 'Time_min,Effluent_Ratio_Ct_C0\n';
+      currentBreakthroughPoints.forEach(p => { csv += `${p.t.toFixed(2)},${p.ratio.toFixed(4)}\n`; });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `breakthrough_curve_${Date.now()}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      showToast('✅ Downloaded Breakthrough CSV');
+    });
+
+    document.getElementById('btnDownloadCurveSvg')?.addEventListener('click', () => {
+      const svg = document.getElementById('breakthroughSvg');
+      if (!svg) return;
+      const serializer = new XMLSerializer();
+      let source = serializer.serializeToString(svg);
+      if (!source.includes('xmlns=')) source = source.replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" ');
+      const blob = new Blob([source], { type: 'image/svg+xml;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `breakthrough_curve_${Date.now()}.svg`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      showToast('✅ Saved Breakthrough Curve SVG');
+    });
+
+    document.getElementById('btnCopyShareUrl')?.addEventListener('click', async () => {
+      await navigator.clipboard.writeText(window.location.href);
+      showToast('✅ Experiment Link Copied!');
+    });
+
+    document.getElementById('btnCopyLatex')?.addEventListener('click', async () => {
+      const latex = `% Fixed-Bed Breakthrough Formulation (ChemistryDesk)
+\\begin{equation}
+  \\frac{C_t}{C_0} = \\frac{1}{1 + \\exp\\left( \\frac{k_{\\text{Th}} q_0 m}{Q} - k_{\\text{Th}} C_0 t \\right)}
+\\end{equation}`;
+      await navigator.clipboard.writeText(latex);
+      showToast('✅ Copied LaTeX Formula');
+    });
+
+    // CITATION DRAWER
+    const citeDrawer = document.getElementById('citeDrawer');
+    const toggleCiteBtn = document.getElementById('toggleCiteBtn');
+    const inlineCiteOutput = document.getElementById('inlineCiteOutput');
+    const inlineTabs = document.querySelectorAll('.inline-cite-tab');
+    const inlineCopyBtn = document.getElementById('inlineCopyCiteBtn');
+
+    const doi = "10.5281/zenodo.23059466";
+    const currentYear = new Date().getFullYear();
+
+    const columnCitations: Record<string, string> = {
+      bibtex: `@software{khan_chemistrydesk_column_${currentYear},
+  author        = {Khan, Bilal},
+  title         = {ChemistryDesk: Adsorption Column & Gas Separation Studio (Breakthrough, IAST & Ergun)},
+  year          = {${currentYear}},
+  version       = {v1.0.1},
+  publisher     = {Zenodo},
+  doi           = {${doi}},
+  url           = {https://chemistrycal.com/adsorption-column}
+}`,
+      acs: `Khan, B. ChemistryDesk: Adsorption Column & Gas Separation Studio, version 1.0.1; Zenodo, ${currentYear}. https://doi.org/${doi}.`,
+      rsc: `B. Khan, ChemistryDesk: Adsorption Column & Gas Separation Studio, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`,
+      nature: `Khan, B. ChemistryDesk: Adsorption Column & Gas Separation Studio. Zenodo https://doi.org/${doi} (${currentYear}).`,
+      elsevier: `Khan, B., ${currentYear}. ChemistryDesk: Adsorption Column & Gas Separation Studio (Version 1.0.1). Zenodo. https://doi.org/${doi}.`,
+      wiley: `B. Khan, ChemistryDesk: Adsorption Column & Gas Separation Studio, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`
+    };
+
+    let currentInlineFormat = 'bibtex';
+
+    function updateInlineCite() {
+      if (inlineCiteOutput) inlineCiteOutput.textContent = columnCitations[currentInlineFormat] || columnCitations['bibtex'];
+    }
+
+    if (toggleCiteBtn && citeDrawer) {
+      toggleCiteBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const isHidden = window.getComputedStyle(citeDrawer).display === 'none';
+        citeDrawer.style.display = isHidden ? 'block' : 'none';
+        toggleCiteBtn.style.background = isHidden ? '#0d9488' : '#ccfbf1';
+        toggleCiteBtn.style.color = isHidden ? '#ffffff' : '#0f766e';
+        if (isHidden) updateInlineCite();
+      });
+    }
+
+    inlineTabs.forEach(tab => {
+      tab.addEventListener('click', (e) => {
+        e.preventDefault();
+        inlineTabs.forEach(t => {
+          const el = t as HTMLElement;
+          el.style.background = '#ffffff';
+          el.style.color = '#334155';
+          el.style.borderColor = '#cbd5e1';
+          el.style.fontWeight = '600';
+        });
+        const activeTab = tab as HTMLElement;
+        activeTab.style.background = '#0f172a';
+        activeTab.style.color = '#ffffff';
+        activeTab.style.borderColor = '#0f172a';
+        activeTab.style.fontWeight = '700';
+        currentInlineFormat = activeTab.getAttribute('data-format') || 'bibtex';
+        updateInlineCite();
+      });
+    });
+
+    if (inlineCopyBtn) {
+      inlineCopyBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        await navigator.clipboard.writeText(columnCitations[currentInlineFormat]);
+        inlineCopyBtn.textContent = '✅ Copied!';
+        setTimeout(() => { inlineCopyBtn.textContent = '📋 Copy'; }, 1800);
+      });
+    }
+
+    updateInlineCite();
+    checkUrlImport();
+    runBreakthroughEngine();
+    runSelectivityEngine();
+    runErgunEngine();
+  </script>
+</BaseLayout>
