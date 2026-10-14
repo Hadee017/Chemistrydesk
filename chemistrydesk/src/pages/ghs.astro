@@ -86,11 +86,13 @@ const schemaData = {
       "creator": { "@id": `${siteUrl}/#author` },
       "featureList": [
         "Universal 110M+ Compound Lookup with Live PubChem Resolution",
-        "Complete UN GHS Rev. 10 H and P Code Index with Real-Time Filtering",
+        "Instant Preset Profiles for High-Volume Reagents (Sodium Dodecyl Sulfate, NaOH, Acetone, Isopropanol)",
+        "Complete UN GHS Rev. 10 H and P Code Index with Real-Time Filtering & 1-Click CSV Export",
         "Mixture Generic Concentration Cut-Off Calculator",
-        "Interactive 9-Pictogram Filter Bar with High-Resolution SVGs",
-        "Printable OSHA HazCom Secondary Container Label Generator",
-        "COSHH Protocol Summary Copy & 1-Click LaTeX Equations",
+        "Interactive 9-Pictogram Vector Download Vault with SVG and High-Res PNG Exports",
+        "Printable OSHA HazCom Secondary Container Label Generator with Customizable Bottle Dimensions",
+        "16-Section OSHA HazCom Safety Data Sheet (SDS) Framework with Downloadable Template",
+        "Chemical Resistant Glove Compatibility & PPE Permeation Matrix",
         "Integrated academic citation drawer (BibTeX, ACS, RSC, Nature, Elsevier, Wiley)"
       ]
     },
@@ -175,6 +177,14 @@ const schemaData = {
             "@type": "Answer",
             "text": "DANGER is reserved for severe hazard categories (e.g., Fatal if swallowed, Severe skin burns, Carcinogen Category 1). WARNING is assigned to less severe hazard categories (e.g., Harmful if swallowed, Skin irritation, Suspected carcinogen Category 2)."
           }
+        },
+        {
+          "@type": "Question",
+          "name": "What are the 16 mandatory sections of a GHS Safety Data Sheet (SDS)?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A compliant GHS/OSHA SDS contains: 1. Identification, 2. Hazard Identification, 3. Composition, 4. First-Aid, 5. Firefighting, 6. Accidental Release, 7. Handling & Storage, 8. Exposure Controls/PPE, 9. Physical/Chemical Properties, 10. Stability & Reactivity, 11. Toxicological, 12. Ecological, 13. Disposal, 14. Transport, 15. Regulatory, and 16. Other Information."
+          }
         }
       ]
     }
@@ -185,10 +195,10 @@ const schemaData = {
 <BaseLayout title={pageTitle} description={pageDescription}>
   <script is:inline type="application/ld+json" set:html={JSON.stringify(schemaData)}></script>
 
-  <main style="max-width: 1060px; margin: 1.5rem auto 3rem auto; padding: 0 1rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1e293b; box-sizing: border-box; overflow-x: hidden;">
+  <main style="max-width: 1080px; margin: 1.5rem auto 3rem auto; padding: 0 1rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1e293b; box-sizing: border-box; overflow-x: hidden;">
     
     <!-- Validated 2-Tier Breadcrumb Navigation -->
-    <nav style="font-size: 0.8rem; color: #64748b; margin-bottom: 1.25rem;">
+    <nav style="font-size: 0.82rem; color: #64748b; margin-bottom: 1.25rem;">
       <a href="/" style="color: #dc2626; text-decoration: none; font-weight: 600;">Home</a> &rsaquo; 
       <span style="color: #0f172a; font-weight: 700;">GHS Safety Studio</span>
     </nav>
@@ -227,7 +237,7 @@ const schemaData = {
             type="button"
             style="background: transparent; color: #475569; border: none; padding: 0.65rem 1.25rem; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s ease; min-height: 38px;"
           >
-            <span>📑</span> H &amp; P Statement Matrix
+            <span>📑</span> H &amp; P Statement Matrix &amp; Vectors
           </button>
           <button 
             id="modeCutoffBtn" 
@@ -235,6 +245,13 @@ const schemaData = {
             style="background: transparent; color: #475569; border: none; padding: 0.65rem 1.25rem; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s ease; min-height: 38px;"
           >
             <span>⚖️</span> Mixture Cut-Off Limit Solver
+          </button>
+          <button 
+            id="modeSdsGuideBtn" 
+            type="button"
+            style="background: transparent; color: #475569; border: none; padding: 0.65rem 1.25rem; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s ease; min-height: 38px;"
+          >
+            <span>📋</span> 16-Section SDS &amp; PPE Matrix
           </button>
         </div>
       </div>
@@ -255,17 +272,18 @@ const schemaData = {
     <!-- ============================================================ -->
     <div id="reagentModeSection">
       
-      <!-- Free-Form Universal Search Bar -->
+      <!-- Free-Form Universal Search Bar & High-Volume Quick Presets -->
       <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: clamp(1rem, 3vw, 1.5rem); margin-bottom: 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.04); min-width: 0;">
-        <label style="display: block; font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #334155; margin-bottom: 0.5rem;">
+        <label for="chemSearchInput" style="display: block; font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #334155; margin-bottom: 0.5rem;">
           Universal Chemical Search (Name, Formula, or CAS Number)
         </label>
-        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+        
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.85rem;">
           <input 
             type="text" 
             id="chemSearchInput" 
-            placeholder="Type any compound (e.g. Copper Sulfate, Paraquat, HCl, KMnO4, C6H12O6)..." 
-            value="Copper(II) Sulfate Pentahydrate"
+            placeholder="Type any compound (e.g. Sodium Dodecyl Sulfate, NaOH, Acetone, Isopropanol, Benzene, HCl)..." 
+            value="Sodium Dodecyl Sulfate"
             style="flex: 1; min-width: 240px; padding: 0.75rem 1rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 1rem; font-weight: 600; outline: none; transition: border-color 0.2s;" 
           />
           <button 
@@ -276,8 +294,22 @@ const schemaData = {
             <span>⚡</span> Search 110M+
           </button>
         </div>
+
+        <!-- High-Volume Fast Presets Pill Bar -->
+        <div style="display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.65rem;">
+          <span style="font-size: 0.75rem; font-weight: 800; color: #64748b; text-transform: uppercase;">Top High-Traffic SDS Presets:</span>
+          <button type="button" class="chem-preset-btn" data-query="Sodium Dodecyl Sulfate" style="background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 0.25rem 0.65rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; cursor: pointer;">Sodium Dodecyl Sulfate (SDS/SLS)</button>
+          <button type="button" class="chem-preset-btn" data-query="Sodium Hydroxide" style="background: #f8fafc; border: 1px solid #cbd5e1; color: #334155; padding: 0.25rem 0.65rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; cursor: pointer;">NaOH</button>
+          <button type="button" class="chem-preset-btn" data-query="Hydrochloric Acid" style="background: #f8fafc; border: 1px solid #cbd5e1; color: #334155; padding: 0.25rem 0.65rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; cursor: pointer;">HCl</button>
+          <button type="button" class="chem-preset-btn" data-query="Isopropanol" style="background: #f8fafc; border: 1px solid #cbd5e1; color: #334155; padding: 0.25rem 0.65rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; cursor: pointer;">Isopropanol (IPA)</button>
+          <button type="button" class="chem-preset-btn" data-query="Acetone" style="background: #f8fafc; border: 1px solid #cbd5e1; color: #334155; padding: 0.25rem 0.65rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; cursor: pointer;">Acetone</button>
+          <button type="button" class="chem-preset-btn" data-query="Methanol" style="background: #f8fafc; border: 1px solid #cbd5e1; color: #334155; padding: 0.25rem 0.65rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; cursor: pointer;">Methanol</button>
+          <button type="button" class="chem-preset-btn" data-query="Benzene" style="background: #f8fafc; border: 1px solid #cbd5e1; color: #334155; padding: 0.25rem 0.65rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; cursor: pointer;">Benzene</button>
+          <button type="button" class="chem-preset-btn" data-query="Acetonitrile" style="background: #f8fafc; border: 1px solid #cbd5e1; color: #334155; padding: 0.25rem 0.65rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; cursor: pointer;">Acetonitrile</button>
+        </div>
+
         <div id="searchStatusText" style="margin-top: 0.5rem; font-size: 0.78rem; color: #64748b; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.25rem;">
-          <span>Instant local benchmark cache active. Exotic compounds query live NCBI PubChem API.</span>
+          <span>Instant verified benchmark cache active. Uncached chemicals resolve live via NCBI PubChem API.</span>
           <span id="lookupSpeedBadge" style="font-weight: 700; color: #059669;">Ready</span>
         </div>
       </div>
@@ -286,11 +318,11 @@ const schemaData = {
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 2rem; margin-bottom: 3rem;">
         
         <!-- Entity Identity & Chemical Specifications -->
-        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: clamp(1rem, 3vw, 1.75rem); box-shadow: 0 1px 3px rgba(0,0,0,0.05); min-width: 0;">
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: clamp(1rem, 3vw, 1.75rem); box-shadow: 0 1px 3px rgba(0,0,0,0.05); min-width: 0;">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
             <div>
               <span style="font-size: 0.75rem; font-weight: 800; color: #dc2626; text-transform: uppercase; letter-spacing: 0.05em;">Resolved Chemical Entity</span>
-              <h2 id="dossierName" style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin: 0.25rem 0 0 0; word-break: break-all;">Copper(II) Sulfate Pentahydrate</h2>
+              <h2 id="dossierName" style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin: 0.25rem 0 0 0; word-break: break-word;">Sodium Dodecyl Sulfate</h2>
             </div>
             <span id="dossierSignalBadge" style="background: #fee2e2; color: #991b1b; padding: 4px 10px; border-radius: 9999px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase;">
               DANGER
@@ -302,23 +334,23 @@ const schemaData = {
               <tbody>
                 <tr style="border-bottom: 1px solid #f1f5f9;">
                   <td style="padding: 0.5rem 0.5rem; color: #64748b; font-weight: 600;">Formula:</td>
-                  <td id="dossierFormula" style="padding: 0.5rem 0.5rem; text-align: right; font-weight: 800; font-family: monospace; color: #0f172a;">CuSO4 · 5H2O</td>
+                  <td id="dossierFormula" style="padding: 0.5rem 0.5rem; text-align: right; font-weight: 800; font-family: monospace; color: #0f172a;">C12H25NaO4S</td>
                 </tr>
                 <tr style="border-bottom: 1px solid #f1f5f9;">
                   <td style="padding: 0.5rem 0.5rem; color: #64748b; font-weight: 600;">Anhydrous Molecular Weight:</td>
-                  <td id="dossierMwAnh" style="padding: 0.5rem 0.5rem; text-align: right; font-weight: 800; color: #0f172a;">159.610 g/mol</td>
+                  <td id="dossierMwAnh" style="padding: 0.5rem 0.5rem; text-align: right; font-weight: 800; color: #0f172a;">288.372 g/mol</td>
                 </tr>
                 <tr style="border-bottom: 1px solid #f1f5f9;">
                   <td style="padding: 0.5rem 0.5rem; color: #64748b; font-weight: 600;">Hydrate Waters (· nH₂O):</td>
-                  <td id="dossierHydrateN" style="padding: 0.5rem 0.5rem; text-align: right; font-weight: 800; color: #0284c7;">5 (Pentahydrate)</td>
+                  <td id="dossierHydrateN" style="padding: 0.5rem 0.5rem; text-align: right; font-weight: 800; color: #0284c7;">0 (Anhydrous)</td>
                 </tr>
                 <tr style="border-bottom: 1px solid #f1f5f9;">
                   <td style="padding: 0.5rem 0.5rem; color: #64748b; font-weight: 600;">Effective Formula Weight:</td>
-                  <td id="dossierMwEff" style="padding: 0.5rem 0.5rem; text-align: right; font-weight: 800; color: #dc2626;">249.685 g/mol</td>
+                  <td id="dossierMwEff" style="padding: 0.5rem 0.5rem; text-align: right; font-weight: 800; color: #dc2626;">288.372 g/mol</td>
                 </tr>
                 <tr>
                   <td style="padding: 0.5rem 0.5rem; color: #64748b; font-weight: 600;">CAS Registry Number:</td>
-                  <td id="dossierCas" style="padding: 0.5rem 0.5rem; text-align: right; font-weight: 700; color: #475569;">7758-99-8</td>
+                  <td id="dossierCas" style="padding: 0.5rem 0.5rem; text-align: right; font-weight: 700; color: #475569;">151-21-3</td>
                 </tr>
               </tbody>
             </table>
@@ -338,15 +370,15 @@ const schemaData = {
         <!-- Hazard & Precautionary Statements Panel -->
         <div style="display: flex; flex-direction: column; gap: 1.5rem; min-width: 0;">
           
-          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: clamp(1rem, 3vw, 1.5rem); box-shadow: 0 1px 3px rgba(0,0,0,0.05); flex: 1; min-width: 0;">
+          <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: clamp(1rem, 3vw, 1.5rem); box-shadow: 0 1px 3px rgba(0,0,0,0.05); flex: 1; min-width: 0;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.4rem;">
               <h3 style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #475569; margin: 0;">
                 GHS Classifications &amp; Protocols
               </h3>
               <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
-                <button id="btnCopyRiskSummary" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.25rem 0.55rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #334155; min-height: 28px;">📋 Copy COSHH</button>
-                <button id="btnPrintOshaLabel" type="button" style="background: #dc2626; border: none; padding: 0.25rem 0.65rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: white; min-height: 28px;">🖨️ Print OSHA Label</button>
-                <button id="toggleCiteBtn" type="button" style="background: #fee2e2; border: 1px solid #fecaca; padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #991b1b; display: inline-flex; align-items: center; gap: 0.35rem; min-height: 28px;"><span>📖</span> Cite</button>
+                <button id="btnCopyRiskSummary" type="button" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.65rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #334155; min-height: 32px;">📋 Copy COSHH</button>
+                <button id="btnPrintOshaLabel" type="button" style="background: #dc2626; border: none; padding: 0.35rem 0.85rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: white; min-height: 32px;">🖨️ Label Studio</button>
+                <button id="toggleCiteBtn" type="button" style="background: #fee2e2; border: 1px solid #fecaca; padding: 0.35rem 0.65rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #991b1b; display: inline-flex; align-items: center; gap: 0.35rem; min-height: 32px;"><span>📖</span> Cite</button>
               </div>
             </div>
 
@@ -371,7 +403,7 @@ const schemaData = {
 
             <!-- Summary Statement Box -->
             <div id="dossierSummaryBox" style="background: #f8fafc; border-left: 4px solid #dc2626; padding: 0.75rem 1rem; border-radius: 0 6px 6px 0; font-size: 0.85rem; color: #334155; margin-bottom: 1rem; line-height: 1.5;">
-              Harmful if swallowed. Causes serious eye damage. Very toxic to aquatic life.
+              Flammable solid. Harmful if swallowed or inhaled. Causes skin irritation and serious eye damage. May cause respiratory irritation. Harmful to aquatic life with long lasting effects.
             </div>
 
             <!-- List of H-Codes -->
@@ -397,56 +429,70 @@ const schemaData = {
     </div>
 
     <!-- ============================================================ -->
-    <!-- MODE 2: COMPLETE UN GHS H & P STATEMENT MATRIX               -->
+    <!-- MODE 2: COMPLETE UN GHS H & P MATRIX & PICTOGRAM VAULT       -->
     <!-- ============================================================ -->
     <div id="statementsModeSection" style="display: none; margin-bottom: 3rem;">
-      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: clamp(1rem, 3vw, 1.75rem); margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); min-width: 0;">
+      <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: clamp(1rem, 3vw, 1.75rem); margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); min-width: 0;">
         
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
           <div>
-            <h2 style="font-size: 1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; margin: 0;">
-              Standardized UN GHS Rev. 10 Statement Dictionary
+            <h2 style="font-size: 1.05rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #0f172a; margin: 0;">
+              Standardized UN GHS Rev. 10 Statement &amp; Vector Vault
             </h2>
             <p style="font-size: 0.8rem; color: #64748b; margin: 0.25rem 0 0 0;">
               Filter across all Physical (H200), Health (H300), Environmental (H400), and Precautionary (P100–P500) codes.
             </p>
           </div>
 
-          <!-- Code Filter Input -->
-          <div style="display: flex; gap: 0.5rem; align-items: center; width: 100%; max-width: 300px;">
+          <!-- Actions Toolbar: CSV Export & Filter -->
+          <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+            <button id="btnExportHpCsv" type="button" style="background: #059669; color: white; border: none; padding: 0.45rem 0.85rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.35rem;">
+              <span>📥</span> Export Master H&amp;P (CSV)
+            </button>
             <input 
               type="text" 
               id="statementFilterInput" 
-              placeholder="Search code (e.g. H314, P280, eye, flame)..." 
-              style="padding: 0.45rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem; font-weight: 600; width: 100%;" 
+              placeholder="Filter code (e.g. H314, P280, eye, flame)..." 
+              style="padding: 0.45rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem; font-weight: 600; width: 220px;" 
             />
           </div>
         </div>
 
-        <!-- 9 Interactive GHS Pictogram Filter Bar -->
-        <div style="border-top: 1px solid #f1f5f9; padding-top: 1rem; margin-bottom: 1.25rem;">
-          <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; display: block; margin-bottom: 0.5rem;">
-            Click Pictogram to Filter Hazard Statements:
-          </span>
-          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-            {Object.entries(GHS_PICTOGRAMS).map(([key, item]) => (
-              <button 
-                type="button" 
-                class="pictogram-filter-btn" 
-                data-pic={key} 
-                title={item.title}
-                style="width: 44px; height: 44px; padding: 4px; border: 1.5px solid #cbd5e1; background: #ffffff; border-radius: 8px; cursor: pointer; transition: all 0.2s ease;"
-              >
-                <div style="width: 100%; height: 100%;" set:html={item.svg}></div>
-              </button>
-            ))}
+        <!-- 9 Interactive GHS Pictogram Vector Download Grid -->
+        <div style="border-top: 1.5px solid #f1f5f9; padding-top: 1rem; margin-bottom: 1.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.65rem; flex-wrap: wrap; gap: 0.4rem;">
+            <span style="font-size: 0.75rem; font-weight: 800; color: #334155; text-transform: uppercase;">
+              UN GHS Pictograms (Click to filter statements, or download vector files):
+            </span>
             <button 
               id="btnClearPicFilter" 
               type="button" 
-              style="padding: 0 0.75rem; font-size: 0.75rem; font-weight: 700; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; cursor: pointer; color: #64748b; min-height: 44px;"
+              style="padding: 0.2rem 0.6rem; font-size: 0.72rem; font-weight: 700; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; cursor: pointer; color: #64748b;"
             >
               Reset Filter
             </button>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 100px), 1fr)); gap: 0.75rem;">
+            {Object.entries(GHS_PICTOGRAMS).map(([key, item]) => (
+              <div style="border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 0.5rem; text-align: center; background: #ffffff;">
+                <div 
+                  class="pictogram-filter-btn" 
+                  data-pic={key} 
+                  title={`Filter statements for ${item.title}`}
+                  style="width: 48px; height: 48px; margin: 0 auto; cursor: pointer;"
+                >
+                  <div style="width: 100%; height: 100%;" set:html={item.svg}></div>
+                </div>
+                <div style="font-size: 0.68rem; font-weight: 700; color: #1e293b; margin-top: 0.35rem; line-height: 1.2;">
+                  {item.title}
+                </div>
+                <div style="display: flex; justify-content: center; gap: 4px; margin-top: 0.4rem;">
+                  <button type="button" class="btn-download-svg" data-pic={key} style="font-size: 0.65rem; font-weight: 700; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 3px; padding: 1px 4px; cursor: pointer;" title="Download Vector SVG">SVG</button>
+                  <button type="button" class="btn-download-png" data-pic={key} style="font-size: 0.65rem; font-weight: 700; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 3px; padding: 1px 4px; cursor: pointer;" title="Download High-Res PNG">PNG</button>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -474,7 +520,7 @@ const schemaData = {
     <!-- MODE 3: MIXTURE CONCENTRATION CUT-OFF LIMIT SOLVER           -->
     <!-- ============================================================ -->
     <div id="cutoffModeSection" style="display: none; margin-bottom: 3rem;">
-      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: clamp(1rem, 3vw, 1.75rem); margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); min-width: 0;">
+      <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: clamp(1rem, 3vw, 1.75rem); margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); min-width: 0;">
         
         <h2 style="font-size: 1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; margin: 0 0 0.25rem 0;">
           Mixture Generic Concentration Cut-Off Calculator
@@ -523,6 +569,207 @@ const schemaData = {
             </thead>
             <tbody id="cutoffTableBody">
               <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- MODE 4: 16-SECTION OSHA SDS GUIDE & PPE RESISTANCE MATRIX    -->
+    <!-- ============================================================ -->
+    <div id="sdsGuideModeSection" style="display: none; margin-bottom: 3rem;">
+      <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: clamp(1rem, 3vw, 1.75rem); margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); min-width: 0;">
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h2 style="font-size: 1.05rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #0f172a; margin: 0;">
+              OSHA HazCom 2012 / GHS 16-Section Safety Data Sheet Framework
+            </h2>
+            <p style="font-size: 0.8rem; color: #64748b; margin: 0.25rem 0 0 0;">
+              Complete regulatory breakdown of mandatory workplace sections vs. EPA/DOT non-mandatory sections.
+            </p>
+          </div>
+          <button id="btnDownloadSdsTemplate" type="button" style="background: #dc2626; color: white; border: none; padding: 0.45rem 0.85rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.35rem;">
+            <span>📄</span> Download Blank SDS Template (.txt)
+          </button>
+        </div>
+
+        <!-- 16-Section Grid Breakdown -->
+        <div style="border: 1px solid #cbd5e1; border-radius: 8px; overflow-x: auto; margin-bottom: 2rem;">
+          <table style="width: 100%; min-width: 600px; border-collapse: collapse; font-size: 0.85rem; text-align: left;">
+            <thead style="background: #0f172a; color: white;">
+              <tr>
+                <th style="padding: 0.6rem 0.75rem; width: 60px;">Sec.</th>
+                <th style="padding: 0.6rem 0.75rem; width: 220px;">Heading Title</th>
+                <th style="padding: 0.6rem 0.75rem;">Mandatory Information &amp; Key Details</th>
+                <th style="padding: 0.6rem 0.75rem; width: 110px; text-align: center;">OSHA Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 0.5rem 0.75rem; font-weight: 800;">1</td>
+                <td style="padding: 0.5rem 0.75rem; font-weight: 700;">Identification</td>
+                <td style="padding: 0.5rem 0.75rem; color: #334155;">Chemical identity, manufacturer info, emergency phone number, and recommended/restricted uses.</td>
+                <td style="padding: 0.5rem 0.75rem; text-align: center; color: #dc2626; font-weight: 800;">Mandatory</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+                <td style="padding: 0.5rem 0.75rem; font-weight: 800;">2</td>
+                <td style="padding: 0.5rem 0.75rem; font-weight: 700;">Hazard(s) Identification</td>
+                <td style="padding: 0.5rem 0.75rem; color: #334155;">GHS classification, signal words (Danger/Warning), pictograms, H-statements, and P-statements.</td>
+                <td style="padding: 0.5rem 0.75rem; text-align: center; color: #dc2626; font-weight: 800;">Mandatory</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 0.5rem 0.75rem; font-weight: 800;">3</td>
+                <td style="padding: 0.5rem 0.75rem; font-weight: 700;">Composition / Ingredients</td>
+                <td style="padding: 0.5rem 0.75rem; color: #334155;">Chemical name, CAS numbers, impurities, stabilizing additives, and concentration ranges.</td>
+                <td style="padding: 0.5rem 0.75rem; text-align: center; color: #dc2626; font-weight: 800;">Mandatory</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+                <td style="padding: 0.5rem 0.75rem; font-weight: 800;">4</td>
+                <td style="padding: 0.5rem 0.75rem; font-weight: 700;">First-Aid Measures</td>
+                <td style="padding: 0.5rem 0.75rem; color: #334155;">Instructions by exposure route (inhalation, skin, eyes, ingestion), acute/delayed symptoms, and antidotes.</td>
+                <td style="padding: 0.5rem 0.75rem; text-align: center; color: #dc2626; font-weight: 800;">Mandatory</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 0.5rem 0.75rem; font-weight: 800;">5</td>
+                <td style="padding: 0.5rem 0.75rem; font-weight: 700;">Fire-Fighting Measures</td>
+                <td style="padding: 0.5rem 0.75rem; color: #334155;">Extinguishing media (water, dry chem, CO₂), hazardous combustion products, and firefighter gear.</td>
+                <td style="padding: 0.5rem 0.75rem; text-align: center; color: #dc2626; font-weight: 800;">Mandatory</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+                <td style="padding: 0.5rem 0.75rem; font-weight: 800;">6</td>
+                <td style="padding: 0.5rem 0.75rem; font-weight: 700;">Accidental Release</td>
+                <td style="padding: 0.5rem 0.75rem; color: #334155;">PPE for spill cleanups, containment methods, neutralization, and environmental barriers.</td>
+                <td style="padding: 0.5rem 0.75rem; text-align: center; color: #dc2626; font-weight: 800;">Mandatory</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 0.5rem 0.75rem; font-weight: 800;">7</td>
+                <td style="padding: 0.5rem 0.75rem; font-weight: 700;">Handling &amp; Storage</td>
+                <td style="padding: 0.5rem 0.75rem; color: #334155;">Precautions for safe handling, ventilation, incompatible chemicals, and temperature restrictions.</td>
+                <td style="padding: 0.5rem 0.75rem; text-align: center; color: #dc2626; font-weight: 800;">Mandatory</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+                <td style="padding: 0.5rem 0.75rem; font-weight: 800;">8</td>
+                <td style="padding: 0.5rem 0.75rem; font-weight: 700;">Exposure Controls / PPE</td>
+                <td style="padding: 0.5rem 0.75rem; color: #334155;">OSHA PELs, ACGIH TLVs, engineering controls (fume hoods), and personal protection (gloves, goggles, respirators).</td>
+                <td style="padding: 0.5rem 0.75rem; text-align: center; color: #dc2626; font-weight: 800;">Mandatory</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 0.5rem 0.75rem; font-weight: 800;">9</td>
+                <td style="padding: 0.5rem 0.75rem; font-weight: 700;">Physical &amp; Chemical Properties</td>
+                <td style="padding: 0.5rem 0.75rem; color: #334155;">Appearance, odor, pH, melting/boiling points, flash point, vapor pressure, and solubility.</td>
+                <td style="padding: 0.5rem 0.75rem; text-align: center; color: #dc2626; font-weight: 800;">Mandatory</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+                <td style="padding: 0.5rem 0.75rem; font-weight: 800;">10</td>
+                <td style="padding: 0.5rem 0.75rem; font-weight: 700;">Stability &amp; Reactivity</td>
+                <td style="padding: 0.5rem 0.75rem; color: #334155;">Chemical stability, conditions to avoid, incompatible materials, and hazardous decomposition.</td>
+                <td style="padding: 0.5rem 0.75rem; text-align: center; color: #dc2626; font-weight: 800;">Mandatory</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 0.5rem 0.75rem; font-weight: 800;">11</td>
+                <td style="padding: 0.5rem 0.75rem; font-weight: 700;">Toxicological Information</td>
+                <td style="padding: 0.5rem 0.75rem; color: #334155;">LD50 values, acute/chronic effects, exposure routes, and carcinogen status (IARC, NTP, OSHA).</td>
+                <td style="padding: 0.5rem 0.75rem; text-align: center; color: #dc2626; font-weight: 800;">Mandatory</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+                <td style="padding: 0.5rem 0.75rem; font-weight: 800;">12</td>
+                <td style="padding: 0.5rem 0.75rem; font-weight: 700;">Ecological Information</td>
+                <td style="padding: 0.5rem 0.75rem; color: #64748b;">Aquatic toxicity (LC50/EC50), persistence, bioaccumulative potential, and mobility in soil.</td>
+                <td style="padding: 0.5rem 0.75rem; text-align: center; color: #64748b;">EPA (Non-Mand.)</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 0.5rem 0.75rem; font-weight: 800;">13</td>
+                <td style="padding: 0.5rem 0.75rem; font-weight: 700;">Disposal Considerations</td>
+                <td style="padding: 0.5rem 0.75rem; color: #64748b;">Waste classification, safe container handling, and avoidance of sewage disposal.</td>
+                <td style="padding: 0.5rem 0.75rem; text-align: center; color: #64748b;">EPA (Non-Mand.)</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+                <td style="padding: 0.5rem 0.75rem; font-weight: 800;">14</td>
+                <td style="padding: 0.5rem 0.75rem; font-weight: 700;">Transport Information</td>
+                <td style="padding: 0.5rem 0.75rem; color: #64748b;">UN number, proper shipping name, transport hazard class, packing group, and marine pollutants.</td>
+                <td style="padding: 0.5rem 0.75rem; text-align: center; color: #64748b;">DOT (Non-Mand.)</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 0.5rem 0.75rem; font-weight: 800;">15</td>
+                <td style="padding: 0.5rem 0.75rem; font-weight: 700;">Regulatory Information</td>
+                <td style="padding: 0.5rem 0.75rem; color: #64748b;">TSCA inventory status, SARA Title III, California Proposition 65, and international chemical inventories.</td>
+                <td style="padding: 0.5rem 0.75rem; text-align: center; color: #64748b;">EPA (Non-Mand.)</td>
+              </tr>
+              <tr>
+                <td style="padding: 0.5rem 0.75rem; font-weight: 800;">16</td>
+                <td style="padding: 0.5rem 0.75rem; font-weight: 700;">Other Information</td>
+                <td style="padding: 0.5rem 0.75rem; color: #334155;">Preparation date, latest revision date, NFPA/HMIS ratings, and change summaries.</td>
+                <td style="padding: 0.5rem 0.75rem; text-align: center; color: #dc2626; font-weight: 800;">Mandatory</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Chemical PPE Compatibility & Glove Breakthrough Guide -->
+        <h3 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin-top: 2rem; margin-bottom: 0.65rem;">
+          Chemical Resistant Glove Permeation Guide
+        </h3>
+        <p style="font-size: 0.85rem; color: #475569; margin-bottom: 1rem;">
+          Breakthrough times and compatibility ratings across standard laboratory glove materials against common solvents and acids:
+        </p>
+
+        <div style="border: 1px solid #cbd5e1; border-radius: 8px; overflow-x: auto;">
+          <table style="width: 100%; min-width: 580px; border-collapse: collapse; font-size: 0.85rem; text-align: left;">
+            <thead style="background: #f1f5f9; color: #334155; border-bottom: 1.5px solid #cbd5e1;">
+              <tr>
+                <th style="padding: 0.6rem 0.75rem;">Chemical Substance</th>
+                <th style="padding: 0.6rem 0.75rem;">Nitrile (4–5 mil)</th>
+                <th style="padding: 0.6rem 0.75rem;">Neoprene</th>
+                <th style="padding: 0.6rem 0.75rem;">Butyl Rubber</th>
+                <th style="padding: 0.6rem 0.75rem;">Silver Shield / 4H</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 0.5rem 0.75rem; font-weight: 700;">Acetone</td>
+                <td style="padding: 0.5rem 0.75rem; color: #dc2626; font-weight: 700;">Poor (&lt; 5 min)</td>
+                <td style="padding: 0.5rem 0.75rem; color: #d97706; font-weight: 700;">Fair (15–30 min)</td>
+                <td style="padding: 0.5rem 0.75rem; color: #059669; font-weight: 800;">Excellent (&gt; 480 min)</td>
+                <td style="padding: 0.5rem 0.75rem; color: #059669; font-weight: 800;">Excellent (&gt; 480 min)</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+                <td style="padding: 0.5rem 0.75rem; font-weight: 700;">Acetonitrile</td>
+                <td style="padding: 0.5rem 0.75rem; color: #d97706; font-weight: 700;">Fair (15–30 min)</td>
+                <td style="padding: 0.5rem 0.75rem; color: #d97706; font-weight: 700;">Fair (30–60 min)</td>
+                <td style="padding: 0.5rem 0.75rem; color: #059669; font-weight: 800;">Excellent (&gt; 480 min)</td>
+                <td style="padding: 0.5rem 0.75rem; color: #059669; font-weight: 800;">Excellent (&gt; 480 min)</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 0.5rem 0.75rem; font-weight: 700;">Dichloromethane (DCM)</td>
+                <td style="padding: 0.5rem 0.75rem; color: #dc2626; font-weight: 700;">Poor (&lt; 2 min)</td>
+                <td style="padding: 0.5rem 0.75rem; color: #dc2626; font-weight: 700;">Poor (&lt; 5 min)</td>
+                <td style="padding: 0.5rem 0.75rem; color: #dc2626; font-weight: 700;">Poor (&lt; 15 min)</td>
+                <td style="padding: 0.5rem 0.75rem; color: #059669; font-weight: 800;">Excellent (&gt; 240 min)</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+                <td style="padding: 0.5rem 0.75rem; font-weight: 700;">Methanol / Ethanol</td>
+                <td style="padding: 0.5rem 0.75rem; color: #059669; font-weight: 700;">Good (60–120 min)</td>
+                <td style="padding: 0.5rem 0.75rem; color: #059669; font-weight: 800;">Excellent (&gt; 360 min)</td>
+                <td style="padding: 0.5rem 0.75rem; color: #059669; font-weight: 800;">Excellent (&gt; 480 min)</td>
+                <td style="padding: 0.5rem 0.75rem; color: #059669; font-weight: 800;">Excellent (&gt; 480 min)</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 0.5rem 0.75rem; font-weight: 700;">Sodium Hydroxide (50%)</td>
+                <td style="padding: 0.5rem 0.75rem; color: #059669; font-weight: 800;">Excellent (&gt; 480 min)</td>
+                <td style="padding: 0.5rem 0.75rem; color: #059669; font-weight: 800;">Excellent (&gt; 480 min)</td>
+                <td style="padding: 0.5rem 0.75rem; color: #059669; font-weight: 800;">Excellent (&gt; 480 min)</td>
+                <td style="padding: 0.5rem 0.75rem; color: #059669; font-weight: 800;">Excellent (&gt; 480 min)</td>
+              </tr>
+              <tr>
+                <td style="padding: 0.5rem 0.75rem; font-weight: 700;">Hydrochloric Acid (37%)</td>
+                <td style="padding: 0.5rem 0.75rem; color: #059669; font-weight: 700;">Good (120–240 min)</td>
+                <td style="padding: 0.5rem 0.75rem; color: #059669; font-weight: 800;">Excellent (&gt; 360 min)</td>
+                <td style="padding: 0.5rem 0.75rem; color: #059669; font-weight: 800;">Excellent (&gt; 480 min)</td>
+                <td style="padding: 0.5rem 0.75rem; color: #059669; font-weight: 800;">Excellent (&gt; 480 min)</td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -642,6 +889,13 @@ const schemaData = {
 
       <div style="display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 2rem;">
         <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What are the 16 mandatory sections of a GHS Safety Data Sheet (SDS)?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Under OSHA HazCom 2012 and EU CLP, a compliant SDS has 16 standardized sections: 1. Identification, 2. Hazard Identification, 3. Composition, 4. First-Aid, 5. Firefighting, 6. Accidental Release, 7. Handling &amp; Storage, 8. Exposure Controls/PPE, 9. Physical/Chemical Properties, 10. Stability/Reactivity, 11. Toxicological, 12. Ecological, 13. Disposal, 14. Transport, 15. Regulatory, and 16. Other Information. Note that OSHA enforces Sections 1–11 and 16, while Sections 12–15 are governed by EPA and DOT.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
           <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">When is a secondary container label legally required in a laboratory?</summary>
           <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
             Under OSHA HazCom 2012, if a prepared solution or chemical is transferred from its manufacturer bottle into a secondary vessel (e.g. Schott bottle, beaker, volumetric flask) and is <strong>not</strong> used immediately during the work shift by the person who transferred it, a secondary container label with product identifier, signal word, and hazard statements is legally required.
@@ -649,9 +903,23 @@ const schemaData = {
         </details>
 
         <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Why is Sodium Dodecyl Sulfate (SDS/SLS) classified with multiple GHS pictograms?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Sodium Dodecyl Sulfate (CAS 151-21-3) is an anionic surfactant widely used in SDS-PAGE. In pure powder form, it is classified as a Flammable Solid Category 2 (GHS02, H228), Acute Oral/Inhalation Toxic (GHS07, H302+H332), Skin Irritant Category 2 (GHS07, H315), Serious Eye Damage Category 1 (GHS05, H318), and Chronic Aquatic Toxin (H412).
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
           <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How does concentration cut-off affect diluted acid and base solutions?</summary>
           <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
             Concentrated mineral acids (such as 12 M HCl or 18 M H₂SO₄) are Category 1 Skin Corrosives (H314). However, when diluted below the 3.0% generic concentration threshold, the solution no longer meets the criteria for Category 1 corrosion and is de-escalated to Category 2 Skin Irritation (H315) or non-hazardous status below 1.0%.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What glove material protects best against Acetone and DCM?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Standard disposable Nitrile gloves offer zero protection against Dichloromethane (DCM breakthrough &lt; 2 min) and poor protection against Acetone (&lt; 5 min). For Acetone, Butyl Rubber provides &gt; 480 minutes of protection. For DCM, specialized Silver Shield / 4H laminates are mandatory.
           </p>
         </details>
 
@@ -666,43 +934,102 @@ const schemaData = {
     </article>
   </main>
 
-  <!-- PRINT-ONLY BENCHTOP SECONDARY CONTAINER LABEL MODAL -->
-  <div id="printLabelModal" style="display: none;">
-    <div id="labelBox" style="width: 4.0in; height: 2.5in; border: 2.5px solid #000; padding: 0.15in; box-sizing: border-box; font-family: system-ui, sans-serif; background: #fff; color: #000; position: relative;">
+  <!-- USER-CONFIGURABLE PRINT & EXPORT MODAL -->
+  <div id="printConfigModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); z-index: 9999; align-items: center; justify-content: center; padding: 1rem;">
+    <div style="background: #ffffff; border-radius: 12px; max-width: 680px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 1.5rem; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);">
       
-      <!-- Top Header -->
-      <div style="border-bottom: 2px solid #000; padding-bottom: 3px; display: flex; justify-content: space-between; align-items: baseline;">
-        <span style="font-size: 11pt; font-weight: 900; letter-spacing: -0.02em;">OSHA GHS SECONDARY CONTAINER</span>
-        <span id="printDate" style="font-size: 8pt; font-weight: bold;"></span>
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 0.75rem; margin-bottom: 1rem;">
+        <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;">
+          🏷️ OSHA GHS Secondary Container Label Studio
+        </h3>
+        <button id="btnCloseModal" type="button" style="background: transparent; border: none; font-size: 1.25rem; font-weight: 800; color: #64748b; cursor: pointer;">✕</button>
       </div>
 
-      <!-- Chemical Name & Signal Word -->
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
-        <div style="flex: 1; padding-right: 8px;">
-          <div id="printChemName" style="font-size: 13pt; font-weight: 900; line-height: 1.1; text-transform: uppercase;">COPPER(II) SULFATE</div>
-          <div id="printFormula" style="font-size: 8.5pt; font-family: monospace; font-weight: bold; color: #333;">CuSO4 · 5H2O</div>
+      <!-- Controls Grid -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 1rem; margin-bottom: 1.25rem;">
+        <div>
+          <label style="display: block; font-size: 0.75rem; font-weight: 700; color: #475569; margin-bottom: 0.25rem;">LABEL DIMENSION / PRESET:</label>
+          <select id="modalSizeSelect" style="width: 100%; padding: 0.45rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem; font-weight: 700; color: #0f172a;">
+            <option value="schott500" selected>500 mL Schott Bottle (4.0" × 2.5")</option>
+            <option value="flask250">250 mL Reagent Flask (3.5" × 2.0")</option>
+            <option value="vial20">20 mL Scintillation Vial (2.0" × 1.2")</option>
+            <option value="avery5163">Avery 5163 / 5263 Sheet (4.0" × 2.0")</option>
+            <option value="thermal4x6">Direct Thermal Industrial (4.0" × 6.0")</option>
+          </select>
         </div>
-        <div id="printSignalWord" style="background: #000; color: #fff; padding: 3px 8px; font-size: 11pt; font-weight: 900; border-radius: 3px; text-transform: uppercase;">
-          DANGER
+
+        <div>
+          <label style="display: block; font-size: 0.75rem; font-weight: 700; color: #475569; margin-bottom: 0.25rem;">STORAGE TEMPERATURE:</label>
+          <select id="modalStorageSelect" style="width: 100%; padding: 0.45rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem; font-weight: 600; color: #0f172a;">
+            <option value="Room Temperature [20-25°C]" selected>Room Temperature [20-25°C]</option>
+            <option value="Refrigerated [4°C]">Refrigerated [4°C]</option>
+            <option value="Freezer [-20°C]">Freezer [-20°C]</option>
+            <option value="Ventilated Flammables Cabinet">Ventilated Flammables Cabinet</option>
+            <option value="Corrosives Acid/Base Cabinet">Corrosives Acid/Base Cabinet</option>
+          </select>
+        </div>
+
+        <div>
+          <label style="display: block; font-size: 0.75rem; font-weight: 700; color: #475569; margin-bottom: 0.25rem;">PREPARER INITIALS / ID:</label>
+          <input type="text" id="modalPrepBy" value="Lab Tech" style="width: 100%; padding: 0.45rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem; font-weight: 600; box-sizing: border-box;" />
         </div>
       </div>
 
-      <!-- Center Body: Pictograms & Statements -->
-      <div style="display: flex; gap: 8px; margin-top: 6px; border-top: 1px dashed #666; padding-top: 5px;">
-        <div id="printPictograms" style="display: flex; gap: 4px; width: 100px; flex-wrap: wrap;">
-          <!-- Active Pictogram SVGs rendered here -->
+      <!-- Live Interactive Label Canvas Container -->
+      <div style="background: #f1f5f9; padding: 1.25rem; border-radius: 8px; display: flex; justify-content: center; overflow-x: auto; margin-bottom: 1.25rem;">
+        
+        <div id="labelBox" style="width: 4.0in; height: 2.5in; border: 2.5px solid #000; padding: 0.15in; box-sizing: border-box; font-family: system-ui, sans-serif; background: #fff; color: #000; position: relative; transition: all 0.2s ease;">
+          
+          <!-- Top Header -->
+          <div style="border-bottom: 2px solid #000; padding-bottom: 3px; display: flex; justify-content: space-between; align-items: baseline;">
+            <span style="font-size: 10pt; font-weight: 900; letter-spacing: -0.02em;">OSHA GHS SECONDARY CONTAINER</span>
+            <span id="printDate" style="font-size: 8pt; font-weight: bold;"></span>
+          </div>
+
+          <!-- Chemical Name & Signal Word -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
+            <div style="flex: 1; padding-right: 8px;">
+              <div id="printChemName" style="font-size: 12pt; font-weight: 900; line-height: 1.1; text-transform: uppercase;">SODIUM DODECYL SULFATE</div>
+              <div id="printFormula" style="font-size: 8pt; font-family: monospace; font-weight: bold; color: #333;">C12H25NaO4S</div>
+            </div>
+            <div id="printSignalWord" style="background: #000; color: #fff; padding: 3px 8px; font-size: 10pt; font-weight: 900; border-radius: 3px; text-transform: uppercase;">
+              DANGER
+            </div>
+          </div>
+
+          <!-- Center Body: Pictograms & Statements -->
+          <div style="display: flex; gap: 8px; margin-top: 6px; border-top: 1px dashed #666; padding-top: 5px;">
+            <div id="printPictograms" style="display: flex; gap: 4px; width: 90px; flex-wrap: wrap;">
+              <!-- Active Pictogram SVGs rendered here -->
+            </div>
+            <div style="flex: 1; font-size: 7.5pt; line-height: 1.25;">
+              <div style="font-weight: bold;">Hazards: <span id="printHazardsText">Flammable solid. Eye damage. Harmful.</span></div>
+              <div style="margin-top: 3px; color: #333;">Precautions: Wear gloves, eye protection. Store in ventilated area.</div>
+            </div>
+          </div>
+
+          <!-- Footer: Preparer & Storage -->
+          <div style="position: absolute; bottom: 0.12in; left: 0.15in; right: 0.15in; display: flex; justify-content: space-between; font-size: 7pt; border-top: 1px solid #000; padding-top: 3px;">
+            <span id="printFooterPrep">Prep By: Lab Tech</span>
+            <span id="printFooterStorage">Storage: Room Temp</span>
+          </div>
         </div>
-        <div style="flex: 1; font-size: 7.5pt; line-height: 1.25;">
-          <div style="font-weight: bold;">Hazards: <span id="printHazardsText">Harmful if swallowed. Eye damage.</span></div>
-          <div style="margin-top: 3px; color: #333;">Precautions: Wear gloves, eye protection. Store in cool area.</div>
-        </div>
+
       </div>
 
-      <!-- Footer: Preparer & Storage -->
-      <div style="position: absolute; bottom: 0.12in; left: 0.15in; right: 0.15in; display: flex; justify-content: space-between; font-size: 7pt; border-top: 1px solid #000; padding-top: 3px;">
-        <span>Prep By: ____________________</span>
-        <span>Storage: [ ]RT [ ]Ventilated [ ]4°C</span>
+      <!-- Export & Print Action Buttons -->
+      <div style="display: flex; justify-content: flex-end; gap: 0.5rem; flex-wrap: wrap;">
+        <button id="btnDownloadLabelSvg" type="button" style="background: #f8fafc; border: 1.5px solid #cbd5e1; color: #334155; padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.82rem; font-weight: 700; cursor: pointer;">
+          📥 Download SVG
+        </button>
+        <button id="btnDownloadLabelPng" type="button" style="background: #f8fafc; border: 1.5px solid #cbd5e1; color: #334155; padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.82rem; font-weight: 700; cursor: pointer;">
+          🖼️ Download PNG
+        </button>
+        <button id="btnTriggerPrint" type="button" style="background: #dc2626; color: white; border: none; padding: 0.5rem 1.25rem; border-radius: 6px; font-size: 0.85rem; font-weight: 700; cursor: pointer;">
+          🖨️ Print Label Now
+        </button>
       </div>
+
     </div>
   </div>
 
@@ -711,20 +1038,26 @@ const schemaData = {
       body * {
         visibility: hidden !important;
       }
-      #printLabelModal, #printLabelModal * {
+      #printConfigModal, #printConfigModal * {
         visibility: visible !important;
       }
-      #printLabelModal {
+      #printConfigModal {
         position: absolute;
         left: 0;
         top: 0;
         width: 100%;
+        background: transparent !important;
         display: block !important;
+        padding: 0 !important;
       }
       #labelBox {
         position: absolute;
-        left: 0.25in;
-        top: 0.25in;
+        left: 0.2in;
+        top: 0.2in;
+      }
+      #btnCloseModal, #modalSizeSelect, #modalStorageSelect, #modalPrepBy, 
+      #btnDownloadLabelSvg, #btnDownloadLabelPng, #btnTriggerPrint {
+        display: none !important;
       }
     }
   </style>
@@ -743,12 +1076,14 @@ const schemaData = {
     const reagentSection = document.getElementById('reagentModeSection')!;
     const statementsSection = document.getElementById('statementsModeSection')!;
     const cutoffSection = document.getElementById('cutoffModeSection')!;
+    const sdsGuideSection = document.getElementById('sdsGuideModeSection')!;
     const modeReagentBtn = document.getElementById('modeReagentBtn')!;
     const modeStatementsBtn = document.getElementById('modeStatementsBtn')!;
     const modeCutoffBtn = document.getElementById('modeCutoffBtn')!;
+    const modeSdsGuideBtn = document.getElementById('modeSdsGuideBtn')!;
 
     function setTabStyles(activeBtn: HTMLElement) {
-      [modeReagentBtn, modeStatementsBtn, modeCutoffBtn].forEach(btn => {
+      [modeReagentBtn, modeStatementsBtn, modeCutoffBtn, modeSdsGuideBtn].forEach(btn => {
         btn.style.background = 'transparent';
         btn.style.color = '#475569';
         btn.style.boxShadow = 'none';
@@ -762,6 +1097,7 @@ const schemaData = {
       reagentSection.style.display = 'block';
       statementsSection.style.display = 'none';
       cutoffSection.style.display = 'none';
+      sdsGuideSection.style.display = 'none';
       setTabStyles(modeReagentBtn);
     });
 
@@ -769,6 +1105,7 @@ const schemaData = {
       reagentSection.style.display = 'none';
       statementsSection.style.display = 'block';
       cutoffSection.style.display = 'none';
+      sdsGuideSection.style.display = 'none';
       setTabStyles(modeStatementsBtn);
       renderStatementsTable();
     });
@@ -777,12 +1114,21 @@ const schemaData = {
       reagentSection.style.display = 'none';
       statementsSection.style.display = 'none';
       cutoffSection.style.display = 'block';
+      sdsGuideSection.style.display = 'none';
       setTabStyles(modeCutoffBtn);
       runCutoffEngine();
     });
 
+    modeSdsGuideBtn.addEventListener('click', () => {
+      reagentSection.style.display = 'none';
+      statementsSection.style.display = 'none';
+      cutoffSection.style.display = 'none';
+      sdsGuideSection.style.display = 'block';
+      setTabStyles(modeSdsGuideBtn);
+    });
+
     // ============================================================
-    // MODE 1: CHEMICAL DOSSIER RESOLVER
+    // MODE 1: CHEMICAL DOSSIER RESOLVER & PRESET HANDLERS
     // ============================================================
     const searchInput = document.getElementById('chemSearchInput') as HTMLInputElement;
     const btnSearch = document.getElementById('btnExecuteSearch')!;
@@ -790,11 +1136,13 @@ const schemaData = {
 
     let currentEntity: any = null;
 
-    async function handleChemicalSearch() {
-      const q = searchInput.value.trim();
+    async function handleChemicalSearch(customQuery?: string) {
+      const q = customQuery || searchInput.value.trim();
       if (!q) return;
 
-      speedBadge.textContent = 'Querying...';
+      if (customQuery) searchInput.value = customQuery;
+
+      speedBadge.textContent = 'Resolving...';
       speedBadge.style.color = '#dc2626';
 
       const t0 = performance.now();
@@ -881,9 +1229,16 @@ const schemaData = {
       });
     }
 
-    btnSearch.addEventListener('click', handleChemicalSearch);
+    btnSearch.addEventListener('click', () => handleChemicalSearch());
     searchInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') handleChemicalSearch();
+    });
+
+    document.querySelectorAll('.chem-preset-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const query = (e.currentTarget as HTMLElement).dataset.query;
+        if (query) handleChemicalSearch(query);
+      });
     });
 
     // Copy COSHH Risk Summary
@@ -891,6 +1246,7 @@ const schemaData = {
       if (!currentEntity) return;
       const text = `CHEMICAL SAFETY PROTOCOL (COSHH):
 Substance: ${currentEntity.name} (${currentEntity.formula})
+CAS: ${currentEntity.cas || 'N/A'}
 Molecular Weight: ${currentEntity.molecularWeight} g/mol
 Signal Word: ${currentEntity.ghs?.signalWord || 'Warning'}
 Hazards: ${(currentEntity.ghs?.hCodes || []).join(', ')}
@@ -899,8 +1255,18 @@ Summary: ${currentEntity.ghs?.summary || 'N/A'}`;
       alert('COSHH risk assessment summary copied to clipboard.');
     });
 
-    // Print OSHA Secondary Container Label Modal
-    document.getElementById('btnPrintOshaLabel')?.addEventListener('click', () => {
+    // ============================================================
+    // PRINT & EXPORT LABEL STUDIO MODAL HANDLERS
+    // ============================================================
+    const printConfigModal = document.getElementById('printConfigModal')!;
+    const btnOpenLabelModal = document.getElementById('btnPrintOshaLabel')!;
+    const btnCloseModal = document.getElementById('btnCloseModal')!;
+    const modalSizeSelect = document.getElementById('modalSizeSelect') as HTMLSelectElement;
+    const modalStorageSelect = document.getElementById('modalStorageSelect') as HTMLSelectElement;
+    const modalPrepBy = document.getElementById('modalPrepBy') as HTMLInputElement;
+    const labelBox = document.getElementById('labelBox')!;
+
+    function syncLabelModal() {
       const name = currentEntity ? currentEntity.name : searchInput.value;
       const formula = currentEntity ? currentEntity.formula : '';
       const signal = currentEntity?.ghs?.signalWord || 'WARNING';
@@ -923,12 +1289,106 @@ Summary: ${currentEntity.ghs?.summary || 'N/A'}`;
       });
 
       document.getElementById('printHazardsText')!.textContent = currentEntity?.ghs?.summary || 'Follow standard lab PPE protocols.';
+      document.getElementById('printFooterPrep')!.textContent = `Prep By: ${modalPrepBy.value || 'Lab Tech'}`;
+      document.getElementById('printFooterStorage')!.textContent = `Storage: ${modalStorageSelect.value}`;
 
+      // Adjust dimensions dynamically
+      const sizeVal = modalSizeSelect.value;
+      if (sizeVal === 'schott500') {
+        labelBox.style.width = '4.0in'; labelBox.style.height = '2.5in';
+      } else if (sizeVal === 'flask250') {
+        labelBox.style.width = '3.5in'; labelBox.style.height = '2.0in';
+      } else if (sizeVal === 'vial20') {
+        labelBox.style.width = '2.0in'; labelBox.style.height = '1.2in';
+      } else if (sizeVal === 'avery5163') {
+        labelBox.style.width = '4.0in'; labelBox.style.height = '2.0in';
+      } else if (sizeVal === 'thermal4x6') {
+        labelBox.style.width = '4.0in'; labelBox.style.height = '6.0in';
+      }
+    }
+
+    btnOpenLabelModal.addEventListener('click', () => {
+      printConfigModal.style.display = 'flex';
+      syncLabelModal();
+    });
+
+    btnCloseModal.addEventListener('click', () => {
+      printConfigModal.style.display = 'none';
+    });
+
+    [modalSizeSelect, modalStorageSelect, modalPrepBy].forEach(el => {
+      el.addEventListener('input', syncLabelModal);
+      el.addEventListener('change', syncLabelModal);
+    });
+
+    document.getElementById('btnTriggerPrint')?.addEventListener('click', () => {
       window.print();
     });
 
+    // Client-side Label SVG Export
+    document.getElementById('btnDownloadLabelSvg')?.addEventListener('click', () => {
+      const chem = currentEntity?.name || 'Chemical';
+      const sig = currentEntity?.ghs?.signalWord || 'Warning';
+      const svgData = `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="250" viewBox="0 0 400 250">
+        <rect width="400" height="250" fill="#ffffff" stroke="#000000" stroke-width="4"/>
+        <line x1="10" y1="35" x2="390" y2="35" stroke="#000000" stroke-width="2"/>
+        <text x="15" y="25" font-family="sans-serif" font-size="12" font-weight="900">OSHA GHS SECONDARY CONTAINER</text>
+        <text x="385" y="25" text-anchor="end" font-family="sans-serif" font-size="10">${new Date().toLocaleDateString()}</text>
+        <text x="15" y="65" font-family="sans-serif" font-size="16" font-weight="900">${chem.toUpperCase()}</text>
+        <rect x="290" y="45" width="95" height="26" fill="#000000" rx="3"/>
+        <text x="337" y="63" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="13" font-weight="bold">${sig.toUpperCase()}</text>
+        <line x1="10" y1="80" x2="390" y2="80" stroke="#666666" stroke-dasharray="3,3"/>
+        <text x="15" y="105" font-family="sans-serif" font-size="9" font-weight="bold">Hazard Summary: Standard PPE and ventilation required.</text>
+        <line x1="15" y1="225" x2="385" y2="225" stroke="#000000"/>
+        <text x="15" y="240" font-family="sans-serif" font-size="8">Prep By: ${modalPrepBy.value || 'Lab Tech'}</text>
+        <text x="385" y="240" text-anchor="end" font-family="sans-serif" font-size="8">${modalStorageSelect.value}</text>
+      </svg>`;
+      const blob = new Blob([svgData], { type: 'image/svg+xml' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `${chem.toLowerCase().replace(/[^a-z0-9]/g, '_')}_ghs_label.svg`;
+      a.click();
+    });
+
+    // Client-side Label PNG Export via Canvas
+    document.getElementById('btnDownloadLabelPng')?.addEventListener('click', () => {
+      const chem = currentEntity?.name || 'Chemical';
+      const sig = currentEntity?.ghs?.signalWord || 'Warning';
+      const canvas = document.createElement('canvas');
+      canvas.width = 800; canvas.height = 500;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 800, 500);
+      ctx.lineWidth = 8; ctx.strokeStyle = '#000000'; ctx.strokeRect(4, 4, 792, 492);
+      ctx.fillStyle = '#000000'; ctx.font = 'bold 24px system-ui';
+      ctx.fillText('OSHA GHS SECONDARY CONTAINER', 30, 50);
+      ctx.font = '18px system-ui'; ctx.fillText(new Date().toLocaleDateString(), 680, 50);
+      ctx.beginPath(); ctx.moveTo(20, 70); ctx.lineTo(780, 70); ctx.stroke();
+
+      ctx.font = 'bold 30px system-ui';
+      ctx.fillText(chem.toUpperCase().slice(0, 32), 30, 130);
+
+      ctx.fillRect(580, 90, 190, 50);
+      ctx.fillStyle = '#ffffff'; ctx.font = 'bold 26px system-ui';
+      ctx.fillText(sig.toUpperCase(), 620, 126);
+
+      ctx.fillStyle = '#333333'; ctx.font = '18px system-ui';
+      ctx.fillText('Follow OSHA HazCom 2012 handling & PPE protocols.', 30, 200);
+
+      ctx.beginPath(); ctx.moveTo(20, 440); ctx.lineTo(780, 440); ctx.strokeStyle = '#000000'; ctx.stroke();
+      ctx.fillStyle = '#000000'; ctx.font = '16px system-ui';
+      ctx.fillText(`Prep By: ${modalPrepBy.value || 'Lab Tech'}`, 30, 470);
+      ctx.fillText(`Storage: ${modalStorageSelect.value}`, 420, 470);
+
+      const a = document.createElement('a');
+      a.href = canvas.toDataURL('image/png');
+      a.download = `${chem.toLowerCase().replace(/[^a-z0-9]/g, '_')}_ghs_label.png`;
+      a.click();
+    });
+
     // ============================================================
-    // MODE 2: UN GHS STATEMENTS DICTIONARY & PICTOGRAM FILTER
+    // MODE 2: UN GHS STATEMENTS DICTIONARY & VECTOR DOWNLOADS
     // ============================================================
     const statementsTableBody = document.getElementById('statementsTableBody')!;
     const statementFilterInput = document.getElementById('statementFilterInput') as HTMLInputElement;
@@ -986,17 +1446,72 @@ Summary: ${currentEntity.ghs?.summary || 'N/A'}`;
       btn.addEventListener('click', (e) => {
         const t = e.currentTarget as HTMLElement;
         activePicFilter = t.dataset.pic || null;
-        document.querySelectorAll('.pictogram-filter-btn').forEach(b => (b as HTMLElement).style.borderColor = '#cbd5e1');
-        t.style.borderColor = '#dc2626';
+        document.querySelectorAll('.pictogram-filter-btn').forEach(b => (b.parentElement as HTMLElement).style.borderColor = '#cbd5e1');
+        (t.parentElement as HTMLElement).style.borderColor = '#dc2626';
         renderStatementsTable();
       });
     });
 
     document.getElementById('btnClearPicFilter')?.addEventListener('click', () => {
       activePicFilter = null;
-      document.querySelectorAll('.pictogram-filter-btn').forEach(b => (b as HTMLElement).style.borderColor = '#cbd5e1');
+      document.querySelectorAll('.pictogram-filter-btn').forEach(b => (b.parentElement as HTMLElement).style.borderColor = '#cbd5e1');
       statementFilterInput.value = '';
       renderStatementsTable();
+    });
+
+    // 1-Click Master H & P CSV Export
+    document.getElementById('btnExportHpCsv')?.addEventListener('click', () => {
+      const all = [
+        ...Object.values(GHS_HAZARD_STATEMENTS),
+        ...Object.values(GHS_PRECAUTIONARY_STATEMENTS)
+      ];
+      let csv = 'Code,Type,Statement_Phrase,Hazard_Class_Category\n';
+      all.forEach(item => {
+        const type = item.code.startsWith('H') ? 'Hazard' : 'Precautionary';
+        const cleanPhrase = item.statement.replace(/"/g, '""');
+        const cleanClass = (item.classCategory || '').replace(/"/g, '""');
+        csv += `"${item.code}","${type}","${cleanPhrase}","${cleanClass}"\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'un_ghs_rev10_statements_master.csv';
+      a.click();
+    });
+
+    // Individual Vector Pictogram Downloads
+    document.querySelectorAll('.btn-download-svg').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const picKey = (e.currentTarget as HTMLElement).dataset.pic;
+        if (!picKey || !GHS_PICTOGRAMS[picKey]) return;
+        const svgStr = GHS_PICTOGRAMS[picKey].svg;
+        const blob = new Blob([svgStr], { type: 'image/svg+xml' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `ghs_${picKey}_pictogram.svg`;
+        a.click();
+      });
+    });
+
+    document.querySelectorAll('.btn-download-png').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const picKey = (e.currentTarget as HTMLElement).dataset.pic;
+        if (!picKey || !GHS_PICTOGRAMS[picKey]) return;
+        const svgStr = GHS_PICTOGRAMS[picKey].svg;
+        const img = new Image();
+        img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgStr)));
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          canvas.width = 1000; canvas.height = 1000;
+          const ctx = canvas.getContext('2d');
+          if (!ctx) return;
+          ctx.drawImage(img, 0, 0, 1000, 1000);
+          const a = document.createElement('a');
+          a.href = canvas.toDataURL('image/png');
+          a.download = `ghs_${picKey}_pictogram_1000px.png`;
+          a.click();
+        };
+      });
     });
 
     // ============================================================
@@ -1044,6 +1559,86 @@ Summary: ${currentEntity.ghs?.summary || 'N/A'}`;
     }
 
     cutoffInput.addEventListener('input', runCutoffEngine);
+
+    // ============================================================
+    // MODE 4: SDS BLANK TEMPLATE DOWNLOAD
+    // ============================================================
+    document.getElementById('btnDownloadSdsTemplate')?.addEventListener('click', () => {
+      const template = `SAFETY DATA SHEET (SDS) FRAMEWORK
+In Accordance with OSHA HazCom 2012 (29 CFR 1910.1200) & UN GHS Rev. 10
+
+SECTION 1: IDENTIFICATION
+Product Name: __________________________________________________
+CAS Number: _____________________ Formula: ______________________
+Manufacturer / Distributor: ____________________________________
+Emergency Telephone Number: ____________________________________
+
+SECTION 2: HAZARD(S) IDENTIFICATION
+GHS Classification: ____________________________________________
+Signal Word: [ ] DANGER    [ ] WARNING
+Hazard Statements (H-Codes): ___________________________________
+Precautionary Statements (P-Codes): ____________________________
+
+SECTION 3: COMPOSITION / INFORMATION ON INGREDIENTS
+Chemical Name          CAS Number          Weight %
+____________________   _________________   _______________
+
+SECTION 4: FIRST-AID MEASURES
+Inhalation: ____________________________________________________
+Skin Contact: __________________________________________________
+Eye Contact: ___________________________________________________
+Ingestion: _____________________________________________________
+
+SECTION 5: FIRE-FIGHTING MEASURES
+Suitable Extinguishing Media: __________________________________
+Specific Combustion Hazards: ___________________________________
+
+SECTION 6: ACCIDENTAL RELEASE MEASURES
+Personal Precautions / PPE: ___________________________________
+Spill Containment & Neutralization: ____________________________
+
+SECTION 7: HANDLING AND STORAGE
+Safe Handling: _________________________________________________
+Storage Temperature & Incompatibilities: _______________________
+
+SECTION 8: EXPOSURE CONTROLS / PERSONAL PROTECTION
+OSHA PEL: _____________________ ACGIH TLV: _____________________
+Respiratory Protection: ________________________________________
+Hand Protection (Glove Material): ______________________________
+
+SECTION 9: PHYSICAL AND CHEMICAL PROPERTIES
+Appearance: ___________________ Odor: __________________________
+pH: ____________ Boiling Point: _________ Flash Point: _________
+
+SECTION 10: STABILITY AND REACTIVITY
+Reactivity & Stability: ________________________________________
+Incompatible Materials: ________________________________________
+
+SECTION 11: TOXICOLOGICAL INFORMATION
+Acute Toxicity (LD50): _________________________________________
+Carcinogenicity: [ ] Not Listed  [ ] IARC  [ ] NTP  [ ] OSHA
+
+SECTION 12: ECOLOGICAL INFORMATION (Non-Mandatory under OSHA)
+Aquatic Toxicity: ______________________________________________
+
+SECTION 13: DISPOSAL CONSIDERATIONS (Non-Mandatory under OSHA)
+Safe Waste Disposal: ___________________________________________
+
+SECTION 14: TRANSPORT INFORMATION (Non-Mandatory under OSHA)
+UN Number: _____________ Proper Shipping Name: _________________
+
+SECTION 15: REGULATORY INFORMATION (Non-Mandatory under OSHA)
+TSCA / SARA Status: ____________________________________________
+
+SECTION 16: OTHER INFORMATION
+Revision Date: ${new Date().toLocaleDateString()}
+`;
+      const blob = new Blob([template], { type: 'text/plain;charset=utf-8;' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'osha_16_section_sds_framework_template.txt';
+      a.click();
+    });
 
     // ============================================================
     // ACADEMIC CITATION SYSTEM
@@ -1130,8 +1725,8 @@ Summary: ${currentEntity.ghs?.summary || 'N/A'}`;
 
     updateInlineCite();
 
-    // Initial Execute
-    handleChemicalSearch();
+    // Initial Execution
+    handleChemicalSearch('Sodium Dodecyl Sulfate');
     renderStatementsTable();
     runCutoffEngine();
   </script>
