@@ -1,203 +1,309 @@
 ---
+// src/pages/index.astro
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { toolsCatalog } from '../data/tools';
 import AuthorCard from '../components/AuthorCard.astro';
 
-// Comprehensive metadata mapping to enrich all 15 calculators for semantic search & crawlability
-const toolMetaMap: Record<string, { formula: string; inputs: string; outputs: string; category: string }> = {
-  "/molarity": {
+interface ToolItem {
+  title: string;
+  path: string;
+  icon: string;
+  badge?: string;
+  badgeColor?: string;
+  formula: string;
+  inputs: string;
+  outputs: string;
+  category: 'solutions' | 'physical' | 'materials';
+  description: string;
+}
+
+const allTools: ToolItem[] = [
+  {
+    title: "Molarity & Normality Calculator",
+    path: "/molarity",
+    icon: "🧪",
+    badge: "Most Used",
+    badgeColor: "#0284c7",
     formula: "m = (C · V · MW) / Purity",
     inputs: "Concentration (C), Volume (V), Molecular Weight (MW), Hydrate (·nH₂O), Assay %",
     outputs: "Target Solute Balance Mass (g), Total Moles, Hydrated MW",
-    category: "solutions"
+    category: "solutions",
+    description: "Universal solution preparation solver compensating for crystalline waters of hydration (·nH₂O) and chemical assay purity percentages."
   },
-  "/dilution": {
+  {
+    title: "Solution Dilution Calculator (C1V1 = C2V2)",
+    path: "/dilution",
+    icon: "💧",
+    badge: "Core Lab",
+    badgeColor: "#059669",
     formula: "C₁V₁ = C₂V₂",
     inputs: "Stock Conc (C₁), Target Conc (C₂), Target Volume (V₂)",
     outputs: "Required Stock Aliquot (V₁), Diluent Solvent Volume, Dilution Factor",
-    category: "solutions"
+    category: "solutions",
+    description: "Stock aliquot calculator and multi-step serial dilution ladder designer with volume displacement safeguards."
   },
-  "/buffer": {
+  {
+    title: "Buffer Preparation & Capacity Calculator",
+    path: "/buffer",
+    icon: "⚖️",
+    badge: "Biochem",
+    badgeColor: "#7c3aed",
     formula: "pH = pKa + log([A⁻]/[HA])",
     inputs: "Target pH, Total Buffer Conc, Volume, Conjugate Acid/Base Pair",
     outputs: "Acid Mass/Volume, Conjugate Base Mass, Buffer Capacity (β)",
-    category: "solutions"
+    category: "solutions",
+    description: "Henderson-Hasselbalch buffer formulation engine for biological (PBS, Tris, HEPES) and analytical (Acetate, Citrate) buffer systems."
   },
-  "/titration": {
+  {
+    title: "Acid-Base Titration Simulator & Curve Solver",
+    path: "/titration",
+    icon: "📊",
+    badge: "Analytical",
+    badgeColor: "#0284c7",
     formula: "V_titrant × C_titrant = V_analyte × C_analyte",
     inputs: "Analyte Type (Weak/Strong Acid/Base), Volume, Titrant Molarity",
     outputs: "Titration Curve, Equivalence Point pH, Van Slyke Capacity",
-    category: "solutions"
+    category: "solutions",
+    description: "Dynamic titration curve generator, derivative endpoint detector, and chemical indicator selection matrix."
   },
-  "/ph": {
+  {
+    title: "pH & Aqueous Equilibrium Calculator",
+    path: "/ph",
+    icon: "🧫",
+    badge: "Core Lab",
+    badgeColor: "#059669",
     formula: "pH = -log₁₀[H⁺] | pOH = 14 - pH",
     inputs: "Hydronium [H₃O⁺], Hydroxide [OH⁻], Ka / Kb Dissociation Constant",
     outputs: "pH, pOH, Hydrogen Ion Activity, Solution Acid-Base Regime",
-    category: "solutions"
+    category: "solutions",
+    description: "Full-spectrum aqueous equilibrium solver computing ionic strength, hydronium concentration, and polyprotic dissociation."
   },
-  "/stoichiometry": {
+  {
+    title: "Reaction Stoichiometry & Yield Balancer",
+    path: "/stoichiometry",
+    icon: "⚗️",
+    badge: "Equilibrium",
+    badgeColor: "#d97706",
     formula: "aA + bB → cC + dD (Mass Balance)",
     inputs: "Chemical Equation, Reagent Masses (g, mol), Percent Purity",
     outputs: "Limiting Reactant, Theoretical Yield, Percent Yield, Excess Solute",
-    category: "solutions"
+    category: "solutions",
+    description: "Multi-reactant mass balancer calculating theoretical yield, limiting reactants, and excess unreacted reagents."
   },
-  "/molar-mass": {
+  {
+    title: "Molar Mass & Molecular Weight Calculator",
+    path: "/molar-mass",
+    icon: "⚛️",
+    badge: "High Traffic",
+    badgeColor: "#0284c7",
     formula: "MW = Σ (nᵢ · Aᵢ)",
     inputs: "Chemical Formula, Hydrate Notation, Coordinated Brackets",
     outputs: "Molecular Weight (g/mol), Elemental Mass Percentages, Total Moles",
-    category: "solutions"
+    category: "solutions",
+    description: "IUPAC isotopic mass solver parsing complex coordination compounds, hydrates, and empirical elemental mass percentages."
   },
-  "/sig-figs": {
+  {
+    title: "Significant Figures & Error Propagation Calculator",
+    path: "/sig-figs",
+    icon: "📐",
+    badge: "Precision",
+    badgeColor: "#475569",
     formula: "Analytical Significant Figures & Propagation Rules",
     inputs: "Measurement Value String, Operation Type (+, -, ×, ÷)",
     outputs: "Significant Digit Count, Precision Tolerance, Rounded Result",
-    category: "solutions"
+    category: "solutions",
+    description: "Scientific notation and analytical rounding engine calculating significant figures and propagating measurement uncertainty."
   },
-  "/gas": {
+  {
+    title: "Ideal & Real Gas Law Calculator (PV = nRT)",
+    path: "/gas",
+    icon: "🎈",
+    badge: "Thermodynamics",
+    badgeColor: "#2563eb",
     formula: "PV = nRT | (P + an²/V²)(V - nb) = nRT",
     inputs: "Pressure (P), Volume (V), Moles/Mass (n/m), Temperature (T)",
     outputs: "Unknown State Variable, Compressibility (Z), Gas Density (ρ)",
-    category: "physical"
+    category: "physical",
+    description: "Dual-engine gas dynamics solver comparing Ideal Gas behavior against Van der Waals non-ideal real gas corrections."
   },
-  "/spectro": {
+  {
+    title: "Beer-Lambert Law & Spectrophotometry Studio",
+    path: "/spectro",
+    icon: "🌈",
+    badge: "Spectroscopy",
+    badgeColor: "#7c3aed",
     formula: "A = ε · b · c (Beer-Lambert Law)",
     inputs: "Path Length (b), Molar Absorptivity (ε), % Transmittance or Absorbance (A)",
     outputs: "Analyte Concentration (c), Transmittance (T), Optical Density",
-    category: "physical"
+    category: "physical",
+    description: "UV-Vis spectrophotometry suite with standard calibration curve least-squares regression, unknown interpolation, and kinetics."
   },
-  "/electron-configuration": {
+  {
+    title: "Electron Configuration & Orbital Physics Studio",
+    path: "/electron-configuration",
+    icon: "⚡",
+    badge: "Quantum",
+    badgeColor: "#4f46e5",
     formula: "1s² 2s² 2p⁶ 3s² 3p⁶ 4s² 3d¹⁰...",
     inputs: "Element Symbol or Atomic Number (Z), Ion Oxidation Charge",
     outputs: "Aufbau Ground State, Noble Gas Core, Quantum Numbers, Magnetism",
-    category: "physical"
+    category: "physical",
+    description: "Quantum mechanical electron orbital solver predicting Aufbau ground states, anomalous transitions, and diamagnetism/paramagnetism."
   },
-  "/scherrer": {
+  {
+    title: "Scherrer Equation XRD Crystallite Size Calculator",
+    path: "/scherrer",
+    icon: "🔬",
+    badge: "Materials / XRD",
+    badgeColor: "#059669",
     formula: "τ = (K · λ) / (β · cosθ)",
     inputs: "Diffraction Angle (2θ), Peak Broadening (FWHM β), Radiation (λ), Shape Factor (K)",
     outputs: "Mean Crystallite Domain Size (τ in nm & Å), Instrumental Correction",
-    category: "materials"
+    category: "materials",
+    description: "Powder X-ray Diffraction (PXRD) line broadening solver calculating crystallite domain size with instrument broadening corrections."
   },
-  "/bet": {
+  {
+    title: "BET Multi-Point Surface Area Calculator",
+    path: "/bet",
+    icon: "🧱",
+    badge: "Physisorption",
+    badgeColor: "#059669",
     formula: "1 / [W((P₀/P) - 1)] = 1/(WₘC) + [(C - 1)/(WₘC)](P/P₀)",
     inputs: "Relative Pressure (P/P₀), Relative Adsorption Volume (Vads), Sample Mass",
     outputs: "Specific Surface Area (m²/g), Monolayer Capacity (Wₘ), C Constant",
-    category: "materials"
+    category: "materials",
+    description: "Brunauer-Emmett-Teller physisorption isotherm engine computing specific surface area (m²/g) and monolayer capacity."
   },
-  "/isotherm": {
+  {
+    title: "Adsorption Isotherm Fitter (Langmuir & Freundlich)",
+    path: "/isotherm",
+    icon: "📈",
+    badge: "Kinetics",
+    badgeColor: "#0d9488",
     formula: "Langmuir: q = (qₘK_L C)/(1 + K_L C) | Freundlich: q = K_F C^(1/n)",
     inputs: "Equilibrium Concentration (Ce), Equilibrium Adsorption Capacity (qe)",
     outputs: "qmax, KL, KF, 1/n, Mean Free Energy (E), R² Model Fits",
-    category: "materials"
+    category: "materials",
+    description: "Heterogeneous surface adsorption engine performing linear regressions for Langmuir, Freundlich, Temkin, and Dubinin-Radushkevich models."
   },
-  "/ghs": {
+  {
+    title: "GHS Hazard & Chemical Safety Studio",
+    path: "/ghs",
+    icon: "⚠️",
+    badge: "OSHA / CLP",
+    badgeColor: "#dc2626",
     formula: "GHS Hazard Classification Matrix & SDS Thresholds",
     inputs: "Chemical Substance Name, CAS Registry Number, Concentration %",
     outputs: "GHS Pictograms, Hazard / Precautionary Statements, Printable Label",
-    category: "materials"
+    category: "materials",
+    description: "OSHA HazCom 2012 secondary container label generator, 110M+ PubChem compound lookup, 16-section SDS framework, and glove matrix."
   }
-};
+];
 ---
 
 <BaseLayout 
-  title="ChemistryDesk | Offline Chemistry Calculator & Benchtop Suite"
-  description="Research-grade, 100% offline chemistry calculators for benchtop laboratories. Compute molarity, buffer preparation, serial dilutions, PXRD Scherrer crystallite size, and multipoint BET surface area with zero latency."
+  title="Chemistry Calculators | Research-Grade Laboratory Suite | ChemistryDesk"
+  description="Free research-grade chemistry calculators for benchtop laboratories. Compute molarity, solution dilutions, buffer capacity, GHS secondary labels, PXRD Scherrer crystallite size, and BET surface area."
 >
-  <main style="max-width: 1100px; margin: 2rem auto 4rem; padding: 0 1.25rem; color: #0f172a; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; box-sizing: border-box;">
+  <main style="max-width: 1100px; margin: 1.5rem auto 4rem; padding: 0 1.25rem; color: #0f172a; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; box-sizing: border-box; overflow-x: hidden;">
     
     <!-- FRONT TOP-LEFT: Verified Author & E-E-A-T Review Card -->
-    <AuthorCard />
+    <div style="margin-bottom: 1.5rem;">
+      <AuthorCard />
+    </div>
 
-    <!-- Hero Banner -->
-    <header style="text-align: center; margin-bottom: 2.75rem; padding: 0.5rem 0;">
+    <!-- Hero Banner with High-Volume Search Intent -->
+    <header style="text-align: center; margin-bottom: 2rem; padding: 0.5rem 0;">
       <span style="display: inline-block; background: #e0f2fe; color: #0369a1; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.35rem 0.85rem; border-radius: 9999px; margin-bottom: 0.85rem; border: 1px solid #bae6fd;">
-        Benchtop Scientific Utilities
+        Scientific Computational Engine
       </span>
       
       <!-- Offline & Precision Trust Badges -->
-      <div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.25rem;">
+      <div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1rem;">
         <span style="display: inline-flex; align-items: center; gap: 0.35rem; background: #ecfdf5; color: #059669; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 9999px; border: 1px solid #a7f3d0;">
-          ⚡ 100% Offline Capable (PWA)
+          ⚡ 100% Client-Side Offline
         </span>
         <span style="display: inline-flex; align-items: center; gap: 0.35rem; background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 9999px; border: 1px solid #bae6fd;">
-          🔬 Research-Grade Precision
+          🔬 IUPAC &amp; ASTM Standards
         </span>
         <span style="display: inline-flex; align-items: center; gap: 0.35rem; background: #f8fafc; color: #475569; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 9999px; border: 1px solid #cbd5e1;">
-          📦 CERN Zenodo Verified
+          📦 CERN Zenodo Indexed
         </span>
       </div>
 
-      <h1 style="font-size: clamp(2rem, 4.5vw, 2.75rem); font-weight: 800; letter-spacing: -0.025em; line-height: 1.2; margin: 0 0 1rem 0; color: #0f172a;">
-        Computational Chemistry Tools for the Modern Benchtop
+      <!-- Primary H1 Targeting 50k+ "Chemistry Calculators" Traffic -->
+      <h1 style="font-size: clamp(2rem, 4.5vw, 2.75rem); font-weight: 900; letter-spacing: -0.025em; line-height: 1.2; margin: 0 0 0.85rem 0; color: #0f172a;">
+        Chemistry Calculators: Precision Laboratory &amp; Computational Suite
       </h1>
       
-      <p style="font-size: clamp(0.95rem, 2vw, 1.125rem); color: #475569; max-width: 720px; margin: 0 auto; line-height: 1.6;">
-        Standardized, client-side analytical calculators engineered to eliminate manual preparation errors, compensate for crystalline hydration states, and streamline chemical workflows.
+      <p style="font-size: clamp(0.95rem, 2vw, 1.1rem); color: #475569; max-width: 760px; margin: 0 auto; line-height: 1.6;">
+        Standardized, research-grade analytical calculators engineered to eliminate manual preparation errors, compensate for crystal hydration (·nH₂O), design serial dilutions, and model materials characterization.
       </p>
     </header>
 
-    <!-- Instant Search & Topical Domain Filter Bar -->
-    <section style="background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 1.25rem; margin-bottom: 2.5rem; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);">
+    <!-- DIRECT DEFINITION & AEO/GEO SUMMARY CALLOUT BOX -->
+    <section style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-left: 5px solid #0284c7; border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 2rem;">
+      <h2 style="font-size: 0.95rem; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.04em; margin: 0 0 0.4rem 0;">
+        What is ChemistryDesk? (Direct Overview)
+      </h2>
+      <p style="font-size: 0.92rem; color: #334155; margin: 0; line-height: 1.6;">
+        <strong>ChemistryDesk</strong> is an open-access scientific calculation suite providing 15 dedicated computational tools for wet-lab solution preparation, spectroscopy, materials characterization, and chemical safety. All algorithms execute 100% client-side in the browser with zero remote data logging, full offline capability, and rigorous IUPAC physical constants.
+      </p>
+    </section>
+
+    <!-- Instant Search & Category Filter Navigation -->
+    <section style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 1.25rem; margin-bottom: 2.5rem; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);">
       <div style="display: flex; flex-direction: column; gap: 1rem; align-items: center; justify-content: space-between;">
         
-        <!-- Live Filter Search Box -->
+        <!-- Live Filter Search Box with / Focus Shortcut -->
         <div style="position: relative; width: 100%;">
           <span style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); font-size: 1rem; color: #94a3b8; pointer-events: none;">🔍</span>
           <input 
             type="text" 
             id="toolSearchInput" 
-            placeholder="Search by module name, formula (e.g. C1V1, Scherrer, BET), or parameter..." 
+            placeholder="Search all 15 calculators (e.g. Molarity, C1V1, GHS labels, Sig Figs, Scherrer, Langmuir)..." 
             aria-label="Filter laboratory tools"
-            style="width: 100%; padding: 0.7rem 1rem 0.7rem 2.6rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; outline: none; box-sizing: border-box; transition: border-color 0.2s ease;"
-            onfocus="this.style.borderColor='#0284c7';"
-            onblur="this.style.borderColor='#cbd5e1';"
+            style="width: 100%; padding: 0.75rem 3.5rem 0.75rem 2.6rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; outline: none; box-sizing: border-box; transition: border-color 0.2s ease;"
           />
+          <kbd style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0.15rem 0.45rem; font-size: 0.75rem; color: #64748b; font-family: monospace;">/</kbd>
         </div>
 
         <!-- Filter Tab Buttons -->
         <div id="filterPillGroup" style="display: flex; gap: 0.4rem; flex-wrap: wrap; width: 100%; justify-content: flex-start;">
           <button type="button" class="filter-btn active" data-category="all" style="padding: 0.45rem 0.85rem; border-radius: 8px; font-size: 0.82rem; font-weight: 700; border: 1px solid #0284c7; background: #0284c7; color: #ffffff; cursor: pointer; transition: all 0.2s ease;">
-            All Modules ({toolsCatalog.length})
+            All 15 Tools
           </button>
           <button type="button" class="filter-btn" data-category="solutions" style="padding: 0.45rem 0.85rem; border-radius: 8px; font-size: 0.82rem; font-weight: 700; border: 1px solid #cbd5e1; background: #f8fafc; color: #475569; cursor: pointer; transition: all 0.2s ease;">
-            🧪 Solution Prep &amp; Titration
+            🧪 Solution Prep &amp; Titration (8)
           </button>
           <button type="button" class="filter-btn" data-category="physical" style="padding: 0.45rem 0.85rem; border-radius: 8px; font-size: 0.82rem; font-weight: 700; border: 1px solid #cbd5e1; background: #f8fafc; color: #475569; cursor: pointer; transition: all 0.2s ease;">
-            🎈 Physical Chemistry &amp; Gases
+            🌈 Spectroscopy &amp; Gas Laws (3)
           </button>
           <button type="button" class="filter-btn" data-category="materials" style="padding: 0.45rem 0.85rem; border-radius: 8px; font-size: 0.82rem; font-weight: 700; border: 1px solid #cbd5e1; background: #f8fafc; color: #475569; cursor: pointer; transition: all 0.2s ease;">
-            🔬 Materials, PXRD &amp; BET
+            🔬 Materials, XRD &amp; Safety (4)
           </button>
         </div>
 
       </div>
     </section>
 
-    <!-- Automated Tool Grid with Semantic Formula Anatomy -->
-    <div id="toolsGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 3.5rem;">
-      {toolsCatalog.map((tool) => {
-        const meta = toolMetaMap[tool.path] || {
-          formula: "Laboratory Standard Algorithm",
-          inputs: "Target Analytical Parameters",
-          outputs: "Validated Numerical Result",
-          category: "solutions"
-        };
-        const searchCorpus = `${tool.title} ${tool.description} ${meta.formula} ${meta.inputs} ${meta.outputs}`.toLowerCase();
+    <!-- Complete 15-Tool Grid (Zero Orphan Pages Guarantee) -->
+    <div id="toolsGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 310px), 1fr)); gap: 1.5rem; margin-bottom: 3.5rem;">
+      {allTools.map((tool) => {
+        const searchCorpus = `${tool.title} ${tool.description} ${tool.formula} ${tool.inputs} ${tool.outputs}`.toLowerCase();
 
         return (
           <article 
             class="tool-card" 
-            data-category={meta.category}
+            data-category={tool.category}
             data-keywords={searchCorpus}
-            style={`background: #ffffff; border: 1.5px solid ${tool.badgeColor ? tool.badgeColor : (tool.badge === 'Live Studio' ? '#0284c7' : '#e2e8f0')}; border-radius: 12px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.04); display: flex; flex-direction: column; justify-content: space-between; position: relative; transition: all 0.2s ease;`}
-            onmouseover="this.style.boxShadow='0 8px 24px rgba(2, 132, 199, 0.08)';"
-            onmouseout="this.style.boxShadow='0 1px 3px rgba(0,0,0,0.04)';"
+            style={`background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.03); display: flex; flex-direction: column; justify-content: space-between; position: relative; transition: all 0.2s ease;`}
           >
             <div>
               <!-- Top Row: Icon + Badge -->
               <div style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 0.75rem;">
                 <div style="font-size: 2rem; line-height: 1;">{tool.icon}</div>
                 {tool.badge && (
-                  <span style={`background: ${tool.badgeColor ? '#ecfdf5' : '#e0f2fe'}; color: ${tool.badgeColor ? tool.badgeColor : '#0369a1'}; font-size: 0.7rem; font-weight: 800; padding: 3px 8px; border-radius: 9999px; text-transform: uppercase; letter-spacing: 0.05em;`}>
+                  <span style={`background: #f8fafc; color: ${tool.badgeColor || '#0284c7'}; border: 1px solid #cbd5e1; font-size: 0.7rem; font-weight: 800; padding: 3px 8px; border-radius: 9999px; text-transform: uppercase; letter-spacing: 0.05em;`}>
                     {tool.badge}
                   </span>
                 )}
@@ -206,11 +312,11 @@ const toolMetaMap: Record<string, { formula: string; inputs: string; outputs: st
               <!-- Mathematical Equation Badge -->
               <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.35rem 0.65rem; margin-bottom: 0.85rem;">
                 <span style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.76rem; font-weight: 700; color: #0284c7; word-break: break-all;">
-                  {meta.formula}
+                  {tool.formula}
                 </span>
               </div>
 
-              <h2 style="font-size: 1.22rem; font-weight: 800; margin: 0 0 0.5rem 0; color: #0f172a; line-height: 1.3;">
+              <h2 style="font-size: 1.15rem; font-weight: 800; margin: 0 0 0.5rem 0; color: #0f172a; line-height: 1.3;">
                 <a href={tool.path} style="color: inherit; text-decoration: none;">
                   {tool.title}
                 </a>
@@ -223,22 +329,20 @@ const toolMetaMap: Record<string, { formula: string; inputs: string; outputs: st
               <!-- Semantic Input/Output Parameter Breakdown -->
               <div style="background: #f8fafc; border-left: 3px solid #0284c7; border-radius: 0 6px 6px 0; padding: 0.6rem 0.75rem; margin-bottom: 1.25rem; font-size: 0.75rem; color: #475569; line-height: 1.45;">
                 <div style="margin-bottom: 0.25rem;">
-                  <strong style="color: #0f172a;">Inputs:</strong> {meta.inputs}
+                  <strong style="color: #0f172a;">Inputs:</strong> {tool.inputs}
                 </div>
                 <div>
-                  <strong style="color: #0f172a;">Outputs:</strong> {meta.outputs}
+                  <strong style="color: #0f172a;">Outputs:</strong> {tool.outputs}
                 </div>
               </div>
             </div>
 
-            <!-- Full-Width Mobile-Optimized Action Target -->
+            <!-- Full-Width Direct Anchor Target -->
             <a 
               href={tool.path} 
-              style={`display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; width: 100%; min-height: 48px; border-radius: 8px; background: ${tool.badgeColor || '#0284c7'}; color: #ffffff; font-weight: 700; font-size: 0.88rem; text-decoration: none; box-sizing: border-box; transition: opacity 0.2s ease;`}
-              onmouseover="this.style.opacity='0.9';"
-              onmouseout="this.style.opacity='1';"
+              style={`display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; width: 100%; min-height: 44px; border-radius: 8px; background: ${tool.badgeColor || '#0284c7'}; color: #ffffff; font-weight: 700; font-size: 0.88rem; text-decoration: none; box-sizing: border-box; transition: opacity 0.2s ease;`}
             >
-              Open {tool.title.split(' ')[0]} Studio &rarr;
+              Launch Solver &rarr;
             </a>
           </article>
         );
@@ -248,7 +352,7 @@ const toolMetaMap: Record<string, { formula: string; inputs: string; outputs: st
     <!-- No Match Dynamic Search Message -->
     <div id="noResultsMsg" style="display: none; text-align: center; padding: 3rem 1rem; color: #64748b; margin-bottom: 3rem;">
       <p style="font-size: 1.1rem; font-weight: 700; color: #0f172a; margin: 0 0 0.5rem;">No matching computational tools found</p>
-      <p style="font-size: 0.9rem; margin: 0;">Try searching for parameters like "moles", "FWHM", "BET", or "pH".</p>
+      <p style="font-size: 0.9rem; margin: 0;">Try searching for parameters like "moles", "FWHM", "BET", "GHS", or "pH".</p>
     </div>
 
     <!-- Programmatic Long-Tail Solution Formulation Shortcuts (Preserved) -->
@@ -271,22 +375,22 @@ const toolMetaMap: Record<string, { formula: string; inputs: string; outputs: st
           Molar Solutions (Hydrate &amp; Assay Compensated)
         </span>
         <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-          <a href="/molarity?chem=Sodium+Chloride+(NaCl)&c=0.5&v=500&mw=58.44&h=0&p=99.5" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #0f172a; transition: all 0.2s ease;">
+          <a href="/molarity?chem=Sodium+Chloride+(NaCl)&c=0.5&v=500&mw=58.44&h=0&p=99.5" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #0f172a;">
             🧪 0.5 M NaCl (500 mL)
           </a>
-          <a href="/molarity?chem=Sodium+Hydroxide+(NaOH)&c=1.0&v=1000&mw=40.00&h=0&p=97.0" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #0f172a; transition: all 0.2s ease;">
+          <a href="/molarity?chem=Sodium+Hydroxide+(NaOH)&c=1.0&v=1000&mw=40.00&h=0&p=97.0" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #0f172a;">
             🧪 1.0 M NaOH (1 L)
           </a>
-          <a href="/molarity?chem=Copper(II)+Sulfate+Pentahydrate&c=0.1&v=250&mw=159.60&h=5&p=98.0" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #0f172a; transition: all 0.2s ease;">
+          <a href="/molarity?chem=Copper(II)+Sulfate+Pentahydrate&c=0.1&v=250&mw=159.60&h=5&p=98.0" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #0f172a;">
             🧪 0.1 M CuSO₄·5H₂O (250 mL)
           </a>
-          <a href="/molarity?chem=Potassium+Chloride+(KCl)&c=3.0&v=250&mw=74.55&h=0&p=99.0" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #0f172a; transition: all 0.2s ease;">
+          <a href="/molarity?chem=Potassium+Chloride+(KCl)&c=3.0&v=250&mw=74.55&h=0&p=99.0" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #0f172a;">
             🧪 3.0 M KCl Electrode Storage (250 mL)
           </a>
-          <a href="/molarity?chem=Tris+Base+(C4H11NO3)&c=1.0&v=500&mw=121.14&h=0&p=99.8" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #0f172a; transition: all 0.2s ease;">
+          <a href="/molarity?chem=Tris+Base+(C4H11NO3)&c=1.0&v=500&mw=121.14&h=0&p=99.8" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #0f172a;">
             🧪 1.0 M Tris Base Stock (500 mL)
           </a>
-          <a href="/molarity?chem=EDTA+Disodium+Dihydrate&c=0.5&v=500&mw=336.21&h=2&p=99.0" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #0f172a; transition: all 0.2s ease;">
+          <a href="/molarity?chem=EDTA+Disodium+Dihydrate&c=0.5&v=500&mw=336.21&h=2&p=99.0" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #0f172a;">
             🧪 0.5 M EDTA (pH 8.0 Stock)
           </a>
         </div>
@@ -297,17 +401,17 @@ const toolMetaMap: Record<string, { formula: string; inputs: string; outputs: st
         <span style="display: block; font-size: 0.78rem; font-weight: 800; text-transform: uppercase; color: #475569; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
           Biological &amp; Chemical Buffers (Henderson-Hasselbalch)
         </span>
-        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-          <a href="/buffer?sys=phosphate&ph=7.40&c=50&v=1000" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #0369a1; transition: all 0.2s ease;">
+        <div style="flex-wrap: wrap; display: flex; gap: 0.5rem;">
+          <a href="/buffer?sys=phosphate&ph=7.40&c=50&v=1000" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #0369a1;">
             ⚖️ 50 mM PBS Buffer (pH 7.4)
           </a>
-          <a href="/buffer?sys=tris&ph=8.00&c=100&v=500" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #0369a1; transition: all 0.2s ease;">
+          <a href="/buffer?sys=tris&ph=8.00&c=100&v=500" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #0369a1;">
             ⚖️ 100 mM Tris-HCl (pH 8.0)
           </a>
-          <a href="/buffer?sys=acetate&ph=5.00&c=50&v=1000" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #0369a1; transition: all 0.2s ease;">
+          <a href="/buffer?sys=acetate&ph=5.00&c=50&v=1000" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #0369a1;">
             ⚖️ 50 mM Acetate Buffer (pH 5.0)
           </a>
-          <a href="/buffer?sys=citrate&ph=4.50&c=50&v=500" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #0369a1; transition: all 0.2s ease;">
+          <a href="/buffer?sys=citrate&ph=4.50&c=50&v=500" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #0369a1;">
             ⚖️ 50 mM Citrate Buffer (pH 4.5)
           </a>
         </div>
@@ -319,32 +423,35 @@ const toolMetaMap: Record<string, { formula: string; inputs: string; outputs: st
           Stock Dilution &amp; Serial Workflows
         </span>
         <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-          <a href="/dilution?c1=10&c2=1&v2=1000" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #166534; transition: all 0.2s ease;">
+          <a href="/dilution?c1=10&c2=1&v2=1000" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #166534;">
             💧 10x Buffer to 1x Working (1 L)
           </a>
-          <a href="/dilution?c1=50&c2=1&v2=500" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #166534; transition: all 0.2s ease;">
+          <a href="/dilution?c1=50&c2=1&v2=500" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #166534;">
             💧 50x TAE/TBE Gel Buffer to 1x (500 mL)
           </a>
-          <a href="/dilution?c1=100&c2=1&v2=100" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #166534; transition: all 0.2s ease;">
+          <a href="/dilution?c1=100&c2=1&v2=100" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #166534;">
             💧 1:100 Micro-Dilution Aliquot
           </a>
-          <a href="/scherrer?fwhm=0.35&theta=14.2&k=0.94&lambda=0.15406" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f5f3ff; border: 1px solid #ddd6fe; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #5b21b6; transition: all 0.2s ease;">
+          <a href="/scherrer?fwhm=0.35&theta=14.2&k=0.94&lambda=0.15406" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f5f3ff; border: 1px solid #ddd6fe; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #5b21b6;">
             🔬 Standard Cu-Kα (1.5406 Å) Scherrer Size
           </a>
         </div>
       </div>
 
-      <!-- Category D: Materials Physisorption & BET Surface Area -->
+      <!-- Category D: Materials Physisorption & Safety Standards -->
       <div>
         <span style="display: block; font-size: 0.78rem; font-weight: 800; text-transform: uppercase; color: #475569; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
-          Gas Physisorption &amp; Porosity Standards (BET)
+          Materials Physisorption &amp; Chemical Compliance (BET &amp; GHS)
         </span>
         <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-          <a href="/bet" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #047857; transition: all 0.2s ease;">
+          <a href="/bet" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #047857;">
             📊 MCM-41 Mesoporous Silica (N₂ at 77 K)
           </a>
-          <a href="/bet" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #047857; transition: all 0.2s ease;">
-            📊 HKUST-1 MOF Microporous Isotherm
+          <a href="/isotherm" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #047857;">
+            📈 Langmuir &amp; Freundlich Adsorption Fitter
+          </a>
+          <a href="/ghs" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #991b1b;">
+            ⚠️ OSHA GHS Secondary Container Label Generator
           </a>
         </div>
       </div>
@@ -358,7 +465,7 @@ const toolMetaMap: Record<string, { formula: string; inputs: string; outputs: st
           Academic Methodology &amp; Peer-Reviewed Integrity
         </h2>
         <p style="font-size: 0.9rem; line-height: 1.65; color: #475569; margin: 0 0 1.25rem;">
-          ChemistryDesk algorithms are authored and maintained by <strong>Bilal Khan</strong>, Materials Scientist &amp; Physical Chemistry Researcher. All tools operate entirely client-side using standard IUPAC physical constants, Deikman-Scherrer line broadening derivations, and multi-point Brunauer-Emmett-Teller equations. Zero proprietary laboratory formulations or sample masses are transferred across remote servers.
+          ChemistryDesk algorithms are authored and maintained by <strong>Bilal Khan</strong>, Physical Chemistry Researcher. All tools execute client-side using standard IUPAC physical constants, Deikman-Scherrer line broadening derivations, and multi-point Brunauer-Emmett-Teller equations. Zero proprietary laboratory formulations or sample masses are transferred across remote servers.
         </p>
         
         <div style="display: flex; justify-content: center; align-items: center; gap: 1rem; flex-wrap: wrap; font-size: 0.84rem; font-weight: 700;">
@@ -377,18 +484,36 @@ const toolMetaMap: Record<string, { formula: string; inputs: string; outputs: st
       </div>
     </section>
 
-    <!-- Educational & AdSense Quality Text Section (Preserved) -->
-    <section style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 2rem; line-height: 1.8; color: #334155; margin-bottom: 3.5rem;">
-      <h2 style="color: #0f172a; font-size: 1.35rem; font-weight: 700; margin-top: 0;">Precision Computational Standards</h2>
-      <p>
-        In experimental chemical synthesis, material characterization, and analytical titrations, computational precision during initial solution preparation is paramount. Minor errors in compensating for crystal water or neglect of reagent assay variances lead to systematic concentration discrepancies that compromise experimental reproducibility.
-      </p>
-      <p style="margin-bottom: 0;">
-        ChemistryDesk operates entirely client-side, running pure mathematical evaluations in real time without transmitting proprietary formulation parameters across remote servers. Review our dedicated module guides for explicit theoretical derivations, worked numerical problems, and Standard Operating Procedures (SOPs).
-      </p>
+    <!-- Homepage AEO/AIO Frequently Asked Questions Accordion -->
+    <section style="margin-bottom: 3.5rem;">
+      <h2 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-bottom: 1.25rem;">
+        Frequently Asked Questions: ChemistryDesk Computational Suite
+      </h2>
+      <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Are ChemistryDesk calculators suitable for academic and industrial research?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Yes. All computational routines apply standard IUPAC physical constants, compensate for crystalline hydration factors (·nH₂O) and assay purity percentages, and are archived under permanent CERN Zenodo DOIs with formatted BibTeX, ACS, and Nature citation support.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Do these tools require an active internet connection?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            No. All calculation engines execute 100% client-side inside the user's browser via JavaScript. No experimental inputs, sample concentrations, or imported CSV datasets are ever transmitted to external servers.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How does the molarity tool compensate for hydrate salts?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            The solver incorporates stoichiometric hydration waters directly into the effective molecular weight calculation: MW_eff = MW_anh + (n_H2O × 18.015 g/mol). It simultaneously adjusts the required bench mass by the chemical assay fraction (m_bench = m_calc / Purity).
+          </p>
+        </details>
+      </div>
     </section>
 
-    <!-- Offline Wet-Lab Utility Section for SEO (Preserved) -->
+    <!-- Offline Wet-Lab Utility Section for SEO -->
     <section style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 2rem; box-sizing: border-box;">
       <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.75rem;">
         <span style="font-size: 1.5rem;">📶</span>
@@ -399,7 +524,7 @@ const toolMetaMap: Record<string, { formula: string; inputs: string; outputs: st
       <p style="font-size: 0.95rem; color: #475569; line-height: 1.7; margin-bottom: 1.25rem;">
         Modern wet laboratories, cleanrooms, and subterranean analytical suites (such as XRD, SEM, and NMR instrument rooms) frequently have shielded cellular reception and intermittent Wi-Fi. ChemistryDesk is built as an installable Progressive Web App (PWA). All mathematical formulas, formula weights, and serial dilution ladders execute entirely on your device.
       </p>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 1rem;">
         <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 1rem;">
           <strong style="color: #0f172a; font-size: 0.9rem; display: block; margin-bottom: 0.35rem;">⚡ No Internet Required</strong>
           <span style="font-size: 0.85rem; color: #64748b;">All calculations execute locally once the page loads or the app is installed.</span>
@@ -417,7 +542,7 @@ const toolMetaMap: Record<string, { formula: string; inputs: string; outputs: st
 
   </main>
 
-  <!-- High-Speed Zero-Dependency Search & Filter Script -->
+  <!-- High-Speed Zero-Dependency Search & Filter Script with / Shortcut -->
   <script is:inline>
     const searchInput = document.getElementById('toolSearchInput');
     const filterButtons = document.querySelectorAll('.filter-btn');
@@ -453,6 +578,14 @@ const toolMetaMap: Record<string, { formula: string; inputs: string; outputs: st
         filterTools();
       });
     }
+
+    // Keyboard shortcut / focus
+    window.addEventListener('keydown', (e) => {
+      if (e.key === '/' && document.activeElement !== searchInput) {
+        e.preventDefault();
+        searchInput?.focus();
+      }
+    });
 
     filterButtons.forEach(btn => {
       btn.addEventListener('click', () => {
