@@ -457,7 +457,7 @@ const schemaData = {
 
           <!-- Actions Toolbar: CSV Export & Filter -->
           <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
-            <button id="btnExportHpCsv" type="button" style="background: #059669; color: white; border: none; padding: 0.45rem 0.85rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.35rem;">
+            <button id="btnExportHpCsv" type="button" style="background: #059669; color: white; border: none; padding: 0.45rem 0.85rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; display: flex; align-items: gap: 0.35rem;">
               <span>📥</span> Export Master H&amp;P (CSV)
             </button>
             <input 
@@ -471,17 +471,26 @@ const schemaData = {
 
         <!-- 9 Interactive GHS Pictogram Vector Download Grid -->
         <div style="border-top: 1.5px solid #f1f5f9; padding-top: 1rem; margin-bottom: 1.5rem;">
-          <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.65rem; flex-wrap: wrap; gap: 0.4rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.65rem; flex-wrap: wrap; gap: 0.5rem;">
             <span style="font-size: 0.75rem; font-weight: 800; color: #334155; text-transform: uppercase;">
               All 9 UN GHS Pictograms (Click symbol to filter statements, or download vector files):
             </span>
-            <button 
-              id="btnClearPicFilter" 
-              type="button" 
-              style="padding: 0.2rem 0.6rem; font-size: 0.72rem; font-weight: 700; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; cursor: pointer; color: #64748b;"
-            >
-              Reset Filter
-            </button>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <!-- User Resolution Selector for PNG Export -->
+              <label for="pngResolutionSelect" style="font-size: 0.72rem; font-weight: 700; color: #64748b;">PNG RES:</label>
+              <select id="pngResolutionSelect" style="font-size: 0.72rem; padding: 2px 6px; border: 1px solid #cbd5e1; border-radius: 4px; background: #ffffff; color: #0f172a; font-weight: 700;">
+                <option value="500">500×500 px (Standard)</option>
+                <option value="1000" selected>1000×1000 px (High-Res)</option>
+                <option value="2000">2000×2000 px (Ultra-HD / Print)</option>
+              </select>
+              <button 
+                id="btnClearPicFilter" 
+                type="button" 
+                style="padding: 0.2rem 0.6rem; font-size: 0.72rem; font-weight: 700; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; cursor: pointer; color: #64748b;"
+              >
+                Reset Filter
+              </button>
+            </div>
           </div>
 
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 100px), 1fr)); gap: 0.75rem;">
@@ -499,8 +508,8 @@ const schemaData = {
                   {item.title}
                 </div>
                 <div style="display: flex; justify-content: center; gap: 4px; margin-top: 0.4rem;">
-                  <button type="button" class="btn-download-svg" data-pic={key} style="font-size: 0.65rem; font-weight: 700; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 3px; padding: 1px 4px; cursor: pointer;" title="Download Vector SVG">SVG</button>
-                  <button type="button" class="btn-download-png" data-pic={key} style="font-size: 0.65rem; font-weight: 700; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 3px; padding: 1px 4px; cursor: pointer;" title="Download High-Res PNG">PNG</button>
+                  <button type="button" class="btn-download-svg" data-pic={key} style="font-size: 0.65rem; font-weight: 700; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 3px; padding: 1px 4px; cursor: pointer;" title="Download Standalone Vector SVG">SVG</button>
+                  <button type="button" class="btn-download-png" data-pic={key} style="font-size: 0.65rem; font-weight: 700; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 3px; padding: 1px 4px; cursor: pointer;" title="Download Transparent PNG">PNG</button>
                 </div>
               </div>
             ))}
@@ -916,25 +925,25 @@ const schemaData = {
             <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
               <td style="padding: 0.5rem 0.75rem; font-weight: 800;">12</td>
               <td style="padding: 0.5rem 0.75rem; font-weight: 700;">Ecological Information</td>
-              <td style="padding: 0.5rem 0.75rem; color: #64748b;">Aquatic toxicity, persistence, bioaccumulative potential, and environmental fate.</td>
+              <td style="padding: 0.5rem 0.75rem;">Aquatic toxicity, persistence, bioaccumulative potential, and environmental fate.</td>
               <td style="padding: 0.5rem 0.75rem; text-align: center; color: #64748b;">EPA (Non-Mand.)</td>
             </tr>
             <tr style="border-bottom: 1px solid #e2e8f0;">
               <td style="padding: 0.5rem 0.75rem; font-weight: 800;">13</td>
               <td style="padding: 0.5rem 0.75rem; font-weight: 700;">Disposal Considerations</td>
-              <td style="padding: 0.5rem 0.75rem; color: #64748b;">Proper hazardous waste disposal practices and contaminated packaging handling.</td>
+              <td style="padding: 0.5rem 0.75rem;">Proper hazardous waste disposal practices and contaminated packaging handling.</td>
               <td style="padding: 0.5rem 0.75rem; text-align: center; color: #64748b;">EPA (Non-Mand.)</td>
             </tr>
             <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
               <td style="padding: 0.5rem 0.75rem; font-weight: 800;">14</td>
               <td style="padding: 0.5rem 0.75rem; font-weight: 700;">Transport Information</td>
-              <td style="padding: 0.5rem 0.75rem; color: #64748b;">UN number, proper shipping name, hazard class, packing group, marine pollutant status.</td>
+              <td style="padding: 0.5rem 0.75rem;">UN number, proper shipping name, hazard class, packing group, marine pollutant status.</td>
               <td style="padding: 0.5rem 0.75rem; text-align: center; color: #64748b;">DOT (Non-Mand.)</td>
             </tr>
             <tr style="border-bottom: 1px solid #e2e8f0;">
               <td style="padding: 0.5rem 0.75rem; font-weight: 800;">15</td>
               <td style="padding: 0.5rem 0.75rem; font-weight: 700;">Regulatory Information</td>
-              <td style="padding: 0.5rem 0.75rem; color: #64748b;">TSCA, SARA Title III, OSHA, and regional environmental compliance mandates.</td>
+              <td style="padding: 0.5rem 0.75rem;">TSCA, SARA Title III, OSHA, and regional environmental compliance mandates.</td>
               <td style="padding: 0.5rem 0.75rem; text-align: center; color: #64748b;">EPA (Non-Mand.)</td>
             </tr>
             <tr>
@@ -1402,7 +1411,7 @@ Generated on:       ${new Date().toLocaleDateString()}
       const sig = currentEntity?.ghs?.signalWord || 'Warning';
 
       if (format === 'svg') {
-        const svgData = `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="250" viewBox="0 0 400 250">
+        const svgData = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="250" viewBox="0 0 400 250">
           <rect width="400" height="250" fill="#ffffff" stroke="#000000" stroke-width="4"/>
           <line x1="10" y1="35" x2="390" y2="35" stroke="#000000" stroke-width="2"/>
           <text x="15" y="25" font-family="sans-serif" font-size="12" font-weight="900">OSHA GHS SECONDARY CONTAINER</text>
@@ -1416,11 +1425,13 @@ Generated on:       ${new Date().toLocaleDateString()}
           <text x="15" y="240" font-family="sans-serif" font-size="8">Prep By: Lab Tech</text>
           <text x="385" y="240" text-anchor="end" font-family="sans-serif" font-size="8">Room Temperature [20-25°C]</text>
         </svg>`;
-        const blob = new Blob([svgData], { type: 'image/svg+xml' });
+        const blob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
         a.download = `${chem.toLowerCase().replace(/[^a-z0-9]/g, '_')}_ghs_label.svg`;
+        document.body.appendChild(a);
         a.click();
+        document.body.removeChild(a);
         showToast('✅ Downloaded Vector SVG Label');
       } else {
         const canvas = document.createElement('canvas');
@@ -1453,7 +1464,9 @@ Generated on:       ${new Date().toLocaleDateString()}
         const a = document.createElement('a');
         a.href = canvas.toDataURL('image/png');
         a.download = `${chem.toLowerCase().replace(/[^a-z0-9]/g, '_')}_ghs_label.png`;
+        document.body.appendChild(a);
         a.click();
+        document.body.removeChild(a);
         showToast('✅ Downloaded High-Res PNG Label');
       }
     }
@@ -1623,37 +1636,75 @@ Generated on:       ${new Date().toLocaleDateString()}
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
       a.download = 'un_ghs_rev10_statements_master.csv';
+      document.body.appendChild(a);
       a.click();
+      document.body.removeChild(a);
       showToast('✅ Downloaded Master H & P CSV Table');
     });
 
-    // Helper: Download Pictogram Vector Files
+    // Helper: Download Pictogram Vector & Raster Files with Standalone Namespace Injection
     function downloadPictogramFile(picKey: string, format: 'svg' | 'png') {
       if (!GHS_PICTOGRAMS[picKey]) return;
-      const svgStr = GHS_PICTOGRAMS[picKey].svg;
+      
+      let rawSvg = GHS_PICTOGRAMS[picKey].svg;
+
+      // 1. Ensure mandatory XML namespace and XML attributes exist for standalone viewer rendering
+      if (!rawSvg.includes('xmlns=')) {
+        rawSvg = rawSvg.replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" ');
+      }
+
+      // 2. Ensure explicit width/height for canvas rasterization
+      if (!rawSvg.includes('width=')) {
+        rawSvg = rawSvg.replace('<svg ', '<svg width="1000" height="1000" ');
+      }
 
       if (format === 'svg') {
-        const blob = new Blob([svgStr], { type: 'image/svg+xml' });
+        const blob = new Blob([rawSvg], { type: 'image/svg+xml;charset=utf-8' });
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
         a.download = `ghs_${picKey}_pictogram.svg`;
+        document.body.appendChild(a);
         a.click();
+        document.body.removeChild(a);
         showToast(`✅ Downloaded GHS ${picKey} SVG`);
       } else {
+        // Read user-selected pixel resolution
+        const resSelect = document.getElementById('pngResolutionSelect') as HTMLSelectElement;
+        const targetDim = resSelect ? parseInt(resSelect.value) || 1000 : 1000;
+
         const img = new Image();
-        img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgStr)));
+        const svgBlob = new Blob([rawSvg], { type: 'image/svg+xml;charset=utf-8' });
+        const url = URL.createObjectURL(svgBlob);
+
         img.onload = () => {
           const canvas = document.createElement('canvas');
-          canvas.width = 1000; canvas.height = 1000;
+          canvas.width = targetDim;
+          canvas.height = targetDim;
           const ctx = canvas.getContext('2d');
           if (!ctx) return;
-          ctx.drawImage(img, 0, 0, 1000, 1000);
-          const a = document.createElement('a');
-          a.href = canvas.toDataURL('image/png');
-          a.download = `ghs_${picKey}_pictogram_1000px.png`;
-          a.click();
-          showToast(`✅ Downloaded GHS ${picKey} 1000px PNG`);
+
+          ctx.clearRect(0, 0, targetDim, targetDim);
+          ctx.drawImage(img, 0, 0, targetDim, targetDim);
+          URL.revokeObjectURL(url);
+
+          canvas.toBlob((pngBlob) => {
+            if (!pngBlob) return;
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(pngBlob);
+            a.download = `ghs_${picKey}_pictogram_${targetDim}px.png`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            showToast(`✅ Downloaded GHS ${picKey} (${targetDim}×${targetDim} px PNG)`);
+          }, 'image/png');
         };
+
+        img.onerror = () => {
+          URL.revokeObjectURL(url);
+          showToast('❌ Failed to rasterize PNG. Try downloading SVG.');
+        };
+
+        img.src = url;
       }
     }
 
@@ -1794,7 +1845,9 @@ Revision Date: ${new Date().toLocaleDateString()}
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
       a.download = 'osha_16_section_sds_framework_template.txt';
+      document.body.appendChild(a);
       a.click();
+      document.body.removeChild(a);
       showToast('✅ Downloaded Blank SDS Template');
     }
 
