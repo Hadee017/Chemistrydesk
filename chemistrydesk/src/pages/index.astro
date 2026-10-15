@@ -18,19 +18,7 @@ interface ToolItem {
 
 const allTools: ToolItem[] = [
   {
-    title: "Molarity & Normality Calculator",
-    path: "/molarity",
-    icon: "🧪",
-    badge: "Most Used",
-    badgeColor: "#0284c7",
-    formula: "m = (C · V · MW) / Purity",
-    inputs: "Concentration (C), Volume (V), Molecular Weight (MW), Hydrate (·nH₂O), Assay %",
-    outputs: "Target Solute Balance Mass (g), Total Moles, Hydrated MW",
-    category: "solutions",
-    description: "Universal solution preparation solver compensating for crystalline waters of hydration (·nH₂O) and chemical assay purity percentages."
-  },
-  {
-    title: "Solution Dilution Calculator (C1V1 = C2V2)",
+    title: "C1V1 C2V2 Solution Dilution Calculator",
     path: "/dilution",
     icon: "💧",
     badge: "Core Lab",
@@ -39,118 +27,22 @@ const allTools: ToolItem[] = [
     inputs: "Stock Conc (C₁), Target Conc (C₂), Target Volume (V₂)",
     outputs: "Required Stock Aliquot (V₁), Diluent Solvent Volume, Dilution Factor",
     category: "solutions",
-    description: "Stock aliquot calculator and multi-step serial dilution ladder designer with volume displacement safeguards."
+    description: "Stock aliquot calculator and c1v1 c2v2 dilution equation calculator supporting mg/ml, ppm, and multi-step serial dilution ladders."
   },
   {
-    title: "Buffer Preparation & Capacity Calculator",
-    path: "/buffer",
-    icon: "⚖️",
-    badge: "Biochem",
-    badgeColor: "#7c3aed",
-    formula: "pH = pKa + log([A⁻]/[HA])",
-    inputs: "Target pH, Total Buffer Conc, Volume, Conjugate Acid/Base Pair",
-    outputs: "Acid Mass/Volume, Conjugate Base Mass, Buffer Capacity (β)",
-    category: "solutions",
-    description: "Henderson-Hasselbalch buffer formulation engine for biological (PBS, Tris, HEPES) and analytical (Acetate, Citrate) buffer systems."
-  },
-  {
-    title: "Acid-Base Titration Simulator & Curve Solver",
-    path: "/titration",
-    icon: "📊",
-    badge: "Analytical",
+    title: "Molarity & Molecular Weight Calculator",
+    path: "/molarity",
+    icon: "🧪",
+    badge: "Most Used",
     badgeColor: "#0284c7",
-    formula: "V_titrant × C_titrant = V_analyte × C_analyte",
-    inputs: "Analyte Type (Weak/Strong Acid/Base), Volume, Titrant Molarity",
-    outputs: "Titration Curve, Equivalence Point pH, Van Slyke Capacity",
+    formula: "m = (C · V · MW) / Purity",
+    inputs: "Concentration (C), Volume (V), Molecular Weight (MW), Hydrate (·nH₂O), Assay %",
+    outputs: "Target Solute Balance Mass (g), Total Moles, Hydrated MW",
     category: "solutions",
-    description: "Dynamic titration curve generator, derivative endpoint detector, and chemical indicator selection matrix."
+    description: "Universal wet chemistry molarity calculator compensating for crystal hydration (·nH₂O), percent purity, and concentrated reagent solutions."
   },
   {
-    title: "pH & Aqueous Equilibrium Calculator",
-    path: "/ph",
-    icon: "🧫",
-    badge: "Core Lab",
-    badgeColor: "#059669",
-    formula: "pH = -log₁₀[H⁺] | pOH = 14 - pH",
-    inputs: "Hydronium [H₃O⁺], Hydroxide [OH⁻], Ka / Kb Dissociation Constant",
-    outputs: "pH, pOH, Hydrogen Ion Activity, Solution Acid-Base Regime",
-    category: "solutions",
-    description: "Full-spectrum aqueous equilibrium solver computing ionic strength, hydronium concentration, and polyprotic dissociation."
-  },
-  {
-    title: "Reaction Stoichiometry & Yield Balancer",
-    path: "/stoichiometry",
-    icon: "⚗️",
-    badge: "Equilibrium",
-    badgeColor: "#d97706",
-    formula: "aA + bB → cC + dD (Mass Balance)",
-    inputs: "Chemical Equation, Reagent Masses (g, mol), Percent Purity",
-    outputs: "Limiting Reactant, Theoretical Yield, Percent Yield, Excess Solute",
-    category: "solutions",
-    description: "Multi-reactant mass balancer calculating theoretical yield, limiting reactants, and excess unreacted reagents."
-  },
-  {
-    title: "Molar Mass & Molecular Weight Calculator",
-    path: "/molar-mass",
-    icon: "⚛️",
-    badge: "High Traffic",
-    badgeColor: "#0284c7",
-    formula: "MW = Σ (nᵢ · Aᵢ)",
-    inputs: "Chemical Formula, Hydrate Notation, Coordinated Brackets",
-    outputs: "Molecular Weight (g/mol), Elemental Mass Percentages, Total Moles",
-    category: "solutions",
-    description: "IUPAC isotopic mass solver parsing complex coordination compounds, hydrates, and empirical elemental mass percentages."
-  },
-  {
-    title: "Significant Figures & Error Propagation Calculator",
-    path: "/sig-figs",
-    icon: "📐",
-    badge: "Precision",
-    badgeColor: "#475569",
-    formula: "Analytical Significant Figures & Propagation Rules",
-    inputs: "Measurement Value String, Operation Type (+, -, ×, ÷)",
-    outputs: "Significant Digit Count, Precision Tolerance, Rounded Result",
-    category: "solutions",
-    description: "Scientific notation and analytical rounding engine calculating significant figures and propagating measurement uncertainty."
-  },
-  {
-    title: "Ideal & Real Gas Law Calculator (PV = nRT)",
-    path: "/gas",
-    icon: "🎈",
-    badge: "Thermodynamics",
-    badgeColor: "#2563eb",
-    formula: "PV = nRT | (P + an²/V²)(V - nb) = nRT",
-    inputs: "Pressure (P), Volume (V), Moles/Mass (n/m), Temperature (T)",
-    outputs: "Unknown State Variable, Compressibility (Z), Gas Density (ρ)",
-    category: "physical",
-    description: "Dual-engine gas dynamics solver comparing Ideal Gas behavior against Van der Waals non-ideal real gas corrections."
-  },
-  {
-    title: "Beer-Lambert Law & Spectrophotometry Studio",
-    path: "/spectro",
-    icon: "🌈",
-    badge: "Spectroscopy",
-    badgeColor: "#7c3aed",
-    formula: "A = ε · b · c (Beer-Lambert Law)",
-    inputs: "Path Length (b), Molar Absorptivity (ε), % Transmittance or Absorbance (A)",
-    outputs: "Analyte Concentration (c), Transmittance (T), Optical Density",
-    category: "physical",
-    description: "UV-Vis spectrophotometry suite with standard calibration curve least-squares regression, unknown interpolation, and kinetics."
-  },
-  {
-    title: "Electron Configuration & Orbital Physics Studio",
-    path: "/electron-configuration",
-    icon: "⚡",
-    badge: "Quantum",
-    badgeColor: "#4f46e5",
-    formula: "1s² 2s² 2p⁶ 3s² 3p⁶ 4s² 3d¹⁰...",
-    inputs: "Element Symbol or Atomic Number (Z), Ion Oxidation Charge",
-    outputs: "Aufbau Ground State, Noble Gas Core, Quantum Numbers, Magnetism",
-    category: "physical",
-    description: "Quantum mechanical electron orbital solver predicting Aufbau ground states, anomalous transitions, and diamagnetism/paramagnetism."
-  },
-  {
-    title: "Scherrer Equation XRD Crystallite Size Calculator",
+    title: "PXRD Scherrer Crystallite Size Calculator",
     path: "/scherrer",
     icon: "🔬",
     badge: "Materials / XRD",
@@ -159,10 +51,22 @@ const allTools: ToolItem[] = [
     inputs: "Diffraction Angle (2θ), Peak Broadening (FWHM β), Radiation (λ), Shape Factor (K)",
     outputs: "Mean Crystallite Domain Size (τ in nm & Å), Instrumental Correction",
     category: "materials",
-    description: "Powder X-ray Diffraction (PXRD) line broadening solver calculating crystallite domain size with instrument broadening corrections."
+    description: "Powder X-ray diffraction (PXRD) scherrer formula xrd particle size calculator with instrumental line broadening corrections."
   },
   {
-    title: "BET Multi-Point Surface Area Calculator",
+    title: "Henderson-Hasselbalch Buffer Solution Calculator",
+    path: "/buffer",
+    icon: "⚖️",
+    badge: "Biochem",
+    badgeColor: "#7c3aed",
+    formula: "pH = pKa + log([A⁻]/[HA])",
+    inputs: "Target pH, Total Buffer Conc, Volume, Conjugate Acid/Base Pair",
+    outputs: "Acid Mass/Volume, Conjugate Base Mass, Buffer Capacity (β)",
+    category: "solutions",
+    description: "Laboratory buffer calculator using the henderson hasselbalch equation for Tris, phosphate, acetate, and citrate buffer solutions."
+  },
+  {
+    title: "BET Surface Area & Porosity Analyzer",
     path: "/bet",
     icon: "🧱",
     badge: "Physisorption",
@@ -171,22 +75,22 @@ const allTools: ToolItem[] = [
     inputs: "Relative Pressure (P/P₀), Relative Adsorption Volume (Vads), Sample Mass",
     outputs: "Specific Surface Area (m²/g), Monolayer Capacity (Wₘ), C Constant",
     category: "materials",
-    description: "Brunauer-Emmett-Teller physisorption isotherm engine computing specific surface area (m²/g) and monolayer capacity."
+    description: "Brunauer emmett teller bet analysis tool for measuring specific surface area, activated carbon porosity, and nitrogen physisorption."
   },
   {
-    title: "Adsorption Isotherm Fitter (Langmuir & Freundlich)",
-    path: "/isotherm",
-    icon: "📈",
-    badge: "Kinetics",
-    badgeColor: "#0d9488",
-    formula: "Langmuir: q = (qₘK_L C)/(1 + K_L C) | Freundlich: q = K_F C^(1/n)",
-    inputs: "Equilibrium Concentration (Ce), Equilibrium Adsorption Capacity (qe)",
-    outputs: "qmax, KL, KF, 1/n, Mean Free Energy (E), R² Model Fits",
-    category: "materials",
-    description: "Heterogeneous surface adsorption engine performing linear regressions for Langmuir, Freundlich, Temkin, and Dubinin-Radushkevich models."
+    title: "Beer-Lambert Law & Chemical Kinetics Calculator",
+    path: "/spectro",
+    icon: "🌈",
+    badge: "Spectroscopy",
+    badgeColor: "#7c3aed",
+    formula: "A = ε · b · c (Beer-Lambert Law)",
+    inputs: "Path Length (b), Molar Absorptivity (ε), % Transmittance or Absorbance (A)",
+    outputs: "Analyte Concentration (c), Transmittance (T), Optical Density",
+    category: "physical",
+    description: "Beer lambert law calculation tool for UV-Vis spectrophotometry, dye photodegradation kinetics, and reaction rate mechanisms."
   },
   {
-    title: "GHS Hazard & Chemical Safety Studio",
+    title: "OSHA GHS & SDS Chemical Safety Data Sheet Studio",
     path: "/ghs",
     icon: "⚠️",
     badge: "OSHA / CLP",
@@ -195,14 +99,110 @@ const allTools: ToolItem[] = [
     inputs: "Chemical Substance Name, CAS Registry Number, Concentration %",
     outputs: "GHS Pictograms, Hazard / Precautionary Statements, Printable Label",
     category: "materials",
-    description: "OSHA HazCom 2012 secondary container label generator, 110M+ PubChem compound lookup, 16-section SDS framework, and glove matrix."
+    description: "OSHA GHS pictograms, SDS hazard identification, secondary container label requirements, and hazardous chemical compliance."
+  },
+  {
+    title: "Langmuir & Freundlich Adsorption Isotherm Studio",
+    path: "/isotherm",
+    icon: "📈",
+    badge: "Kinetics",
+    badgeColor: "#0d9488",
+    formula: "Langmuir: q = (qₘK_L C)/(1 + K_L C) | Freundlich: q = qₘK_L C",
+    inputs: "Equilibrium Concentration (Ce), Equilibrium Adsorption Capacity (qe)",
+    outputs: "qmax, KL, KF, 1/n, Mean Free Energy (E), R² Model Fits",
+    category: "materials",
+    description: "Brunauer emmett teller, Temkin, Langmuir, and Freundlich adsorption isotherm fitting tool for wastewater treatment and heavy metal sorption."
+  },
+  {
+    title: "Chemical Equation Balancer & Stoichiometry Calculator",
+    path: "/stoichiometry",
+    icon: "⚗️",
+    badge: "Equilibrium",
+    badgeColor: "#d97706",
+    formula: "aA + bB → cC + dD (Mass Balance)",
+    inputs: "Chemical Equation, Reagent Masses (g, mol), Percent Purity",
+    outputs: "Limiting Reactant, Theoretical Yield, Percent Yield, Excess Solute",
+    category: "solutions",
+    description: "Chemical equation solver, chemical formula balancer, and stoichiometry balancing equations engine for general chemistry."
+  },
+  {
+    title: "Acid-Base Titration & Potentiometric Calculator",
+    path: "/titration",
+    icon: "📊",
+    badge: "Analytical",
+    badgeColor: "#0284c7",
+    formula: "V_titrant × C_titrant = V_analyte × C_analyte",
+    inputs: "Analyte Type (Weak/Strong Acid/Base), Volume, Titrant Molarity",
+    outputs: "Titration Curve, Equivalence Point pH, Van Slyke Capacity",
+    category: "solutions",
+    description: "Acid base titration calculator, titrant and titrate curves, potentiometric titrimetry, and equivalence point solver."
+  },
+  {
+    title: "PV=nRT Ideal & Real Gas Law Calculator",
+    path: "/gas",
+    icon: "🎈",
+    badge: "Thermodynamics",
+    badgeColor: "#2563eb",
+    formula: "PV = nRT | (P + an²/V²)(V - nb) = nRT",
+    inputs: "Pressure (P), Volume (V), Moles/Mass (n/m), Temperature (T)",
+    outputs: "Unknown State Variable, Compressibility (Z), Gas Density (ρ)",
+    category: "physical",
+    description: "PV nrt calculator, universal gas constant R solver, and Van der Waals real gas equation of state analyzer."
+  },
+  {
+    title: "Universal pH & Aqueous Equilibrium Calculator",
+    path: "/ph",
+    icon: "🧫",
+    badge: "Core Lab",
+    badgeColor: "#059669",
+    formula: "pH = -log₁₀[H⁺] | pOH = 14 - pH",
+    inputs: "Hydronium [H₃O⁺], Hydroxide [OH⁻], Ka / Kb Dissociation Constant",
+    outputs: "pH, pOH, Hydrogen Ion Activity, Solution Acid-Base Regime",
+    category: "solutions",
+    description: "Universal indicator solution and universal pH paper equilibrium solver for strong and weak acids/bases."
+  },
+  {
+    title: "Molar Mass & Elemental Composition Calculator",
+    path: "/molar-mass",
+    icon: "⚛️",
+    badge: "High Traffic",
+    badgeColor: "#0284c7",
+    formula: "MW = Σ (nᵢ · Aᵢ)",
+    inputs: "Chemical Formula, Hydrate Notation, Coordinated Brackets",
+    outputs: "Molecular Weight (g/mol), Elemental Mass Percentages, Total Moles",
+    category: "solutions",
+    description: "Molar weight calculator, molecular mass finder, and gram to mole conversion tool for compounds like NaCl, NaOH, and glucose."
+  },
+  {
+    title: "Significant Figures & Scientific Precision Calculator",
+    path: "/sig-figs",
+    icon: "📐",
+    badge: "Precision",
+    badgeColor: "#475569",
+    formula: "Analytical Significant Figures & Propagation Rules",
+    inputs: "Measurement Value String, Operation Type (+, -, ×, ÷)",
+    outputs: "Significant Digit Count, Precision Tolerance, Rounded Result",
+    category: "solutions",
+    description: "Significant figures calculator, determine significant digits, scientific notation rounding, and uncertainty propagation."
+  },
+  {
+    title: "Electron Configuration & Periodic Table Orbital Solver",
+    path: "/electron-configuration",
+    icon: "⚡",
+    badge: "Quantum",
+    badgeColor: "#4f46e5",
+    formula: "1s² 2s² 2p⁶ 3s² 3p⁶ 4s² 3d¹⁰...",
+    inputs: "Element Symbol or Atomic Number (Z), Ion Oxidation Charge",
+    outputs: "Aufbau Ground State, Noble Gas Core, Quantum Numbers, Magnetism",
+    category: "physical",
+    description: "Periodic table of elements configuration, 1s 2s 2p orbital distribution, valence electrons, and quantum numbers."
   }
 ];
 ---
 
 <BaseLayout 
-  title="Chemistry Calculators | Research-Grade Laboratory Suite | ChemistryDesk"
-  description="Free research-grade chemistry calculators for benchtop laboratories. Compute molarity, solution dilutions, buffer capacity, GHS secondary labels, PXRD Scherrer crystallite size, and BET surface area."
+  title="Chemistry Calculators & General Chemistry Dictionary | ChemistryDesk"
+  description="Free research-grade chemistry calculators and wet chemistry tools. Compute molarity, solution dilutions, buffer capacity, chemical equations, GHS labels, and PXRD Scherrer size."
 >
   <main style="max-width: 1100px; margin: 1.5rem auto 4rem; padding: 0 1.25rem; color: #0f172a; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; box-sizing: border-box; overflow-x: hidden;">
     
@@ -214,7 +214,7 @@ const allTools: ToolItem[] = [
     <!-- Hero Banner with High-Volume Search Intent -->
     <header style="text-align: center; margin-bottom: 2rem; padding: 0.5rem 0;">
       <span style="display: inline-block; background: #e0f2fe; color: #0369a1; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.35rem 0.85rem; border-radius: 9999px; margin-bottom: 0.85rem; border: 1px solid #bae6fd;">
-        Scientific Computational Engine
+        Modern General Chemistry Workbench
       </span>
       
       <!-- Offline & Precision Trust Badges -->
@@ -222,21 +222,23 @@ const allTools: ToolItem[] = [
         <span style="display: inline-flex; align-items: center; gap: 0.35rem; background: #ecfdf5; color: #059669; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 9999px; border: 1px solid #a7f3d0;">
           ⚡ 100% Client-Side Offline
         </span>
+
         <span style="display: inline-flex; align-items: center; gap: 0.35rem; background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 9999px; border: 1px solid #bae6fd;">
           🔬 IUPAC &amp; ASTM Standards
         </span>
+
         <span style="display: inline-flex; align-items: center; gap: 0.35rem; background: #f8fafc; color: #475569; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 9999px; border: 1px solid #cbd5e1;">
           📦 CERN Zenodo Indexed
         </span>
       </div>
 
-      <!-- Primary H1 Targeting 50k+ "Chemistry Calculators" Traffic -->
+      <!-- Primary H1 Targeting High-Volume General Chemistry & Dictionary Traffic -->
       <h1 style="font-size: clamp(2rem, 4.5vw, 2.75rem); font-weight: 900; letter-spacing: -0.025em; line-height: 1.2; margin: 0 0 0.85rem 0; color: #0f172a;">
-        Chemistry Calculators: Precision Laboratory &amp; Computational Suite
+        Chemistry Calculators &amp; Wet Chemistry Dictionary Suite
       </h1>
       
       <p style="font-size: clamp(0.95rem, 2vw, 1.1rem); color: #475569; max-width: 760px; margin: 0 auto; line-height: 1.6;">
-        Standardized, research-grade analytical calculators engineered to eliminate manual preparation errors, compensate for crystal hydration (·nH₂O), design serial dilutions, and model materials characterization.
+        Standardized, research-grade analytical calculators engineered for modern general chemistry dictionaries, wet chemistry stock preparation, stoichiometric equation balancing, and materials characterization.
       </p>
     </header>
 
@@ -246,7 +248,7 @@ const allTools: ToolItem[] = [
         What is ChemistryDesk? (Direct Overview)
       </h2>
       <p style="font-size: 0.92rem; color: #334155; margin: 0; line-height: 1.6;">
-        <strong>ChemistryDesk</strong> is an open-access scientific calculation suite providing 15 dedicated computational tools for wet-lab solution preparation, spectroscopy, materials characterization, and chemical safety. All algorithms execute 100% client-side in the browser with zero remote data logging, full offline capability, and rigorous IUPAC physical constants.
+        <strong>ChemistryDesk</strong> is an open-access general chemistry dictionary and scientific calculation suite providing 15 dedicated computational tools for wet-lab solution preparation, stoichiometry, spectroscopy, materials characterization, and chemical safety. All algorithms execute 100% client-side in the browser with zero remote data logging, full offline capability, and rigorous IUPAC physical constants.
       </p>
     </section>
 
@@ -260,7 +262,7 @@ const allTools: ToolItem[] = [
           <input 
             type="text" 
             id="toolSearchInput" 
-            placeholder="Search all 15 calculators (e.g. Molarity, C1V1, GHS labels, Sig Figs, Scherrer, Langmuir)..." 
+            placeholder="Search all 15 calculators (e.g. C1V1, Molarity, GHS labels, Sig Figs, Scherrer, Titration)..." 
             aria-label="Filter laboratory tools"
             style="width: 100%; padding: 0.75rem 3.5rem 0.75rem 2.6rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; outline: none; box-sizing: border-box; transition: border-color 0.2s ease;"
           />
@@ -273,20 +275,20 @@ const allTools: ToolItem[] = [
             All 15 Tools
           </button>
           <button type="button" class="filter-btn" data-category="solutions" style="padding: 0.45rem 0.85rem; border-radius: 8px; font-size: 0.82rem; font-weight: 700; border: 1px solid #cbd5e1; background: #f8fafc; color: #475569; cursor: pointer; transition: all 0.2s ease;">
-            🧪 Solution Prep &amp; Titration (8)
+            🧪 Solution Prep &amp; Titration (9)
           </button>
           <button type="button" class="filter-btn" data-category="physical" style="padding: 0.45rem 0.85rem; border-radius: 8px; font-size: 0.82rem; font-weight: 700; border: 1px solid #cbd5e1; background: #f8fafc; color: #475569; cursor: pointer; transition: all 0.2s ease;">
-            🌈 Spectroscopy &amp; Gas Laws (3)
+            🌈 Spectroscopy &amp; Quantum (3)
           </button>
           <button type="button" class="filter-btn" data-category="materials" style="padding: 0.45rem 0.85rem; border-radius: 8px; font-size: 0.82rem; font-weight: 700; border: 1px solid #cbd5e1; background: #f8fafc; color: #475569; cursor: pointer; transition: all 0.2s ease;">
-            🔬 Materials, XRD &amp; Safety (4)
+            🔬 Materials, XRD &amp; Safety (3)
           </button>
         </div>
 
       </div>
     </section>
 
-    <!-- Complete 15-Tool Grid (Zero Orphan Pages Guarantee) -->
+    <!-- Complete 15-Tool Grid (60-30-10 Balanced Styling) -->
     <div id="toolsGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 310px), 1fr)); gap: 1.5rem; margin-bottom: 3.5rem;">
       {allTools.map((tool) => {
         const searchCorpus = `${tool.title} ${tool.description} ${tool.formula} ${tool.inputs} ${tool.outputs}`.toLowerCase();
@@ -337,10 +339,10 @@ const allTools: ToolItem[] = [
               </div>
             </div>
 
-            <!-- Full-Width Direct Anchor Target -->
+            <!-- Full-Width Direct Anchor Target (48px Touch Floor) -->
             <a 
               href={tool.path} 
-              style={`display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; width: 100%; min-height: 44px; border-radius: 8px; background: ${tool.badgeColor || '#0284c7'}; color: #ffffff; font-weight: 700; font-size: 0.88rem; text-decoration: none; box-sizing: border-box; transition: opacity 0.2s ease;`}
+              style={`display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; width: 100%; min-height: 48px; border-radius: 8px; background: ${tool.badgeColor || '#0284c7'}; color: #ffffff; font-weight: 700; font-size: 0.88rem; text-decoration: none; box-sizing: border-box; transition: opacity 0.2s ease;`}
             >
               Launch Solver &rarr;
             </a>
@@ -355,7 +357,7 @@ const allTools: ToolItem[] = [
       <p style="font-size: 0.9rem; margin: 0;">Try searching for parameters like "moles", "FWHM", "BET", "GHS", or "pH".</p>
     </div>
 
-    <!-- Programmatic Long-Tail Solution Formulation Shortcuts (Preserved) -->
+    <!-- Programmatic Long-Tail Solution Formulation Shortcuts -->
     <section style="margin: 3rem auto 2.5rem; padding: 1.5rem; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);">
       <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.75rem;">
         <div>
@@ -401,7 +403,7 @@ const allTools: ToolItem[] = [
         <span style="display: block; font-size: 0.78rem; font-weight: 800; text-transform: uppercase; color: #475569; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
           Biological &amp; Chemical Buffers (Henderson-Hasselbalch)
         </span>
-        <div style="flex-wrap: wrap; display: flex; gap: 0.5rem;">
+        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
           <a href="/buffer?sys=phosphate&ph=7.40&c=50&v=1000" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #0369a1;">
             ⚖️ 50 mM PBS Buffer (pH 7.4)
           </a>
@@ -491,23 +493,30 @@ const allTools: ToolItem[] = [
       </h2>
       <div style="display: flex; flex-direction: column; gap: 0.85rem;">
         <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
-          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Are ChemistryDesk calculators suitable for academic and industrial research?</summary>
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How do you calculate C1V1 = C2V2 serial dilutions in ppm and mg/mL?</summary>
           <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
-            Yes. All computational routines apply standard IUPAC physical constants, compensate for crystalline hydration factors (·nH₂O) and assay purity percentages, and are archived under permanent CERN Zenodo DOIs with formatted BibTeX, ACS, and Nature citation support.
+            The C1V1 = C2V2 dilution equation solver computes required stock aliquots by multiplying target concentration and volume, divided by stock concentration ($V_1 = C_2V_2 / C_1$), with automatic unit conversion across ppm, mg/mL, and molarities.
           </p>
         </details>
 
         <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
-          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Do these tools require an active internet connection?</summary>
-          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
-            No. All calculation engines execute 100% client-side inside the user's browser via JavaScript. No experimental inputs, sample concentrations, or imported CSV datasets are ever transmitted to external servers.
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What is the Scherrer formula for crystallite size measurement in PXRD?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7 &gt;;">
+            The Scherrer equation ($\tau = K\lambda / \beta\cos\theta$) calculates mean crystallite domain size from powder X-ray diffraction peak broadening (FWHM $\beta$), factoring in instrumental broadening corrections.
           </p>
         </details>
 
         <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
-          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How does the molarity tool compensate for hydrate salts?</summary>
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How do you balance chemical equations and calculate stoichiometry?</summary>
           <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
-            The solver incorporates stoichiometric hydration waters directly into the effective molecular weight calculation: MW_eff = MW_anh + (n_H2O × 18.015 g/mol). It simultaneously adjusts the required bench mass by the chemical assay fraction (m_bench = m_calc / Purity).
+            Chemical equation balancing uses exact Gaussian matrix elimination for mass conservation, parsing polyatomic formulas and hydrate structures to compute limiting reactants and theoretical percentage yields.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What are the OSHA GHS pictograms and SDS formatting requirements?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Under OSHA HazCom 2012 and UN GHS Revision 10 standards, compliant safety data sheets (SDS) require 16 mandatory sections, standardized pictograms, signal words (DANGER/WARNING), and H/P hazard statements.
           </p>
         </details>
       </div>
