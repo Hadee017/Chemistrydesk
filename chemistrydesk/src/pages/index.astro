@@ -196,6 +196,18 @@ const allTools: ToolItem[] = [
     outputs: "Aufbau Ground State, Noble Gas Core, Quantum Numbers, Magnetism",
     category: "physical",
     description: "Periodic table of elements configuration, 1s 2s 2p orbital distribution, valence electrons, and quantum numbers."
+  },
+  {
+    title: "Adsorption Column & Gas Separation Studio",
+    path: "/adsorption-column",
+    icon: "🗼",
+    badge: "PSA / IAST",
+    badgeColor: "#0d9488",
+    formula: "C_t/C_0 = 1 / [1 + exp((k·q₀·m/Q) - k·C₀·t)]",
+    inputs: "Flow Rate (Q), Feed Conc (C₀), Bed Mass (m), Capacity (q₀)",
+    outputs: "Breakthrough Time (tb), Exhaustion (ts), MTZ Length, IAST α_A/B",
+    category: "materials",
+    description: "Fixed-bed breakthrough curve modeling, binary gas separation selectivity (IAST), and Ergun packed bed pressure drop calculations."
   }
 ];
 ---
@@ -248,7 +260,7 @@ const allTools: ToolItem[] = [
         What is ChemistryDesk? (Direct Overview)
       </h2>
       <p style="font-size: 0.92rem; color: #334155; margin: 0; line-height: 1.6;">
-        <strong>ChemistryDesk</strong> is an open-access general chemistry dictionary and scientific calculation suite providing 15 dedicated computational tools for wet-lab solution preparation, stoichiometry, spectroscopy, materials characterization, and chemical safety. All algorithms execute 100% client-side in the browser with zero remote data logging, full offline capability, and rigorous IUPAC physical constants.
+        <strong>ChemistryDesk</strong> is an open-access general chemistry dictionary and scientific calculation suite providing 16 dedicated computational tools for wet-lab solution preparation, stoichiometry, spectroscopy, materials characterization, and chemical safety. All algorithms execute 100% client-side in the browser with zero remote data logging, full offline capability, and rigorous IUPAC physical constants.
       </p>
     </section>
 
@@ -262,7 +274,7 @@ const allTools: ToolItem[] = [
           <input 
             type="text" 
             id="toolSearchInput" 
-            placeholder="Search all 15 calculators (e.g. C1V1, Molarity, GHS labels, Sig Figs, Scherrer, Titration)..." 
+            placeholder="Search all 16 calculators (e.g. C1V1, Molarity, GHS labels, Sig Figs, Scherrer, Breakthrough)..." 
             aria-label="Filter laboratory tools"
             style="width: 100%; padding: 0.75rem 3.5rem 0.75rem 2.6rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; outline: none; box-sizing: border-box; transition: border-color 0.2s ease;"
           />
@@ -272,7 +284,7 @@ const allTools: ToolItem[] = [
         <!-- Filter Tab Buttons -->
         <div id="filterPillGroup" style="display: flex; gap: 0.4rem; flex-wrap: wrap; width: 100%; justify-content: flex-start;">
           <button type="button" class="filter-btn active" data-category="all" style="padding: 0.45rem 0.85rem; border-radius: 8px; font-size: 0.82rem; font-weight: 700; border: 1px solid #0284c7; background: #0284c7; color: #ffffff; cursor: pointer; transition: all 0.2s ease;">
-            All 15 Tools
+            All 16 Tools
           </button>
           <button type="button" class="filter-btn" data-category="solutions" style="padding: 0.45rem 0.85rem; border-radius: 8px; font-size: 0.82rem; font-weight: 700; border: 1px solid #cbd5e1; background: #f8fafc; color: #475569; cursor: pointer; transition: all 0.2s ease;">
             🧪 Solution Prep &amp; Titration (9)
@@ -281,14 +293,14 @@ const allTools: ToolItem[] = [
             🌈 Spectroscopy &amp; Quantum (3)
           </button>
           <button type="button" class="filter-btn" data-category="materials" style="padding: 0.45rem 0.85rem; border-radius: 8px; font-size: 0.82rem; font-weight: 700; border: 1px solid #cbd5e1; background: #f8fafc; color: #475569; cursor: pointer; transition: all 0.2s ease;">
-            🔬 Materials, XRD &amp; Safety (3)
+            🔬 Materials, XRD &amp; Safety (4)
           </button>
         </div>
 
       </div>
     </section>
 
-    <!-- Complete 15-Tool Grid (60-30-10 Balanced Styling) -->
+    <!-- Complete 16-Tool Grid (60-30-10 Balanced Styling) -->
     <div id="toolsGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 310px), 1fr)); gap: 1.5rem; margin-bottom: 3.5rem;">
       {allTools.map((tool) => {
         const searchCorpus = `${tool.title} ${tool.description} ${tool.formula} ${tool.inputs} ${tool.outputs}`.toLowerCase();
@@ -357,7 +369,7 @@ const allTools: ToolItem[] = [
       <p style="font-size: 0.9rem; margin: 0;">Try searching for parameters like "moles", "FWHM", "BET", "GHS", or "pH".</p>
     </div>
 
-    <!-- Programmatic Long-Tail Solution Formulation Shortcuts (Keyword-Rich Anchors) -->
+    <!-- Programmatic Long-Tail Solution Formulation Shortcuts -->
     <section style="margin: 3rem auto 2.5rem; padding: 1.5rem; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);">
       <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.75rem;">
         <div>
