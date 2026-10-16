@@ -138,7 +138,7 @@ const allTools: ToolItem[] = [
     description: "Acid base titration calculator, titrant and titrate curves, potentiometric titrimetry, and equivalence point solver."
   },
   {
-    title: "PV=nRT Ideal & Real Gas Law Calculator",
+    title: "Ideal & Real Gas Law Calculator (PV = nRT)",
     path: "/gas",
     icon: "🎈",
     badge: "Thermodynamics",
@@ -213,7 +213,7 @@ const allTools: ToolItem[] = [
 ---
 
 <BaseLayout 
-  title="Chemistry Calculators & General Chemistry Dictionary | ChemistryDesk"
+  title="Chemistry Calculators & General Chemistry Dictionary | Chemistrycal"
   description="Free research-grade chemistry calculators and wet chemistry tools. Compute molarity, solution dilutions, buffer capacity, chemical equations, GHS labels, and PXRD Scherrer size."
 >
   <main style="max-width: 1100px; margin: 1.5rem auto 4rem; padding: 0 1.25rem; color: #0f172a; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; box-sizing: border-box; overflow-x: hidden;">
@@ -257,10 +257,10 @@ const allTools: ToolItem[] = [
     <!-- DIRECT DEFINITION & AEO/GEO SUMMARY CALLOUT BOX -->
     <section style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-left: 5px solid #0284c7; border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 2rem;">
       <h2 style="font-size: 0.95rem; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.04em; margin: 0 0 0.4rem 0;">
-        What is ChemistryDesk? (Direct Overview)
+        Overview: What is Chemistrycal
       </h2>
       <p style="font-size: 0.92rem; color: #334155; margin: 0; line-height: 1.6;">
-        <strong>ChemistryDesk</strong> is an open-access general chemistry dictionary and scientific calculation suite providing 16 dedicated computational tools for wet-lab solution preparation, stoichiometry, spectroscopy, materials characterization, and chemical safety. All algorithms execute 100% client-side in the browser with zero remote data logging, full offline capability, and rigorous IUPAC physical constants.
+        Chemistrycal provides client-side computational modules for academic and laboratory calculations, including solution preparation, stoichiometry, and materials analysis. All algorithms execute locally to ensure offline accessibility and complete data privacy.
       </p>
     </section>
 
@@ -388,6 +388,7 @@ const allTools: ToolItem[] = [
         <span style="display: block; font-size: 0.78rem; font-weight: 800; text-transform: uppercase; color: #475569; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
           Molar Solutions (Hydrate &amp; Assay Compensated)
         </span>
+
         <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
           <a href="/molarity?chem=Sodium+Chloride+(NaCl)&c=0.5&v=500&mw=58.44&h=0&p=99.5" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #0f172a;">
             🧪 0.5 M Sodium Chloride (NaCl) Solution Preparation Calculator
@@ -415,6 +416,7 @@ const allTools: ToolItem[] = [
         <span style="display: block; font-size: 0.78rem; font-weight: 800; text-transform: uppercase; color: #475569; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
           Biological &amp; Chemical Buffers (Henderson-Hasselbalch)
         </span>
+
         <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
           <a href="/buffer?sys=phosphate&ph=7.40&c=50&v=1000" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #0369a1;">
             ⚖️ 50 mM Phosphate Buffered Saline (PBS pH 7.4) Recipe
@@ -436,6 +438,7 @@ const allTools: ToolItem[] = [
         <span style="display: block; font-size: 0.78rem; font-weight: 800; text-transform: uppercase; color: #475569; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
           Stock Dilution &amp; Serial Workflows
         </span>
+
         <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
           <a href="/dilution?c1=10&c2=1&v2=1000" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #166534;">
             💧 10x to 1x Working Solution Dilution Calculator (1 L)
@@ -457,6 +460,7 @@ const allTools: ToolItem[] = [
         <span style="display: block; font-size: 0.78rem; font-weight: 800; text-transform: uppercase; color: #475569; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
           Materials Physisorption &amp; Chemical Compliance (BET &amp; GHS)
         </span>
+
         <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
           <a href="/bet" style="text-decoration: none; padding: 0.45rem 0.85rem; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 8px; font-size: 0.82rem; font-weight: 700; color: #047857;">
             📊 MCM-41 Mesoporous Silica Nitrogen BET Surface Area Analyzer
@@ -471,29 +475,25 @@ const allTools: ToolItem[] = [
       </div>
     </section>
 
-    <!-- AdSense E-E-A-T Academic Hub & Researcher Verification -->
+    <!-- Platform Commitment & Continuous Improvement (AdSense-Compliant & Professional) -->
     <section style="background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 2rem 1.75rem; margin-bottom: 3rem; color: #334155; box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);">
       <div style="max-width: 840px; margin: 0 auto; text-align: center;">
-        <div style="font-size: 1.75rem; margin-bottom: 0.5rem;">🏛️</div>
-        <h2 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0 0 0.75rem;">
-          Academic Methodology &amp; Peer-Reviewed Integrity
+        <h2 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0 0 0.75rem;">
+          Platform Commitment &amp; Continuous Improvement
         </h2>
         <p style="font-size: 0.9rem; line-height: 1.65; color: #475569; margin: 0 0 1.25rem;">
-          ChemistryDesk algorithms are authored and maintained by <strong>Bilal Khan</strong>, Physical Chemistry Researcher. All tools execute client-side using standard IUPAC physical constants, Deikman-Scherrer line broadening derivations, and multi-point Brunauer-Emmett-Teller equations. Zero proprietary laboratory formulations or sample masses are transferred across remote servers.
+          Chemistrycal is engineered to deliver reliable, zero-latency computational tools designed to function seamlessly in academic and professional laboratory environments, even under connectivity-constrained conditions. Our ongoing roadmap focuses on expanding our suite of educational and analytical utilities to support students, educators, and researchers globally.
+        </p>
+        <p style="font-size: 0.9rem; line-height: 1.65; color: #475569; margin: 0 0 1.5rem;">
+          We maintain a rigorous commitment to mathematical and chemical precision. However, as an evolving scientific resource, we welcome peer collaboration. If you encounter any calculation discrepancies, technical bugs, or have constructive suggestions for improvement, please report them directly through our <a href="/contact" style="color: #0284c7; font-weight: 700; text-decoration: underline;">Contact Page</a> so our team can review and refine our modules.
         </p>
         
-        <div style="display: flex; justify-content: center; align-items: center; gap: 1rem; flex-wrap: wrap; font-size: 0.84rem; font-weight: 700;">
-          <a href="https://orcid.org/0009-0006-3082-7043" target="_blank" rel="noopener noreferrer" style="color: #0284c7; text-decoration: none; display: inline-flex; align-items: center; gap: 0.25rem;">
-            <span>🆔</span> ORCID: 0009-0006-3082-7043 ↗
-          </a>
-          <span style="color: #cbd5e1;">•</span>
-          <a href="https://zenodo.org/records/23059466" target="_blank" rel="noopener noreferrer" style="color: #0284c7; text-decoration: none; display: inline-flex; align-items: center; gap: 0.25rem;">
-            <span>📦</span> CERN Zenodo Archive (DOI: 10.5281/zenodo.23059466) ↗
-          </a>
-          <span style="color: #cbd5e1;">•</span>
-          <a href="https://wikidata.org/wiki/Q141699332" target="_blank" rel="noopener noreferrer" style="color: #0284c7; text-decoration: none; display: inline-flex; align-items: center; gap: 0.25rem;">
-            <span>🌐</span> Wikidata Entity (Q141699332) ↗
-          </a>
+        <div style="display: flex; justify-content: center; align-items: center; gap: 1rem; font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; flex-wrap: wrap;">
+          <span>100% Client-Side Execution</span>
+          <span>•</span>
+          <span>Zero Data Tracking</span>
+          <span>•</span>
+          <span>Adhering to Web Standards</span>
         </div>
       </div>
     </section>
@@ -501,7 +501,7 @@ const allTools: ToolItem[] = [
     <!-- Homepage AEO/AIO Frequently Asked Questions Accordion -->
     <section style="margin-bottom: 3.5rem;">
       <h2 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-bottom: 1.25rem;">
-        Frequently Asked Questions: ChemistryDesk Computational Suite
+        Frequently Asked Questions: Chemistrycal Computational Suite
       </h2>
       <div style="display: flex; flex-direction: column; gap: 0.85rem;">
         <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
@@ -543,7 +543,7 @@ const allTools: ToolItem[] = [
         </h2>
       </div>
       <p style="font-size: 0.95rem; color: #475569; line-height: 1.7; margin-bottom: 1.25rem;">
-        Modern wet laboratories, cleanrooms, and subterranean analytical suites (such as XRD, SEM, and NMR instrument rooms) frequently have shielded cellular reception and intermittent Wi-Fi. ChemistryDesk is built as an installable Progressive Web App (PWA). All mathematical formulas, formula weights, and serial dilution ladders execute entirely on your device.
+        Modern wet laboratories, cleanrooms, and subterranean analytical suites (such as XRD, SEM, and NMR instrument rooms) frequently have shielded cellular reception and intermittent Wi-Fi. Chemistrycal is built as an installable Progressive Web App (PWA). All mathematical formulas, formula weights, and serial dilution ladders execute entirely on your device.
       </p>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 1rem;">
         <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 1rem;">
@@ -556,7 +556,7 @@ const allTools: ToolItem[] = [
         </div>
         <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 1rem;">
           <strong style="color: #0f172a; font-size: 0.9rem; display: block; margin-bottom: 0.35rem;">💻 Installable on Any Device</strong>
-          <span style="font-size: 0.85rem; color: #64748b;">Click "Install App" in your browser bar to add ChemistryDesk directly to your desktop or mobile home screen.</span>
+          <span style="font-size: 0.85rem; color: #64748b;">Click "Install App" in your browser bar to add Chemistrycal directly to your desktop or mobile home screen.</span>
         </div>
       </div>
     </section>
