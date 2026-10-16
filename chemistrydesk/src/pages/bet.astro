@@ -3,8 +3,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import AuthorCard from '../components/AuthorCard.astro';
 
-const pageTitle = "BET Surface Area Calculator — Multipoint Isotherm & Rouquerol Analysis | ChemistryDesk";
-const pageDescription = "Research-grade BET surface area calculator. Solve multipoint isotherms, verify Rouquerol consistency criteria, and calibrate against certified NIST reference standards.";
+const pageTitle = "BET Surface Area Calculator & Porosity Analysis Studio | Chemistrycal";
+const pageDescription = "Advanced research-grade BET surface area calculator for N2 physisorption and porosity analysis. Solve multipoint isotherms, Rouquerol criteria, and monolayer capacity instantly.";
 const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://chemistrycal.com';
 const canonicalUrl = `${siteUrl}/bet`;
 
@@ -15,7 +15,7 @@ const schemaData = {
       "@type": "WebSite",
       "@id": `${siteUrl}/#website`,
       "url": siteUrl,
-      "name": "ChemistryDesk",
+      "name": "Chemistrycal",
       "description": "Precision Scientific Utilities & Computational Laboratory Engines",
       "inLanguage": "en-US"
     },
@@ -66,7 +66,7 @@ const schemaData = {
     {
       "@type": "WebApplication",
       "@id": `${canonicalUrl}#software`,
-      "name": "ChemistryDesk BET Surface Area & Physisorption Engine",
+      "name": "Chemistrycal BET Surface Area & Physisorption Engine",
       "url": canonicalUrl,
       "applicationCategory": "EducationalApplication, ScientificApplication",
       "operatingSystem": "All modern web browsers",
@@ -127,42 +127,50 @@ const schemaData = {
       "mainEntity": [
         {
           "@type": "Question",
+          "name": "How does a surface area and porosity analyzer perform N2 BET physisorption measurements?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A surface area and porosity analyzer operates by dosing precise increments of nitrogen gas (N2) onto a degassed solid sample at cryogenic temperatures (77.35 K) and measuring equilibrium adsorption volumes across a linear relative pressure range (P/P0 = 0.05 to 0.30)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the full form of BET analysis and how does the Brunauer-Emmett-Teller method work?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The full form of BET analysis is Brunauer-Emmett-Teller analysis, named after Stephen Brunauer, Paul Emmett, and Edward Teller. It extends the Langmuir isotherm to account for multi-layer molecular gas adsorption on solid surfaces."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I calculate specific surface area for activated carbon using BET characterization?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "To calculate specific surface area for activated carbon, acquire an N2 physisorption isotherm, select the appropriate linear pressure range using Rouquerol criteria to account for micropores, solve for monolayer capacity Vm from linear regression, and multiply by the nitrogen cross-sectional conversion factor."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the difference between the BET method and Langmuir adsorption models?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "While the Langmuir model assumes monolayer adsorption on energetically uniform sites without molecular interactions between adsorbed layers, the BET method permits multimolecular physical adsorption layers where subsequent molecules condense with liquid-like heat of vaporization."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I evaluate multipoint adsorption data and Rouquerol criteria in a surface area analyzer?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Rouquerol consistency criteria require that the transformed function Va(1 - P/P0) increases monotonically with relative pressure and that the regression intercept yields a strictly positive C-constant, ensuring thermodynamic validity for microporous and mesoporous solids."
+          }
+        },
+        {
+          "@type": "Question",
           "name": "What is the acceptable relative pressure (P/P0) range for BET calculations?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "For classic mesoporous materials (like MCM-41 or SBA-15), the linear BET range is typically between P/P0 = 0.05 and 0.30. For microporous MOFs and zeolites, pore filling occurs at much lower pressures, shifting the valid linear region down to P/P0 = 0.005 to 0.08."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Why is the calculated BET constant C sometimes negative?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "A negative C-constant is physically impossible. It occurs when relative pressure points beyond monolayer completion or into the micropore filling regime are evaluated. Rouquerol consistency criteria require removing higher pressure points until the intercept becomes positive."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How much sample mass is needed for an accurate BET analysis?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Instrument transducers typically require at least 2 to 5 m² of total surface area in the sample tube. For high-surface-area materials (1000 m²/g), 0.02–0.05 g suffices; for low-surface-area materials (1–5 m²/g), 1 to 2 g is recommended."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Why is Argon preferred over Nitrogen for microporous zeolites and MOFs?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Nitrogen has a permanent quadrupole moment that interacts specifically with exposed metal sites, cations, and polar functional groups, distorting the adsorption isotherm. Argon at 87.27 K is a spherical monoatomic noble gas without a quadrupole moment, providing more accurate pore size distributions."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What is the molecular cross-sectional area of Nitrogen at 77.35 K?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "The standard IUPAC cross-sectional area (sigma) for Nitrogen at 77.35 K is 0.162 nm² (16.2 square Ångströms). This yields a conversion factor of 4.353 m²/cm³ at standard temperature and pressure (STP)."
+            "text": "For classic mesoporous materials, the linear BET range is typically between P/P0 = 0.05 and 0.30. For microporous MOFs and zeolites, pore filling occurs at much lower pressures, shifting the valid linear region down to P/P0 = 0.005 to 0.08."
           }
         }
       ]
@@ -190,7 +198,7 @@ const schemaData = {
             <span>Physisorption &amp; Porous Materials</span>
           </div>
           <h1 style="font-size: clamp(1.75rem, 4vw, 2.25rem); font-weight: 800; color: #ffffff; letter-spacing: -0.025em; margin: 0; line-height: 1.2;">
-            BET Surface Area Calculator (Multipoint Physisorption)
+            BET Surface Area Calculator &amp; Porosity Analysis Studio
           </h1>
           <p style="color: #cbd5e1; font-size: 0.95rem; margin-top: 0.65rem; margin-bottom: 0; line-height: 1.6;">
             Multipoint isotherm regression, automated Rouquerol consistency evaluation, Excel/CSV paste importer, and single-point QC estimator.
@@ -331,6 +339,7 @@ const schemaData = {
             <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #38bdf8;">
               Multipoint BET Surface Area (S_BET)
             </span>
+
             <div id="primaryResult" style="font-size: clamp(2rem, 5vw, 2.75rem); font-weight: 800; color: #38bdf8; margin: 0.25rem 0 0.75rem 0; word-break: break-all;">--</div>
 
             <div style="border-top: 1px solid #334155; padding-top: 1rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; font-size: 0.85rem;">
@@ -731,37 +740,44 @@ const schemaData = {
 
       <div style="display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 2rem;">
         <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
-          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What is the mathematical equation for converting Vm to SBET?</summary>
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How does a surface area and porosity analyzer perform N2 BET physisorption measurements?</summary>
           <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
-            The specific surface area is derived via <strong>S<sub>BET</sub> = (V<sub>m</sub> &middot; N<sub>A</sub> &middot; &sigma;) / V<sub>molar</sub></strong>, where N<sub>A</sub> is Avogadro's number (6.022 &times; 10²³), &sigma; is the cross-sectional area of the probe gas molecule (0.162 nm² for N₂ at 77.35 K), and V<sub>molar</sub> is 22,414 cm³/mol at STP. For nitrogen, this reduces to <strong>S<sub>BET</sub> = V<sub>m</sub> &times; 4.353 m²/g</strong>.
+            A surface area and porosity analyzer operates by dosing precise increments of nitrogen gas (N2) onto a degassed solid sample at cryogenic temperatures (77.35 K) and measuring equilibrium adsorption volumes across a linear relative pressure range (P/P0 = 0.05 to 0.30).
           </p>
         </details>
 
         <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
-          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Why must samples be degassed under vacuum before BET analysis?</summary>
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What is the full form of BET analysis and how does the Brunauer-Emmett-Teller method work?</summary>
           <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
-            Atmospheric moisture, carbon dioxide, and synthetic solvents adsorb strongly into pores during synthesis and air exposure. Vacuum outgassing at 100°C–150°C cleanses the interstitial surface area, preventing underestimation of the true monolayer volume.
+            The full form of BET analysis is Brunauer-Emmett-Teller analysis, named after Stephen Brunauer, Paul Emmett, and Edward Teller. It extends the Langmuir isotherm to account for multi-layer molecular gas adsorption on solid surfaces.
           </p>
         </details>
 
         <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
-          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What is the minimum recommended surface area in the measurement cell?</summary>
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How do I calculate specific surface area for activated carbon using BET characterization?</summary>
           <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
-            Commercial manometric physisorption analyzers require a minimum of <strong>2.0 to 5.0 m²</strong> of absolute surface area in the sample cell to achieve pressure transducer signal-to-noise stability. For low-surface-area materials (e.g. 10 m²/g), at least 0.2–0.5 g of dry sample should be loaded.
+            To calculate specific surface area for activated carbon, acquire an N2 physisorption isotherm, select the appropriate linear pressure range using Rouquerol criteria to account for micropores, solve for monolayer capacity Vm from linear regression, and multiply by the nitrogen cross-sectional conversion factor.
           </p>
         </details>
 
         <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
-          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Why is Argon preferred over Nitrogen for microporous zeolites and MOFs?</summary>
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What is the difference between the BET method and Langmuir adsorption models?</summary>
           <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
-            Dinitrogen possesses a permanent electric quadrupole moment that interacts strongly with localized electrical fields (such as exposed transition metal sites in HKUST-1 or balancing cations in zeolites). This interaction alters orientation and packing density, shifting monolayer formation unpredictably. Argon at 87.27 K has spherical symmetry with zero quadrupole moment, providing clean van der Waals physisorption.
+            While the Langmuir model assumes monolayer adsorption on energetically uniform sites without molecular interactions between adsorbed layers, the BET method permits multimolecular physical adsorption layers where subsequent molecules condense with liquid-like heat of vaporization.
           </p>
         </details>
 
         <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
-          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">When should CO2 adsorption at 273.15 K be utilized instead of N2 at 77 K?</summary>
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How do I evaluate multipoint adsorption data and Rouquerol criteria in a surface area analyzer?</summary>
           <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
-            For materials with narrow micropores (&lt; 0.7 nm, e.g. certain carbon molecular sieves), nitrogen molecules at 77.35 K encounter severe kinetic diffusion limitations due to their low kinetic energy and slow pore entry. Performing CO₂ physisorption at 273.15 K (0°C) uses high thermal energy to rapidly achieve equilibrium, allowing accurate measurement of sub-nanometer ultramicropores.
+            Rouquerol consistency criteria require that the transformed function Va(1 - P/P0) increases monotonically with relative pressure and that the regression intercept yields a strictly positive C-constant, ensuring thermodynamic validity for microporous and mesoporous solids.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What is the acceptable relative pressure (P/P0) range for BET calculations?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            For classic mesoporous materials, the linear BET range is typically between P/P0 = 0.05 and 0.30. For microporous MOFs and zeolites, pore filling occurs at much lower pressures, shifting the valid linear region down to P/P0 = 0.005 to 0.08.
           </p>
         </details>
       </div>
@@ -773,7 +789,7 @@ const schemaData = {
   <div id="printLabelModal" style="display: none;">
     <div id="labelBox" style="width: 3.75in; height: 2.0in; border: 2px solid #000; padding: 0.2in; box-sizing: border-box; font-family: sans-serif; background: #fff; color: #000; position: relative;">
       <div style="border-bottom: 2px solid #000; padding-bottom: 4px; display: flex; justify-content: space-between; align-items: baseline;">
-        <span style="font-size: 11pt; font-weight: 900; letter-spacing: -0.02em;">CHEMISTRYDESK PHYSISORPTION</span>
+        <span style="font-size: 11pt; font-weight: 900; letter-spacing: -0.02em;">CHEMISTRYCAL PHYSISORPTION</span>
         <span id="labelDate" style="font-size: 8pt; font-weight: bold;"></span>
       </div>
       <div style="margin-top: 6px;">
@@ -1191,7 +1207,7 @@ const schemaData = {
         var url = window.URL.createObjectURL(blob);
         var a = document.createElement('a');
         a.href = url;
-        a.download = 'chemistrydesk_isotherm_points.csv';
+        a.download = 'chemistrycal_isotherm_points.csv';
         a.click();
       });
     }
@@ -1241,20 +1257,20 @@ const schemaData = {
     var currentYear = new Date().getFullYear();
 
     var betCitations = {
-      bibtex: '@software{khan_chemistrydesk_bet_' + currentYear + ',\n' +
+      bibtex: '@software{khan_chemistrycal_bet_' + currentYear + ',\n' +
               '  author    = {Khan, Bilal},\n' +
-              '  title     = {ChemistryDesk: Multipoint BET Surface Area & Physisorption Engine},\n' +
+              '  title     = {Chemistrycal: Multipoint BET Surface Area & Physisorption Engine},\n' +
               '  year      = {' + currentYear + '},\n' +
               '  version   = {v1.0.1},\n' +
               '  publisher = {Zenodo},\n' +
               '  doi       = {' + doi + '},\n' +
               '  url       = {https://chemistrycal.com/bet}\n' +
               '}',
-      acs: 'Khan, B. ChemistryDesk: Multipoint BET Surface Area & Physisorption Engine, version 1.0.1; Zenodo, ' + currentYear + '. https://doi.org/' + doi + '.',
-      rsc: 'B. Khan, ChemistryDesk: Multipoint BET Surface Area & Physisorption Engine, version 1.0.1, Zenodo, ' + currentYear + ', DOI: ' + doi + '.',
-      nature: 'Khan, B. ChemistryDesk: Multipoint BET Surface Area & Physisorption Engine. Zenodo https://doi.org/' + doi + ' (' + currentYear + ').',
-      elsevier: 'Khan, B., ' + currentYear + '. ChemistryDesk: Multipoint BET Surface Area & Physisorption Engine (Version 1.0.1). Zenodo. https://doi.org/' + doi + '.',
-      wiley: 'B. Khan, ChemistryDesk: Multipoint BET Surface Area & Physisorption Engine, version 1.0.1, Zenodo, ' + currentYear + ', DOI: ' + doi + '.'
+      acs: 'Khan, B. Chemistrycal: Multipoint BET Surface Area & Physisorption Engine, version 1.0.1; Zenodo, ' + currentYear + '. https://doi.org/' + doi + '.',
+      rsc: 'B. Khan, Chemistrycal: Multipoint BET Surface Area & Physisorption Engine, version 1.0.1, Zenodo, ' + currentYear + ', DOI: ' + doi + '.',
+      nature: 'Khan, B. Chemistrycal: Multipoint BET Surface Area & Physisorption Engine. Zenodo https://doi.org/' + doi + ' (' + currentYear + ').',
+      elsevier: 'Khan, B., ' + currentYear + '. Chemistrycal: Multipoint BET Surface Area & Physisorption Engine (Version 1.0.1). Zenodo. https://doi.org/' + doi + '.',
+      wiley: 'B. Khan, Chemistrycal: Multipoint BET Surface Area & Physisorption Engine, version 1.0.1, Zenodo, ' + currentYear + ', DOI: ' + doi + '.'
     };
 
     var currentInlineFormat = 'bibtex';
