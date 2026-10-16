@@ -4,8 +4,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import AuthorCard from '../components/AuthorCard.astro';
 import { REAGENTS_DATABASE } from '../data/reagents';
 
-const pageTitle = "Offline Solution Molarity Calculator & Solute Mass Studio | ChemistryDesk";
-const pageDescription = "Research-grade offline laboratory molarity calculator. Automatically compensates for crystalline hydration water (·nH2O) and chemical assay purity. Features dynamic GHS safety alerts, step-by-step SOPs, Overleaf LaTeX export, and printable bottle labels.";
+const pageTitle = "Molarity Calculator & Molar Mass Reagent Solver | Chemistrycal";
+const pageDescription = "Advanced research-grade molarity calculator and solute mass solver. Calculate grams to moles, molar mass of bench reagents (HCl, CaCO3, KMnO4, CaCl2), percent-to-molarity conversions, and assay purity instantly.";
 const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://chemistrycal.com';
 const canonicalUrl = `${siteUrl}/molarity`;
 
@@ -16,7 +16,7 @@ const schemaData = {
       "@type": "WebSite",
       "@id": `${siteUrl}/#website`,
       "url": siteUrl,
-      "name": "ChemistryDesk",
+      "name": "Chemistrycal",
       "description": "Precision Scientific Utilities & Computational Laboratory Engines",
       "inLanguage": "en-US"
     },
@@ -67,7 +67,7 @@ const schemaData = {
     {
       "@type": "WebApplication",
       "@id": `${canonicalUrl}#app`,
-      "name": "ChemistryDesk Offline Solution Molarity & Reagent Prep Studio",
+      "name": "Chemistrycal Molarity Calculator & Reagent Prep Studio",
       "url": canonicalUrl,
       "applicationCategory": "ScientificApplication, EducationalApplication",
       "operatingSystem": "All modern web browsers (Desktop, Tablet, Mobile)",
@@ -128,58 +128,50 @@ const schemaData = {
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "Does ChemistryDesk Molarity Studio work offline in the laboratory?",
+          "name": "How do I use a molarity calculator to calculate mass from moles?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes. ChemistryDesk uses a client-side Service Worker architecture. Once loaded in your browser, the molarity solver, hydrate compensator, and reagent label generator function completely offline at the bench without an active internet connection."
+            "text": "To calculate mass from moles using a molarity calculator, multiply the target molarity (mol/L) by the solution volume (L) to get moles of solute, then multiply by the effective molar mass (g/mol). The Chemistrycal solver automatically incorporates hydrate stoichiometry and assay purity."
           }
         },
         {
           "@type": "Question",
-          "name": "What is the difference between molarity and molality?",
+          "name": "How do I convert percent concentration (% w/v or w/w) to molarity?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Molarity (M) denotes moles of solute per liter of total solution, which is temperature-dependent due to solvent thermal expansion. Molality (m) is moles of solute per kilogram of pure solvent, which remains strictly temperature-invariant."
+            "text": "Percent-to-molarity conversion depends on whether the concentration is weight-by-volume (% w/v = g/100 mL) or weight-by-weight (% w/w). For % w/v, multiply by 10 and divide by the molecular weight. For % w/w, factor in the reagent's density and manufacturer assay purity."
           }
         },
         {
           "@type": "Question",
-          "name": "Why must chemical assay purity be factored into molarity mass calculations?",
+          "name": "What is the molarity of concentrated HCl stock solutions?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Commercial reagents are rarely 100% pure due to atmospheric moisture absorption, trace isomers, or manufacturing tolerances. If a salt has an assay of 98%, weighing 100 g supplies only 98 g of active solute, producing an under-concentrated solution unless mathematically compensated."
+            "text": "Certified American Chemical Society (ACS) grade concentrated hydrochloric acid (HCl) typically has an assay purity of 37% w/w and a density of approximately 1.19 g/mL, yielding an effective stock molarity of ~12.0 M."
           }
         },
         {
           "@type": "Question",
-          "name": "How does crystalline hydration water affect balance weighing?",
+          "name": "How do I find the molar mass and effective molecular weight of salts like CaCl₂ or KMnO₄?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Hydrates incorporate water molecules into their crystal lattice (e.g., CuSO4·5H2O). Because water adds significant molecular mass without contributing active ions, weighing must be based on the complete hydrate formula weight (249.68 g/mol) rather than the anhydrous weight (159.60 g/mol)."
+            "text": "You can look up exact anhydrous molar masses and crystalline hydrate forms (such as CaCl₂·2H₂O or KMnO₄) instantly using the Chemistrycal reagent database auto-lookup or by entering custom formula weights."
           }
         },
         {
           "@type": "Question",
-          "name": "Why should solutes never be dissolved directly inside a volumetric flask?",
+          "name": "Why must manufacturer assay purity and crystal hydration water be factored into molarity balance mass?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Dissolution of salts frequently produces significant enthalpy of solution (exothermic heat or endothermic cooling). Volumetric flasks are calibrated strictly at 20°C; thermal expansion of glass and liquids causes significant volumetric calibration errors before thermal equilibrium is restored."
+            "text": "Commercial reagents are rarely 100% pure or anhydrous due to moisture absorption. Factoring in assay purity (P%) and lattice water (·nH2O) ensures that your balance mass supplies the exact stoichiometric amount of active solute."
           }
         },
         {
           "@type": "Question",
-          "name": "What are the ASTM Class-A volumetric flask tolerances?",
+          "name": "How do I prepare primary analytical standard solutions like calcium carbonate (CaCO₃) or potassium permanganate?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Per ASTM E288 and ISO 1042 standards, Class-A flasks have strictly enforced volume limits: 100 mL flasks carry a tolerance of ±0.08 mL, 250 mL flasks have ±0.12 mL, 500 mL flasks have ±0.20 mL, and 1000 mL flasks have ±0.30 mL."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Why must primary standards such as KHP and Na2CO3 be oven-dried prior to weighing?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Primary standards pick up surface-adsorbed atmospheric moisture during storage. Oven drying (e.g., KHP at 110°C–120°C for 2 hours, or anhydrous Na2CO3 at 260°C–270°C for 1 hour) drives off free moisture so that analytical balance readings reflect 100.0% pure stoichiometric mass."
+            "text": "Weigh high-purity primary standard solids after proper oven drying. Dissolve in an initial volume of solvent in a beaker, allow thermal equilibrium, and transfer quantitatively to an ASTM Class-A volumetric flask before diluting to the meniscus line."
           }
         }
       ]
@@ -207,7 +199,7 @@ const schemaData = {
             <span>Analytical Volumetric Formulation</span>
           </div>
           <h1 style="font-size: clamp(1.6rem, 4vw, 2.25rem); font-weight: 800; color: #ffffff; letter-spacing: -0.025em; margin: 0; line-height: 1.2;">
-            Solution Molarity &amp; Reagent Prep Studio
+            Molarity Calculator, Molar Mass &amp; Reagent Mass Solver
           </h1>
           <p style="color: #cbd5e1; font-size: 0.95rem; margin-top: 0.5rem; margin-bottom: 0; line-height: 1.6;">
             Two-way analytical mass solver with crystal hydration water compensation (&middot;nH₂O), manufacturer assay purity corrections, dynamic GHS safety alerts, and benchtop bottle label generation.
@@ -386,6 +378,7 @@ const schemaData = {
           <span style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #38bdf8;">
             Mass of Reagent to Weigh on Balance
           </span>
+
           <div id="primaryMassGrams" style="font-size: clamp(2.4rem, 6vw, 3.25rem); font-weight: 900; color: #38bdf8; margin: 0.4rem 0 0.75rem 0; line-height: 1; word-break: break-all;">--</div>
 
           <div style="border-top: 1px solid #334155; padding-top: 1.25rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr)); gap: 1rem; font-size: 0.9rem;">
@@ -455,7 +448,7 @@ const schemaData = {
     <div id="molarityLabelWrapper" style="display: none; margin-bottom: 3.5rem;">
       <div id="labelBoxMolarity" style="width: 3.75in; max-width: 100%; border: 2px solid #000; padding: 0.25in; box-sizing: border-box; font-family: system-ui, sans-serif; background: #fff; color: #000; margin: 0 auto; box-shadow: 0 4px 10px rgba(0,0,0,0.06);">
         <div style="border-bottom: 2px solid #000; padding-bottom: 4px; display: flex; justify-content: space-between; align-items: baseline;">
-          <span style="font-size: 11pt; font-weight: 900; letter-spacing: -0.02em;">ChemistryDesk LAB STANDARD</span>
+          <span style="font-size: 11pt; font-weight: 900; letter-spacing: -0.02em;">Chemistrycal LAB STANDARD</span>
           <span id="labelDate" style="font-size: 8pt; font-weight: bold;"></span>
         </div>
         <div style="margin-top: 8px;">
@@ -742,37 +735,44 @@ const schemaData = {
       
       <div style="display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 2rem;">
         <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
-          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What is the physical difference between molarity and molality?</summary>
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How do I use a molarity calculator to calculate mass from moles?</summary>
           <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
-            Molarity (M) denotes moles of solute per liter of total solution, which is temperature-dependent due to solvent thermal expansion. Molality (m) represents moles of solute per kilogram of pure solvent, which remains strictly independent of temperature.
+            To calculate mass from moles using a molarity calculator, multiply the target molarity (mol/L) by the solution volume (L) to get moles of solute, then multiply by the effective molar mass (g/mol). The Chemistrycal solver automatically incorporates hydrate stoichiometry and assay purity.
           </p>
         </details>
 
         <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
-          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Why must chemical assay purity be factored into molarity calculations?</summary>
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How do I convert percent concentration (% w/v or w/w) to molarity?</summary>
           <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
-            Manufacturer reagents are rarely 100% pure due to residual moisture and trace synthetic precursors. If an assay reads 96.0%, weighing 100 g supplies only 96 g of active solute, yielding an under-concentrated standard unless compensated.
+            Percent-to-molarity conversion depends on whether the concentration is weight-by-volume (% w/v = g/100 mL) or weight-by-weight (% w/w). For % w/v, multiply by 10 and divide by the molecular weight. For % w/w, factor in the reagent's density and manufacturer assay purity.
           </p>
         </details>
 
         <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
-          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Why should solutions never be dissolved directly inside a volumetric flask?</summary>
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What is the molarity of concentrated HCl stock solutions?</summary>
           <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
-            Salts often display significant dissolution heats (&Delta;H<sub>solution</sub>). Volumetric flasks are calibrated strictly at 20&deg;C; dissolving hot or cold reagents alters glass dimensions and causes inaccurate volume markings before thermal equilibrium.
+            Certified American Chemical Society (ACS) grade concentrated hydrochloric acid (HCl) typically has an assay purity of 37% w/w and a density of approximately 1.19 g/mL, yielding an effective stock molarity of ~12.0 M.
           </p>
         </details>
 
         <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
-          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What are the ASTM Class-A volumetric flask tolerances?</summary>
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How do I find the molar mass and effective molecular weight of salts like CaCl₂ or KMnO₄?</summary>
           <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
-            Per ASTM E288 and ISO 1042 standards, Class-A flasks have strictly enforced volume limits: 100 mL flasks carry a tolerance of &plusmn;0.08 mL, 250 mL flasks have &plusmn;0.12 mL, 500 mL flasks have &plusmn;0.20 mL, and 1000 mL flasks have &plusmn;0.30 mL.
+            You can look up exact anhydrous molar masses and crystalline hydrate forms (such as CaCl₂·2H₂O or KMnO₄) instantly using the Chemistrycal reagent database auto-lookup or by entering custom formula weights.
           </p>
         </details>
 
         <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
-          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Why must primary standards such as KHP and Na2CO3 be oven-dried prior to weighing?</summary>
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Why must manufacturer assay purity and crystal hydration water be factored into molarity balance mass?</summary>
           <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
-            Primary standards pick up surface-adsorbed atmospheric moisture during storage. Oven drying (e.g., KHP at 110°C–120°C for 2 hours, or anhydrous Na₂CO₃ at 260°C–270°C for 1 hour) drives off free moisture so that analytical balance readings reflect 100.0% pure stoichiometric mass.
+            Commercial reagents are rarely 100% pure or anhydrous due to moisture absorption. Factoring in assay purity (P%) and lattice water (·nH2O) ensures that your balance mass supplies the exact stoichiometric amount of active solute.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How do I prepare primary analytical standard solutions like calcium carbonate (CaCO₃) or potassium permanganate?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Weigh high-purity primary standard solids after proper oven drying. Dissolve in an initial volume of solvent in a beaker, allow thermal equilibrium, and transfer quantitatively to an ASTM Class-A volumetric flask before diluting to the meniscus line.
           </p>
         </details>
       </div>
@@ -1114,20 +1114,20 @@ const schemaData = {
     const currentYear = new Date().getFullYear();
 
     const molCitations = {
-      bibtex: `@software{khan_chemistrydesk_molarity_${currentYear},
-  author        = {Khan, Bilal},
-  title         = {ChemistryDesk: Solution Molarity Studio & Hydrate Compensation Engine},
-  year          = {${currentYear}},
-  version       = {v1.0.1},
-  publisher     = {Zenodo},
-  doi           = {${doi}},
-  url           = {https://chemistrycal.com/molarity}
+      bibtex: `@software{khan_chemistrycal_molarity_${currentYear},
+  author         = {Khan, Bilal},
+  title          = {Chemistrycal: Solution Molarity Studio & Hydrate Compensation Engine},
+  year           = {${currentYear}},
+  version        = {v1.0.1},
+  publisher      = {Zenodo},
+  doi            = {${doi}},
+  url            = {https://chemistrycal.com/molarity}
 }`,
-      acs: `Khan, B. ChemistryDesk: Solution Molarity Studio & Hydrate Compensation Engine, version 1.0.1; Zenodo, ${currentYear}. https://doi.org/${doi}.`,
-      rsc: `B. Khan, ChemistryDesk: Solution Molarity Studio & Hydrate Compensation Engine, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`,
-      nature: `Khan, B. ChemistryDesk: Solution Molarity Studio & Hydrate Compensation Engine. Zenodo https://doi.org/${doi} (${currentYear}).`,
-      elsevier: `Khan, B., ${currentYear}. ChemistryDesk: Solution Molarity Studio & Hydrate Compensation Engine (Version 1.0.1). Zenodo. https://doi.org/${doi}.`,
-      wiley: `B. Khan, ChemistryDesk: Solution Molarity Studio & Hydrate Compensation Engine, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`
+      acs: `Khan, B. Chemistrycal: Solution Molarity Studio & Hydrate Compensation Engine, version 1.0.1; Zenodo, ${currentYear}. https://doi.org/${doi}.`,
+      rsc: `B. Khan, Chemistrycal: Solution Molarity Studio & Hydrate Compensation Engine, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`,
+      nature: `Khan, B. Chemistrycal: Solution Molarity Studio & Hydrate Compensation Engine. Zenodo https://doi.org/${doi} (${currentYear}).`,
+      elsevier: `Khan, B., ${currentYear}. Chemistrycal: Solution Molarity Studio & Hydrate Compensation Engine (Version 1.0.1). Zenodo. https://doi.org/${doi}.`,
+      wiley: `B. Khan, Chemistrycal: Solution Molarity Studio & Hydrate Compensation Engine, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`
     };
 
     let currentInlineFormat = 'bibtex';
