@@ -3,8 +3,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import AuthorCard from '../components/AuthorCard.astro';
 
-const pageTitle = "Solution Dilution Calculator (C1V1 = C2V2) & Serial Ladder Studio | ChemistryDesk";
-const pageDescription = "Free research-grade dilution calculator. Solves C1V1 = C2V2 with automated multi-tube serial dilution ladders, diluent volume breakdown, and printable SOPs.";
+const pageTitle = "C1V1 Calculator & Solution Dilution Formula Calculator | Chemistrycal";
+const pageDescription = "Free research-grade C1V1 = C2V2 dilution calculator and equation solver. Calculate concentration, mg/mL, ppm, antibody dilutions, and multi-step serial ladders instantly.";
 const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://chemistrycal.com';
 const canonicalUrl = `${siteUrl}/dilution`;
 
@@ -15,7 +15,7 @@ const schemaData = {
       "@type": "WebSite",
       "@id": `${siteUrl}/#website`,
       "url": siteUrl,
-      "name": "ChemistryDesk",
+      "name": "Chemistrycal",
       "description": "Precision Scientific Utilities & Computational Laboratory Engines",
       "inLanguage": "en-US"
     },
@@ -66,7 +66,7 @@ const schemaData = {
     {
       "@type": "WebApplication",
       "@id": `${canonicalUrl}#app`,
-      "name": "ChemistryDesk Serial Dilution & C1V1 Solver Studio",
+      "name": "Chemistrycal C1V1 Calculator & Serial Dilution Studio",
       "url": canonicalUrl,
       "applicationCategory": "EducationalApplication, ScientificApplication",
       "operatingSystem": "All modern web browsers (Desktop, Tablet, Mobile)",
@@ -191,10 +191,10 @@ const schemaData = {
             <span>Conservation of Mass Engine</span>
           </div>
           <h1 style="font-size: clamp(1.6rem, 4vw, 2.25rem); font-weight: 800; color: #ffffff; letter-spacing: -0.025em; margin: 0; line-height: 1.2;">
-            Stock Dilution &amp; Serial Ladder Studio
+            C1V1 &amp; C2V2 Solution Dilution Calculator &amp; Equation Solver
           </h1>
           <p style="color: #cbd5e1; font-size: 0.95rem; margin-top: 0.5rem; margin-bottom: 0; line-height: 1.6;">
-            Two-way mass conservation engine, multi-tube serial ladders, dynamic semi-log graphs, non-ideal solvent contraction warnings, and benchtop label printing.
+            Two-way C1V1 calculator, mg/mL and ppm concentration adjustments, multi-tube C1V1 C2V2 C3V3 serial dilution ladders, and printable benchtop SOPs.
           </p>
         </div>
       </div>
@@ -365,6 +365,7 @@ const schemaData = {
             <span id="readoutLabel" style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #38bdf8;">
               Calculated Aliquot (V₁)
             </span>
+
             <div id="primaryResult" style="font-size: clamp(2rem, 5vw, 2.5rem); font-weight: 800; color: #38bdf8; margin: 0.25rem 0 0.75rem 0; word-break: break-all;">--</div>
 
             <div style="border-top: 1px solid #334155; padding-top: 1rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 130px), 1fr)); gap: 1rem; font-size: 0.85rem;">
@@ -465,6 +466,7 @@ const schemaData = {
           <span style="font-size: 0.85rem; color: #64748b;">
             Step Dilution Factor: <strong id="stepDFText" style="color: #0284c7;">10&times;</strong> | Series Type: <strong id="seriesTypeText" style="color: #0f172a;">1:10 Logarithmic Ladder</strong>
           </span>
+
           <button id="downloadCsvBtn" type="button" style="background: #0284c7; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; min-height: 36px;">
             📥 Export CSV Spreadsheet
           </button>
@@ -678,7 +680,7 @@ const schemaData = {
   <div id="printLabelModal" style="display: none;">
     <div id="labelBox" style="width: 3.75in; height: 2.0in; border: 2px solid #000; padding: 0.2in; box-sizing: border-box; font-family: sans-serif; background: #fff; color: #000; position: relative;">
       <div style="border-bottom: 2px solid #000; padding-bottom: 4px; display: flex; justify-content: space-between; align-items: baseline;">
-        <span style="font-size: 12pt; font-weight: 900; letter-spacing: -0.02em;">ChemistryDesk LAB STANDARD</span>
+        <span style="font-size: 12pt; font-weight: 900; letter-spacing: -0.02em;">Chemistrycal LAB STANDARD</span>
         <span id="labelDate" style="font-size: 8pt; font-weight: bold;"></span>
       </div>
       <div style="margin-top: 8px;">
@@ -1157,20 +1159,20 @@ const schemaData = {
     const currentYear = new Date().getFullYear();
 
     const dilCitations: Record<string, string> = {
-      bibtex: `@software{khan_chemistrydesk_dilution_${currentYear},
-  author        = {Khan, Bilal},
-  title         = {ChemistryDesk: Stock Dilution & Serial Ladder Studio},
-  year          = {${currentYear}},
-  version       = {v1.0.1},
-  publisher     = {Zenodo},
-  doi           = {${doi}},
-  url           = {https://chemistrycal.com/dilution}
+      bibtex: `@software{khan_chemistrycal_dilution_${currentYear},
+  author         = {Khan, Bilal},
+  title          = {Chemistrycal: Stock Dilution & Serial Ladder Studio},
+  year           = {${currentYear}},
+  version        = {v1.0.1},
+  publisher      = {Zenodo},
+  doi            = {${doi}},
+  url            = {https://chemistrycal.com/dilution}
 }`,
-      acs: `Khan, B. ChemistryDesk: Stock Dilution & Serial Ladder Studio, version 1.0.1; Zenodo, ${currentYear}. https://doi.org/${doi}.`,
-      rsc: `B. Khan, ChemistryDesk: Stock Dilution & Serial Ladder Studio, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`,
-      nature: `Khan, B. ChemistryDesk: Stock Dilution & Serial Ladder Studio. Zenodo https://doi.org/${doi} (${currentYear}).`,
-      elsevier: `Khan, B., ${currentYear}. ChemistryDesk: Stock Dilution & Serial Ladder Studio (Version 1.0.1). Zenodo. https://doi.org/${doi}.`,
-      wiley: `B. Khan, ChemistryDesk: Stock Dilution & Serial Ladder Studio, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`
+      acs: `Khan, B. Chemistrycal: Stock Dilution & Serial Ladder Studio, version 1.0.1; Zenodo, ${currentYear}. https://doi.org/${doi}.`,
+      rsc: `B. Khan, Chemistrycal: Stock Dilution & Serial Ladder Studio, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`,
+      nature: `Khan, B. Chemistrycal: Stock Dilution & Serial Ladder Studio. Zenodo https://doi.org/${doi} (${currentYear}).`,
+      elsevier: `Khan, B., ${currentYear}. Chemistrycal: Stock Dilution & Serial Ladder Studio (Version 1.0.1). Zenodo. https://doi.org/${doi}.`,
+      wiley: `B. Khan, Chemistrycal: Stock Dilution & Serial Ladder Studio, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`
     };
 
     let currentInlineFormat = 'bibtex';
