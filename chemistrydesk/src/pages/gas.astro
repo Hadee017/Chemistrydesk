@@ -3,8 +3,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import AuthorCard from '../components/AuthorCard.astro';
 
-const pageTitle = "Ideal & Real Gas Law Engine | PV=nRT, Van der Waals & Density | ChemistryDesk";
-const pageDescription = "Solve ideal and real gas equations (PV=nRT & Van der Waals). Compute pressure, volume, temperature, moles, density, and compressibility factor with interactive isotherm curves.";
+const pageTitle = "PV=nRT Ideal & Real Gas Law Calculator | Van der Waals Studio | Chemistrycal";
+const pageDescription = "Free online PV=nRT calculator. Solve ideal and real gas laws, find pressure, volume, moles, and temperature using the universal gas constant (R), and apply Van der Waals equation of state constants a and b.";
 const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://chemistrycal.com';
 const canonicalUrl = `${siteUrl}/gas`;
 
@@ -15,7 +15,7 @@ const schemaData = {
       "@type": "WebSite",
       "@id": `${siteUrl}/#website`,
       "url": siteUrl,
-      "name": "ChemistryDesk",
+      "name": "Chemistrycal",
       "description": "Precision Scientific Utilities & Computational Laboratory Engines",
       "inLanguage": "en-US"
     },
@@ -66,7 +66,7 @@ const schemaData = {
     {
       "@type": "WebApplication",
       "@id": `${canonicalUrl}#software`,
-      "name": "ChemistryDesk Ideal & Real Gas Thermodynamics Studio",
+      "name": "Chemistrycal PV=nRT Ideal & Real Gas Thermodynamics Studio",
       "url": canonicalUrl,
       "applicationCategory": "EducationalApplication, ScientificApplication",
       "operatingSystem": "All modern web browsers",
@@ -91,7 +91,7 @@ const schemaData = {
     {
       "@type": "HowTo",
       "@id": `${canonicalUrl}#howto`,
-      "name": "How to Calculate Ideal and Real Gas Thermodynamic Parameters",
+      "name": "How to Calculate Ideal and Real Gas Thermodynamic Parameters Using a PV=nRT Calculator",
       "step": [
         {
           "@type": "HowToStep",
@@ -106,12 +106,12 @@ const schemaData = {
         {
           "@type": "HowToStep",
           "name": "Solve Ideal Gas Law",
-          "text": "Calculate the theoretical ideal gas property via PV = nRT."
+          "text": "Calculate the theoretical ideal gas property via PV = nRT using the universal gas constant R (8.314 J/(mol·K))."
         },
         {
           "@type": "HowToStep",
           "name": "Apply Van der Waals Real Gas Corrections",
-          "text": "Account for molecular attraction (a) and excluded co-volume (b) via (P + a(n/V)^2)(V - nb) = nRT to determine the compressibility factor (Z)."
+          "text": "Account for molecular attraction (a) and excluded co-volume (b) via the Van der Waals equation of state to determine the compressibility factor (Z)."
         }
       ]
     },
@@ -121,18 +121,18 @@ const schemaData = {
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "What is the difference between an ideal gas and a real gas?",
+          "name": "How do I use a PV=nRT calculator to solve for P, V, n, or T?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "An ideal gas assumes point-mass particles with zero finite volume and zero intermolecular attractive forces. Real gases possess finite molecular volumes and attractive dispersion forces, causing measurable deviations at elevated pressures and low temperatures."
+            "text": "To use a PV=nRT calculator, select your target variable to solve for from the dropdown menu, input the known parameters along with their units, and the calculator automatically rearranges the ideal gas equation to compute the unknown value."
           }
         },
         {
           "@type": "Question",
-          "name": "How does the Van der Waals equation account for non-ideal gas behavior?",
+          "name": "How does the Van der Waals equation of state account for non-ideal gas behavior?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "The Van der Waals equation introduces two empirical correction parameters: 'a' compensates for intermolecular attractive dispersion forces (reducing effective observed wall pressure), while 'b' accounts for the finite physical co-volume occupied by one mole of gas particles."
+            "text": "The Van der Waals equation of state introduces two empirical correction parameters: 'a' and 'b' constants. 'a' compensates for intermolecular attractive dispersion forces (reducing effective observed wall pressure), while 'b' accounts for the finite physical co-volume occupied by one mole of gas particles."
           }
         },
         {
@@ -153,10 +153,10 @@ const schemaData = {
         },
         {
           "@type": "Question",
-          "name": "What is modern IUPAC Standard Temperature and Pressure (STP)?",
+          "name": "What is the relationship between PV=nRT and PV=NkT?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Since 1982, IUPAC defines standard temperature as 273.15 K (0 °C) and standard pressure as exactly 100 kPa (1 bar), resulting in an ideal molar volume of 22.711 L/mol rather than the pre-1982/NIST value of 22.414 L/mol (at 1 atm)."
+            "text": "While PV=nRT uses the number of moles (n) and the universal gas constant R (8.314 J/(mol·K)), PV=NkT uses the actual number of gas molecules (N) and the Boltzmann constant (k), where k equals R divided by Avogadro's number."
           }
         }
       ]
@@ -184,10 +184,10 @@ const schemaData = {
             <span>Physical Chemistry &amp; Real Gas Solver</span>
           </div>
           <h1 style="font-size: clamp(1.6rem, 4vw, 2.35rem); font-weight: 800; color: #ffffff; letter-spacing: -0.025em; margin: 0; line-height: 1.2;">
-            Ideal &amp; Real Gas Thermodynamics Studio
+            PV=nRT Ideal &amp; Real Gas Law Calculator &amp; Thermodynamics Studio
           </h1>
           <p style="color: #cbd5e1; font-size: 1rem; margin-top: 0.65rem; margin-bottom: 0; line-height: 1.6;">
-            Universal five-variable solver for <span style="color: #38bdf8; font-weight: 700;">PV = nRT</span> and <span style="color: #34d399; font-weight: 700;">Van der Waals Real Gas</span>, compressibility factor (Z), density (&rho;), and dynamic isotherm curve.
+            Universal five-variable PV=nRT calculator for <span style="color: #38bdf8; font-weight: 700;">PV = nRT</span> and <span style="color: #34d399; font-weight: 700;">Van der Waals Real Gas</span>, compressibility factor (Z), density (&rho;), and dynamic isotherm curve.
           </p>
         </div>
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
@@ -212,10 +212,10 @@ const schemaData = {
     <!-- DIRECT DEFINITION & GEO SUMMARY CALLOUT BOX -->
     <section style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-left: 5px solid #0284c7; border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 1.75rem;">
       <h2 style="font-size: 1rem; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.04em; margin: 0 0 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
-        <span>💡</span> What is the Ideal Gas Law and Real Gas Behavior? (Direct Answer)
+        <span>💡</span> What is the Ideal Gas Law (PV=nRT) and Real Gas Behavior? (Direct Answer)
       </h2>
       <p style="font-size: 0.92rem; color: #334155; margin: 0; line-height: 1.6;">
-        The <strong>Ideal Gas Law</strong> states that <code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">PV = nRT</code>, relating pressure (P), volume (V), molar amount (n), and absolute temperature (T). Real gases deviate at high pressures and low temperatures, requiring the <strong>Van der Waals equation</strong>: <code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">(P + a(n/V)²)(V - nb) = nRT</code>, where 'a' corrects for intermolecular attraction and 'b' accounts for molecular co-volume.
+        The <strong>Ideal Gas Law</strong> states that <code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">PV = nRT</code>, relating pressure (P), volume (V), molar amount (n), and absolute temperature (T) via the universal gas constant R (8.314 J/(mol·K)). Real gases deviate at high pressures and low temperatures, requiring the <strong>Van der Waals equation of state</strong>: <code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">(P + a(n/V)²)(V - nb) = nRT</code>, where 'a' and 'b' constants correct for intermolecular attraction and molecular co-volume.
       </p>
     </section>
 
@@ -225,6 +225,7 @@ const schemaData = {
         <span style="font-size: 0.8rem; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.05em;">
           Select Benchmark Gas:
         </span>
+
         <div style="display: flex; gap: 0.4rem; flex-wrap: wrap; align-items: center;">
           <span style="font-size: 0.75rem; font-weight: 700; color: #64748b;">STP Presets:</span>
           <button type="button" class="cond-preset-btn" data-p="1.0" data-pu="bar" data-t="0.0" data-tu="C" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.25rem 0.6rem; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; color: #0284c7; min-height: 28px;">IUPAC STP (1 bar, 0°C)</button>
@@ -259,6 +260,7 @@ const schemaData = {
           <span id="activeGasLabel" style="font-size: 0.75rem; font-weight: 800; color: #0284c7; background: #f0f9ff; padding: 3px 10px; border-radius: 6px; border: 1px solid #bae6fd;">
             Hypothetical Ideal Gas
           </span>
+
         </div>
 
         <!-- Variable to Solve For Selector -->
@@ -369,9 +371,11 @@ const schemaData = {
             <span id="outputHeaderLabel" style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #38bdf8;">
               Calculated Pressure (Ideal Gas)
             </span>
+
             <span id="nonIdealityBadge" style="font-size: 0.72rem; font-weight: 800; padding: 2px 8px; border-radius: 9999px; background: #0284c7; color: #ffffff;">
               Ideal Behavior (0.00% dev)
             </span>
+
           </div>
 
           <div id="primarySolvedDisplay" style="font-size: clamp(2rem, 5vw, 2.75rem); font-weight: 900; color: #38bdf8; margin: 0.5rem 0; font-family: ui-monospace, monospace; line-height: 1.2; word-break: break-all;">
@@ -423,6 +427,7 @@ const schemaData = {
             <span style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; color: #1e293b;">
               Boyle's Law Isotherm (P vs. V at Const T)
             </span>
+
             <span style="font-size: 0.72rem; color: #64748b; font-weight: 600;">P = nRT / V</span>
           </div>
 
@@ -664,42 +669,42 @@ const schemaData = {
 
       <!-- FAQ Accordion (Expanded 5 High-Value Sections) -->
       <h3 style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-top: 3rem; margin-bottom: 1.25rem;">
-        Frequently Asked Questions: Gas Thermodynamics
+        Frequently Asked Questions: PV=nRT &amp; Gas Thermodynamics
       </h3>
 
       <div style="display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 2rem;">
         <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
-          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Why is IUPAC STP defined at 1 bar rather than 1 atm?</summary>
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How do I use a PV=nRT calculator to solve for P, V, n, or T?</summary>
           <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
-            In 1982, IUPAC adopted 1 bar (100,000 Pa) as standard pressure to align gas thermodynamics directly with the coherent SI system of units (1 bar = exactly 10⁵ N/m²), whereas 1 atm (101,325 Pa) was an arbitrary barometric average at sea level.
+            To use a PV=nRT calculator, select your target variable to solve for from the dropdown menu, input the known parameters along with their units, and the calculator automatically rearranges the ideal gas equation to compute the unknown value.
           </p>
         </details>
 
         <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
-          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">When is the compressibility factor Z less than or greater than 1?</summary>
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How does the Van der Waals equation of state account for non-ideal gas behavior?</summary>
           <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
-            When Z &lt; 1, attractive intermolecular forces dominate, causing the gas to occupy less volume or exert less pressure than an ideal gas. When Z &gt; 1 (typically at ultra-high pressures exceeding 200–300 bar), the physical co-volume of molecules dominates, making the gas less compressible than an ideal gas.
+            The Van der Waals equation of state introduces two empirical correction parameters: 'a' and 'b' constants. 'a' compensates for intermolecular attractive dispersion forces, while 'b' accounts for the finite physical co-volume occupied by one mole of gas particles.
           </p>
         </details>
 
         <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
-          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Why do parameters 'a' and 'b' remain constant during calculations?</summary>
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What does a compressibility factor (Z) different from 1.0 indicate?</summary>
           <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
-            Van der Waals parameters are intrinsic molecular constants specific to each chemical substance. 'a' quantifies the molecule's polarizability and attractive dispersion force, while 'b' reflects the molecular exclusion volume. Unlike P, V, or T, they do not vary with system state changes.
+            The compressibility factor Z = PV/(nRT). If Z = 1.0, the gas behaves ideally. If Z &lt; 1.0, attractive intermolecular forces dominate, making the gas more compressible than ideal. If Z > 1.0, repulsive forces and finite molecular exclusion volume dominate, making the gas less compressible.
           </p>
         </details>
 
         <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
-          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Under what conditions does a real gas behave almost identically to an ideal gas?</summary>
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Why are parameters 'a' and 'b' constant while operating pressure and temperature change?</summary>
           <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
-            Real gases exhibit near-ideal behavior (Z &approx; 1) at <strong>low pressures</strong> (typically below 1–2 bar) and <strong>high temperatures</strong> relative to their critical temperature. In this regime, intermolecular distances are large, making molecular volume negligible and thermal kinetic energy high enough to overcome attractive forces.
+            Van der Waals parameters 'a' and 'b' represent intrinsic, substance-specific chemical properties (molecular polarizability and steric hard-sphere diameter) rather than operational thermodynamic state variables. They remain fixed for a given chemical species.
           </p>
         </details>
 
         <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
-          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How does gas density vary with changes in pressure and temperature?</summary>
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What is the relationship between PV=nRT and PV=NkT?</summary>
           <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
-            From the Ideal Gas Law, density is expressed as &rho; = (P &middot; M) / (R &middot; T). Density is directly proportional to absolute pressure (compression increases mass per unit volume) and inversely proportional to absolute temperature (heating causes thermal expansion, decreasing density).
+            While PV=nRT uses the number of moles (n) and the universal gas constant R (8.314 J/(mol·K)), PV=NkT uses the actual number of gas molecules (N) and the Boltzmann constant (k), where k equals R divided by Avogadro's number.
           </p>
         </details>
       </div>
@@ -1068,7 +1073,7 @@ const schemaData = {
     // Copy Report
     document.getElementById('btnCopyReport')?.addEventListener('click', async () => {
       const report = `========================================
-CHEMISTRYDESK GAS THERMODYNAMICS REPORT
+CHEMISTRYCAL GAS THERMODYNAMICS REPORT
 Target: ${selSolveFor.value}
 Solved Result: ${primarySolvedDisplay.innerText}
 Real Gas Output: ${realGasOutputText.innerText}
@@ -1082,7 +1087,7 @@ Molar Volume: ${dispMolarVol.textContent}
 
     // Copy LaTeX
     document.getElementById('btnCopyLatex')?.addEventListener('click', async () => {
-      const latex = `% Ideal Gas Law & Van der Waals (ChemistryDesk)
+      const latex = `% Ideal Gas Law & Van der Waals (Chemistrycal)
 \\begin{aligned}
   PV &= nRT \\implies P = \\frac{nRT}{V} \\\\
   \\left(P + a\\frac{n^2}{V^2}\\right)(V - nb) &= nRT
@@ -1101,20 +1106,20 @@ Molar Volume: ${dispMolarVol.textContent}
     const year = new Date().getFullYear();
 
     const citations: Record<string, string> = {
-      bibtex: `@software{khan_chemistrydesk_gas_${year},
-  author        = {Khan, Bilal},
-  title         = {ChemistryDesk: Ideal & Real Gas Thermodynamics Studio},
-  year          = {${year}},
-  version       = {v1.0.1},
-  publisher     = {Zenodo},
-  doi           = {${doi}},
-  url           = {https://chemistrycal.com/gas}
+      bibtex: `@software{khan_chemistrycal_gas_${year},
+  author         = {Khan, Bilal},
+  title          = {Chemistrycal: Ideal & Real Gas Thermodynamics Studio},
+  year           = {${year}},
+  version        = {v1.0.1},
+  publisher      = {Zenodo},
+  doi            = {${doi}},
+  url            = {https://chemistrycal.com/gas}
 }`,
-      acs: `Khan, B. ChemistryDesk: Ideal & Real Gas Thermodynamics Studio, version 1.0.1; Zenodo, ${year}. https://doi.org/${doi}.`,
-      rsc: `B. Khan, ChemistryDesk: Ideal & Real Gas Thermodynamics Studio, version 1.0.1, Zenodo, ${year}, DOI: ${doi}.`,
-      nature: `Khan, B. ChemistryDesk: Ideal & Real Gas Thermodynamics Studio. Zenodo https://doi.org/${doi} (${year}).`,
-      elsevier: `Khan, B., ${year}. ChemistryDesk: Ideal & Real Gas Thermodynamics Studio (Version 1.0.1). Zenodo. https://doi.org/${doi}.`,
-      wiley: `B. Khan, ChemistryDesk: Ideal & Real Gas Thermodynamics Studio, version 1.0.1, Zenodo, ${year}, DOI: ${doi}.`
+      acs: `Khan, B. Chemistrycal: Ideal & Real Gas Thermodynamics Studio, version 1.0.1; Zenodo, ${year}. https://doi.org/${doi}.`,
+      rsc: `B. Khan, Chemistrycal: Ideal & Real Gas Thermodynamics Studio, version 1.0.1, Zenodo, ${year}, DOI: ${doi}.`,
+      nature: `Khan, B. Chemistrycal: Ideal & Real Gas Thermodynamics Studio. Zenodo https://doi.org/${doi} (${year}).`,
+      elsevier: `Khan, B., ${year}. Chemistrycal: Ideal & Real Gas Thermodynamics Studio (Version 1.0.1). Zenodo. https://doi.org/${doi}.`,
+      wiley: `B. Khan, Chemistrycal: Ideal & Real Gas Thermodynamics Studio, version 1.0.1, Zenodo, ${year}, DOI: ${doi}.`
     };
 
     let activeFormat = 'bibtex';
