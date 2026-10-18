@@ -3,8 +3,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import AuthorCard from '../components/AuthorCard.astro';
 
-const pageTitle = "Significant Figures Calculator | Sig Fig Counter, Rounder & Expression Solver | ChemistryDesk";
-const pageDescription = "Universal significant figures studio. Count sig figs with dynamic visual digit anatomy, solve multi-step expressions with intermediate precision audits, and round to target scientific precision.";
+const pageTitle = "Calculate Significant Figures & Significant Digits | Chemistrycal";
+const pageDescription = "Free online significant figures calculator and significant digits solver. Determine the number of significant figures, calculate scientific figures, and round numbers.";
 const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://chemistrycal.com';
 const canonicalUrl = `${siteUrl}/sig-figs`;
 
@@ -15,7 +15,7 @@ const schemaData = {
       "@type": "WebSite",
       "@id": `${siteUrl}/#website`,
       "url": siteUrl,
-      "name": "ChemistryDesk",
+      "name": "Chemistrycal",
       "description": "Precision Scientific Utilities & Computational Laboratory Engines",
       "inLanguage": "en-US"
     },
@@ -66,7 +66,7 @@ const schemaData = {
     {
       "@type": "WebApplication",
       "@id": `${canonicalUrl}#software`,
-      "name": "ChemistryDesk Significant Figures & Scientific Precision Studio",
+      "name": "Chemistrycal Significant Figures & Scientific Precision Studio",
       "url": canonicalUrl,
       "applicationCategory": "EducationalApplication, ScientificApplication",
       "operatingSystem": "All modern web browsers",
@@ -119,6 +119,22 @@ const schemaData = {
       "@type": "FAQPage",
       "@id": `${canonicalUrl}#faq`,
       "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How do you calculate significant figures and solve significant figures problems?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "To calculate significant figures and solve significant figures problems, follow chemistry significant figures rules: identify non-zero digits, count captive zeros, ignore leading zeros, and treat trailing zeros as significant only if a decimal point is present."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do you correct 0.00798516 to three significant figures?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "To correct 0.00798516 to three significant figures, start from the first non-zero digit (7), count three digits (7, 9, 8), and look at the fourth digit (5) to round up. The result is 0.00799."
+          }
+        },
         {
           "@type": "Question",
           "name": "What are the five golden rules of significant figures?",
@@ -184,10 +200,10 @@ const schemaData = {
             <span>Precision &amp; Error Propagation Core &bull; ASTM / IUPAC Rules</span>
           </div>
           <h1 style="font-size: clamp(1.6rem, 4vw, 2.35rem); font-weight: 800; color: #ffffff; letter-spacing: -0.025em; margin: 0; line-height: 1.2;">
-            Significant Figures Studio
+            Significant Figures Studio &amp; Calculator
           </h1>
           <p style="color: #cbd5e1; font-size: 1rem; margin-top: 0.65rem; margin-bottom: 0; line-height: 1.6;">
-            Count significant figures with real-time visual digit anatomy, evaluate mixed multi-step lab calculations with intermediate precision audits, and round raw measurements accurately.
+            Calculate significant figures, determine significant digits, solve math significant figures expressions with intermediate precision audits, and round numbers accurately.
           </p>
         </div>
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
@@ -212,10 +228,10 @@ const schemaData = {
     <!-- DIRECT DEFINITION & GEO SUMMARY CALLOUT BOX -->
     <section style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-left: 5px solid #0284c7; border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 1.75rem;">
       <h2 style="font-size: 1rem; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.04em; margin: 0 0 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
-        <span>💡</span> What Are Significant Figures? (Direct Answer)
+        <span>💡</span> Understanding Significant Figures &amp; Significant Digits (Direct Answer)
       </h2>
       <p style="font-size: 0.92rem; color: #334155; margin: 0; line-height: 1.6;">
-        <strong>Significant figures (sig figs)</strong> are the meaningful digits in a measured value that reflect the precision of an experimental apparatus. They comprise all certain digits plus one estimated final digit. In calculations, addition/subtraction results are limited by <strong>fewest decimal places</strong>, while multiplication/division results are limited by <strong>fewest total significant figures</strong>.
+        <strong>Significant figures</strong> (or <strong>significant digits</strong>) are the meaningful digits in a measured value that reflect the precision of an experimental apparatus. When learning how to <strong>calculate significant figures</strong> or <strong>determine the number of significant figures</strong>, remember that addition and subtraction results are limited by the fewest decimal places, while multiplication and division results are limited by the fewest total significant figures.
       </p>
     </section>
 
@@ -231,7 +247,7 @@ const schemaData = {
         <button type="button" class="preset-pill" data-mode="count" data-val="6.022e23" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">6.022 &times; 10²³ (Avogadro)</button>
         <button type="button" class="preset-pill" data-mode="expr" data-val="(14.285 - 0.12) / 2.05" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">(14.285 - 0.12) / 2.05 (Mixed)</button>
         <button type="button" class="preset-pill" data-mode="expr" data-val="4.56 * 1.4" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">4.56 &times; 1.4 (Multiplication)</button>
-        <button type="button" class="preset-pill" data-mode="round" data-val="149.528" data-target="3" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Round 149.528 to 3 SF</button>
+        <button type="button" class="preset-pill" data-mode="round" data-val="0.00798516" data-target="3" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Correct 0.00798516 to 3 SF</button>
       </div>
     </div>
 
@@ -308,7 +324,7 @@ const schemaData = {
                 type="text" 
                 inputmode="decimal"
                 id="inpRoundVal" 
-                value="149.528" 
+                value="0.00798516" 
                 style="width: 100%; box-sizing: border-box; padding: 0.65rem 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 1.15rem; font-weight: 800; color: #0f172a; font-family: monospace; outline: none;"
               />
             </div>
@@ -504,10 +520,10 @@ const schemaData = {
 
       <!-- NIST / ASTM APPARATUS TOLERANCE & SIG FIG BENCHMARK TABLE -->
       <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2.75rem; margin-bottom: 0.75rem;">
-        3. NIST &amp; ASTM Laboratory Apparatus Tolerances &amp; Measurement Sig Figs
+        3. NIST &amp; ASTM Laboratory Apparatus Tolerances &amp; Measurement Sig Figs (e.g., 10 mL &amp; 100 mL Graduated Cylinders)
       </h3>
       <p style="font-size: 0.9rem; color: #475569; margin-bottom: 1rem;">
-        Standard tolerances and recorded significant figures across common analytical laboratory apparatus:
+        Standard tolerances and recorded significant figures across common analytical laboratory apparatus, including standard 10 ml and 100 ml graduated cylinders:
       </p>
 
       <div style="border: 1px solid #cbd5e1; border-radius: 8px; overflow-x: auto; margin-bottom: 2rem;">
@@ -530,39 +546,39 @@ const schemaData = {
               <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">6 Sig Figs</td>
             </tr>
             <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
-              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Top-Loading Balance (2-Place)</td>
-              <td style="padding: 0.65rem 0.75rem;">1200 g</td>
-              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">&plusmn; 0.01 g</td>
-              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">45.20 g</td>
-              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">4 Sig Figs</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">10 mL Graduated Cylinder</td>
+              <td style="padding: 0.65rem 0.75rem;">10 mL</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">&plusmn; 0.1 mL</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">8.2 mL</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">2 Sig Figs</td>
             </tr>
             <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">100 mL Graduated Cylinder</td>
+              <td style="padding: 0.65rem 0.75rem;">100 mL</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">&plusmn; 0.5 mL</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">48.5 mL</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">3 Sig Figs</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
               <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Class A Volumetric Flask</td>
               <td style="padding: 0.65rem 0.75rem;">250 mL</td>
               <td style="padding: 0.65rem 0.75rem; font-family: monospace;">&plusmn; 0.12 mL</td>
               <td style="padding: 0.65rem 0.75rem; font-family: monospace;">250.00 mL</td>
               <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">5 Sig Figs</td>
             </tr>
-            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+            <tr style="border-bottom: 1px solid #e2e8f0;">
               <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Class A Transfer Pipette</td>
               <td style="padding: 0.65rem 0.75rem;">25 mL</td>
               <td style="padding: 0.65rem 0.75rem; font-family: monospace;">&plusmn; 0.03 mL</td>
               <td style="padding: 0.65rem 0.75rem; font-family: monospace;">25.00 mL</td>
               <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">4 Sig Figs</td>
             </tr>
-            <tr style="border-bottom: 1px solid #e2e8f0;">
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
               <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Class A Glass Burette</td>
               <td style="padding: 0.65rem 0.75rem;">50 mL</td>
               <td style="padding: 0.65rem 0.75rem; font-family: monospace;">&plusmn; 0.05 mL</td>
               <td style="padding: 0.65rem 0.75rem; font-family: monospace;">34.25 mL</td>
               <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">4 Sig Figs</td>
-            </tr>
-            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
-              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Graduated Cylinder</td>
-              <td style="padding: 0.65rem 0.75rem;">100 mL</td>
-              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">&plusmn; 0.5 mL</td>
-              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">48.5 mL</td>
-              <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">3 Sig Figs</td>
             </tr>
             <tr>
               <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Laboratory Thermometer</td>
@@ -577,10 +593,24 @@ const schemaData = {
 
       <!-- FAQ Accordion -->
       <h3 style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-top: 3rem; margin-bottom: 1.25rem;">
-        Frequently Asked Questions: Significant Figures
+        Frequently Asked Questions: Significant Figures &amp; Significant Digits
       </h3>
 
       <div style="display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 2rem;">
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How do you calculate significant figures and solve significant figures problems?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            To calculate significant figures and solve significant figures problems, follow chemistry significant figures rules: identify non-zero digits, count captive zeros, ignore leading zeros, and treat trailing zeros as significant only if a decimal point is present.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How do you correct 0.00798516 to three significant figures?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            To correct 0.00798516 to three significant figures, start from the first non-zero digit (7), count three digits (7, 9, 8), and look at the fourth digit (5) to round up. The result is 0.00799.
+          </p>
+        </details>
+
         <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
           <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What are the five golden rules of significant figures?</summary>
           <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
@@ -937,7 +967,7 @@ const schemaData = {
     document.getElementById('btnResetDefault')?.addEventListener('click', () => {
       inpCountVal.value = '0.005020';
       inpExprVal.value = '(14.285 - 0.12) / 2.05';
-      inpRoundVal.value = '149.528';
+      inpRoundVal.value = '0.00798516';
       inpTargetSigFigs.value = '3';
       switchMode('count');
     });
@@ -1043,18 +1073,18 @@ const schemaData = {
     const year = new Date().getFullYear();
 
     const citations: Record<string, string> = {
-      bibtex: `@software{khan_chemistrydesk_sigfigs_${year},
-  author        = {Khan, Bilal},
-  title         = {ChemistryDesk: Significant Figures & Scientific Precision Studio},
-  year          = {${year}},
-  version       = {v1.0.1},
-  publisher     = {Zenodo},
-  doi           = {${doi}},
-  url           = {https://chemistrycal.com/sig-figs}
+      bibtex: `@software{khan_chemistrycal_sigfigs_${year},
+  author         = {Khan, Bilal},
+  title          = {Chemistrycal: Significant Figures & Scientific Precision Studio},
+  year           = {${year}},
+  version        = {v1.0.1},
+  publisher      = {Zenodo},
+  doi            = {${doi}},
+  url            = {https://chemistrycal.com/sig-figs}
 }`,
-      acs: `Khan, B. ChemistryDesk: Significant Figures & Scientific Precision Studio, version 1.0.1; Zenodo, ${year}. https://doi.org/${doi}.`,
-      rsc: `B. Khan, ChemistryDesk: Significant Figures & Scientific Precision Studio, version 1.0.1, Zenodo, ${year}, DOI: ${doi}.`,
-      nature: `Khan, B. ChemistryDesk: Significant Figures & Scientific Precision Studio. Zenodo https://doi.org/${doi} (${year}).`
+      acs: `Khan, B. Chemistrycal: Significant Figures & Scientific Precision Studio, version 1.0.1; Zenodo, ${year}. https://doi.org/${doi}.`,
+      rsc: `B. Khan, Chemistrycal: Significant Figures & Scientific Precision Studio, version 1.0.1, Zenodo, ${year}, DOI: ${doi}.`,
+      nature: `Khan, B. Chemistrycal: Significant Figures & Scientific Precision Studio. Zenodo https://doi.org/${doi} (${year}).`
     };
 
     let activeFormat = 'bibtex';
