@@ -1,4 +1,5 @@
 ---
+// src/pages/BaseLayout.astro
 interface Props {
   title: string;
   description: string;
@@ -19,7 +20,7 @@ const cleanPath = canonicalPath.split('?')[0];
 const fullCanonicalUrl = new URL(cleanPath, siteOrigin).href;
 
 // Detect tool pages dynamically via prop or route
-const toolRoutes = ['/molarity', '/dilution', '/scherrer'];
+const toolRoutes = ['/molarity', '/dilution', '/scherrer', '/molar-mass', '/buffer', '/stoichiometry', '/bet', '/spectro', '/ghs', '/isotherm', '/titration', '/gas', '/ph', '/sig-figs', '/electron-configuration', '/adsorption-column'];
 const isToolPage = isTool || toolRoutes.some(route => cleanPath.startsWith(route));
 
 // Dynamic breadcrumb generation for search engines
@@ -52,7 +53,7 @@ const graphNodes: any[] = [
     "@type": "WebSite",
     "@id": "https://chemistrycal.com/#website",
     "url": "https://chemistrycal.com",
-    "name": "ChemistryDesk",
+    "name": "Chemistrycal",
     "description": "Research-grade benchtop computational suite and laboratory calculator.",
     "publisher": {
       "@id": "https://chemistrycal.com/#author"
@@ -157,7 +158,7 @@ const globalSchemaGraph = {
       <a href="/" style="display: flex; align-items: center; gap: 0.65rem; text-decoration: none; color: inherit;">
         <span style="font-size: 1.6rem; line-height: 1;">⚗️</span>
         <div style="display: flex; flex-direction: column;">
-          <span style="font-size: 1.15rem; font-weight: 800; letter-spacing: -0.025em; color: #0f172a; line-height: 1.15;">ChemistryDesk</span>
+          <span style="font-size: 1.15rem; font-weight: 800; letter-spacing: -0.025em; color: #0f172a; line-height: 1.15;">Chemistrycal</span>
           <span style="font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #0284c7;">Benchtop Studio</span>
         </div>
       </a>
@@ -167,10 +168,11 @@ const globalSchemaGraph = {
         <a href="/" style={`text-decoration: none; font-size: 0.85rem; font-weight: 700; padding: 0.45rem 0.85rem; border-radius: 8px; transition: all 0.2s ease; ${Astro.url.pathname === '/' ? 'background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd;' : 'background: transparent; color: #475569; border: 1px solid transparent;'}`}>Home</a>
         <a href="/molarity" style={`text-decoration: none; font-size: 0.85rem; font-weight: 700; padding: 0.45rem 0.85rem; border-radius: 8px; transition: all 0.2s ease; ${Astro.url.pathname.startsWith('/molarity') ? 'background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd;' : 'background: transparent; color: #475569; border: 1px solid transparent;'}`}>Molarity</a>
         <a href="/dilution" style={`text-decoration: none; font-size: 0.85rem; font-weight: 700; padding: 0.45rem 0.85rem; border-radius: 8px; transition: all 0.2s ease; ${Astro.url.pathname.startsWith('/dilution') ? 'background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd;' : 'background: transparent; color: #475569; border: 1px solid transparent;'}`}>Dilution</a>
+        <a href="/molar-mass" style={`text-decoration: none; font-size: 0.85rem; font-weight: 700; padding: 0.45rem 0.85rem; border-radius: 8px; transition: all 0.2s ease; ${Astro.url.pathname.startsWith('/molar-mass') ? 'background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd;' : 'background: transparent; color: #475569; border: 1px solid transparent;'}`}>Molar Mass</a>
         <a href="/scherrer" style={`text-decoration: none; font-size: 0.85rem; font-weight: 700; padding: 0.45rem 0.85rem; border-radius: 8px; transition: all 0.2s ease; ${Astro.url.pathname.startsWith('/scherrer') ? 'background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd;' : 'background: transparent; color: #475569; border: 1px solid transparent;'}`}>PXRD Scherrer</a>
         <a href="/about" style={`text-decoration: none; font-size: 0.85rem; font-weight: 700; padding: 0.45rem 0.85rem; border-radius: 8px; transition: all 0.2s ease; ${Astro.url.pathname.startsWith('/about') ? 'background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd;' : 'background: transparent; color: #475569; border: 1px solid transparent;'}`}>About</a>
         <a href="/contact" style={`text-decoration: none; font-size: 0.85rem; font-weight: 700; padding: 0.45rem 0.85rem; border-radius: 8px; transition: all 0.2s ease; ${Astro.url.pathname.startsWith('/contact') ? 'background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd;' : 'background: transparent; color: #475569; border: 1px solid transparent;'}`}>Contact</a>
-        <button id="pwaInstallBtn" type="button" title="Install ChemistryDesk as a native offline app" style="display: inline-flex; flex-direction: column; align-items: center; justify-content: center; padding: 0.35rem 0.85rem; border-radius: 8px; background: #0284c7; color: #ffffff; border: none; cursor: pointer; transition: all 0.2s ease; line-height: 1.15; box-shadow: 0 1px 3px rgba(2, 132, 199, 0.3);">
+        <button id="pwaInstallBtn" type="button" title="Install Chemistrycal as a native offline app" style="display: inline-flex; flex-direction: column; align-items: center; justify-content: center; padding: 0.35rem 0.85rem; border-radius: 8px; background: #0284c7; color: #ffffff; border: none; cursor: pointer; transition: all 0.2s ease; line-height: 1.15; box-shadow: 0 1px 3px rgba(2, 132, 199, 0.3);">
           <span style="display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.8rem; font-weight: 700;">
             <span>📥</span> Install App
           </span>
@@ -188,22 +190,52 @@ const globalSchemaGraph = {
     <slot />
   </div>
 
+  <!-- Automated Global Internal Link Network Footer Hub -->
+  <section style="max-width: 1000px; margin: 4rem auto 1.5rem; padding: 1.5rem; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; box-sizing: border-box;">
+    <h3 style="margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 0.5rem;">
+      <span>🔗</span> Core Chemistrycal Calculator Suite
+    </h3>
+    <p style="margin: 0 0 1rem; font-size: 0.85rem; color: #64748b; line-height: 1.4;">
+      Explore our complete network of research-grade wet chemistry, stoichiometry, and materials analysis utilities:
+    </p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 0.75rem;">
+      <a href="/molarity" style="display: block; padding: 0.75rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
+        <div style="font-weight: 700; font-size: 0.88rem; color: #0284c7;">Molarity Studio &rarr;</div>
+      </a>
+      <a href="/dilution" style="display: block; padding: 0.75rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
+        <div style="font-weight: 700; font-size: 0.88rem; color: #0284c7;">Stock Dilution &rarr;</div>
+      </a>
+      <a href="/molar-mass" style="display: block; padding: 0.75rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
+        <div style="font-weight: 700; font-size: 0.88rem; color: #0284c7;">Molar Mass Calculator &rarr;</div>
+      </a>
+      <a href="/scherrer" style="display: block; padding: 0.75rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
+        <div style="font-weight: 700; font-size: 0.88rem; color: #0284c7;">PXRD Scherrer Studio &rarr;</div>
+      </a>
+      <a href="/buffer" style="display: block; padding: 0.75rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
+        <div style="font-weight: 700; font-size: 0.88rem; color: #0284c7;">Buffer Calculator &rarr;</div>
+      </a>
+      <a href="/stoichiometry" style="display: block; padding: 0.75rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
+        <div style="font-weight: 700; font-size: 0.88rem; color: #0284c7;">Stoichiometry &rarr;</div>
+      </a>
+    </div>
+  </section>
+
   <!-- AdSense Mandatory Compliance Footer -->
-  <footer style="margin-top: 5rem; border-top: 1px solid #e2e8f0; background: #ffffff; padding: 2.5rem 1.5rem; text-align: center; font-size: 0.875rem; color: #64748b;">
+  <footer style="margin-top: 1.5rem; border-top: 1px solid #e2e8f0; background: #ffffff; padding: 2.5rem 1.5rem; text-align: center; font-size: 0.875rem; color: #64748b;">
     <div style="display: flex; justify-content: center; gap: 1.75rem; flex-wrap: wrap; margin-bottom: 1rem; font-weight: 500;">
       <a href="/about" style="color: #475569; text-decoration: none;">About Us</a>
       <a href="/contact" style="color: #475569; text-decoration: none;">Contact Us</a>
       <a href="/privacy-policy" style="color: #475569; text-decoration: none;">Privacy Policy</a>
       <a href="/terms" style="color: #475569; text-decoration: none;">Terms of Service</a>
     </div>
-    <div>&copy; 2026 ChemistryDesk. Designed for benchtop precision and educational reference.</div>
+    <div>&copy; 2026 Chemistrycal. Designed for benchtop precision and educational reference.</div>
   </footer>
 
   <script is:inline>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('/sw.js')
-        .then(() => console.log('ChemistryDesk offline engine active.'))
+        .then(() => console.log('Chemistrycal offline engine active.'))
         .catch((err) => console.warn('PWA registration error:', err));
     });
   }
@@ -226,7 +258,7 @@ const globalSchemaGraph = {
         }
         deferredPrompt = null;
       } else {
-        alert("To install ChemistryDesk for offline benchtop use:\n\n• Desktop: Click the 'Install' icon inside your browser's address bar (top-right).\n• Mobile: Tap your browser menu (⋮ or Share) and select 'Add to Home screen'.");
+        alert("To install Chemistrycal for offline benchtop use:\n\n• Desktop: Click the 'Install' icon inside your browser's address bar (top-right).\n• Mobile: Tap your browser menu (⋮ or Share) and select 'Add to Home screen'.");
       }
     });
   }
