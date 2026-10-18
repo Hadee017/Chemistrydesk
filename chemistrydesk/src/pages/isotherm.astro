@@ -3,8 +3,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import AuthorCard from '../components/AuthorCard.astro';
 
-const pageTitle = "Adsorption Isotherm Studio | Langmuir, Freundlich, Temkin & D-R Models | ChemistryDesk";
-const pageDescription = "Fit Langmuir, Freundlich, Temkin, and Dubinin-Radushkevich adsorption isotherms. Batch mass-balance solver, non-linear error metrics (R², RMSE, χ²), Van 't Hoff thermodynamics, and dynamic SVG equilibrium curves.";
+const pageTitle = "Adsorption Isotherm Calculator & Studio | Langmuir, Freundlich & D-R Models | Chemistrycal";
+const pageDescription = "Free online adsorption isotherm calculator. Fit Langmuir, Freundlich, Temkin, and Dubinin-Radushkevich models with batch mass-balance solver, non-linear error metrics (R², RMSE, χ²), and Van 't Hoff thermodynamics.";
 const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://chemistrycal.com';
 const canonicalUrl = `${siteUrl}/isotherm`;
 
@@ -15,7 +15,7 @@ const schemaData = {
       "@type": "WebSite",
       "@id": `${siteUrl}/#website`,
       "url": siteUrl,
-      "name": "ChemistryDesk",
+      "name": "Chemistrycal",
       "description": "Precision Scientific Utilities & Computational Laboratory Engines",
       "inLanguage": "en-US"
     },
@@ -66,7 +66,7 @@ const schemaData = {
     {
       "@type": "WebApplication",
       "@id": `${canonicalUrl}#software`,
-      "name": "ChemistryDesk Adsorption Isotherm Studio",
+      "name": "Chemistrycal Adsorption Isotherm Calculator & Studio",
       "url": canonicalUrl,
       "applicationCategory": "EducationalApplication, ScientificApplication",
       "operatingSystem": "All modern web browsers",
@@ -92,7 +92,7 @@ const schemaData = {
     {
       "@type": "HowTo",
       "@id": `${canonicalUrl}#howto`,
-      "name": "How to Fit and Evaluate Adsorption Isotherm Models",
+      "name": "How to Fit and Evaluate Adsorption Isotherm Models Using an Online Calculator",
       "step": [
         {
           "@type": "HowToStep",
@@ -183,10 +183,10 @@ const schemaData = {
         <span style="font-size: 2.5rem;">🧲</span>
         <div>
           <h1 style="font-size: clamp(1.6rem, 4vw, 2.25rem); font-weight: 800; color: #0f172a; letter-spacing: -0.025em; margin: 0; line-height: 1.2;">
-            Adsorption Isotherm Studio
+            Adsorption Isotherm Calculator &amp; Studio
           </h1>
           <p style="color: #64748b; font-size: 0.95rem; margin-top: 0.25rem; margin-bottom: 0;">
-            Multi-model fitting: Langmuir (q<sub>max</sub>, K<sub>L</sub>, R<sub>L</sub>), Freundlich (K<sub>F</sub>, 1/n), Temkin (b<sub>T</sub>, A<sub>T</sub>), Dubinin-Radushkevich (E), and Van 't Hoff thermodynamics (&Delta;H&deg;, &Delta;S&deg;, &Delta;G&deg;).
+            Multi-model adsorption isotherm calculator: Langmuir (q<sub>max</sub>, K<sub>L</sub>, R<sub>L</sub>), Freundlich (K<sub>F</sub>, 1/n), Temkin (b<sub>T</sub>, A<sub>T</sub>), Dubinin-Radushkevich (E), and Van 't Hoff thermodynamics (&Delta;H&deg;, &Delta;S&deg;, &Delta;G&deg;).
           </p>
         </div>
       </div>
@@ -197,7 +197,7 @@ const schemaData = {
           <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Load Benchmark:</span>
           <button type="button" class="preset-btn" data-preset="mb" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0.35rem 0.65rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #0284c7; min-height: 28px;">Methylene Blue / Biochar</button>
           <button type="button" class="preset-btn" data-preset="paraquat" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0.35rem 0.65rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #0284c7; min-height: 28px;">Paraquat / HKUST-1 MOF</button>
-          <button type="button" class="preset-btn" data-preset="lead" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0.35rem 0.65rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #0284c7; min-height: 28px;">Pb(II) / α-ZrP</button>
+          <button type="button" class="preset-btn" data-preset="lead" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0.35rem 0.65rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; color: #0284c7; min-height: 28px;">Pb(II) / &alpha;-ZrP</button>
         </div>
 
         <div style="display: flex; gap: 0.45rem; flex-wrap: wrap;">
@@ -235,10 +235,10 @@ const schemaData = {
     <!-- DIRECT DEFINITION & GEO SUMMARY CALLOUT BOX -->
     <section style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-left: 5px solid #0284c7; border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 1.75rem;">
       <h2 style="font-size: 1rem; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.04em; margin: 0 0 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
-        <span>💡</span> What is an Adsorption Isotherm? (Direct Answer)
+        <span>💡</span> What is an Adsorption Isotherm Calculator? (Direct Answer)
       </h2>
       <p style="font-size: 0.92rem; color: #334155; margin: 0; line-height: 1.6;">
-        An <strong>adsorption isotherm</strong> models the equilibrium relationship between the amount of sorbate adsorbed per unit mass of sorbent (<code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">q_e</code>) and the residual concentration in liquid solution (<code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">C_e</code>) at constant temperature. <strong>Langmuir</strong> assumes monolayer coverage on identical sites, <strong>Freundlich</strong> describes multilayer uptake on heterogeneous surfaces, and <strong>Dubinin-Radushkevich (D-R)</strong> extracts the mean free energy (<code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">E</code>) to distinguish physisorption (<code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">E &lt; 8 kJ/mol</code>) from chemisorption.
+        An <strong>adsorption isotherm calculator</strong> models the equilibrium relationship between the amount of sorbate adsorbed per unit mass of sorbent (<code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">q_e</code>) and the residual concentration in liquid solution (<code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">C_e</code>) at constant temperature. <strong>Langmuir</strong> assumes monolayer coverage on identical sites, <strong>Freundlich</strong> describes multilayer uptake on heterogeneous surfaces, and <strong>Dubinin-Radushkevich (D-R)</strong> extracts the mean free energy (<code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">E</code>) to distinguish physical adsorption (<code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">E &lt; 8 kJ/mol</code>) from chemisorption.
       </p>
     </section>
 
@@ -583,7 +583,7 @@ const schemaData = {
             <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
               <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Type II (Sigmoidal)</td>
               <td style="padding: 0.65rem 0.75rem;">Non-porous or Macroporous (&gt; 50 nm)</td>
-              <td style="padding: 0.65rem 0.75rem;">α-Alumina, Fumed Silica</td>
+              <td style="padding: 0.65rem 0.75rem;">&alpha;-Alumina, Fumed Silica</td>
               <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #0284c7;">BET / Freundlich</td>
               <td style="padding: 0.65rem 0.75rem; color: #475569;">Unrestricted multilayer formation</td>
             </tr>
@@ -619,7 +619,7 @@ const schemaData = {
         </table>
       </div>
 
-      <!-- FAQs Accordion -->
+      <!-- FAQs Accordion (with compiler-safe &lt;) -->
       <h3 style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-top: 3rem; margin-bottom: 1.25rem;">
         Frequently Asked Questions: Adsorption Equilibrium Analysis
       </h3>
@@ -654,9 +654,9 @@ const schemaData = {
         </details>
 
         <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
-          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How are thermodynamic parameters (ΔH°, ΔS°, ΔG°) calculated from adsorption isotherms?</summary>
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How are thermodynamic parameters (&Delta;H&deg;, &Delta;S&deg;, &Delta;G&deg;) calculated from adsorption isotherms?</summary>
           <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
-            By evaluating the Langmuir affinity constant KL across multiple temperatures, the Van 't Hoff equation ln(KL) = (ΔS°/R) - (ΔH°/RT) allows determination of enthalpy (ΔH°) from the slope and entropy (ΔS°) from the intercept, with Gibbs free energy determined via ΔG° = -RT ln(KL).
+            By evaluating the Langmuir affinity constant KL across multiple temperatures, the Van 't Hoff equation ln(KL) = (&Delta;S&deg;/R) - (&Delta;H&deg;/RT) allows determination of enthalpy (&Delta;H&deg;) from the slope and entropy (&Delta;S&deg;) from the intercept, with Gibbs free energy determined via &Delta;G&deg; = -RT ln(KL).
           </p>
         </details>
       </div>
@@ -763,7 +763,6 @@ const schemaData = {
         return;
       }
 
-      // If invalid/empty storage, reset to clean benchmark
       const saved = localStorage.getItem('cd_isotherm_points');
       if (saved) {
         try {
@@ -1291,7 +1290,7 @@ const schemaData = {
       const pD = lastTournamentResult.dubininRadushkevich.parameters;
 
       const summary = `================================================
-CHEMISTRYDESK ADSORPTION ISOTHERM REPORT
+CHEMISTRYCAL ADSORPTION ISOTHERM REPORT
 URL: ${window.location.href}
 ================================================
 Best-Fit Model: ${lastTournamentResult.bestModel} (R² = ${lastTournamentResult.bestR2.toFixed(4)})
@@ -1361,7 +1360,7 @@ Mechanism Verdict: ${lastTournamentResult.adsorptionMechanism}
       const kL = lastTournamentResult.langmuir.parameters.kL?.value.toFixed(4);
       const r2L = lastTournamentResult.langmuir.r2.toFixed(4);
 
-      const latex = `% Adsorption Isotherm Fitted Parameters (ChemistryDesk)
+      const latex = `% Adsorption Isotherm Fitted Parameters (Chemistrycal)
 \\begin{equation}
   q_e = \\frac{q_{\\max} K_L C_e}{1 + K_L C_e} = \\frac{${qmax} \\times ${kL} \\times C_e}{1 + ${kL} C_e} \\quad (R^2 = ${r2L})
 \\end{equation}`;
@@ -1382,20 +1381,20 @@ Mechanism Verdict: ${lastTournamentResult.adsorptionMechanism}
     const currentYear = new Date().getFullYear();
 
     const citations: Record<string, string> = {
-      bibtex: `@software{khan_chemistrydesk_isotherm_${currentYear},
-  author        = {Khan, Bilal},
-  title         = {ChemistryDesk: Adsorption Isotherm Studio (Langmuir, Freundlich, Temkin, D-R)},
-  year          = {${currentYear}},
-  version       = {v1.0.1},
-  publisher     = {Zenodo},
-  doi           = {${doi}},
-  url           = {https://chemistrycal.com/isotherm}
+      bibtex: `@software{khan_chemistrycal_isotherm_${currentYear},
+  author         = {Khan, Bilal},
+  title          = {Chemistrycal: Adsorption Isotherm Studio (Langmuir, Freundlich, Temkin, D-R)},
+  year           = {${currentYear}},
+  version        = {v1.0.1},
+  publisher      = {Zenodo},
+  doi            = {${doi}},
+  url            = {https://chemistrycal.com/isotherm}
 }`,
-      acs: `Khan, B. ChemistryDesk: Adsorption Isotherm Studio, version 1.0.1; Zenodo, ${currentYear}. https://doi.org/${doi}.`,
-      rsc: `B. Khan, ChemistryDesk: Adsorption Isotherm Studio, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`,
-      nature: `Khan, B. ChemistryDesk: Adsorption Isotherm Studio. Zenodo https://doi.org/${doi} (${currentYear}).`,
-      elsevier: `Khan, B., ${currentYear}. ChemistryDesk: Adsorption Isotherm Studio (Version 1.0.1). Zenodo. https://doi.org/${doi}.`,
-      wiley: `B. Khan, ChemistryDesk: Adsorption Isotherm Studio, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`
+      acs: `Khan, B. Chemistrycal: Adsorption Isotherm Studio, version 1.0.1; Zenodo, ${currentYear}. https://doi.org/${doi}.`,
+      rsc: `B. Khan, Chemistrycal: Adsorption Isotherm Studio, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`,
+      nature: `Khan, B. Chemistrycal: Adsorption Isotherm Studio. Zenodo https://doi.org/${doi} (${currentYear}).`,
+      elsevier: `Khan, B., ${currentYear}. Chemistrycal: Adsorption Isotherm Studio (Version 1.0.1). Zenodo. https://doi.org/${doi}.`,
+      wiley: `B. Khan, Chemistrycal: Adsorption Isotherm Studio, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`
     };
 
     let currentInlineFormat = 'bibtex';
