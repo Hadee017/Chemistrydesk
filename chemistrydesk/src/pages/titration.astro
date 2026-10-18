@@ -3,8 +3,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import AuthorCard from '../components/AuthorCard.astro';
 
-const pageTitle = "Acid-Base Titration Calculator & Curve Simulator | ChemistryDesk";
-const pageDescription = "Research-grade interactive titration curve simulator and pH engine. Calculate equivalence points, buffer regions, Henderson-Hasselbalch inflection points, and indicator color transitions.";
+const pageTitle = "Acid-Base Titration Calculator & Curve Simulator | Chemistrycal";
+const pageDescription = "Free online acid-base titration calculator and pH curve simulator. Calculate equivalence points, buffer regions, Henderson-Hasselbalch inflection points, and indicator color transitions.";
 const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://chemistrycal.com';
 const canonicalUrl = `${siteUrl}/titration`;
 
@@ -15,7 +15,7 @@ const schemaData = {
       "@type": "WebSite",
       "@id": `${siteUrl}/#website`,
       "url": siteUrl,
-      "name": "ChemistryDesk",
+      "name": "Chemistrycal",
       "description": "Precision Scientific Utilities & Computational Laboratory Engines",
       "inLanguage": "en-US"
     },
@@ -66,7 +66,7 @@ const schemaData = {
     {
       "@type": "WebApplication",
       "@id": `${canonicalUrl}#software`,
-      "name": "ChemistryDesk Acid-Base Titration Curve Simulator",
+      "name": "Chemistrycal Acid-Base Titration Curve Simulator",
       "url": canonicalUrl,
       "applicationCategory": "EducationalApplication, ScientificApplication",
       "operatingSystem": "All modern web browsers (Desktop, Tablet, Mobile)",
@@ -119,6 +119,22 @@ const schemaData = {
       "@type": "FAQPage",
       "@id": `${canonicalUrl}#faq`,
       "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is a titrant in titration?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A titrant is a standard solution of precisely known concentration contained in the burette, delivered progressively into the flask to neutralize the analyte."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the titrate in titration?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The titrate (commonly referred to as the analyte) is the solution of unknown concentration placed in the Erlenmeyer flask whose concentration is determined through volumetric analysis."
+          }
+        },
         {
           "@type": "Question",
           "name": "What is the difference between the equivalence point and the endpoint?",
@@ -184,7 +200,7 @@ const schemaData = {
             <span>Interactive Chemistry Lab Simulation</span>
           </div>
           <h1 style="font-size: clamp(1.6rem, 4vw, 2.35rem); font-weight: 800; color: #ffffff; letter-spacing: -0.025em; margin: 0; line-height: 1.2;">
-            Acid-Base Titration Calculator &amp; Curve Generator
+            Acid-Base Titration Calculator &amp; Curve Simulator
           </h1>
           <p style="color: #cbd5e1; font-size: 0.95rem; margin-top: 0.65rem; margin-bottom: 0; line-height: 1.6;">
             Select your acid and base solutions to generate live neutralization curves, pinpoint stoichiometric equivalence points, explore Henderson-Hasselbalch buffer regions, and determine indicator color transitions.
@@ -212,7 +228,7 @@ const schemaData = {
         <span>💡</span> What is an Acid-Base Titration? (Direct Answer)
       </h2>
       <p style="font-size: 0.92rem; color: #334155; margin: 0; line-height: 1.6;">
-        An <strong>acid-base titration</strong> is a quantitative analytical method where a standard titrant of known concentration is delivered from a burette to neutralize an analyte of unknown concentration. The <strong>equivalence point</strong> is reached when moles of titrant chemically equal moles of analyte (<code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">C_a &middot; V_a = C_b &middot; V_b</code>), while the <strong>endpoint</strong> is the visual color transition of an indicator bracketing that equivalence pH.
+        An <strong>acid-base titration</strong> is a quantitative analytical method where a standard <strong>titrant</strong> of known concentration is delivered from a burette to neutralize the <strong>titrate</strong> (analyte) of unknown concentration. The <strong>equivalence point</strong> is reached when moles of titrant chemically equal moles of analyte (<code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">C_a &middot; V_a = C_b &middot; V_b</code>).
       </p>
     </section>
 
@@ -243,13 +259,14 @@ const schemaData = {
           <span id="activePresetBadge" style="font-size: 0.75rem; font-weight: 800; color: #0284c7; background: #f0f9ff; padding: 3px 10px; border-radius: 6px; border: 1px solid #bae6fd;">
             Weak Acid vs. Strong Base
           </span>
+
         </div>
 
         <!-- Analyte Panel -->
         <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 1.15rem; margin-bottom: 1.25rem;">
           <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem;">
             <label style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; color: #0f172a;">
-              🏺 SOLUTION IN THE FLASK (Analyte)
+              🏺 SOLUTION IN THE FLASK (Titrate / Analyte)
             </label>
             <span style="font-size: 0.72rem; color: #64748b; font-weight: 600;">Being Measured</span>
           </div>
@@ -330,6 +347,7 @@ const schemaData = {
           <span style="display: block; font-size: 0.72rem; color: #64748b; margin-top: 0.35rem;">
             Enter any burette reading to inspect the equilibrium pH at that stage.
           </span>
+
         </div>
 
         <!-- Action Buttons -->
@@ -448,7 +466,7 @@ const schemaData = {
         Acid-Base Titration Theory, Curve Shapes, and Equivalence Calculations
       </h2>
       <p style="font-size: 1rem; margin-bottom: 1.25rem;">
-        An acid-base titration is a quantitative analytical technique used to determine the unknown concentration of an identified analyte. By systematically delivering a standard solution of known concentration (the <strong>titrant</strong>) from a graduated Class-A burette into a known volume of sample (the <strong>analyte</strong>) inside an Erlenmeyer flask, the stoichiometric point of complete chemical neutralization can be measured.
+        An acid-base titration is a quantitative analytical technique used to determine the unknown concentration of an identified analyte. By systematically delivering a standard solution of known concentration (the <strong>titrant</strong>) from a graduated Class-A burette into a known volume of sample (the <strong>titrate</strong> or analyte) inside an Erlenmeyer flask, the stoichiometric point of complete chemical neutralization can be measured.
       </p>
 
       <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2.25rem; margin-bottom: 0.75rem;">
@@ -617,6 +635,18 @@ const schemaData = {
       </h3>
       <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 2rem;">
         <details style="background: white; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.9rem;">What is a titrant in titration?</summary>
+          <p style="margin: 0.5rem 0 0; font-size: 0.85rem; color: #475569; line-height: 1.6;">
+            A <strong>titrant</strong> is a standard solution of precisely known concentration contained in the burette, delivered progressively into the flask to neutralize the analyte.
+          </p>
+        </details>
+        <details style="background: white; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.9rem;">What is the titrate in titration?</summary>
+          <p style="margin: 0.5rem 0 0; font-size: 0.85rem; color: #475569; line-height: 1.6;">
+            The <strong>titrate</strong> (commonly referred to as the analyte) is the solution of unknown concentration placed in the Erlenmeyer flask whose concentration is determined through volumetric analysis.
+          </p>
+        </details>
+        <details style="background: white; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1rem;">
           <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.9rem;">What is the difference between equivalence point and endpoint?</summary>
           <p style="margin: 0.5rem 0 0; font-size: 0.85rem; color: #475569; line-height: 1.6;">
             The <strong>equivalence point</strong> is a theoretical stoichiometric state where moles of titrant exactly equal moles of analyte. The <strong>endpoint</strong> is the experimental observation when the indicator changes color. Choosing an indicator whose transition brackets the equivalence pH keeps indicator error minimal.
@@ -665,6 +695,7 @@ const schemaData = {
           <div style="font-weight: 700; font-size: 0.92rem; color: #0284c7; margin-bottom: 0.35rem;">Serial Dilution Calculator &rarr;</div>
           <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">Perform C1V1 = C2V2 aliquot dilution calculations and generate multi-tube series.</div>
         </a>
+
       </div>
     </section>
 
@@ -1130,12 +1161,12 @@ const schemaData = {
     var currentYear = new Date().getFullYear();
 
     var titCitations = {
-      bibtex: '@software{khan_chemistrydesk_titration_' + currentYear + ',\n  author        = {Khan, Bilal},\n  title         = {ChemistryDesk: Acid-Base Titration Simulator & Analytical pH Engine},\n  year          = {' + currentYear + '},\n  version       = {v1.0.1},\n  publisher     = {Zenodo},\n  doi           = {' + doi + '},\n  url           = {https://chemistrycal.com/titration}\n}',
-      acs: 'Khan, B. ChemistryDesk: Acid-Base Titration Simulator & Analytical pH Engine, version 1.0.1; Zenodo, ' + currentYear + '. https://doi.org/' + doi + '.',
-      rsc: 'B. Khan, ChemistryDesk: Acid-Base Titration Simulator & Analytical pH Engine, version 1.0.1, Zenodo, ' + currentYear + ', DOI: ' + doi + '.',
-      nature: 'Khan, B. ChemistryDesk: Acid-Base Titration Simulator & Analytical pH Engine. Zenodo https://doi.org/' + doi + ' (' + currentYear + ').',
-      elsevier: 'Khan, B., ' + currentYear + '. ChemistryDesk: Acid-Base Titration Simulator & Analytical pH Engine (Version 1.0.1). Zenodo. https://doi.org/' + doi + '.',
-      wiley: 'B. Khan, ChemistryDesk: Acid-Base Titration Simulator & Analytical pH Engine, version 1.0.1, Zenodo, ' + currentYear + ', DOI: ' + doi + '.'
+      bibtex: '@software{khan_chemistrycal_titration_' + currentYear + ',\n  author         = {Khan, Bilal},\n  title          = {Chemistrycal: Acid-Base Titration Simulator & Analytical pH Engine},\n  year           = {' + currentYear + '},\n  version        = {v1.0.1},\n  publisher      = {Zenodo},\n  doi            = {' + doi + '},\n  url            = {https://chemistrycal.com/titration}\n}',
+      acs: 'Khan, B. Chemistrycal: Acid-Base Titration Simulator & Analytical pH Engine, version 1.0.1; Zenodo, ' + currentYear + '. https://doi.org/' + doi + '.',
+      rsc: 'B. Khan, Chemistrycal: Acid-Base Titration Simulator & Analytical pH Engine, version 1.0.1, Zenodo, ' + currentYear + ', DOI: ' + doi + '.',
+      nature: 'Khan, B. Chemistrycal: Acid-Base Titration Simulator & Analytical pH Engine. Zenodo https://doi.org/' + doi + ' (' + currentYear + ').',
+      elsevier: 'Khan, B., ' + currentYear + '. Chemistrycal: Acid-Base Titration Simulator & Analytical pH Engine (Version 1.0.1). Zenodo. https://doi.org/' + doi + '.',
+      wiley: 'B. Khan, Chemistrycal: Acid-Base Titration Simulator & Analytical pH Engine, version 1.0.1, Zenodo, ' + currentYear + ', DOI: ' + doi + '.'
     };
 
     var currentInlineFormat = 'bibtex';
