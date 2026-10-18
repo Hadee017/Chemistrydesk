@@ -9,7 +9,7 @@ import {
   GHS_GENERIC_CUTOFFS 
 } from '../utils/chemicalLookup';
 
-const pageTitle = "GHS Hazard & Chemical Safety Studio | Universal 110M+ Reagent Lookup | ChemistryDesk";
+const pageTitle = "GHS Hazard & Chemical Safety Studio | Universal 110M+ Reagent Lookup | Chemistrycal";
 const pageDescription = "Universal GHS chemical safety engine. Live lookup for 110M+ compounds via PubChem, full UN Rev. 10 H & P code index, mixture concentration cut-off calculator, and printable OSHA secondary container labels.";
 const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://chemistrycal.com';
 const canonicalUrl = `${siteUrl}/ghs`;
@@ -21,7 +21,7 @@ const schemaData = {
       "@type": "WebSite",
       "@id": `${siteUrl}/#website`,
       "url": siteUrl,
-      "name": "ChemistryDesk",
+      "name": "Chemistrycal",
       "description": "Precision Scientific Utilities & Computational Laboratory Engines",
       "inLanguage": "en-US"
     },
@@ -72,7 +72,7 @@ const schemaData = {
     {
       "@type": "WebApplication",
       "@id": `${canonicalUrl}#software`,
-      "name": "ChemistryDesk Universal GHS Hazard & Chemical Safety Studio",
+      "name": "Chemistrycal Universal GHS Hazard & Chemical Safety Studio",
       "url": canonicalUrl,
       "applicationCategory": "EducationalApplication, ScientificApplication",
       "operatingSystem": "All modern web browsers",
@@ -333,6 +333,7 @@ const schemaData = {
             <span id="dossierSignalBadge" style="background: #fee2e2; color: #991b1b; padding: 4px 10px; border-radius: 9999px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase;">
               DANGER
             </span>
+
           </div>
 
           <div style="border: 1px solid #f1f5f9; border-radius: 8px; overflow-x: auto; margin-bottom: 1.25rem;">
@@ -597,7 +598,7 @@ const schemaData = {
     </div>
 
     <!-- ============================================================ -->
-    <!-- MODE 4: 16-SECTION OSHA SDS GUIDE & PPE RESISTANCE MATRIX    -->
+    <!-- MODE 4: 16-SECTION OSHA SDS GUIDE & PPE RESISTANCE MATRIX     -->
     <!-- ============================================================ -->
     <div id="sdsGuideModeSection" style="display: none; margin-bottom: 3rem;">
       <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: clamp(1rem, 3vw, 1.75rem); margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); min-width: 0;">
@@ -1377,7 +1378,7 @@ Chemical Name:      ${currentEntity.name}
 Chemical Formula:   ${currentEntity.formula || 'N/A'}
 CAS Registry No:    ${currentEntity.cas || 'N/A'}
 Formula Weight:     ${currentEntity.molecularWeight} g/mol
-Prepared Via:       ChemistryDesk GHS Studio (https://chemistrycal.com/ghs)
+Prepared Via:       Chemistrycal GHS Studio (https://chemistrycal.com/ghs)
 
 2. HAZARD IDENTIFICATION
 Signal Word:        ${(currentEntity.ghs?.signalWord || 'Warning').toUpperCase()}
@@ -1788,12 +1789,12 @@ Hazard Statements (H-Codes): ___________________________________
 Precautionary Statements (P-Codes): ____________________________
 
 SECTION 3: COMPOSITION / INFORMATION ON INGREDIENTS
-Chemical Name          CAS Number          Weight %
+Chemical Name         CAS Number         Weight %
 ____________________   _________________   _______________
 
 SECTION 4: FIRST-AID MEASURES
 Inhalation: ____________________________________________________
-Skin Contact: __________________________________________________
+Skin Contact: ________________________________________________--
 Eye Contact: ___________________________________________________
 Ingestion: _____________________________________________________
 
@@ -1867,20 +1868,20 @@ Revision Date: ${new Date().toLocaleDateString()}
     const currentYear = new Date().getFullYear();
 
     const ghsCitations: Record<string, string> = {
-      bibtex: `@software{khan_chemistrydesk_ghs_${currentYear},
-  author        = {Khan, Bilal},
-  title         = {ChemistryDesk: GHS Hazard & Chemical Safety Studio},
-  year          = {${currentYear}},
-  version       = {v1.0.1},
-  publisher     = {Zenodo},
-  doi           = {${doi}},
-  url           = {https://chemistrycal.com/ghs}
+      bibtex: `@software{khan_chemistrycal_ghs_${currentYear},
+  author         = {Khan, Bilal},
+  title          = {Chemistrycal: GHS Hazard & Chemical Safety Studio},
+  year           = {${currentYear}},
+  version        = {v1.0.1},
+  publisher      = {Zenodo},
+  doi            = {${doi}},
+  url            = {https://chemistrycal.com/ghs}
 }`,
-      acs: `Khan, B. ChemistryDesk: GHS Hazard & Chemical Safety Studio, version 1.0.1; Zenodo, ${currentYear}. https://doi.org/${doi}.`,
-      rsc: `B. Khan, ChemistryDesk: GHS Hazard & Chemical Safety Studio, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`,
-      nature: `Khan, B. ChemistryDesk: GHS Hazard & Chemical Safety Studio. Zenodo https://doi.org/${doi} (${currentYear}).`,
-      elsevier: `Khan, B., ${currentYear}. ChemistryDesk: GHS Hazard & Chemical Safety Studio (Version 1.0.1). Zenodo. https://doi.org/${doi}.`,
-      wiley: `B. Khan, ChemistryDesk: GHS Hazard & Chemical Safety Studio, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`
+      acs: `Khan, B. Chemistrycal: GHS Hazard & Chemical Safety Studio, version 1.0.1; Zenodo, ${currentYear}. https://doi.org/${doi}.`,
+      rsc: `B. Khan, Chemistrycal: GHS Hazard & Chemical Safety Studio, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`,
+      nature: `Khan, B. Chemistrycal: GHS Hazard & Chemical Safety Studio. Zenodo https://doi.org/${doi} (${currentYear}).`,
+      elsevier: `Khan, B., ${currentYear}. Chemistrycal: GHS Hazard & Chemical Safety Studio (Version 1.0.1). Zenodo. https://doi.org/${doi}.`,
+      wiley: `B. Khan, Chemistrycal: GHS Hazard & Chemical Safety Studio, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`
     };
 
     let currentInlineFormat = 'bibtex';
