@@ -3,8 +3,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import AuthorCard from '../components/AuthorCard.astro';
 
-const pageTitle = "pH Calculator | 4-Way pH, pOH, [H+], [OH-] & Ka/Kb Equilibrium | ChemistryDesk";
-const pageDescription = "Universal circular pH solver and exact quadratic weak acid/base equilibrium engine. Real-time Kw temperature correction, 5% rule diagnostic, and indicator color transitions.";
+const pageTitle = "pH Calculator | Universal pH Indicator, pOH & Ka/Kb Equilibrium | Chemistrycal";
+const pageDescription = "Free online pH calculator simulating universal ph paper and universal indicator solution color scales. Exact quadratic weak acid/base equilibrium engine and Kw temperature correction.";
 const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://chemistrycal.com';
 const canonicalUrl = `${siteUrl}/ph`;
 
@@ -15,7 +15,7 @@ const schemaData = {
       "@type": "WebSite",
       "@id": `${siteUrl}/#website`,
       "url": siteUrl,
-      "name": "ChemistryDesk",
+      "name": "Chemistrycal",
       "description": "Precision Scientific Utilities & Computational Laboratory Engines",
       "inLanguage": "en-US"
     },
@@ -66,7 +66,7 @@ const schemaData = {
     {
       "@type": "WebApplication",
       "@id": `${canonicalUrl}#software`,
-      "name": "ChemistryDesk Universal pH & Aqueous Equilibrium Studio",
+      "name": "Chemistrycal Universal pH & Aqueous Equilibrium Studio",
       "url": canonicalUrl,
       "applicationCategory": "EducationalApplication, ScientificApplication",
       "operatingSystem": "All modern web browsers",
@@ -80,10 +80,11 @@ const schemaData = {
       "creator": { "@id": `${siteUrl}/#author` },
       "featureList": [
         "Circular 4-Way Real-Time Solver (pH, pOH, [H+], and [OH-])",
+        "Universal pH Indicator & Color Solution Simulation",
         "Exact Quadratic Weak Acid/Base Equilibrium Engine (Ka and Kb)",
         "Analytical 5% Approximation Rule Diagnostic and Error Quantifier",
         "Temperature-Dependent Kw Autoionization (0 C, 25 C, 37 C, 60 C)",
-        "Dynamic Visual pH Scale Bar with Universal Indicator Colors",
+        "Dynamic Visual pH Scale Bar matching Universal Indicator Paper",
         "Color Transitions for Phenolphthalein, Bromothymol Blue, and Methyl Orange",
         "1-Click LaTeX Equation, CSV Export, and Academic Citation Drawer"
       ]
@@ -91,7 +92,7 @@ const schemaData = {
     {
       "@type": "HowTo",
       "@id": `${canonicalUrl}#howto`,
-      "name": "How to Calculate pH, pOH, and Weak Acid Equilibrium",
+      "name": "How to Calculate pH, pOH, and Weak Acid Equilibrium Using an Online Calculator",
       "step": [
         {
           "@type": "HowToStep",
@@ -129,10 +130,26 @@ const schemaData = {
         },
         {
           "@type": "Question",
+          "name": "How does a digital calculator simulate universal indicator paper and universal indicator solution color scales?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "While physical universal indicator paper and universal indicator solution rely on dye mixtures that change protonation states across Attock laboratory samples, the digital calculator computes the exact hydronium concentration [H+] and maps it to a calibrated RGB visual spectrum replicating 1-14 color bands."
+          }
+        },
+        {
+          "@type": "Question",
           "name": "When does the 5% approximation rule for weak acid calculations fail?",
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "The 5% approximation shortcut assumes that x << C_initial, simplifying the equilibrium expression to x = sqrt(Ka * C). This assumption fails whenever the degree of dissociation (alpha) exceeds 5%, which happens with relatively strong weak acids (Ka > 1e-3) or at very low analytical concentrations (C < 1e-4 M). In these scenarios, an exact quadratic equation must be solved."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do universal indicator paper ph 1 14 strips compare to precise logarithmic calculations?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Physical universal indicator paper ph 1 14 strips provide rapid semi-quantitative color estimates with an uncertainty of roughly +/- 0.5 pH units. In contrast, digital logarithmic calculations and quadratic equilibrium engines yield precise values to three decimal places."
           }
         },
         {
@@ -149,14 +166,6 @@ const schemaData = {
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "For any conjugate acid-base pair in aqueous solution, the product of the acid dissociation constant (Ka) and the conjugate base dissociation constant (Kb) equals the autoionization constant of water: Ka * Kb = Kw (or pKa + pKb = pKw = 14.00 at 25 C)."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How do chemical indicators determine the endpoint in an acid-base solution?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Acid-base indicators are themselves weak organic acids whose protonated (HIn) and deprotonated (In-) forms display distinct light absorption spectra. The visible color change occurs over a transition range of roughly pKa +/- 1. For instance, phenolphthalein transitions from colorless to pink between pH 8.2 and 10.0."
           }
         }
       ]
@@ -184,10 +193,10 @@ const schemaData = {
             <span>Aqueous Ion Equilibrium &amp; Exact Quadratic Solver</span>
           </div>
           <h1 style="font-size: clamp(1.6rem, 4vw, 2.35rem); font-weight: 800; color: #ffffff; letter-spacing: -0.025em; margin: 0; line-height: 1.2;">
-            Universal pH &amp; Aqueous Equilibrium Studio
+            Universal pH Calculator &amp; Equilibrium Studio
           </h1>
           <p style="color: #cbd5e1; font-size: 1rem; margin-top: 0.65rem; margin-bottom: 0; line-height: 1.6;">
-            Circular 4-way solver for <span style="color: #38bdf8; font-weight: 700;">pH, pOH, [H&#8314;], [OH&#8315;]</span>, temperature-adjusted <span style="color: #34d399; font-weight: 700;">K_w</span>, and exact quadratic <span style="color: #f59e0b; font-weight: 700;">K_a / K_b</span> weak electrolyte dissociation with indicator spectrum tracking.
+            Circular 4-way pH calculator for <span style="color: #38bdf8; font-weight: 700;">pH, pOH, [H&#8314;], [OH&#8315;]</span>, temperature-adjusted <span style="color: #34d399; font-weight: 700;">K_w</span>, and exact quadratic <span style="color: #f59e0b; font-weight: 700;">K_a / K_b</span> weak electrolyte dissociation with universal ph paper spectrum tracking.
           </p>
         </div>
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
@@ -212,10 +221,10 @@ const schemaData = {
     <!-- DIRECT DEFINITION & GEO SUMMARY CALLOUT BOX -->
     <section style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-left: 5px solid #0284c7; border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 1.75rem;">
       <h2 style="font-size: 1rem; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.04em; margin: 0 0 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
-        <span>💡</span> What is pH and Aqueous Equilibrium? (Direct Answer)
+        <span>💡</span> What is a pH Calculator &amp; Universal pH Indicator? (Direct Answer)
       </h2>
       <p style="font-size: 0.92rem; color: #334155; margin: 0; line-height: 1.6;">
-        <strong>pH</strong> is the negative base-10 logarithm of hydronium ion activity: <code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">pH = -log₁₀[H⁺]</code>. In aqueous solutions, it couples with pOH via water's auto-ionization: <code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">pH + pOH = pK_w</code> (14.00 at 25°C, 13.62 at 37°C). Weak electrolytes require solving exact quadratic ICE equations when dissociation exceeds 5%.
+        A <strong>pH calculator</strong> determines the negative base-10 logarithm of hydronium ion activity: <code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">pH = -log₁₀[H⁺]</code>. By utilizing a digital <strong>universal ph paper</strong> color spectrum and <strong>universal indicator solution</strong> equivalence algorithms, it couples pH with pOH via water's auto-ionization: <code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">pH + pOH = pK_w</code> (14.00 at 25°C). Weak electrolytes require solving exact quadratic ICE equations when dissociation exceeds 5%.
       </p>
     </section>
 
@@ -225,6 +234,7 @@ const schemaData = {
         <span style="font-size: 0.85rem; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.05em;">
           Autoionization Temperature:
         </span>
+
         <div style="display: flex; gap: 0.35rem; flex-wrap: wrap;" id="tempBtnGroup">
           <button type="button" class="temp-btn" data-temp="0" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.3rem 0.65rem; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer; color: #475569; min-height: 30px;">0 &deg;C</button>
           <button type="button" class="temp-btn active" data-temp="25" style="background: #0284c7; border: 1px solid #0284c7; padding: 0.3rem 0.65rem; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer; color: #ffffff; min-height: 30px;">25 &deg;C (Std)</button>
@@ -296,7 +306,7 @@ const schemaData = {
       <!-- DYNAMIC pH SPECTRUM BAR -->
       <div style="margin-top: 1.75rem;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.25rem;">
-          <span style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; color: #334155;">Universal Indicator Spectrum</span>
+          <span style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; color: #334155;">Universal Indicator Spectrum (pH 1-14 Paper Equivalent)</span>
           <span id="lblSpectrumColor" style="font-size: 0.8rem; font-weight: 800; color: #059669;">Neutral Green (pH 7.00)</span>
         </div>
         
@@ -423,9 +433,11 @@ const schemaData = {
             <span style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #38bdf8;">
               Equilibrium Solution Result
             </span>
+
             <span id="badgeApproxRule" style="font-size: 0.72rem; font-weight: 800; padding: 2px 8px; border-radius: 9999px; background: #0284c7; color: #ffffff;">
               5% Rule Valid
             </span>
+
           </div>
 
           <div id="dispEquilPh" style="font-size: clamp(2rem, 5vw, 2.75rem); font-weight: 900; color: #38bdf8; margin: 0.5rem 0; font-family: ui-monospace, monospace; line-height: 1.2; word-break: break-all;">
@@ -708,9 +720,23 @@ const schemaData = {
         </details>
 
         <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How does a digital calculator simulate universal indicator paper and universal indicator solution color scales?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            While physical universal indicator paper and universal indicator solution rely on dye mixtures that change protonation states across laboratory samples, the digital calculator computes the exact hydronium concentration [H+] and maps it to a calibrated RGB visual spectrum replicating 1-14 color bands.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
           <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">When does the 5% approximation rule for weak acid calculations fail?</summary>
           <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
             The 5% approximation shortcut assumes that x is much smaller than C0. This fails whenever the degree of dissociation exceeds 5%, which happens with relatively strong weak acids or at low analytical concentrations below 0.0001 M. In these cases, exact quadratic formulas must be used.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How do universal indicator paper ph 1 14 strips compare to precise logarithmic calculations?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Physical universal indicator paper ph 1 14 strips provide rapid semi-quantitative color estimates with an uncertainty of roughly +/- 0.5 pH units. In contrast, digital logarithmic calculations and quadratic equilibrium engines yield precise values to three decimal places.
           </p>
         </details>
 
@@ -725,13 +751,6 @@ const schemaData = {
           <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What is the mathematical relationship linking Ka, Kb, and Kw?</summary>
           <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
             For any conjugate acid-base pair in aqueous solution, the product of Ka and Kb equals the autoionization constant of water: K_a &times; K_b = K_w (or pKa + pKb = pKw = 14.00 at 25 &deg;C).
-          </p>
-        </details>
-
-        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
-          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How do chemical indicators determine the endpoint in an acid-base solution?</summary>
-          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
-            Acid-base indicators are weak organic acids whose protonated and deprotonated forms absorb different wavelengths of light. The visible color change occurs over a transition range of roughly pKa &plusmn; 1. For example, phenolphthalein transitions from colorless to pink between pH 8.2 and 10.0.
           </p>
         </details>
       </div>
@@ -1043,7 +1062,7 @@ const schemaData = {
 
     document.getElementById('btnCopyReport')?.addEventListener('click', async () => {
       const report = `========================================
-CHEMISTRYDESK pH & EQUILIBRIUM REPORT
+CHEMISTRYCAL pH & EQUILIBRIUM REPORT
 Temperature: ${currentTemp} C
 pH: ${inpPh.value} | pOH: ${inpPoh.value}
 [H+]: ${inpHConc.value} M | [OH-]: ${inpOhConc.value} M
@@ -1057,7 +1076,7 @@ Diagnostic: ${calloutExplanation.textContent}
     });
 
     document.getElementById('btnCopyLatex')?.addEventListener('click', async () => {
-      const latex = `% Aqueous Ion Equilibrium & Exact Quadratic Root (ChemistryDesk)
+      const latex = `% Aqueous Ion Equilibrium & Exact Quadratic Root (Chemistrycal)
 \\begin{aligned}
   \\text{pH} &= -\\log_{10}[\\text{H}^+] \\implies [\\text{H}^+] = 10^{-\\text{pH}} \\\\
   K_w &= [\\text{H}^+][\\text{OH}^-] = 1.00 \\times 10^{-14} \\text{ (at 25}^\\circ\\text{C)} \\\\
@@ -1076,20 +1095,20 @@ Diagnostic: ${calloutExplanation.textContent}
     const year = new Date().getFullYear();
 
     const citations: Record<string, string> = {
-      bibtex: `@software{khan_chemistrydesk_ph_${year},
-  author        = {Khan, Bilal},
-  title         = {ChemistryDesk: Universal pH & Aqueous Equilibrium Studio},
-  year          = {${year}},
-  version       = {v1.0.1},
-  publisher     = {Zenodo},
-  doi           = {${doi}},
-  url           = {https://chemistrycal.com/ph}
+      bibtex: `@software{khan_chemistrycal_ph_${year},
+  author         = {Khan, Bilal},
+  title          = {Chemistrycal: Universal pH & Aqueous Equilibrium Studio},
+  year           = {${year}},
+  version        = {v1.0.1},
+  publisher      = {Zenodo},
+  doi            = {${doi}},
+  url            = {https://chemistrycal.com/ph}
 }`,
-      acs: `Khan, B. ChemistryDesk: Universal pH & Aqueous Equilibrium Studio, version 1.0.1; Zenodo, ${year}. https://doi.org/${doi}.`,
-      rsc: `B. Khan, ChemistryDesk: Universal pH & Aqueous Equilibrium Studio, version 1.0.1, Zenodo, ${year}, DOI: ${doi}.`,
-      nature: `Khan, B. ChemistryDesk: Universal pH & Aqueous Equilibrium Studio. Zenodo https://doi.org/${doi} (${year}).`,
-      elsevier: `Khan, B., ${year}. ChemistryDesk: Universal pH & Aqueous Equilibrium Studio (Version 1.0.1). Zenodo. https://doi.org/${doi}.`,
-      wiley: `B. Khan, ChemistryDesk: Universal pH & Aqueous Equilibrium Studio, version 1.0.1, Zenodo, ${year}, DOI: ${doi}.`
+      acs: `Khan, B. Chemistrycal: Universal pH & Aqueous Equilibrium Studio, version 1.0.1; Zenodo, ${year}. https://doi.org/${doi}.`,
+      rsc: `B. Khan, Chemistrycal: Universal pH & Aqueous Equilibrium Studio, version 1.0.1, Zenodo, ${year}, DOI: ${doi}.`,
+      nature: `Khan, B. Chemistrycal: Universal pH & Aqueous Equilibrium Studio. Zenodo https://doi.org/${doi} (${year}).`,
+      elsevier: `Khan, B., ${year}. Chemistrycal: Universal pH & Aqueous Equilibrium Studio (Version 1.0.1). Zenodo. https://doi.org/${doi}.`,
+      wiley: `B. Khan, Chemistrycal: Universal pH & Aqueous Equilibrium Studio, version 1.0.1, Zenodo, ${year}, DOI: ${doi}.`
     };
 
     let activeFormat = 'bibtex';
