@@ -3,8 +3,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import AuthorCard from '../components/AuthorCard.astro';
 
-const pageTitle = "Molar Mass Calculator | Molecular Weight & Elemental Composition | ChemistryDesk";
-const pageDescription = "Universal chemical formula molar mass calculator. Computes molecular weight, elemental mass percentages, nested coordination complexes, hydrates, and two-way grams to moles conversions.";
+const pageTitle = "Molecular Weight Calculator & Molar Mass Finder | Chemistrycal";
+const pageDescription = "Free online molecular weight calculator and molar mass finder. Compute molar calculation, convert g to mol, find elemental mass percentages, and solve formulas with Chemistrycal.";
 const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://chemistrycal.com';
 const canonicalUrl = `${siteUrl}/molar-mass`;
 
@@ -15,7 +15,7 @@ const schemaData = {
       "@type": "WebSite",
       "@id": `${siteUrl}/#website`,
       "url": siteUrl,
-      "name": "ChemistryDesk",
+      "name": "Chemistrycal",
       "description": "Precision Scientific Utilities & Computational Laboratory Engines",
       "inLanguage": "en-US"
     },
@@ -66,7 +66,7 @@ const schemaData = {
     {
       "@type": "WebApplication",
       "@id": `${canonicalUrl}#software`,
-      "name": "ChemistryDesk Universal Molar Mass & Elemental Composition Studio",
+      "name": "Chemistrycal Universal Molar Mass & Elemental Composition Studio",
       "url": canonicalUrl,
       "applicationCategory": "EducationalApplication, ScientificApplication",
       "operatingSystem": "All modern web browsers",
@@ -122,42 +122,58 @@ const schemaData = {
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "What is the difference between molar mass, molecular weight, and formula weight?",
+          "name": "How do you use a molecular weight calculator for chemical formulas?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Molar mass is the mass of one mole of a substance expressed in grams per mole (g/mol). Molecular weight is the dimensionless relative ratio of the average mass of one molecule relative to 1/12th the mass of a carbon-12 atom. Formula weight is used specifically for ionic salts (such as NaCl) that do not exist as discreet individual molecules but form extended three-dimensional crystal lattices."
+            "text": "To find molecular weight or molar weight, enter any valid chemical formula (including nested parentheses and hydrates like CuSO4·5H2O), and the molecular weight calculator instantly sums the IUPAC standard atomic weights to yield the total molar mass in g/mol."
           }
         },
         {
           "@type": "Question",
-          "name": "How are crystalline hydrates calculated in molar mass formulas?",
+          "name": "How do you convert g to mol using molar mass?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Hydrates are chemical salts that have water molecules trapped within their crystalline matrix, designated by a central dot (such as CuSO4·5H2O). To calculate the total molar mass, the formula mass of the anhydrous salt (CuSO4 = 159.609 g/mol) is added to the total mass of the stoichiometric water molecules (5 * 18.015 = 90.075 g/mol), resulting in a combined molar mass of 249.684 g/mol."
+            "text": "To convert g to mol, divide your sample mass in grams by the compound's calculated molar mass (n = m / M) using a reliable molar calculation."
           }
         },
         {
           "@type": "Question",
-          "name": "Why do atomic weights on the periodic table contain decimals?",
+          "name": "What is the koh molar mass and how is it calculated?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Standard atomic weights published by the IUPAC Commission on Isotopic Abundances and Atomic Weights (CIAAW) reflect the natural isotopic abundance-weighted averages of all stable isotopes found in terrestrial samples. For example, chlorine is roughly 75.76% Chlorine-35 and 24.24% Chlorine-37, yielding an average atomic weight of 35.45 g/mol."
+            "text": "The koh molar mass (Potassium hydroxide) is calculated by summing the atomic weights of Potassium (39.098), Oxygen (15.999), and Hydrogen (1.008), resulting in a molar mass of 56.105 g/mol."
           }
         },
         {
           "@type": "Question",
-          "name": "How do you convert sample grams to moles and total molecules?",
+          "name": "What is the urea molar mass and its formula?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "To convert mass (m) in grams to moles (n), divide the mass by the molar mass (M): n = m / M. To find the total number of individual molecules (N), multiply the calculated moles by Avogadro's constant (NA = 6.02214076e23 molecules/mol): N = n * NA."
+            "text": "Urea (CH4N2O) has a urea molar mass of 60.056 g/mol, widely used in fertilizer and biochemical research due to its high nitrogen mass percentage."
           }
         },
         {
           "@type": "Question",
-          "name": "What is the Hill system notation for chemical formulas?",
+          "name": "How do you determine the acetic acid molecular mass?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "The Hill system is a standardized convention for writing chemical formulas. For carbon-containing compounds, Carbon (C) is listed first, followed immediately by Hydrogen (H), and then all remaining elements in alphabetical order. If carbon is not present, all elements are listed strictly in alphabetical order."
+            "text": "Acetic acid (CH3COOH or C2H4O2) has an acetic acid molecular mass of 60.052 g/mol, representing the sum of 2 carbon atoms, 4 hydrogen atoms, and 2 oxygen atoms."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the potassium iodide molar mass?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Potassium iodide (KI) has a potassium iodide molar mass of 166.003 g/mol, derived from combining Potassium (39.098) and Iodine (126.904)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does a molar calculation account for crystalline hydrates?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A complete molar calculation for hydrates (such as CaCl2·2H2O) adds the mass of the stoichiometric water molecules directly to the anhydrous formula weight."
           }
         }
       ]
@@ -185,10 +201,10 @@ const schemaData = {
             <span>IUPAC CIAAW Atomic Weight Core &bull; Recursive Parser</span>
           </div>
           <h1 style="font-size: clamp(1.6rem, 4vw, 2.35rem); font-weight: 800; color: #ffffff; letter-spacing: -0.025em; margin: 0; line-height: 1.2;">
-            Molar Mass &amp; Elemental Composition Studio
+            Molecular Weight Calculator &amp; Molar Mass Finder
           </h1>
           <p style="color: #cbd5e1; font-size: 1rem; margin-top: 0.65rem; margin-bottom: 0; line-height: 1.6;">
-            Calculate total molecular weights, elemental mass percent profiles, and two-way grams &harr; moles conversions. Handles nested coordination complexes and crystalline hydrates with auto-case correction.
+            Perform molar calculations, convert g to mol, find total molecular weights, and compute elemental mass percent profiles with a universal molecular weight calculator.
           </p>
         </div>
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
@@ -213,10 +229,10 @@ const schemaData = {
     <!-- DIRECT DEFINITION & GEO SUMMARY CALLOUT BOX -->
     <section style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-left: 5px solid #0284c7; border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 1.75rem;">
       <h2 style="font-size: 1rem; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.04em; margin: 0 0 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
-        <span>💡</span> What is Molar Mass? (Direct Answer)
+        <span>💡</span> What is Molar Weight and Molecular Weight? (Direct Answer)
       </h2>
       <p style="font-size: 0.92rem; color: #334155; margin: 0; line-height: 1.6;">
-        <strong>Molar mass (M)</strong> is the mass of one mole of a chemical substance, expressed in grams per mole: <code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">g/mol</code>. It equals the sum of standard atomic weights across all constituent atoms: <code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">M = &Sigma;(N &middot; A_r)</code>. It connects sample mass (m) to molar amount (n) via <code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">n = m / M</code>.
+        <strong>Molar weight</strong> (molar mass) is the mass of one mole of a substance expressed in grams per mole: <code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">g/mol</code>. When you need to <strong>find molecular weight</strong> or perform a <strong>molar calculation</strong>, you sum the standard atomic weights across all constituent atoms: <code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">M = &Sigma;(N &middot; A_r)</code>. It easily connects sample mass (m) to moles (n) via <code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">n = m / M</code>.
       </p>
     </section>
 
@@ -227,13 +243,15 @@ const schemaData = {
       </div>
       <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;" id="presetPillsGroup">
         <button type="button" class="preset-pill" data-formula="H2O" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Water (H₂O)</button>
-        <button type="button" class="preset-pill" data-formula="NaCl" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">NaCl</button>
+        <button type="button" class="preset-pill" data-formula="NaCl" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Nacl molar weigh (NaCl)</button>
         <button type="button" class="preset-pill active" data-formula="C6H12O6" style="background: #0284c7; border: 1px solid #0284c7; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #ffffff;">Glucose (C₆H₁₂O₆)</button>
-        <button type="button" class="preset-pill" data-formula="H2SO4" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Sulfuric Acid (H₂SO₄)</button>
-        <button type="button" class="preset-pill" data-formula="CuSO4·5H2O" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">CuSO₄·5H₂O</button>
-        <button type="button" class="preset-pill" data-formula="C8H10N4O2" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Caffeine</button>
-        <button type="button" class="preset-pill" data-formula="Fe2(SO4)3" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Iron(III) Sulfate</button>
-        <button type="button" class="preset-pill" data-formula="[Co(NH3)6]Cl3" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">[Co(NH₃)₆]Cl₃</button>
+        <button type="button" class="preset-pill" data-formula="H2SO4" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Molar mass phosphoric acid / H₂SO₄</button>
+        <button type="button" class="preset-pill" data-formula="CuSO4·5H2O" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Molar mass of cuso4</button>
+        <button type="button" class="preset-pill" data-formula="CH3COOH" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Acetic acid molecular mass</button>
+        <button type="button" class="preset-pill" data-formula="CH4N2O" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Urea molar mass</button>
+        <button type="button" class="preset-pill" data-formula="KOH" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">KOH molar mass</button>
+        <button type="button" class="preset-pill" data-formula="CH3OH" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Methanol molar mass</button>
+        <button type="button" class="preset-pill" data-formula="KI" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Potassium iodide molar mass</button>
       </div>
     </div>
 
@@ -477,10 +495,10 @@ const schemaData = {
 
       <!-- IUPAC CIAAW STANDARD ATOMIC WEIGHTS & BENCHMARK MATRIX TABLE -->
       <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2.75rem; margin-bottom: 0.75rem;">
-        3. IUPAC CIAAW Standard Reference Compounds &amp; Molecular Weights
+        3. IUPAC CIAAW Standard Reference Compounds &amp; Molecular Weights (e.g., Chlorine Chemical Composition, Composition of Hydrogen, Composition of Iron, Zirconium Composition)
       </h3>
       <p style="font-size: 0.9rem; color: #475569; margin-bottom: 1rem;">
-        Primary empirical benchmarks evaluated against IUPAC standard atomic weights (CIAAW 2026):
+        Primary empirical benchmarks evaluated against IUPAC standard atomic weights (CIAAW 2026), including chemical composition analysis of hydrogen, sulfur, iron, and zirconium:
       </p>
 
       <div style="border: 1px solid #cbd5e1; border-radius: 8px; overflow-x: auto; margin-bottom: 2rem;">
@@ -500,14 +518,14 @@ const schemaData = {
               <td style="padding: 0.65rem 0.75rem; font-family: monospace;">H₂O</td>
               <td style="padding: 0.65rem 0.75rem; font-family: monospace;">7732-18-5</td>
               <td style="padding: 0.65rem 0.75rem; font-family: monospace; font-weight: 700; color: #0284c7;">18.015</td>
-              <td style="padding: 0.65rem 0.75rem; color: #475569;">88.81% Oxygen</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">88.81% Oxygen (Composition of Hydrogen / Oxygen)</td>
             </tr>
             <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
               <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Sodium Chloride</td>
               <td style="padding: 0.65rem 0.75rem; font-family: monospace;">ClNa</td>
               <td style="padding: 0.65rem 0.75rem; font-family: monospace;">7647-14-5</td>
               <td style="padding: 0.65rem 0.75rem; font-family: monospace; font-weight: 700; color: #0284c7;">58.443</td>
-              <td style="padding: 0.65rem 0.75rem; color: #475569;">60.66% Chlorine</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">60.66% Chlorine (Chlorine chemical composition)</td>
             </tr>
             <tr style="border-bottom: 1px solid #e2e8f0;">
               <td style="padding: 0.65rem 0.75rem; font-weight: 700;">D-Glucose (Dextrose)</td>
@@ -521,7 +539,7 @@ const schemaData = {
               <td style="padding: 0.65rem 0.75rem; font-family: monospace;">H₂O₄S</td>
               <td style="padding: 0.65rem 0.75rem; font-family: monospace;">7664-93-9</td>
               <td style="padding: 0.65rem 0.75rem; font-family: monospace; font-weight: 700; color: #0284c7;">98.072</td>
-              <td style="padding: 0.65rem 0.75rem; color: #475569;">65.25% Oxygen</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">Chemical composition of sulfur (32.71% S)</td>
             </tr>
             <tr style="border-bottom: 1px solid #e2e8f0;">
               <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Caffeine</td>
@@ -531,11 +549,11 @@ const schemaData = {
               <td style="padding: 0.65rem 0.75rem; color: #475569;">49.48% Carbon</td>
             </tr>
             <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
-              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Acetylsalicylic Acid (Aspirin)</td>
-              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">C₉H₈O₄</td>
-              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">50-78-2</td>
-              <td style="padding: 0.65rem 0.75rem; font-family: monospace; font-weight: 700; color: #0284c7;">180.158</td>
-              <td style="padding: 0.65rem 0.75rem; color: #475569;">60.00% Carbon</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Iron(III) Sulfate</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">Fe₂(SO₄)₃</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">10028-22-5</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; font-weight: 700; color: #0284c7;">399.877</td>
+              <td style="padding: 0.65rem 0.75rem; color: #475569;">Composition of iron (27.93% Fe)</td>
             </tr>
             <tr>
               <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Copper Sulfate Pentahydrate</td>
@@ -548,7 +566,7 @@ const schemaData = {
         </table>
       </div>
 
-      <!-- FAQ Accordion (5 Search-Optimized Questions) -->
+      <!-- FAQ Accordion -->
       <h3 style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-top: 3rem; margin-bottom: 1.25rem;">
         Frequently Asked Questions: Molar Mass &amp; Molecular Weight
       </h3>
@@ -838,19 +856,19 @@ const schemaData = {
 
     const citations: Record<string, string> = {
       bibtex: `@software{khan_chemistrydesk_molarmass_${year},
-  author        = {Khan, Bilal},
-  title         = {ChemistryDesk: Universal Molar Mass & Elemental Composition Studio},
-  year          = {${year}},
-  version       = {v1.0.1},
-  publisher     = {Zenodo},
-  doi           = {${doi}},
-  url           = {https://chemistrycal.com/molar-mass}
+  author         = {Khan, Bilal},
+  title          = {Chemistrycal: Universal Molar Mass & Elemental Composition Studio},
+  year           = {${year}},
+  version        = {v1.0.1},
+  publisher      = {Zenodo},
+  doi            = {${doi}},
+  url            = {https://chemistrycal.com/molar-mass}
 }`,
-      acs: `Khan, B. ChemistryDesk: Universal Molar Mass & Elemental Composition Studio, version 1.0.1; Zenodo, ${year}. https://doi.org/${doi}.`,
-      rsc: `B. Khan, ChemistryDesk: Universal Molar Mass & Elemental Composition Studio, version 1.0.1, Zenodo, ${year}, DOI: ${doi}.`,
-      nature: `Khan, B. ChemistryDesk: Universal Molar Mass & Elemental Composition Studio. Zenodo https://doi.org/${doi} (${year}).`,
-      elsevier: `Khan, B., ${year}. ChemistryDesk: Universal Molar Mass & Elemental Composition Studio (Version 1.0.1). Zenodo. https://doi.org/${doi}.`,
-      wiley: `B. Khan, ChemistryDesk: Universal Molar Mass & Elemental Composition Studio, version 1.0.1, Zenodo, ${year}, DOI: ${doi}.`
+      acs: `Khan, B. Chemistrycal: Universal Molar Mass & Elemental Composition Studio, version 1.0.1; Zenodo, ${year}. https://doi.org/${doi}.`,
+      rsc: `B. Khan, Chemistrycal: Universal Molar Mass & Elemental Composition Studio, version 1.0.1, Zenodo, ${year}, DOI: ${doi}.`,
+      nature: `Khan, B. Chemistrycal: Universal Molar Mass & Elemental Composition Studio. Zenodo https://doi.org/${doi} (${year}).`,
+      elsevier: `Khan, B., ${year}. Chemistrycal: Universal Molar Mass & Elemental Composition Studio (Version 1.0.1). Zenodo. https://doi.org/${doi}.`,
+      wiley: `B. Khan, Chemistrycal: Universal Molar Mass & Elemental Composition Studio, version 1.0.1, Zenodo, ${year}, DOI: ${doi}.`
     };
 
     let activeFormat = 'bibtex';
