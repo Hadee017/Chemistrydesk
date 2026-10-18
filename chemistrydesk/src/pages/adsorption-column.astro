@@ -3,7 +3,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import AuthorCard from '../components/AuthorCard.astro';
 
-const pageTitle = "Adsorption Column & Gas Separation Studio | Breakthrough Curves, IAST & Ergun | ChemistryDesk";
+const pageTitle = "Adsorption Column & Gas Separation Studio | Breakthrough Curves, IAST & Ergun | Chemistrycal";
 const pageDescription = "Fixed-bed adsorption column breakthrough predictor (Thomas, Yoon-Nelson & Bohart-Adams), IAST binary gas selectivity engine (CO2/N2, CH4/CO2, O2/N2), and Ergun packed bed pressure drop calculator with fluidization velocity.";
 const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://chemistrycal.com';
 const canonicalUrl = `${siteUrl}/adsorption-column`;
@@ -15,7 +15,7 @@ const schemaData = {
       "@type": "WebSite",
       "@id": `${siteUrl}/#website`,
       "url": siteUrl,
-      "name": "ChemistryDesk",
+      "name": "Chemistrycal",
       "description": "Precision Scientific Utilities & Computational Laboratory Engines",
       "inLanguage": "en-US"
     },
@@ -66,7 +66,7 @@ const schemaData = {
     {
       "@type": "WebApplication",
       "@id": `${canonicalUrl}#software`,
-      "name": "ChemistryDesk Adsorption Column & Gas Separation Studio",
+      "name": "Chemistrycal Adsorption Column & Gas Separation Studio",
       "url": canonicalUrl,
       "applicationCategory": "EducationalApplication, ScientificApplication",
       "operatingSystem": "All modern web browsers",
@@ -192,7 +192,7 @@ const schemaData = {
             Adsorption Column &amp; Gas Separation Studio
           </h1>
           <p style="color: #64748b; font-size: 0.95rem; margin-top: 0.25rem; margin-bottom: 0;">
-            Fixed-bed breakthrough curve modeling (Thomas, Yoon-Nelson &amp; Bohart-Adams), binary competitive gas selectivity (IAST), and Ergun packed bed pressure drop calculations.
+            Fixed-bed adsorption column breakthrough predictor (Thomas, Yoon-Nelson &amp; Bohart-Adams), binary competitive gas selectivity (IAST), and Ergun packed bed pressure drop calculations.
           </p>
         </div>
       </div>
@@ -275,7 +275,7 @@ const schemaData = {
     </section>
 
     <!-- ============================================================ -->
-    <!-- MODULE 1: FIXED-BED BREAKTHROUGH PREDICTOR                   -->
+    <!-- MODULE 1: FIXED-BED BREAKTHROUGH PREDICTOR                  -->
     <!-- ============================================================ -->
     <div id="breakthroughModeSection">
       
@@ -411,6 +411,7 @@ const schemaData = {
             <span id="labelGasA" style="font-size: 0.78rem; font-weight: 800; color: #0d9488; text-transform: uppercase; display: block; margin-bottom: 0.5rem;">
               Component A (e.g., CO₂, Strongly Adsorbed)
             </span>
+
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.5rem;">
               <div>
                 <label for="inpQmA" style="font-size: 0.7rem; font-weight: 700; color: #475569; display: block;">q_max,A (mmol/g)</label>
@@ -432,6 +433,7 @@ const schemaData = {
             <span id="labelGasB" style="font-size: 0.78rem; font-weight: 800; color: #475569; text-transform: uppercase; display: block; margin-bottom: 0.5rem;">
               Component B (e.g., N₂ or CH₄, Weakly Adsorbed)
             </span>
+
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.5rem;">
               <div>
                 <label for="inpQmB" style="font-size: 0.7rem; font-weight: 700; color: #475569; display: block;">q_max,B (mmol/g)</label>
@@ -512,7 +514,7 @@ const schemaData = {
           <div>
             <span style="font-size: 0.72rem; font-weight: 800; color: #475569; text-transform: uppercase;">Superficial Velocity (u):</span>
             <div id="outSuperficialU" style="font-size: 1.15rem; font-weight: 700; color: #0d9488; margin-top: 0.25rem;">-- m/s</div>
-            <div id="outGradP" style="font-size: 0.75rem; color: #64748b;">Gradient: -- kPa/m</div>
+            <div id="outGradP" style="font-size: 0.75rem; font-weight: 64748b;">Gradient: -- kPa/m</div>
           </div>
           <div>
             <span style="font-size: 0.72rem; font-weight: 800; color: #475569; text-transform: uppercase;">Minimum Fluidization (u_mf):</span>
@@ -1046,13 +1048,13 @@ const schemaData = {
 
     const columnCitations: Record<string, string> = {
       bibtex: `@software{khan_chemistrydesk_column_${currentYear},
-  author        = {Khan, Bilal},
-  title         = {ChemistryDesk: Adsorption Column & Gas Separation Studio (Breakthrough, IAST & Ergun)},
-  year          = {${currentYear}},
-  version       = {v1.0.1},
-  publisher     = {Zenodo},
-  doi           = {${doi}},
-  url           = {https://chemistrycal.com/adsorption-column}
+  author         = {Khan, Bilal},
+  title          = {ChemistryDesk: Adsorption Column & Gas Separation Studio (Breakthrough, IAST & Ergun)},
+  year           = {${currentYear}},
+  version        = {v1.0.1},
+  publisher      = {Zenodo},
+  doi            = {${doi}},
+  url            = {https://chemistrycal.com/adsorption-column}
 }`,
       acs: `Khan, B. ChemistryDesk: Adsorption Column & Gas Separation Studio, version 1.0.1; Zenodo, ${currentYear}. https://doi.org/${doi}.`,
       rsc: `B. Khan, ChemistryDesk: Adsorption Column & Gas Separation Studio, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`,
