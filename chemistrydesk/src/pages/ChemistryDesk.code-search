@@ -1,0 +1,220 @@
+# Query: ChemistryDesk
+# ContextLines: 1
+
+67 results - 20 files
+
+Building a tool to compete in a 20M.txt:
+  19  └─────────────────────────┴───────────────────────────────────┴────────────────────────────────────────┘
+  20: ⟪ 3465 characters skipped ⟫rycal.com/ghs](https://chemistrycal.com/ghs)Parent breadcrumb: Home > GHS Hazard Label & Classification StudioTarget Title & Meta Description:<title>: GHS Label Maker & Hazard Classification Studio | Chemistrycal<meta description>: Free OSHA HazCom & EU CLP compliant secondary container label generator. Instant H & P statement lookup, 9 UN pictograms, and printable Schott bottle templates.
+
+ghs.astro file.txt:
+    14  
+    15: const pageTitle = "GHS Hazard & Chemical Safety Studio | Universal 110M+ Reagent Lookup | Chemistrycal";
+    16  const pageDescription = "Universal GHS chemical safety engine. Live lookup for 110M+ compounds via PubChem, full UN Rev. 10 H & P code index, mixture concentration cut-off calculator, and printable OSHA secondary container labels.";
+
+    26        "url": siteUrl,
+    27:       "name": "Chemistrycal",
+    28        "description": "Precision Scientific Utilities & Computational Laboratory Engines",
+
+    77        "@id": `${canonicalUrl}#software`,
+    78:       "name": "Chemistrycal Universal GHS Hazard & Chemical Safety Studio",
+    79        "url": canonicalUrl,
+
+  1063      const ghsCitations: Record<string, string> = {
+  1064:       bibtex: `@software{khan_chemistrydesk_ghs_${currentYear},
+  1065    author        = {Khan, Bilal},
+  1066:   title         = {Chemistrycal: GHS Hazard & Chemical Safety Studio},
+  1067    year          = {${currentYear}},
+
+  1072  }`,
+  1073:       acs: `Khan, B. Chemistrycal: GHS Hazard & Chemical Safety Studio, version 1.0.1; Zenodo, ${currentYear}. https://doi.org/${doi}.`,
+  1074:       rsc: `B. Khan, Chemistrycal: GHS Hazard & Chemical Safety Studio, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`,
+  1075:       nature: `Khan, B. Chemistrycal: GHS Hazard & Chemical Safety Studio. Zenodo https://doi.org/${doi} (${currentYear}).`,
+  1076:       elsevier: `Khan, B., ${currentYear}. Chemistrycal: GHS Hazard & Chemical Safety Studio (Version 1.0.1). Zenodo. https://doi.org/${doi}.`,
+  1077:       wiley: `B. Khan, Chemistrycal: GHS Hazard & Chemical Safety Studio, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`
+  1078      };
+
+README.md:
+  1  [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23059466.svg)](https://doi.org/10.5281/zenodo.23059466)
+  2: # ⚗️ Chemistrycal
+  3  
+
+  7  https://about.me/chemistrycal
+  8: https://www.behance.net/gallery/257033797/Chemistrycal-Offline-Scientific-App
+
+chemistrydesk\package-lock.json:
+  1  {
+  2:   "name": "chemistrydesk",
+  3    "version": "0.0.1",
+
+  7      "": {
+  8:       "name": "chemistrydesk",
+  9        "version": "0.0.1",
+
+chemistrydesk\package.json:
+  1  {
+  2:   "name": "chemistrydesk",
+  3    "type": "module",
+
+chemistrydesk\public\llms.txt:
+  10  - Primary Domain: https://chemistrycal.com
+  11: - Source Code Repository: https://github.com/Hadee017/Chemistrydesk
+  12  - Contact: contact.chemistrycal@gmail.com
+
+  15  If citing ChemistryCal in research papers, theses, or computational workflows:
+  16: - BibTeX: `@software{khan_chemistrydesk_2026, author = {Khan, Bilal}, title = {Chemistrycal: Precision Analytical Web Engine}, year = {2026}, version = {v1.0.1}, publisher = {Zenodo}, doi = {10.5281/zenodo.23059466}, url = {https://doi.org/10.5281/zenodo.23059466}}`
+  17: - ACS: `Khan, B. Chemistrycal: Precision Analytical Web Engine, v1.0.1; Zenodo, 2026. https://doi.org/10.5281/zenodo.23059466.`
+  18  
+
+chemistrydesk\public\sw.js:
+  1: // Chemistrycal Offline Service Worker v1.0.0
+  2: const CACHE_NAME = 'chemistrydesk-v1';
+  3  
+
+chemistrydesk\src\site.config.js:
+  2  export const SITE_CONFIG = {
+  3:   name: "Chemistrycal",
+  4    tagline: "Precision Computational Chemistry & Benchtop Laboratory Suite",
+
+  6    siteUrl: "https://chemistrycal.com", 
+  7:   author: "Chemistrycal Team",
+  8:   contactEmail: "contact@chemistrydesk.com",
+  9    defaultDescription: "High-precision chemical calculation engines, XRD solvers, and laboratory solution formulation utilities running 100% client-side.",
+
+chemistrydesk\src\components\AuthorCard.astro:
+  68            <p class="popover-bio">
+  69:             Specializes in porous material characterization (BET / PXRD), gas physisorption equilibria, and aqueous solution thermodynamics. All formula derivations and calibration tolerances across Chemistrycal are verified against empirical standards.
+  70            </p>
+
+chemistrydesk\src\components\CiteModal.astro:
+  43        </div>
+  44:       <pre id="bibtex-code" class="p-3 bg-slate-900 text-emerald-400 font-mono text-[11px] rounded-lg overflow-x-auto whitespace-pre">@software&#123;khan_chemistrydesk_2026,
+  45    author    = &#123;Khan, Bilal&#125;,
+  46:   title     = &#123;Chemistrycal: Precision Analytical Web Engine&#125;,
+  47    year      = &#123;2026&#125;,
+
+  61        <div id="acs-code" class="p-2.5 bg-slate-50 border border-slate-200 rounded text-xs text-slate-700 font-serif">
+  62:         Khan, B. <em>Chemistrycal: Precision Analytical Web Engine</em>, v1.0.1; Zenodo, 2026. DOI: 10.5281/zenodo.23059466.
+  63        </div>
+
+chemistrydesk\src\components\CiteTool.astro:
+  41      bibtex: `@software{${bibtexKey}_${year},
+  42:   author    = {Chemistrycal Benchtop Contributors},
+  43    title     = {${toolName}},
+  44    year      = {${year}},
+  45:   publisher = {Chemistrycal Precision Scientific Utilities},
+  46    url       = {${toolUrl}}
+  47  }`,
+  48:     acs: `Chemistrycal Benchtop Contributors. ${toolName}. Chemistrycal, ${year}. ${toolUrl} (accessed ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}).`,
+  49:     apa: `Chemistrycal Benchtop Contributors. (${year}). ${toolName} [Web software]. Chemistrycal. ${toolUrl}`,
+  50:     ieee: `Chemistrycal Benchtop Contributors, "${toolName}," Chemistrycal, ${year}. [Online]. Available: ${toolUrl}.`
+  51    };
+
+chemistrydesk\src\components\Navbar.astro:
+  25        <div style="display: flex; flex-direction: column;">
+  26:         <span style="font-size: 1.15rem; font-weight: 800; letter-spacing: -0.025em; color: #0f172a; line-height: 1.15;">Chemistrycal</span>
+  27          <span style="font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #0284c7;">Benchtop Studio</span>
+
+chemistrydesk\src\layouts\BaseLayout.astro:
+   54      "url": "https://chemistrycal.com",
+   55:     "name": "Chemistrycal",
+   56      "description": "Research-grade benchtop computational suite and laboratory calculator.",
+
+  159          <div style="display: flex; flex-direction: column;">
+  160:           <span style="font-size: 1.15rem; font-weight: 800; letter-spacing: -0.025em; color: #0f172a; line-height: 1.15;">Chemistrycal</span>
+  161            <span style="font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #0284c7;">Benchtop Studio</span>
+
+  172          <a href="/contact" style={`text-decoration: none; font-size: 0.85rem; font-weight: 700; padding: 0.45rem 0.85rem; border-radius: 8px; transition: all 0.2s ease; ${Astro.url.pathname.startsWith('/contact') ? 'background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd;' : 'background: transparent; color: #475569; border: 1px solid transparent;'}`}>Contact</a>
+  173:         <button id="pwaInstallBtn" type="button" title="Install Chemistrycal as a native offline app" style="display: inline-flex; flex-direction: column; align-items: center; justify-content: center; padding: 0.35rem 0.85rem; border-radius: 8px; background: #0284c7; color: #ffffff; border: none; cursor: pointer; transition: all 0.2s ease; line-height: 1.15; box-shadow: 0 1px 3px rgba(2, 132, 199, 0.3);">
+  174            <span style="display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.8rem; font-weight: 700;">
+
+  198      </div>
+  199:     <div>&copy; 2026 Chemistrycal. Designed for benchtop precision and educational reference.</div>
+  200    </footer>
+
+  205        navigator.serviceWorker.register('/sw.js')
+  206:         .then(() => console.log('Chemistrycal offline engine active.'))
+  207          .catch((err) => console.warn('PWA registration error:', err));
+
+  228        } else {
+  229:         alert("To install Chemistrycal for offline benchtop use:\n\n• Desktop: Click the 'Install' icon inside your browser's address bar (top-right).\n• Mobile: Tap your browser menu (⋮ or Share) and select 'Add to Home screen'.");
+  230        }
+
+chemistrydesk\src\pages\about.astro:
+    5  <BaseLayout 
+    6:   title="About Chemistrycal | Research-Grade Benchtop Computational Suite"
+    7:   description="Learn about Chemistrycal, an open scientific utility suite developed by physical and analytical chemists to eliminate benchtop volumetric errors and provide standardized stoichiometric workflows."
+    8  >
+
+   16        <h1 style="font-size: 2.5rem; font-weight: 800; color: #0f172a; letter-spacing: -0.025em; margin: 0 0 1rem 0;">
+   17:         About Chemistrycal
+   18        </h1>
+
+   29        <p>
+   30:         Chemistrycal was founded and is actively maintained by <strong>Bilal Khan</strong>, a physical chemistry researcher and educator based in Hazro, District Attock, Pakistan. His research background encompasses <strong>materials chemistry, metal-organic frameworks (HKUST-1 composites), advanced oxidation processes (AOPs), and solution plasma catalytic degradation</strong>.
+   31        </p>
+
+   64        <p>
+   65:         Having worked extensively across academic synthesis laboratories and practical teaching academies, the founder designed Chemistrycal to solve a persistent lab failure point: the discrepancy between theoretical textbook formulas and practical balance weighing—specifically accounting for <em>crystalline hydration water (&middot;nH₂O)</em>, manufacturer <em>assay purity percentages</em>, and <em>instrumental X-ray peak broadening</em>.
+   66        </p>
+
+   74        <p style="font-size: 0.95rem; margin-bottom: 1rem;">
+   75:         All calculators on Chemistrycal adhere strictly to internationally recognized scientific conventions:
+   76        </p>
+
+  107        <p style="font-size: 0.95rem; color: #475569; margin-bottom: 1.25rem;">
+  108:         Chemistrycal is registered and permanently archived in CERN's open-access repository via Zenodo. If you employ this computational suite in thesis dissertations, peer-reviewed manuscripts, or standard laboratory protocol documentation, please cite the permanent record:
+  109        </p>
+  110        <pre style="background: #0f172a; color: #e2e8f0; padding: 1.25rem; border-radius: 8px; font-size: 0.85rem; line-height: 1.6; overflow-x: auto; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; margin: 0;">
+  111: @software&#123;chemistrydesk_2026,
+  112    author       = &#123;Khan, Bilal&#125;,
+  113:   title        = &#123;Chemistrycal: A Client-Side Computational Suite for Analytical Stoichiometry, Solution Formulations, and Powder Diffraction Crystallite Domain Analysis&#125;,
+  114    publisher    = &#123;Zenodo&#125;,
+
+  126        <p>
+  127:         Chemistrycal is an open educational and laboratory utility. If you identify a formula edge case, require a specific reagent addition to our database, or wish to propose an analytical workflow collaboration, please reach out directly through our <a href="/contact" style="color: #0284c7; font-weight: 700; text-decoration: none;">Contact Page</a>.
+  128        </p>
+
+chemistrydesk\src\pages\adsorption-column.astro:
+  1030      document.getElementById('btnCopyLatex')?.addEventListener('click', async () => {
+  1031:       const latex = `% Fixed-Bed Breakthrough Formulation (Chemistrycal)
+  1032  \\begin{equation}
+
+  1049      const columnCitations: Record<string, string> = {
+  1050:       bibtex: `@software{khan_chemistrydesk_column_${currentYear},
+  1051    author         = {Khan, Bilal},
+  1052:   title          = {Chemistrycal: Adsorption Column & Gas Separation Studio (Breakthrough, IAST & Ergun)},
+  1053    year           = {${currentYear}},
+
+  1058  }`,
+  1059:       acs: `Khan, B. Chemistrycal: Adsorption Column & Gas Separation Studio, version 1.0.1; Zenodo, ${currentYear}. https://doi.org/${doi}.`,
+  1060:       rsc: `B. Khan, Chemistrycal: Adsorption Column & Gas Separation Studio, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`,
+  1061:       nature: `Khan, B. Chemistrycal: Adsorption Column & Gas Separation Studio. Zenodo https://doi.org/${doi} (${currentYear}).`,
+  1062:       elsevier: `Khan, B., ${currentYear}. Chemistrycal: Adsorption Column & Gas Separation Studio (Version 1.0.1). Zenodo. https://doi.org/${doi}.`,
+  1063:       wiley: `B. Khan, Chemistrycal: Adsorption Column & Gas Separation Studio, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`
+  1064      };
+
+chemistrydesk\src\pages\electron-configuration.astro:
+  1128      const citations: Record<string, string> = {
+  1129:       bibtex: `@software{khan_chemistrydesk_electron_config_${year},
+  1130    author         = {Khan, Bilal},
+
+chemistrydesk\src\pages\molar-mass.astro:
+  857      const citations: Record<string, string> = {
+  858:       bibtex: `@software{khan_chemistrydesk_molarmass_${year},
+  859    author         = {Khan, Bilal},
+
+chemistrydesk\src\pages\privacy-policy.astro:
+  15        <h2 style="color: #0f172a; font-size: 1.25rem; font-weight: 700;">1. Introduction</h2>
+  16:       <p>ChemistryCal (formerly Chemistrycal, "we", "our", or "us") operates the website https://chemistrycal.com. We respect your personal privacy and are committed to protecting information collected through our laboratory calculation utilities.</p>
+  17      </section>
+
+chemistrydesk\src\pages\terms.astro:
+  15        <h2 style="color: #0f172a; font-size: 1.25rem; font-weight: 700;">1. Agreement to Terms</h2>
+  16:       <p>By accessing ChemistryCal (formerly Chemistrycal, operating at chemistrycal.com), you agree to be bound by these Terms of Service and all applicable regulatory laws. If you do not agree with any part of these terms, you are prohibited from utilizing our computational tools and documentation.</p>
+  17      </section>
+
+chemistrydesk\src\utils\chemicalLookup.ts:
+  2   * src/utils/chemicalLookup.ts
+  3:  * Chemistrycal Unified Chemical Intelligence & GHS Safety Engine
+  4   * 
