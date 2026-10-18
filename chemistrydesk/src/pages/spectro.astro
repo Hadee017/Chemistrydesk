@@ -3,8 +3,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import AuthorCard from '../components/AuthorCard.astro';
 
-const pageTitle = "Beer-Lambert Law & Reaction Kinetics Studio | ChemistryDesk";
-const pageDescription = "Research-grade spectrophotometric suite. Universal Beer-Lambert parameter solver (A = εbc), multi-point calibration curves, unknown interpolation, reaction kinetics regressions, and printable Schott bottle labels.";
+const pageTitle = "Beer-Lambert Law Calculator & Chemical Kinetics Studio | Chemistrycal";
+const pageDescription = "Free online beer lambert law calculator and spectrophotometric kinetics suite. Solve absorbance (A = εbc), calibration curves, unknown interpolation, and photodegradation of dyes.";
 const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://chemistrycal.com';
 const canonicalUrl = `${siteUrl}/spectro`;
 
@@ -15,7 +15,7 @@ const schemaData = {
       "@type": "WebSite",
       "@id": `${siteUrl}/#website`,
       "url": siteUrl,
-      "name": "ChemistryDesk",
+      "name": "Chemistrycal",
       "description": "Precision Scientific Utilities & Computational Laboratory Engines",
       "inLanguage": "en-US"
     },
@@ -66,7 +66,7 @@ const schemaData = {
     {
       "@type": "WebApplication",
       "@id": `${canonicalUrl}#software`,
-      "name": "ChemistryDesk Spectrophotometry & Chemical Kinetics Studio",
+      "name": "Chemistrycal Beer-Lambert Law & Chemical Kinetics Studio",
       "url": canonicalUrl,
       "applicationCategory": "EducationalApplication, ScientificApplication",
       "operatingSystem": "All modern web browsers",
@@ -93,7 +93,7 @@ const schemaData = {
     {
       "@type": "HowTo",
       "@id": `${canonicalUrl}#howto`,
-      "name": "How to Quantify Concentration Using the Beer-Lambert Law",
+      "name": "How to Perform a Beer-Lambert Law Calculation Using an Online Calculator",
       "step": [
         {
           "@type": "HowToStep",
@@ -118,7 +118,31 @@ const schemaData = {
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "Why does the Beer-Lambert law fail at high concentrations (> 0.01 M)?",
+          "name": "What is the formal definition and how do you state beer lambert law?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The beer lambert law states that the optical absorbance of a solution is directly proportional to the concentration of the absorbing species and the optical pathlength through the sample: A = ε · b · c."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What are the standard beer lambert law units for molar absorptivity?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "In the beer lambert equation, absorbance (A) is dimensionless, pathlength (b) is typically expressed in centimeters (cm), concentration (c) is in molarity (mol/L or M), resulting in molar absorptivity (ε) units of L·mol⁻¹·cm⁻¹."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do you perform a beer lambert law calculation example with a standard curve?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Using ordinary least-squares regression on multi-point standard solutions (A = m·c + c₀), unknown sample concentrations are interpolated via c_unk = (A_unk - c₀) / m."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why is the absorption law in uv spectroscopy subject to deviations at high concentrations?",
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "Above 0.01 M, electrostatic interactions between absorbing chromophores alter local refractive indices and electron cloud distributions. Furthermore, stray light leaking through instrument monochromators becomes significant when transmission drops below 3% (A > 1.5)."
@@ -126,26 +150,18 @@ const schemaData = {
         },
         {
           "@type": "Question",
-          "name": "How is the pseudo-first-order rate constant extracted from kinetics data?",
+          "name": "How does the studio model methylene blue photodegradation and dye remediation?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Plot ln(C₀/Ct) vs reaction time (t). The slope of the resulting linear least-squares regression equals the apparent pseudo-first-order rate constant k₁ (min⁻¹)."
+            "text": "By monitoring chromophore absorbance decay over irradiation time, the reaction kinetics engine fits experimental data to pseudo-first-order rate equations (ln(C₀ / Ct) = k₁ · t) to evaluate photodegradation efficiency and half-life."
           }
         },
         {
           "@type": "Question",
-          "name": "What is an optical solvent cutoff in spectrophotometry?",
+          "name": "What are the core principles of chemical kinetics chemistry when extracting rate constants?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "The solvent cutoff wavelength is the spectral point below which the pure solvent itself absorbs intensely (A > 1.0 in a 1 cm cell), masking solute absorption peaks."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How is unknown concentration calculated from a standard calibration curve?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Using ordinary least-squares linear regression (A = m·c + c₀), unknown concentration is calculated via c_unk = (A_unk - c₀) / m, where m is the calibration slope and c₀ is the y-intercept."
+            "text": "Chemical kinetics chemistry evaluates the time-dependent velocity of chemical reactions. In spectrophotometric degradation assays, linearizing reactant concentration decay allows precise extraction of apparent rate constants and catalyst performance."
           }
         }
       ]
@@ -173,10 +189,10 @@ const schemaData = {
             <span>Photometric Quantification &amp; Photodegradation Kinetics</span>
           </div>
           <h1 style="font-size: clamp(1.6rem, 4vw, 2.35rem); font-weight: 800; color: #ffffff; letter-spacing: -0.025em; margin: 0; line-height: 1.2;">
-            Beer-Lambert Law &amp; Photodegradation Kinetics Studio
+            Beer-Lambert Law Calculator &amp; Chemical Kinetics Studio
           </h1>
           <p style="color: #cbd5e1; font-size: 0.95rem; margin-top: 0.65rem; margin-bottom: 0; line-height: 1.6;">
-            Customizable spectrophotometric mass balance solver, multi-point calibration curve regressions, unknown sample interpolation, reaction rate constants, and benchtop label printing.
+            Customizable spectrophotometric beer lambert law mass balance solver, multi-point calibration curve regressions, unknown sample interpolation, chemical kinetics rate constants, and benchtop label printing.
           </p>
         </div>
       </div>
@@ -217,7 +233,7 @@ const schemaData = {
         <span>💡</span> What is the Beer-Lambert Law? (Direct Answer)
       </h2>
       <p style="font-size: 0.92rem; color: #334155; margin: 0; line-height: 1.6;">
-        The <strong>Beer-Lambert law</strong> states that optical absorbance is directly proportional to solute concentration and pathlength: <code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">A = &epsilon; &middot; b &middot; c</code>, where <em>&epsilon;</em> is molar absorptivity, <em>b</em> is pathlength, and <em>c</em> is molarity. It maintains linear validity within <strong>0.100 to 1.200 a.u.</strong>, beyond which stray radiation and chemical interactions induce photometric deviation.
+        The <strong>beer lambert law</strong> states that optical absorbance is directly proportional to solute concentration and pathlength: <code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">A = &epsilon; &middot; b &middot; c</code>, where <em>&epsilon;</em> is molar absorptivity, <em>b</em> is pathlength, and <em>c</em> is molarity. This fundamental principle of absorption law in uv spectroscopy maintains linear validity within <strong>0.100 to 1.200 a.u.</strong>, beyond which stray radiation and chemical interactions induce photometric deviation.
       </p>
     </section>
 
@@ -365,6 +381,7 @@ const schemaData = {
             <span id="readoutLabel" style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #c084fc;">
               Calculated Concentration (c)
             </span>
+
             <div id="primaryResult" style="font-size: clamp(1.75rem, 3.5vw, 2.3rem); font-weight: 800; color: #c084fc; margin: 0.25rem 0 0.75rem 0; word-break: break-all;">--</div>
 
             <div style="border-top: 1px solid #334155; padding-top: 1rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.85rem;">
@@ -494,6 +511,7 @@ const schemaData = {
             <span style="font-size: 0.72rem; color: #64748b; display: block; margin-top: 0.4rem;">
               Tip: Edit numbers in cells, paste copied Excel cells directly, or upload your data file.
             </span>
+
           </div>
 
           <!-- Unknown Sample & Interpolation Card -->
@@ -517,6 +535,7 @@ const schemaData = {
           <span style="font-size: 0.85rem; color: #64748b;">
             Regression: <strong id="calibEquation" style="color: #7c3aed;">A = m·c + c₀</strong> | Fit Quality: <strong id="calibR2Text" style="color: #059669;">R² = --</strong>
           </span>
+
           <button id="downloadCalibCsvBtn" style="background: #7c3aed; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; min-height: 34px;">
             📥 Export Calibration CSV
           </button>
@@ -536,7 +555,7 @@ const schemaData = {
     </div>
 
     <!-- ============================================================ -->
-    <!-- MODE 3: REACTION DEGRADATION KINETICS (EXCEL & UPLOAD READY) -->
+    <!-- MODE 3: REACTION DEGRADATION KINETICS                        -->
     <!-- ============================================================ -->
     <div id="kineticsModeSection" style="display: none; margin-bottom: 3rem;">
       <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: clamp(1rem, 3vw, 1.75rem); margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); min-width: 0;">
@@ -548,7 +567,7 @@ const schemaData = {
               Photocatalytic &amp; Reaction Kinetics Regression
             </h2>
             <p style="font-size: 0.8rem; color: #64748b; margin: 0.25rem 0 0 0;">
-              Enter reaction degradation intervals or upload time-decay run files.
+              Enter chemical kinetics intervals or upload time-decay run files.
             </p>
           </div>
 
@@ -607,6 +626,7 @@ const schemaData = {
             <span style="font-size: 0.72rem; color: #64748b; display: block; margin-top: 0.4rem;">
               Tip: Edit numbers in cells, paste copied Excel columns directly, or upload your data file.
             </span>
+
           </div>
 
           <!-- Kinetic Output Metrics Card -->
@@ -661,7 +681,7 @@ const schemaData = {
         Theoretical Foundations of the Beer-Lambert-Bouguer Law
       </h2>
       <p>
-        The physical attenuation of monochromatic radiation traversing an isotropic, absorbing medium is described mathematically by the differential Beer-Lambert relation. When an incident light beam of radiant flux <em>P₀</em> passes through an incremental transverse pathlength <em>db</em> containing absorbing chemical species at molar concentration <em>c</em>:
+        The physical attenuation of monochromatic radiation traversing an isotropic, absorbing medium is described mathematically by the differential beer lambert law relation. When an incident light beam of radiant flux <em>P₀</em> passes through an incremental transverse pathlength <em>db</em> containing absorbing chemical species at molar concentration <em>c</em>:
       </p>
       
       <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.25rem 2rem; margin: 1.5rem 0; text-align: center; box-shadow: inset 0 1px 2px rgba(0,0,0,0.02); overflow-x: auto;">
@@ -670,38 +690,29 @@ const schemaData = {
         </div>
       </div>
 
-      <!-- WORKED REAL-WORLD ANALYTICAL DERIVATION (ANTI-THIN-CONTENT) -->
+      <!-- WORKED REAL-WORLD ANALYTICAL DERIVATION -->
       <section style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: clamp(1rem, 3vw, 1.5rem); margin: 2rem 0; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
         <h3 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin-top: 0; margin-bottom: 0.75rem;">
-          Step-by-Step Worked Derivation: Spectrophotometric Quantification &amp; Photodegradation Kinetics of Methyl Orange
+          Step-by-Step Worked Derivation: Spectrophotometric Quantification &amp; Photodegradation of Dyes (Methylene Blue &amp; Methyl Orange)
         </h3>
         <p style="font-size: 0.92rem; color: #334155; margin-bottom: 1rem;">
-          Consider tracking the catalytic degradation of Methyl Orange (MO, &lambda;max = 464 nm, MW = 327.33 g/mol) in a standard 1.00 cm optical pathlength quartz cuvette.
+          Consider tracking methylene blue photodegradation (λmax = 664 nm) or Methyl Orange in a standard 1.00 cm optical pathlength quartz cuvette.
         </p>
 
         <div style="background: #f8fafc; border-left: 4px solid #7c3aed; padding: 1rem; margin-bottom: 1rem; font-family: ui-monospace, monospace; font-size: 0.88rem; line-height: 1.7; overflow-x: auto;">
-          <strong>Part 1: Standard Calibration Curve &amp; Extinction Coefficient</strong><br />
-          Standard calibration data recorded at 464 nm:<br />
-          &bull; 2.0 &mu;M &rarr; A = 0.054 a.u.<br />
-          &bull; 5.0 &mu;M &rarr; A = 0.135 a.u.<br />
-          &bull; 10.0 &mu;M &rarr; A = 0.270 a.u.<br />
-          &bull; 20.0 &mu;M &rarr; A = 0.540 a.u.<br />
-          Linear regression slope (m) = &Delta;A / &Delta;c = 0.0270 a.u./&mu;M = <strong>27,000 L&middot;mol⁻¹&middot;cm⁻¹</strong>.<br />
-          Because pathlength b = 1.00 cm, molar absorptivity <strong>&epsilon; = 2.70 &times; 10⁴ L&middot;mol⁻¹&middot;cm⁻¹</strong>.<br /><br />
-          <strong>Part 2: Unknown Sample Quantification</strong><br />
-          An unknown treated solution exhibits A = 0.351 a.u.<br />
-          c_unk = A / (&epsilon; &middot; b) = 0.351 / (27,000 &times; 1.0) = <strong>1.30 &times; 10⁻⁵ M = 13.0 &mu;M</strong>.<br /><br />
-          <strong>Part 3: Reaction Degradation Kinetics (Pseudo-First-Order)</strong><br />
-          Initial concentration (t = 0 min): C₀ = 20.0 &mu;M (A = 0.540)<br />
-          After 30 min irradiation: Ct = 4.2 &mu;M (A = 0.113)<br />
-          Degradation efficiency = [(20.0 - 4.2) / 20.0] &times; 100 = <strong>79.0%</strong>.<br />
-          Apparent rate constant: k₁ = ln(C₀ / Ct) / t = ln(20.0 / 4.2) / 30 min = 1.5606 / 30 = <strong>0.0520 min⁻¹</strong>.<br />
-          Catalytic half-life: t₁/₂ = ln(2) / k₁ = 0.69315 / 0.0520 = <strong>13.33 min</strong>.
+          <strong>Part 1: Beer-Lambert Law Calculation Example</strong><br />
+          Standard calibration data recorded at 664 nm:<br />
+          &bull; 2.0 &mu;M &rarr; A = 0.148 a.u.<br />
+          &bull; 5.0 &mu;M &rarr; A = 0.370 a.u.<br />
+          &bull; 10.0 &mu;M &rarr; A = 0.740 a.u.<br />
+          Linear regression slope (m) = &Delta;A / &Delta;c = 0.074 a.u./&mu;M = <strong>74,000 L&middot;mol⁻¹&middot;cm⁻¹</strong>.<br /><br />
+          <strong>Part 2: Chemical Kinetics Analysis</strong><br />
+          Initial concentration C₀ = 10.0 &mu;M (A = 0.740)<br />
+          After 30 min irradiation: Ct = 2.2 &mu;M (A = 0.163)<br />
+          Degradation efficiency = [(10.0 - 2.2) / 10.0] &times; 100 = <strong>78.0%</strong>.<br />
+          Apparent rate constant: k₁ = ln(C₀ / Ct) / t = ln(10.0 / 2.2) / 30 min = <strong>0.0504 min⁻¹</strong>.<br />
+          Half-life: t₁/₂ = ln(2) / k₁ = <strong>13.75 min</strong>.
         </div>
-
-        <p style="font-size: 0.9rem; color: #475569; margin: 0;">
-          <strong>Analytical Verification:</strong> Operating at A = 0.540 to 0.113 places all measurements comfortably inside the linear dynamic range (0.100 to 1.000 a.u.), avoiding detector dark-current noise and monochromator stray light errors.
-        </p>
       </section>
 
       <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
@@ -850,19 +861,6 @@ const schemaData = {
         </table>
       </div>
 
-      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
-        Photocatalysis &amp; Chemical Kinetics Modeling
-      </h3>
-      <p>
-        In advanced oxidation processes (AOPs), solution plasma treatment, and environmental pollutant breakdown, reaction kinetics are evaluated by monitoring the decay of chromophore absorbance over time. The pseudo-first-order rate constant is extracted via linear regression:
-      </p>
-
-      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.25rem 2rem; margin: 1.5rem 0; text-align: center; box-shadow: inset 0 1px 2px rgba(0,0,0,0.02); overflow-x: auto;">
-        <div style="font-size: clamp(1.1rem, 2.5vw, 1.35rem); font-weight: 700; color: #0f172a; font-family: 'Times New Roman', Times, serif;">
-          ln(C₀ / C<sub><i>t</i></sub>) = <i>k</i>₁ &middot; <i>t</i> &nbsp;&nbsp;|&nbsp;&nbsp; <i>t</i><sub>1/2</sub> = ln(2) / <i>k</i>₁
-        </div>
-      </div>
-
       <!-- FAQ ACCORDION SECTION -->
       <h3 style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-top: 3rem; margin-bottom: 1.25rem;">
         Frequently Asked Questions: Spectrophotometry &amp; Chemical Kinetics
@@ -870,23 +868,44 @@ const schemaData = {
 
       <div style="display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 2rem;">
         <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
-          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Why does Beer-Lambert fail at high solute concentrations?</summary>
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What is the formal definition and how do you state beer lambert law?</summary>
           <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
-            Above 0.01 M, inter-chromophore distances shrink below 10 nm. Neighboring electrostatic fields perturb electron distributions, altering molar absorptivity (&epsilon;). Furthermore, high optical densities let monochromator stray light dominate the detector signal.
+            The beer lambert law states that the optical absorbance of a solution is directly proportional to the concentration of the absorbing species and the optical pathlength through the sample: A = ε · b · c.
           </p>
         </details>
 
         <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
-          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How is unknown concentration calculated from a standard curve?</summary>
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What are the standard beer lambert law units for molar absorptivity?</summary>
           <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
-            Using ordinary least-squares regression (<em>A = m&middot;c + c₀</em>), the unknown concentration is calculated via: <em>c_unk = (A_unk - c₀) / m</em>, where <em>m</em> is the slope and <em>c₀</em> is the y-intercept.
+            In the beer lambert equation, absorbance (A) is dimensionless, pathlength (b) is in centimeters (cm), concentration (c) is in molarity (mol/L), resulting in molar absorptivity (ε) units of L·mol⁻¹·cm⁻¹.
           </p>
         </details>
 
         <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
-          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What is an optical solvent cutoff?</summary>
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How do you perform a beer lambert law calculation example with a standard curve?</summary>
           <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
-            The solvent transmission cutoff is the wavelength below which the pure solvent absorbs heavily (<em>A</em> &gt; 1.0 in a 1 cm cuvette), obscuring the solute spectrum. Common cutoffs include DI Water (190 nm), Methanol (205 nm), and Acetone (330 nm).
+            Using ordinary least-squares regression on multi-point standard solutions (A = m·c + c₀), unknown sample concentrations are interpolated via c_unk = (A_unk - c₀) / m.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Why is the absorption law in uv spectroscopy subject to deviations at high concentrations?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Above 0.01 M, inter-chromophore distances shrink below 10 nm. Neighboring electrostatic fields perturb electron distributions, altering molar absorptivity (ε). Furthermore, high optical densities let monochromator stray light dominate the detector signal.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How does the studio model methylene blue photodegradation and dye remediation?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            By monitoring chromophore absorbance decay over irradiation time, the reaction kinetics engine fits experimental data to pseudo-first-order rate equations (ln(C₀ / Ct) = k₁ · t) to evaluate photodegradation efficiency and half-life.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What are the core principles of chemical kinetics chemistry when extracting rate constants?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Chemical kinetics chemistry evaluates the time-dependent velocity of chemical reactions. In spectrophotometric degradation assays, linearizing reactant concentration decay allows precise extraction of apparent rate constants and catalyst performance.
           </p>
         </details>
       </div>
@@ -923,7 +942,7 @@ const schemaData = {
   <div id="printLabelModal" style="display: none;">
     <div id="labelBox" style="width: 3.75in; height: 2.0in; border: 2px solid #000; padding: 0.2in; box-sizing: border-box; font-family: sans-serif; background: #fff; color: #000; position: relative;">
       <div style="border-bottom: 2px solid #000; padding-bottom: 4px; display: flex; justify-content: space-between; align-items: baseline;">
-        <span style="font-size: 12pt; font-weight: 900; letter-spacing: -0.02em;">ChemistryDesk OPTICAL STANDARD</span>
+        <span style="font-size: 12pt; font-weight: 900; letter-spacing: -0.02em;">Chemistrycal OPTICAL STANDARD</span>
         <span id="labelDate" style="font-size: 8pt; font-weight: bold;"></span>
       </div>
       <div style="margin-top: 8px;">
@@ -1769,20 +1788,20 @@ const schemaData = {
     const currentYear = new Date().getFullYear();
 
     const spectroCitations: Record<string, string> = {
-      bibtex: `@software{khan_chemistrydesk_spectro_${currentYear},
-  author        = {Khan, Bilal},
-  title         = {ChemistryDesk: Beer-Lambert Law & Reaction Kinetics Studio},
-  year          = {${currentYear}},
-  version       = {v1.0.1},
-  publisher     = {Zenodo},
-  doi           = {${doi}},
-  url           = {https://chemistrycal.com/spectro}
+      bibtex: `@software{khan_chemistrycal_spectro_${currentYear},
+  author         = {Khan, Bilal},
+  title          = {Chemistrycal: Beer-Lambert Law Calculator & Chemical Kinetics Studio},
+  year           = {${currentYear}},
+  version        = {v1.0.1},
+  publisher      = {Zenodo},
+  doi            = {${doi}},
+  url            = {https://chemistrycal.com/spectro}
 }`,
-      acs: `Khan, B. ChemistryDesk: Beer-Lambert Law & Reaction Kinetics Studio, version 1.0.1; Zenodo, ${currentYear}. https://doi.org/${doi}.`,
-      rsc: `B. Khan, ChemistryDesk: Beer-Lambert Law & Reaction Kinetics Studio, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`,
-      nature: `Khan, B. ChemistryDesk: Beer-Lambert Law & Reaction Kinetics Studio. Zenodo https://doi.org/${doi} (${currentYear}).`,
-      elsevier: `Khan, B., ${currentYear}. ChemistryDesk: Beer-Lambert Law & Reaction Kinetics Studio (Version 1.0.1). Zenodo. https://doi.org/${doi}.`,
-      wiley: `B. Khan, ChemistryDesk: Beer-Lambert Law & Reaction Kinetics Studio, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`
+      acs: `Khan, B. Chemistrycal: Beer-Lambert Law Calculator & Chemical Kinetics Studio, version 1.0.1; Zenodo, ${currentYear}. https://doi.org/${doi}.`,
+      rsc: `B. Khan, Chemistrycal: Beer-Lambert Law Calculator & Chemical Kinetics Studio, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`,
+      nature: `Khan, B. Chemistrycal: Beer-Lambert Law Calculator & Chemical Kinetics Studio. Zenodo https://doi.org/${doi} (${currentYear}).`,
+      elsevier: `Khan, B., ${currentYear}. Chemistrycal: Beer-Lambert Law Calculator & Chemical Kinetics Studio (Version 1.0.1). Zenodo. https://doi.org/${doi}.`,
+      wiley: `B. Khan, Chemistrycal: Beer-Lambert Law Calculator & Chemical Kinetics Studio, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`
     };
 
     let currentInlineFormat = 'bibtex';
