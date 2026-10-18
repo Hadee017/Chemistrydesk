@@ -3,8 +3,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import AuthorCard from '../components/AuthorCard.astro';
 
-const pageTitle = "Stoichiometry & Reaction Yield Engine | Limiting Reactant & Balancer | ChemistryDesk";
-const pageDescription = "Research-grade reaction stoichiometry engine. Balance equations via matrix nullspace, determine exact limiting reactants, and compute theoretical & percent yields with atomic mass balance checks.";
+const pageTitle = "Stoichiometry Calculator & Chemical Formula Balancer | Chemistrycal";
+const pageDescription = "Free online chem balancing equations and stoichiometry calculator. Solve chemical formula balancer matrix nullspace, limiting reactants, gravimetric stoichiometry, and percent yields.";
 const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://chemistrycal.com';
 const canonicalUrl = `${siteUrl}/stoichiometry`;
 
@@ -15,7 +15,7 @@ const schemaData = {
       "@type": "WebSite",
       "@id": `${siteUrl}/#website`,
       "url": siteUrl,
-      "name": "ChemistryDesk",
+      "name": "Chemistrycal",
       "description": "Precision Scientific Utilities & Computational Laboratory Engines",
       "inLanguage": "en-US"
     },
@@ -66,7 +66,7 @@ const schemaData = {
     {
       "@type": "WebApplication",
       "@id": `${canonicalUrl}#software`,
-      "name": "ChemistryDesk Stoichiometry & Reaction Yield Engine",
+      "name": "Chemistrycal Stoichiometry Calculator & Reaction Yield Engine",
       "url": canonicalUrl,
       "applicationCategory": "EducationalApplication, ScientificApplication",
       "operatingSystem": "All modern web browsers",
@@ -122,18 +122,34 @@ const schemaData = {
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "How does the matrix nullspace balancing algorithm work?",
+          "name": "How does the chemical equation solver and formula balancer work?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "The engine constructs a stoichiometric matrix A where rows represent unique elements and columns represent chemical species. By performing Gaussian elimination using exact rational arithmetic, it solves the homogeneous system A * x = 0 to yield the smallest positive integer nullspace vector for stoichiometric coefficients."
+            "text": "The chemical equation solver constructs a stoichiometric matrix where rows represent unique elements and columns represent chemical species. By performing Gaussian elimination using exact rational arithmetic, it solves the homogeneous system to yield the smallest positive integer nullspace vector for chem balancing equations."
           }
         },
         {
           "@type": "Question",
-          "name": "What is the difference between limiting reactant and excess reactant?",
+          "name": "How do you solve stoichiometry igcse and basic stoichiometry problems?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "The limiting reactant is completely consumed first, dictating the maximum theoretical quantity of product that can form. Excess reactants remain partially unreacted after the limiting reagent is exhausted."
+            "text": "Stoichiometry igcse and basic stoichiometry problems are solved by following three core steps: (1) write and balance the chemical equation, (2) convert given masses to moles using molar mass, and (3) apply stoichiometric molar ratios to find the unknown quantity or limiting reagent."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the difference between gravimetric stoichiometry and solution stoichiometry?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Gravimetric stoichiometry involves solid reactant masses and precipitate isolation (such as in precipitation reactions), whereas solution stoichiometry utilizes liquid volumes and molarity concentrations (such as in acid base titration stoichiometry)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do you determine the limiting reactant in combustion stoichiometry?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "In combustion stoichiometry (e.g., burning hydrocarbons with oxygen), you calculate the reaction extent (xi = moles / coefficient) for each reactant. The reagent with the smaller extent is completely consumed and limits the theoretical yield of carbon dioxide and water."
           }
         },
         {
@@ -146,10 +162,10 @@ const schemaData = {
         },
         {
           "@type": "Question",
-          "name": "What is atom economy and how does it differ from percent yield?",
+          "name": "Where can I find stoichiometry examples with solutions?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Percent yield measures practical reaction efficiency in the laboratory (actual vs. theoretical yield). Atom economy is a green chemistry metric measuring theoretical efficiency: the percentage of all starting reactant atoms that end up in the desired product molecule."
+            "text": "This studio provides built-in preset examples (like propane combustion and metal oxidation) along with step-by-step worked solutions for mass-to-mass conversions and limiting reagent identification."
           }
         }
       ]
@@ -177,10 +193,10 @@ const schemaData = {
             <span>Quantitative Reaction &amp; Mass Balance Studio</span>
           </div>
           <h1 style="font-size: clamp(1.6rem, 4vw, 2.35rem); font-weight: 800; color: #ffffff; letter-spacing: -0.025em; margin: 0; line-height: 1.2;">
-            Stoichiometry &amp; Reaction Yield Engine
+            Stoichiometry Calculator &amp; Chemical Formula Balancer
           </h1>
           <p style="color: #cbd5e1; font-size: 0.95rem; margin-top: 0.65rem; margin-bottom: 0; line-height: 1.6;">
-            Exact integer equation balancing, automatic molar mass calculation, limiting reactant detection, and theoretical &amp; percent yield optimization.
+            Exact integer equation balancing via chemical formula balancer algorithms, automatic molar mass calculation, limiting reactant detection, and gravimetric &amp; combustion stoichiometry.
           </p>
         </div>
 
@@ -203,10 +219,10 @@ const schemaData = {
     <!-- DIRECT DEFINITION & GEO SUMMARY CALLOUT BOX -->
     <section style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-left: 5px solid #0284c7; border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 1.75rem;">
       <h2 style="font-size: 1rem; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.04em; margin: 0 0 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
-        <span>💡</span> What is Chemical Stoichiometry? (Direct Answer)
+        <span>💡</span> What is Chemical Stoichiometry &amp; Chem Balancing Equations? (Direct Answer)
       </h2>
       <p style="font-size: 0.92rem; color: #334155; margin: 0; line-height: 1.6;">
-        <strong>Chemical stoichiometry</strong> is the quantitative measurement of relationships between reactants and products governed by the <strong>Law of Conservation of Mass</strong>. The <strong>limiting reactant</strong> is the reagent with the lowest extent of reaction (<code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">&xi; = n / &nu;</code>) that is consumed completely first, setting the theoretical yield ceiling. <strong>Percent yield</strong> measures the experimental recovery: <code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">(Actual Mass / Theoretical Mass) &times; 100%</code>.
+        <strong>Chemical stoichiometry</strong> is the quantitative measurement of relationships between reactants and products governed by the <strong>Law of Conservation of Mass</strong>. Using a reliable <strong>chemical equation solver</strong> or <strong>chemical formula balancer</strong>, reactions are simplified for both basic stoichiometry and stoichiometry igcse coursework. The <strong>limiting reactant</strong> is the reagent with the lowest reaction extent (<code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">&xi; = n / &nu;</code>) that dictates theoretical yield.
       </p>
     </section>
 
@@ -231,7 +247,7 @@ const schemaData = {
       <!-- EQUATION INPUT & BALANCER CARD -->
       <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: clamp(1rem, 3vw, 1.75rem); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); min-width: 0;">
         <label for="inputEquation" style="font-size: 0.85rem; font-weight: 800; color: #334155; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">
-          Enter Chemical Reaction (Unbalanced or Balanced):
+          Enter Chemical Reaction for Chem Balancing Equations:
         </label>
         
         <div style="display: flex; gap: 0.5rem; margin-bottom: 0.75rem; flex-wrap: wrap;">
@@ -371,7 +387,7 @@ const schemaData = {
         &Sigma; (A<sub>ij</sub> &times; x<sub>j</sub>) = 0
       </div>
       <p>
-        Where A<sub>ij</sub> is the stoichiometric index of element i in species j, and x<sub>j</sub> is the positive integer stoichiometric coefficient. The ChemistryDesk engine applies Gaussian elimination over exact rational arithmetic to identify the smallest non-zero integer vector spanning the null-space of matrix A.
+        Where A<sub>ij</sub> is the stoichiometric index of element i in species j, and x<sub>j</sub> is the positive integer stoichiometric coefficient. The Chemistrycal engine applies Gaussian elimination over exact rational arithmetic to identify the smallest non-zero integer vector spanning the null-space of matrix A.
       </p>
 
       <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
@@ -550,23 +566,44 @@ const schemaData = {
 
       <div style="display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 2rem;">
         <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
-          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Can this engine balance reactions with polyatomic parentheses or hydrates?</summary>
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How does the chemical equation solver and formula balancer work?</summary>
           <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
-            Yes. The lexical formula parser supports standard parentheses and brackets such as Ca(OH)₂, Al₂(SO₄)₃, as well as crystal hydrate dot notation like CuSO₄&middot;5H₂O.
+            The chemical equation solver constructs a stoichiometric matrix where rows represent unique elements and columns represent chemical species. By performing Gaussian elimination using exact rational arithmetic, it solves the homogeneous system to yield the smallest positive integer nullspace vector for chem balancing equations.
           </p>
         </details>
 
         <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
-          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What does a percent yield greater than 100% indicate in the laboratory?</summary>
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How do you solve stoichiometry igcse and basic stoichiometry problems?</summary>
           <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
-            A percent yield above 100% physically indicates an impure product sample—commonly containing residual crystallization solvent, unevaporated water, unreacted starting material, or co-precipitated byproduct salts.
+            Stoichiometry igcse and basic stoichiometry problems are solved by following three core steps: (1) write and balance the chemical equation, (2) convert given masses to moles using molar mass, and (3) apply stoichiometric molar ratios to find the unknown quantity or limiting reagent.
           </p>
         </details>
 
         <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
-          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Why is the stoichiometric coefficient never altered during mass calculation?</summary>
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What is the difference between gravimetric stoichiometry and solution stoichiometry?</summary>
           <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
-            Stoichiometric coefficients represent fundamental molar ratios determined by atomic orbital and valence electron conservation. Multiplying molar mass by the coefficient directly inside the mole conversion introduces dimensional error; molar mass represents the mass of exactly one mole (g/mol) regardless of coefficient magnitude.
+            Gravimetric stoichiometry involves solid reactant masses and precipitate isolation (such as in precipitation reactions), whereas solution stoichiometry utilizes liquid volumes and molarity concentrations (such as in acid base titration stoichiometry).
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How do you determine the limiting reactant in combustion stoichiometry?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            In combustion stoichiometry (e.g., burning hydrocarbons with oxygen), you calculate the reaction extent (xi = moles / coefficient) for each reactant. The reagent with the smaller extent is completely consumed and limits the theoretical yield of carbon dioxide and water.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Why can an experimental percent yield exceed 100%?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            A percent yield above 100% indicates product contamination. Common sources include residual crystallization solvents, unevaporated water, co-precipitated byproduct salts, or unreacted starting materials in the isolated product.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Where can I find stoichiometry examples with solutions?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            This studio provides built-in preset examples (like propane combustion and metal oxidation) along with step-by-step worked solutions for mass-to-mass conversions and limiting reagent identification.
           </p>
         </details>
       </div>
@@ -841,7 +878,7 @@ const schemaData = {
     document.getElementById('btnCopyReport')?.addEventListener('click', async () => {
       if (!currentBalancedResult || !currentBalancedResult.isBalanced) return;
       const report = `================================================
-CHEMISTRYDESK STOICHIOMETRY & YIELD REPORT
+CHEMISTRYCAL STOICHIOMETRY & YIELD REPORT
 Equation: ${currentBalancedResult.balancedEquationString}
 ================================================
 Limiting Reactant: ${limitingVerdictText.textContent}
@@ -861,7 +898,7 @@ Percent Yield: ${percentYieldBadge.textContent}
     // 1-Click LaTeX Block
     document.getElementById('btnCopyLatex')?.addEventListener('click', async () => {
       if (!currentBalancedResult || !currentBalancedResult.isBalanced) return;
-      const latex = `% Balanced Stoichiometric Reaction (ChemistryDesk)
+      const latex = `% Balanced Stoichiometric Reaction (Chemistrycal)
 \\begin{equation}
   ${currentBalancedResult.balancedEquationString.replace(/->|→/g, '\\longrightarrow ')}
 \\end{equation}`;
@@ -903,20 +940,20 @@ Percent Yield: ${percentYieldBadge.textContent}
     const currentYear = new Date().getFullYear();
 
     const citations: Record<string, string> = {
-      bibtex: `@software{khan_chemistrydesk_stoichiometry_${currentYear},
-  author        = {Khan, Bilal},
-  title         = {ChemistryDesk: Stoichiometry & Reaction Yield Engine},
-  year          = {${currentYear}},
-  version       = {v1.0.1},
-  publisher     = {Zenodo},
-  doi           = {${doi}},
-  url           = {https://chemistrycal.com/stoichiometry}
+      bibtex: `@software{khan_chemistrycal_stoichiometry_${currentYear},
+  author         = {Khan, Bilal},
+  title          = {Chemistrycal: Stoichiometry Calculator & Chemical Formula Balancer},
+  year           = {${currentYear}},
+  version        = {v1.0.1},
+  publisher      = {Zenodo},
+  doi            = {${doi}},
+  url            = {https://chemistrycal.com/stoichiometry}
 }`,
-      acs: `Khan, B. ChemistryDesk: Stoichiometry & Reaction Yield Engine, version 1.0.1; Zenodo, ${currentYear}. https://doi.org/${doi}.`,
-      rsc: `B. Khan, ChemistryDesk: Stoichiometry & Reaction Yield Engine, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`,
-      nature: `Khan, B. ChemistryDesk: Stoichiometry & Reaction Yield Engine. Zenodo https://doi.org/${doi} (${currentYear}).`,
-      elsevier: `Khan, B., ${currentYear}. ChemistryDesk: Stoichiometry & Reaction Yield Engine (Version 1.0.1). Zenodo. https://doi.org/${doi}.`,
-      wiley: `B. Khan, ChemistryDesk: Stoichiometry & Reaction Yield Engine, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`
+      acs: `Khan, B. Chemistrycal: Stoichiometry Calculator & Chemical Formula Balancer, version 1.0.1; Zenodo, ${currentYear}. https://doi.org/${doi}.`,
+      rsc: `B. Khan, Chemistrycal: Stoichiometry Calculator & Chemical Formula Balancer, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`,
+      nature: `Khan, B. Chemistrycal: Stoichiometry Calculator & Chemical Formula Balancer. Zenodo https://doi.org/${doi} (${currentYear}).`,
+      elsevier: `Khan, B., ${currentYear}. Chemistrycal: Stoichiometry Calculator & Chemical Formula Balancer (Version 1.0.1). Zenodo. https://doi.org/${doi}.`,
+      wiley: `B. Khan, Chemistrycal: Stoichiometry Calculator & Chemical Formula Balancer, version 1.0.1, Zenodo, ${currentYear}, DOI: ${doi}.`
     };
 
     let currentInlineFormat = 'bibtex';
