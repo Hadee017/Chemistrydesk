@@ -3,8 +3,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import AuthorCard from '../components/AuthorCard.astro';
 
-const pageTitle = "Electron Configuration Calculator | Orbital Notation, Quantum Numbers & Hund's Rule | ChemistryDesk";
-const pageDescription = "Universal electron configuration studio. Generate full and noble gas configurations, interactive Hund's rule orbital box diagrams, quantum numbers, Slater's Zeff, and ionization energies.";
+const pageTitle = "Electron Configuration Calculator | Periodic Table & Orbital Notation | Chemistrycal";
+const pageDescription = "Free online electron configuration calculator and periodic table electron distribution engine. Generate full and noble gas configurations, ion configurations (Fe2+, Ni2+), quantum numbers, and Hund's rule orbital diagrams.";
 const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://chemistrycal.com';
 const canonicalUrl = `${siteUrl}/electron-configuration`;
 
@@ -15,7 +15,7 @@ const schemaData = {
       "@type": "WebSite",
       "@id": `${siteUrl}/#website`,
       "url": siteUrl,
-      "name": "ChemistryDesk",
+      "name": "Chemistrycal",
       "description": "Precision Scientific Utilities & Computational Laboratory Engines",
       "inLanguage": "en-US"
     },
@@ -66,7 +66,7 @@ const schemaData = {
     {
       "@type": "WebApplication",
       "@id": `${canonicalUrl}#software`,
-      "name": "ChemistryDesk Electron Configuration & Orbital Physics Studio",
+      "name": "Chemistrycal Electron Configuration & Orbital Physics Studio",
       "url": canonicalUrl,
       "applicationCategory": "EducationalApplication, ScientificApplication",
       "operatingSystem": "All modern web browsers",
@@ -93,17 +93,17 @@ const schemaData = {
     {
       "@type": "HowTo",
       "@id": `${canonicalUrl}#howto`,
-      "name": "How to Determine Electron Configuration and Orbital Diagrams",
+      "name": "How to Determine Electron Configuration and Orbital Diagrams from the Periodic Table",
       "step": [
         {
           "@type": "HowToStep",
-          "name": "Determine Total Electron Count",
-          "text": "Identify the element's atomic number (Z) and adjust for formal charge (subtracting electrons for cations, adding electrons for anions)."
+          "name": "Locate the Element on the Periodic Table",
+          "text": "Identify the element's atomic number (Z) and period block (s, p, d, f) to establish electron distribution."
         },
         {
           "@type": "HowToStep",
           "name": "Apply the Aufbau (Madelung) Filling Sequence",
-          "text": "Fill orbitals in order of increasing (n + l) energy: 1s, 2s, 2p, 3s, 3p, 4s, 3d, 4p, 5s, etc."
+          "text": "Fill orbitals in order of increasing (n + l) energy: 1s, 2s, 2p, 3s, 3p, 4s, 3d, 4p, etc."
         },
         {
           "@type": "HowToStep",
@@ -121,6 +121,22 @@ const schemaData = {
       "@type": "FAQPage",
       "@id": `${canonicalUrl}#faq`,
       "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How do you find electron configurations using the periodic table?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "You can read electron configurations directly across the periodic table blocks: Group 1-2 form the s-block, Groups 13-18 form the p-block, transition metals form the d-block, and lanthanides/actinides form the f-block. Each period corresponds to the principal quantum number n."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What are the electron configurations for iron ions like Fe2+ and Fe3+?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Neutral iron (Fe) has the configuration [Ar] 3d6 4s2. When forming transition metal cations like Fe2+, electrons are removed from the outermost principal shell first (4s), resulting in [Ar] 3d6. For Fe3+, an additional electron is lost from 3d, yielding [Ar] 3d5."
+          }
+        },
         {
           "@type": "Question",
           "name": "Why do transition metal cations lose 4s electrons before 3d electrons?",
@@ -186,10 +202,10 @@ const schemaData = {
             <span>Quantum Mechanics &bull; IUPAC Aufbau Anomalies &bull; Slater's Z_eff</span>
           </div>
           <h1 style="font-size: clamp(1.6rem, 4vw, 2.35rem); font-weight: 800; color: #ffffff; letter-spacing: -0.025em; margin: 0; line-height: 1.2;">
-            Electron Configuration Studio
+            Electron Configuration Calculator &amp; Periodic Table Studio
           </h1>
           <p style="color: #cbd5e1; font-size: 1rem; margin-top: 0.65rem; margin-bottom: 0; line-height: 1.6;">
-            Interactive subshell orbital box diagrams, quantum numbers, noble gas shorthand, cation/anion ionization, and Slater's effective nuclear charge across all 118 elements.
+            Interactive subshell orbital box diagrams, quantum numbers, periodic table electron distribution, noble gas shorthand, cation/anion ionization (Ni2+, Fe2+), and Slater's effective nuclear charge across all 118 elements.
           </p>
         </div>
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
@@ -214,10 +230,10 @@ const schemaData = {
     <!-- DIRECT DEFINITION & GEO SUMMARY CALLOUT BOX -->
     <section style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-left: 5px solid #0284c7; border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 1.75rem;">
       <h2 style="font-size: 1rem; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.04em; margin: 0 0 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
-        <span>💡</span> What is an Electron Configuration? (Direct Answer)
+        <span>💡</span> What is an Electron Configuration in the Periodic Table? (Direct Answer)
       </h2>
       <p style="font-size: 0.92rem; color: #334155; margin: 0; line-height: 1.6;">
-        An <strong>electron configuration</strong> describes the distribution of electrons across atomic orbitals in an atom or ion. Governing laws include the <strong>Aufbau principle</strong> (<code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">n + l</code> energy filling sequence), the <strong>Pauli exclusion principle</strong> (maximum 2 antiparallel electrons per spatial orbital), and <strong>Hund's rule</strong> (degenerate orbitals fill singly with parallel spins first).
+        An <strong>electron configuration</strong> describes the distribution of electrons across atomic orbitals in an atom or ion relative to the <strong>periodic table of elements</strong>. Governing rules include the <strong>Aufbau principle</strong> (filling in order of <code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: 700;">1s 2s 2p 3s 3p</code>), the Pauli exclusion principle, and Hund's rule.
       </p>
     </section>
 
@@ -228,13 +244,12 @@ const schemaData = {
       </div>
       <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;" id="presetPillsGroup">
         <button type="button" class="preset-pill active" data-query="Fe" style="background: #0284c7; border: 1px solid #0284c7; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #ffffff;">Iron (Fe, Z=26)</button>
-        <button type="button" class="preset-pill" data-query="Fe+2" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Fe²⁺ (4s Outer Loss)</button>
+        <button type="button" class="preset-pill" data-query="Fe+2" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Fe²⁺ (Fe2+ configuration)</button>
+        <button type="button" class="preset-pill" data-query="Ni+2" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Ni²⁺ (Ni2+ configuration)</button>
         <button type="button" class="preset-pill" data-query="Cr" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Chromium (Cr, 3d⁵ 4s¹)</button>
         <button type="button" class="preset-pill" data-query="Cu" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Copper (Cu, 3d¹⁰ 4s¹)</button>
-        <button type="button" class="preset-pill" data-query="Pd" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Palladium (4d¹⁰ 5s⁰)</button>
-        <button type="button" class="preset-pill" data-query="O-2" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Oxide Ion (O²⁻, [Ne])</button>
-        <button type="button" class="preset-pill" data-query="Au" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Gold (Au, 5d¹⁰ 6s¹)</button>
-        <button type="button" class="preset-pill" data-query="U" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Uranium (5f³ 6d¹ 7s²)</button>
+        <button type="button" class="preset-pill" data-query="Mg" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Magnesium configuration</button>
+        <button type="button" class="preset-pill" data-query="Al" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: #1e293b;">Aluminium config</button>
       </div>
     </div>
 
@@ -258,7 +273,7 @@ const schemaData = {
               type="text" 
               id="inpElementQuery" 
               value="Fe" 
-              placeholder="e.g. Fe, Fe+2, Cr, Cu, O-2, or 26" 
+              placeholder="e.g. Fe, Fe+2, Ni+2, Cr, Cu, Mg, or 26" 
               autocomplete="off" 
               spellcheck="false"
               style="width: 100%; box-sizing: border-box; padding: 0.85rem 1rem; border: 2px solid #bae6fd; border-radius: 8px; font-size: 1.45rem; font-weight: 800; color: #0369a1; font-family: ui-monospace, monospace; outline: none; background: #f0f9ff;"
@@ -518,29 +533,29 @@ const schemaData = {
     <article style="border-top: 1px solid #e2e8f0; padding-top: 3.5rem; line-height: 1.85; color: #334155;">
       
       <h2 style="font-size: clamp(1.4rem, 3.5vw, 1.85rem); font-weight: 800; color: #0f172a; margin-bottom: 1rem; letter-spacing: -0.02em; line-height: 1.3;">
-        Theoretical Foundations: Atomic Orbitals &amp; Quantum Physics
+        Theoretical Foundations: Atomic Orbitals &amp; Quantum Physics on the Periodic Table
       </h2>
       <p>
-        The electronic structure of an isolated atom describes the spatial and energetic distribution of its electrons within the electrostatic potential generated by the atomic nucleus. This distribution is dictated by quantum mechanics through the Schrödinger equation, yielding discrete quantum states characterized by four quantum numbers (<em>n, l, m_l, m_s</em>).
+        The electronic structure of an isolated atom describes the spatial and energetic distribution of its electrons within the electrostatic potential generated by the atomic nucleus. By utilizing the <strong>periodic table of elements configuration</strong>, chemists can easily track electron count and orbital filling across the first 30 elements and beyond.
       </p>
 
       <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem;">
         1. The Three Fundamental Principles of Ground-State Orbital Filling
       </h3>
       <ul style="margin: 0.5rem 0 1.5rem 1.5rem;">
-        <li><strong>Aufbau Principle (Madelung Rule):</strong> Electrons occupy subshells in order of increasing <em>(n + l)</em> energy values (1s &lt; 2s &lt; 2p &lt; 3s &lt; 3p &lt; 4s &lt; 3d &hellip;). When two subshells have the same <em>(n + l)</em> sum, the orbital with the lower principal quantum number <em>n</em> fills first.</li>
+        <li><strong>Aufbau Principle (Madelung Rule):</strong> Electrons occupy subshells in order of increasing <em>(n + l)</em> energy values following the sequence <code style="background: #f1f5f9; padding: 2px 4px; border-radius: 4px;">1s 2s 2p 3s 3p</code>. When two subshells have the same <em>(n + l)</em> sum, the orbital with the lower principal quantum number <em>n</em> fills first.</li>
         <li><strong>Pauli Exclusion Principle:</strong> No two electrons in an atom can share the identical set of all four quantum numbers. Since a single spatial orbital is defined by <em>(n, l, m_l)</em>, each orbital can hold a maximum of two electrons, which must have antiparallel spins (<em>m_s = +1/2</em> and <em>-1/2</em>).</li>
         <li><strong>Hund's Rule of Maximum Multiplicity:</strong> Within a set of degenerate orbitals (orbitals possessing identical energy, such as the three <em>p</em> orbitals or five <em>d</em> orbitals), electrons occupy each orbital singly with parallel spins before any pairing occurs, minimizing Coulombic repulsion.</li>
       </ul>
 
       <!-- Worked Benchmark Scenario -->
       <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2.5rem; margin-bottom: 0.75rem;">
-        2. Worked Analytical Scenario: Transition Metal Ionization of Iron (Fe to Fe²⁺)
+        2. Worked Analytical Scenario: Transition Metal Ionization of Iron (Fe to Fe²⁺ and Ni2+)
       </h3>
       <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1.25rem; margin: 1.25rem 0;">
         <p style="margin: 0 0 0.5rem; font-weight: 700; color: #0f172a;">Problem Statement:</p>
         <p style="margin: 0 0 0.75rem; font-size: 0.92rem; color: #475569;">
-          Write the ground-state electron configuration of neutral iron (Fe, Z = 26) and explain the formation of the ferrous ion (Fe²⁺) using the outer-shell-first ionization rule.
+          Write the ground-state electron configuration of neutral iron (Fe, Z = 26) and explain the formation of the ferrous ion (Fe²⁺) and nickel ion (Ni²⁺) using outer-shell-first ionization.
         </p>
 
         <p style="margin: 0 0 0.4rem; font-weight: 700; color: #0f172a;">Step 1: Neutral Ground State (Fe, Z = 26)</p>
@@ -549,24 +564,24 @@ const schemaData = {
           <span>Noble Gas Shorthand: [Ar] 3d⁶ 4s²</span>
         </div>
 
-        <p style="margin: 0 0 0.4rem; font-weight: 700; color: #0f172a;">Step 2: Ionization to Fe²⁺ (Removal of 2 Electrons)</p>
+        <p style="margin: 0 0 0.4rem; font-weight: 700; color: #0f172a;">Step 2: Ionization to Fe²⁺ and Ni²⁺ (Removal of 2 Electrons)</p>
         <div style="margin: 0 0 0.75rem; font-size: 0.92rem; color: #475569; font-family: monospace; line-height: 1.6;">
           <span>Common student error: Stripping from 3d to give [Ar] 3d⁴ 4s² (INCORRECT).</span><br />
           <span>Correct Rule: Electrons are removed from the highest principal quantum shell (n = 4) first.</span><br />
-          <span>Two electrons are lost from 4s: 4s² &rarr; 4s⁰.</span>
+          <span>Fe²⁺ Configuration: [Ar] 3d⁶ &bull; Ni²⁺ Configuration: [Ar] 3d⁸</span>
         </div>
 
         <p style="margin: 0; font-size: 0.92rem; color: #059669; font-weight: 700;">
-          Final Configuration: Fe²⁺ = [Ar] 3d⁶ (Paramagnetic, 4 unpaired electrons).
+          Final Reported Answer: Fe²⁺ = [Ar] 3d⁶ and Ni²⁺ = [Ar] 3d⁸ (Paramagnetic species).
         </p>
       </div>
 
       <!-- IUPAC GROUND-STATE & AUFBAU ANOMALIES BENCHMARK TABLE -->
       <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-top: 2.75rem; margin-bottom: 0.75rem;">
-        3. IUPAC Ground-State Configurations &amp; Aufbau Stability Anomalies
+        3. IUPAC Ground-State Configurations &amp; Aufbau Stability Anomalies (First 30 Elements &amp; Beyond)
       </h3>
       <p style="font-size: 0.9rem; color: #475569; margin-bottom: 1rem;">
-        Representative empirical ground-state benchmarks and subshell promotion anomalies evaluated against IUPAC standards:
+        Representative empirical ground-state benchmarks across the electronic configuration of the first 30 elements and transition series:
       </p>
 
       <div style="border: 1px solid #cbd5e1; border-radius: 8px; overflow-x: auto; margin-bottom: 2rem;">
@@ -596,53 +611,53 @@ const schemaData = {
               <td style="padding: 0.65rem 0.75rem; font-family: monospace;">³P₀</td>
             </tr>
             <tr style="border-bottom: 1px solid #e2e8f0;">
-              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Oxygen</td>
-              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">O (Z = 8)</td>
-              <td style="padding: 0.65rem 0.75rem; font-family: monospace; font-weight: 700; color: #0284c7;">[He] 2s² 2p⁴</td>
-              <td style="padding: 0.65rem 0.75rem;">2 (Paramagnetic)</td>
-              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">³P₂</td>
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Magnesium</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">Mg (Z = 12)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; font-weight: 700; color: #0284c7;">[Ne] 3s²</td>
+              <td style="padding: 0.65rem 0.75rem; color: #059669; font-weight: 700;">0 (Diamagnetic)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">¹S₀</td>
             </tr>
             <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Aluminium</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">Al (Z = 13)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; font-weight: 700; color: #0284c7;">[Ne] 3s² 3p¹</td>
+              <td style="padding: 0.65rem 0.75rem;">1 (Paramagnetic)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">²P₁/₂</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
               <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Chromium (Anomaly)</td>
               <td style="padding: 0.65rem 0.75rem; font-family: monospace;">Cr (Z = 24)</td>
               <td style="padding: 0.65rem 0.75rem; font-family: monospace; font-weight: 700; color: #0284c7;">[Ar] 3d⁵ 4s¹</td>
               <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #dc2626;">6 (Half-filled d-shell)</td>
               <td style="padding: 0.65rem 0.75rem; font-family: monospace;">⁷S₃</td>
             </tr>
-            <tr style="border-bottom: 1px solid #e2e8f0;">
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
               <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Iron</td>
               <td style="padding: 0.65rem 0.75rem; font-family: monospace;">Fe (Z = 26)</td>
               <td style="padding: 0.65rem 0.75rem; font-family: monospace; font-weight: 700; color: #0284c7;">[Ar] 3d⁶ 4s²</td>
               <td style="padding: 0.65rem 0.75rem;">4 (Paramagnetic)</td>
               <td style="padding: 0.65rem 0.75rem; font-family: monospace;">⁵D₄</td>
             </tr>
-            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+            <tr style="border-bottom: 1px solid #e2e8f0;">
               <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Copper (Anomaly)</td>
               <td style="padding: 0.65rem 0.75rem; font-family: monospace;">Cu (Z = 29)</td>
               <td style="padding: 0.65rem 0.75rem; font-family: monospace; font-weight: 700; color: #0284c7;">[Ar] 3d¹⁰ 4s¹</td>
               <td style="padding: 0.65rem 0.75rem; font-weight: 700; color: #dc2626;">1 (Full d-shell)</td>
               <td style="padding: 0.65rem 0.75rem; font-family: monospace;">²S₁/₂</td>
             </tr>
-            <tr style="border-bottom: 1px solid #e2e8f0;">
-              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Palladium (Anomaly)</td>
-              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">Pd (Z = 46)</td>
-              <td style="padding: 0.65rem 0.75rem; font-family: monospace; font-weight: 700; color: #0284c7;">[Kr] 4d¹⁰ 5s⁰</td>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Krypton</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">Kr (Z = 36)</td>
+              <td style="padding: 0.65rem 0.75rem; font-family: monospace; font-weight: 700; color: #0284c7;">[Ar] 3d¹⁰ 4s² 4p⁶</td>
               <td style="padding: 0.65rem 0.75rem; color: #059669; font-weight: 700;">0 (Diamagnetic)</td>
               <td style="padding: 0.65rem 0.75rem; font-family: monospace;">¹S₀</td>
             </tr>
-            <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+            <tr>
               <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Gold (Anomaly)</td>
               <td style="padding: 0.65rem 0.75rem; font-family: monospace;">Au (Z = 79)</td>
               <td style="padding: 0.65rem 0.75rem; font-family: monospace; font-weight: 700; color: #0284c7;">[Xe] 4f¹⁴ 5d¹⁰ 6s¹</td>
               <td style="padding: 0.65rem 0.75rem;">1 (Paramagnetic)</td>
               <td style="padding: 0.65rem 0.75rem; font-family: monospace;">²S₁/₂</td>
-            </tr>
-            <tr>
-              <td style="padding: 0.65rem 0.75rem; font-weight: 700;">Uranium (Actinide)</td>
-              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">U (Z = 92)</td>
-              <td style="padding: 0.65rem 0.75rem; font-family: monospace; font-weight: 700; color: #0284c7;">[Rn] 5f³ 6d¹ 7s²</td>
-              <td style="padding: 0.65rem 0.75rem;">4 (Paramagnetic)</td>
-              <td style="padding: 0.65rem 0.75rem; font-family: monospace;">⁵L₆</td>
             </tr>
           </tbody>
         </table>
@@ -650,10 +665,24 @@ const schemaData = {
 
       <!-- FAQ Accordion -->
       <h3 style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-top: 3rem; margin-bottom: 1.25rem;">
-        Frequently Asked Questions: Electron Configurations
+        Frequently Asked Questions: Electron Configurations &amp; Periodic Table Distribution
       </h3>
 
       <div style="display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 2rem;">
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How do you find electron configurations using the periodic table?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            You can read electron configurations directly across the periodic table blocks: Group 1-2 form the s-block, Groups 13-18 form the p-block, transition metals form the d-block, and lanthanides/actinides form the f-block. Each period corresponds to the principal quantum number n.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">What are the electron configurations for iron ions like Fe2+ and Fe3+?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Neutral iron (Fe) has the configuration [Ar] 3d6 4s2. When forming transition metal cations like Fe2+, electrons are removed from the outermost principal shell first (4s), resulting in [Ar] 3d6. For Fe3+, an additional electron is lost from 3d, yielding [Ar] 3d5.
+          </p>
+        </details>
+
         <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
           <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Why do transition metal cations lose 4s electrons before 3d electrons?</summary>
           <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
@@ -1098,17 +1127,17 @@ const schemaData = {
 
     const citations: Record<string, string> = {
       bibtex: `@software{khan_chemistrydesk_electron_config_${year},
-  author        = {Khan, Bilal},
-  title         = {ChemistryDesk: Electron Configuration & Orbital Physics Studio},
-  year          = {${year}},
-  version       = {v1.0.1},
-  publisher     = {Zenodo},
-  doi           = {${doi}},
-  url           = {https://chemistrycal.com/electron-configuration}
+  author         = {Khan, Bilal},
+  title          = {Chemistrycal: Electron Configuration & Orbital Physics Studio},
+  year           = {${year}},
+  version        = {v1.0.1},
+  publisher      = {Zenodo},
+  doi            = {${doi}},
+  url            = {https://chemistrycal.com/electron-configuration}
 }`,
-      acs: `Khan, B. ChemistryDesk: Electron Configuration & Orbital Physics Studio, version 1.0.1; Zenodo, ${year}. https://doi.org/${doi}.`,
-      rsc: `B. Khan, ChemistryDesk: Electron Configuration & Orbital Physics Studio, version 1.0.1, Zenodo, ${year}, DOI: ${doi}.`,
-      nature: `Khan, B. ChemistryDesk: Electron Configuration & Orbital Physics Studio. Zenodo https://doi.org/${doi} (${year}).`
+      acs: `Khan, B. Chemistrycal: Electron Configuration & Orbital Physics Studio, version 1.0.1; Zenodo, ${year}. https://doi.org/${doi}.`,
+      rsc: `B. Khan, Chemistrycal: Electron Configuration & Orbital Physics Studio, version 1.0.1, Zenodo, ${year}, DOI: ${doi}.`,
+      nature: `Khan, B. Chemistrycal: Electron Configuration & Orbital Physics Studio. Zenodo https://doi.org/${doi} (${year}).`
     };
 
     let activeFormat = 'bibtex';
