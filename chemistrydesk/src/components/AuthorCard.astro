@@ -331,6 +331,16 @@ const wikidataUrl = "https://www.wikidata.org/wiki/Q141699332";
 <script is:inline>
   var uploadInput = document.getElementById('authorAvatarUpload');
   var avatarImg = document.getElementById('authorAvatarImg');
+  var popoverAvatarImgs = document.querySelectorAll('.popover-avatar');
+
+  // Check if a saved avatar exists in localStorage on page load
+  var savedImage = localStorage.getItem('authorAvatar');
+  if (savedImage) {
+    if (avatarImg) avatarImg.src = savedImage;
+    popoverAvatarImgs.forEach(function(img) {
+      img.src = savedImage;
+    });
+  }
 
   if (uploadInput && avatarImg) {
     uploadInput.addEventListener('change', function(e) {
@@ -338,7 +348,17 @@ const wikidataUrl = "https://www.wikidata.org/wiki/Q141699332";
       if (file) {
         var reader = new FileReader();
         reader.onload = function(evt) {
-          avatarImg.src = evt.target.result;
+          var result = evt.target.result;
+          if (avatarImg) avatarImg.src = result;
+          popoverAvatarImgs.forEach(function(img) {
+            img.src = result;
+          });
+          // Save the base64 string to localStorage for persistent sessions
+          try {
+            localStorage.setItem('authorAvatar', result);
+          } catch (err) {
+            console.warn('Image file is too large to store locally', err);
+          }
         };
         reader.readAsDataURL(file);
       }
