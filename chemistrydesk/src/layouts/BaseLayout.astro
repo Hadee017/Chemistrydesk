@@ -1,5 +1,4 @@
 ---
-// src/pages/BaseLayout.astro
 interface Props {
   title: string;
   description: string;
@@ -7,16 +6,21 @@ interface Props {
   isTool?: boolean;
 }
 
-const { 
-  title, 
-  description, 
+const {  
+  title,  
+  description,  
   canonicalPath = Astro.url.pathname,
-  isTool = false 
-} = Astro.props;
+  isTool = false  } = Astro.props;
 
 // Ensure search engines always index the root URL without query string pollution
 const siteOrigin = "https://chemistrycal.com";
-const cleanPath = canonicalPath.split('?')[0];
+let cleanPath = canonicalPath.split('?')[0];
+
+// Strip accidental trailing slash to enforce strict non-slash URLs
+if (cleanPath.length > 1 && cleanPath.endsWith('/')) {
+  cleanPath = cleanPath.slice(0, -1);
+}
+
 const fullCanonicalUrl = new URL(cleanPath, siteOrigin).href;
 
 // Detect tool pages dynamically via prop or route
