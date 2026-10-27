@@ -24,7 +24,7 @@ if (cleanPath.length > 1 && cleanPath.endsWith('/')) {
 const fullCanonicalUrl = new URL(cleanPath, siteOrigin).href;
 
 // Detect tool pages dynamically via prop or route
-const toolRoutes = ['/molarity', '/dilution', '/scherrer', '/molar-mass', '/buffer', '/stoichiometry', '/bet', '/spectro', '/ghs', '/isotherm', '/titration', '/gas', '/ph', '/sig-figs', '/electron-configuration', '/adsorption-column'];
+const toolRoutes = ['/molarity', '/dilution', '/scherrer', '/molar-mass', '/buffer', '/stoichiometry', '/bet', '/spectro', '/ghs', '/isotherm', '/titration', '/gas', '/ph', '/sig-figs', '/electron-configuration', '/adsorption-column', '/periodic-table'];
 const isToolPage = isTool || toolRoutes.some(route => cleanPath.startsWith(route));
 
 // Dynamic breadcrumb generation for search engines
@@ -172,6 +172,7 @@ const globalSchemaGraph = {
       <!-- Modern Pill Nav Links -->
       <nav style="display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap;">
         <a href="/" style={`text-decoration: none; font-size: 0.85rem; font-weight: 700; padding: 0.45rem 0.85rem; border-radius: 8px; transition: all 0.2s ease; ${Astro.url.pathname === '/' ? 'background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd;' : 'background: transparent; color: #475569; border: 1px solid transparent;'}`}>Home</a>
+        <a href="/periodic-table" style={`text-decoration: none; font-size: 0.85rem; font-weight: 700; padding: 0.45rem 0.85rem; border-radius: 8px; transition: all 0.2s ease; ${Astro.url.pathname.startsWith('/periodic-table') ? 'background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd;' : 'background: transparent; color: #475569; border: 1px solid transparent;'}`}>Periodic Table</a>
         <a href="/molarity" style={`text-decoration: none; font-size: 0.85rem; font-weight: 700; padding: 0.45rem 0.85rem; border-radius: 8px; transition: all 0.2s ease; ${Astro.url.pathname.startsWith('/molarity') ? 'background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd;' : 'background: transparent; color: #475569; border: 1px solid transparent;'}`}>Molarity</a>
         <a href="/dilution" style={`text-decoration: none; font-size: 0.85rem; font-weight: 700; padding: 0.45rem 0.85rem; border-radius: 8px; transition: all 0.2s ease; ${Astro.url.pathname.startsWith('/dilution') ? 'background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd;' : 'background: transparent; color: #475569; border: 1px solid transparent;'}`}>Dilution</a>
         <a href="/molar-mass" style={`text-decoration: none; font-size: 0.85rem; font-weight: 700; padding: 0.45rem 0.85rem; border-radius: 8px; transition: all 0.2s ease; ${Astro.url.pathname.startsWith('/molar-mass') ? 'background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd;' : 'background: transparent; color: #475569; border: 1px solid transparent;'}`}>Molar Mass</a>
@@ -205,6 +206,9 @@ const globalSchemaGraph = {
       Explore our complete network of research-grade wet chemistry, stoichiometry, and materials analysis utilities:
     </p>
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 0.75rem;">
+      <a href="/periodic-table" style="display: block; padding: 0.75rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
+        <div style="font-weight: 700; font-size: 0.88rem; color: #0284c7;">Periodic Table Studio &rarr;</div>
+      </a>
       <a href="/molarity" style="display: block; padding: 0.75rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
         <div style="font-weight: 700; font-size: 0.88rem; color: #0284c7;">Molarity Studio &rarr;</div>
       </a>

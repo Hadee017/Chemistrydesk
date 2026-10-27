@@ -54,6 +54,18 @@ const allTools: ToolItem[] = [
     description: "Powder X-ray diffraction (PXRD) scherrer formula xrd particle size calculator with instrumental line broadening corrections."
   },
   {
+    title: "Interactive Periodic Table & Oxidation State Studio",
+    path: "/periodic-table",
+    icon: "🧬",
+    badge: "New Studio",
+    badgeColor: "#0284c7",
+    formula: "Z = 1–118 | Ion Charges & Oxidation Matrix",
+    inputs: "Element Name / Symbol Search, Ion Charge Filter (+1, +2, -1, -2)",
+    outputs: "Atomic Mass, Valence Electron Configuration, Electronegativity, Polyatomic Ions",
+    category: "physical",
+    description: "Interactive periodic table of elements with group charges, oxidation states, atomic mass metrics, polyatomic ion reference guide, and academic citation generator."
+  },
+  {
     title: "Henderson-Hasselbalch Buffer Solution Calculator",
     path: "/buffer",
     icon: "⚖️",
@@ -274,7 +286,7 @@ const allTools: ToolItem[] = [
           <input 
             type="text" 
             id="toolSearchInput" 
-            placeholder="Search all 16 calculators (e.g. C1V1, Molarity, GHS labels, Sig Figs, Scherrer, Breakthrough)..." 
+            placeholder="Search all 17 calculators (e.g. Periodic Table, C1V1, Molarity, GHS labels, Sig Figs, Scherrer)..." 
             aria-label="Filter laboratory tools"
             style="width: 100%; padding: 0.75rem 3.5rem 0.75rem 2.6rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; outline: none; box-sizing: border-box; transition: border-color 0.2s ease;"
           />
@@ -284,13 +296,13 @@ const allTools: ToolItem[] = [
         <!-- Filter Tab Buttons -->
         <div id="filterPillGroup" style="display: flex; gap: 0.4rem; flex-wrap: wrap; width: 100%; justify-content: flex-start;">
           <button type="button" class="filter-btn active" data-category="all" style="padding: 0.45rem 0.85rem; border-radius: 8px; font-size: 0.82rem; font-weight: 700; border: 1px solid #0284c7; background: #0284c7; color: #ffffff; cursor: pointer; transition: all 0.2s ease;">
-            All 16 Tools
+            All 17 Tools
           </button>
           <button type="button" class="filter-btn" data-category="solutions" style="padding: 0.45rem 0.85rem; border-radius: 8px; font-size: 0.82rem; font-weight: 700; border: 1px solid #cbd5e1; background: #f8fafc; color: #475569; cursor: pointer; transition: all 0.2s ease;">
             🧪 Solution Prep &amp; Titration (9)
           </button>
           <button type="button" class="filter-btn" data-category="physical" style="padding: 0.45rem 0.85rem; border-radius: 8px; font-size: 0.82rem; font-weight: 700; border: 1px solid #cbd5e1; background: #f8fafc; color: #475569; cursor: pointer; transition: all 0.2s ease;">
-            🌈 Spectroscopy &amp; Quantum (3)
+            🌈 Spectroscopy, Quantum &amp; Periodic (4)
           </button>
           <button type="button" class="filter-btn" data-category="materials" style="padding: 0.45rem 0.85rem; border-radius: 8px; font-size: 0.82rem; font-weight: 700; border: 1px solid #cbd5e1; background: #f8fafc; color: #475569; cursor: pointer; transition: all 0.2s ease;">
             🔬 Materials, XRD &amp; Safety (4)
@@ -300,7 +312,7 @@ const allTools: ToolItem[] = [
       </div>
     </section>
 
-    <!-- Complete 16-Tool Grid (60-30-10 Balanced Styling) -->
+    <!-- Complete 17-Tool Grid (60-30-10 Balanced Styling) -->
     <div id="toolsGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 310px), 1fr)); gap: 1.5rem; margin-bottom: 3.5rem;">
       {allTools.map((tool) => {
         const searchCorpus = `${tool.title} ${tool.description} ${tool.formula} ${tool.inputs} ${tool.outputs}`.toLowerCase();
