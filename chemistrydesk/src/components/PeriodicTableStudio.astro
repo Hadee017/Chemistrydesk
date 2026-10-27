@@ -1,0 +1,140 @@
+---
+// src/components/PeriodicTableStudio.astro
+import { PERIODIC_TABLE_DATA, type ElementData } from '../data/periodicTableData';
+import { POLYATOMIC_IONS_DATA } from '../data/polyatomicData';
+
+// Helper functions for grid placement if not imported
+function getGridColumn(el: ElementData): number {
+  return el.group || 1;
+}
+
+function getGridRow(el: ElementData): number {
+  return el.period;
+}
+---
+
+<div class="periodic-studio max-w-7xl mx-auto py-4">
+  
+  <!-- CONTROL BAR & FILTERS -->
+  <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 mb-6 shadow-lg flex flex-wrap items-center justify-between gap-4">
+    <div class="flex items-center gap-2 flex-wrap">
+      <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Filter By Charge:</span>
+      <button class="charge-filter-btn px-3 py-1 text-xs font-bold rounded-lg bg-slate-800 text-slate-200 border border-slate-700 hover:bg-sky-600 hover:border-sky-500 transition-all active" data-charge="all">All Elements</button>
+      <button class="charge-filter-btn px-3 py-1 text-xs font-bold rounded-lg bg-slate-800 text-slate-200 border border-slate-700 hover:bg-sky-600 hover:border-sky-500 transition-all" data-charge="+1">+1 Cations</button>
+      <button class="charge-filter-btn px-3 py-1 text-xs font-bold rounded-lg bg-slate-800 text-slate-200 border border-slate-700 hover:bg-sky-600 hover:border-sky-500 transition-all" data-charge="+2">+2 Cations</button>
+      <button class="charge-filter-btn px-3 py-1 text-xs font-bold rounded-lg bg-slate-800 text-slate-200 border border-slate-700 hover:bg-sky-600 hover:border-sky-500 transition-all" data-charge="-1">-1 Anions</button>
+      <button class="charge-filter-btn px-3 py-1 text-xs font-bold rounded-lg bg-slate-800 text-slate-200 border border-slate-700 hover:bg-sky-600 hover:border-sky-500 transition-all" data-charge="-2">-2 Anions</button>
+    </div>
+
+    <!-- SEARCH BAR -->
+    <div class="relative min-w-[240px]">
+      <input 
+        type="text" 
+        id="elementSearchInput" 
+        placeholder="Search element or symbol..." 
+        class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 font-medium"
+      />
+    </div>
+  </div>
+
+  <!-- PERIODIC TABLE GRID CONTAINER -->
+  <div class="overflow-x-auto pb-4">
+    <div class="grid grid-cols-18 gap-1.5 min-w-[950px] bg-slate-950 p-4 rounded-xl border border-slate-800" id="periodicGrid">
+      {PERIODIC_TABLE_DATA.map((el) => (
+        <div 
+          class="element-tile group relative bg-slate-900 border border-slate-800 rounded-lg p-1.5 cursor-pointer transition-all hover:scale-105 hover:z-20 hover:border-sky-400 hover:shadow-lg hover:shadow-sky-500/20"
+          data-number={el.number}
+          data-symbol={el.symbol.toLowerCase()}
+          data-name={el.name.toLowerCase()}
+          data-category={el.category}
+          data-charges={JSON.stringify(el.charges)}
+          style={`grid-column: ${getGridColumn(el)}; grid-row: ${getGridRow(el)};`}
+        >
+          <div class="flex justify-between items-start text-[10px] font-mono text-slate-400 leading-none mb-0.5">
+            <span>{el.number}</span>
+            <span class="text-[9px] text-sky-400 font-semibold">{el.commonOxidation}</span>
+          </div>
+          <div class="text-center py-0.5">
+            <span class="text-base font-extrabold text-white group-hover:text-sky-300 block leading-tight">{el.symbol}</span>
+            <span class="text-[9px] text-slate-400 truncate block">{el.name}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- ELEMENT INSPECTION DRAWER MODAL -->
+  <div id="elementModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative text-slate-100">
+      <button id="closeModalBtn" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg font-bold">✕</button>
+      
+      <div class="flex items-center gap-4 mb-4 border-b border-slate-800 pb-4">
+        <div id="modalTile" class="w-16 h-16 rounded-xl bg-sky-600/20 border border-sky-500 flex flex-col items-center justify-center font-mono">
+          <span id="modalSymbol" class="text-2xl font-extrabold text-sky-400">--</span>
+          <span id="modalNumber" class="text-xs text-slate-400">--</span>
+        </div>
+        <div>
+          <h3 id="modalName" class="text-xl font-extrabold text-white">Element Name</h3>
+          <p id="modalCategory" class="text-xs text-sky-400 font-semibold uppercase tracking-wider">Category</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3 mb-5 text-sm">
+        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+          <span class="text-xs text-slate-400 block font-semibold">Atomic Weight</span>
+          <strong id="modalWeight" class="text-white text-base">--</strong>
+        </div>
+        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+          <span class="text-xs text-slate-400 block font-semibold">Common Oxidation States</span>
+          <strong id="modalCharges" class="text-emerald-400 text-base">--</strong>
+        </div>
+        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+          <span class="text-xs text-slate-400 block font-semibold">Electron Configuration</span>
+          <strong id="modalConfig" class="text-sky-300 font-mono text-xs">--</strong>
+        </div>
+        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+          <span class="text-xs text-slate-400 block font-semibold">Electronegativity (Pauling)</span>
+          <strong id="modalElectronegativity" class="text-amber-400 text-base">--</strong>
+        </div>
+      </div>
+
+      <p id="modalDesc" class="text-sm text-slate-300 mb-6 leading-relaxed bg-slate-950/50 p-3 rounded-xl border border-slate-800/80">--</p>
+
+      <!-- CROSS-TOOL BENCHTOP SYNERGY ACTIONS -->
+      <div class="border-t border-slate-800 pt-4 flex gap-3">
+        <a id="modalMolarityLink" href="/molarity" class="flex-1 bg-sky-600 hover:bg-sky-500 text-white font-bold py-2.5 px-4 rounded-xl text-center text-xs transition-colors shadow-md">
+          Calculate Molarity with this Element →
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- POLYATOMIC IONS COMPANION TABLE -->
+  <div class="mt-12 bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+    <div class="flex justify-between items-center mb-4 flex-wrap gap-4 border-b border-slate-800 pb-4">
+      <div>
+        <h3 class="text-lg font-extrabold text-white">Common Polyatomic Ions Reference Guide</h3>
+        <p class="text-xs text-slate-400">Essential companion ions required for formula writing and salt preparation.</p>
+      </div>
+      <input type="text" id="polyatomicSearch" placeholder="Search polyatomic ions..." class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-sky-500" />
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3" id="polyatomicGrid">
+      {POLYATOMIC_IONS_DATA.map((ion) => (
+        <div class="poly-card bg-slate-950 border border-slate-800 rounded-xl p-3.5 flex justify-between items-center" data-name={ion.name.toLowerCase()} data-formula={ion.formula.toLowerCase()}>
+          <div>
+            <span class="text-xs font-bold text-sky-400 block">{ion.name}</span>
+            <span class="text-sm font-mono font-extrabold text-white">{ion.formula}</span>
+            <p class="text-[11px] text-slate-400 mt-1">{ion.description}</p>
+          </div>
+          <span class="px-2 py-1 bg-slate-900 border border-slate-800 rounded-lg text-xs font-mono font-bold text-emerald-400">{ion.charge}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Client-side interactions for filtering, modal inspection, and search
+</script>

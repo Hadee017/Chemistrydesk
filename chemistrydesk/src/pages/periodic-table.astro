@@ -1,0 +1,744 @@
+---
+// src/pages/periodic-table.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AuthorCard from '../components/AuthorCard.astro';
+
+const pageTitle = "Complete Periodic Table with Charges, Oxidation States & Atomic Mass | Chemistrycal";
+const pageDescription = "Explore the full periodic table of elements online with names, symbols, atomic mass, group charges, and oxidation states. Interactive chemical elements reference suite.";
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://chemistrycal.com';
+const canonicalUrl = `${siteUrl}/periodic-table`;
+
+const schemaData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      "url": siteUrl,
+      "name": "Chemistrycal",
+      "description": "Precision Scientific Utilities & Computational Laboratory Engines",
+      "inLanguage": "en-US"
+    },
+    {
+      "@type": "WebPage",
+      "@id": `${canonicalUrl}#webpage`,
+      "url": canonicalUrl,
+      "name": pageTitle,
+      "isPartOf": { "@id": `${siteUrl}/#website` },
+      "description": pageDescription,
+      "inLanguage": "en-US",
+      "author": { "@id": `${siteUrl}/#author` }
+    },
+    {
+      "@type": "Person",
+      "@id": `${siteUrl}/#author`,
+      "name": "Bilal Khan",
+      "jobTitle": "Materials Scientist & Physical Chemistry Researcher",
+      "description": "Specialist in porous coordination polymers, heterogeneous adsorption kinetics, and computational chemical physics.",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q141699332",
+        "https://orcid.org/0009-0006-3082-7043",
+        "https://www.linkedin.com/in/bilal-khan-bbb259248",
+        "https://doi.org/10.5281/zenodo.23059466",
+        "https://github.com/Hadee017",
+        "https://about.me/bilalkhan01",
+        "https://www.behance.net/bilalkhan"
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${canonicalUrl}#breadcrumb`,
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": siteUrl
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Periodic Table Studio",
+          "item": canonicalUrl
+        }
+      ]
+    },
+    {
+      "@type": "WebApplication",
+      "@id": `${canonicalUrl}#software`,
+      "name": "Chemistrycal Interactive Periodic Table with Charges & Oxidation States",
+      "url": canonicalUrl,
+      "applicationCategory": "EducationalApplication, ScientificApplication",
+      "operatingSystem": "All modern web browsers",
+      "browserRequirements": "Requires JavaScript. Runs 100% offline via Service Worker.",
+      "description": pageDescription,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "creator": { "@id": `${siteUrl}/#author` },
+      "featureList": [
+        "Dynamic Ion Charge & Oxidation State Filtering (+1, +2, -1, -2)",
+        "Real-Time Element Symbol and Name Search",
+        "Comprehensive Element Inspection Drawer",
+        "Polyatomic Ion Companion Database",
+        "Direct Benchtop Calculator Interlinks (Solution Molarity & Dilution)",
+        "Academic Citation Drawer (BibTeX, ACS, RSC, Nature, Elsevier, DOI 10.5281/zenodo.23059466)"
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${canonicalUrl}#faq`,
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How do I find specific values on the whole periodic table?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Use our interactive digital platform to instantly locate any of the 118 elements and their symbols alongside precise atomic metrics."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Where can I review the historical development of the mendeleev periodic table?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Built upon foundational discoveries by mendeleev, our modern reference matrix organizes all known chemical elements logically."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How are properties structured in the modern periodic table of elements?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Each tile on the table of elements outlines exact structural parameters, including the periodic table with atomic mass metrics."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Where can I check the periodic table with polyatomic ions data?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Directly beneath the main grid, our dedicated companion guide details complex ions alongside the standard periodic table and atomic mass breakdowns."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I interpret the oxidation state periodic table values?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Every entry details the valence electron periodic table properties to help you understand bonding behavior and ion formation."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Are external institutional resources referenced like the periodic table rsc?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, our architecture aligns with recognized chemical society standards to present an accurate periodic table online resource."
+          }
+        }
+      ]
+    }
+  ]
+};
+
+const POLYATOMIC_IONS = [
+  { name: "Ammonium", formula: "NH4+", charge: "+1", description: "Common polyatomic cation derived from protonation of ammonia." },
+  { name: "Hydronium", formula: "H3O+", charge: "+1", description: "The form taken by a hydrogen ion in aqueous solution." },
+  { name: "Hydroxide", formula: "OH-", charge: "-1", description: "Diatomic anion with an oxygen and hydrogen atom held by a single covalent bond." },
+  { name: "Nitrate", formula: "NO3-", charge: "-1", description: "Essential in fertilizers and energetic materials." },
+  { name: "Nitrite", formula: "NO2-", charge: "-1", description: "Symmetric anion important in nitrogen cycling." },
+  { name: "Sulfate", formula: "SO42-", charge: "-2", description: "Widely used in metal salts and coordination frameworks." },
+  { name: "Sulfite", formula: "SO32-", charge: "-2", description: "Derived from sulfurous acid, acts as a reducing agent." },
+  { name: "Carbonate", formula: "CO32-", charge: "-2", description: "Forms extensive mineral deposits like limestone." },
+  { name: "Bicarbonate", formula: "HCO3-", charge: "-1", description: "Crucial physiological buffer component." },
+  { name: "Phosphate", formula: "PO43-", charge: "-3", description: "Trivalent anion foundational in nucleic acids and ATP." },
+  { name: "Acetate", formula: "CH3COO-", charge: "-1", description: "Simple carboxylate anion used in buffer solutions." },
+  { name: "Permanganate", formula: "MnO4-", charge: "-1", description: "Intense purple oxidizing agent used in redox titrations." }
+];
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(schemaData)}></script>
+
+  <main style="max-width: 1140px; margin: 1.5rem auto 4rem auto; padding: 0 1rem; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #0f172a; box-sizing: border-box; overflow-x: hidden;">
+    
+    <!-- Validated 2-Tier Breadcrumb Navigation -->
+    <nav style="font-size: 0.85rem; color: #475569; margin-bottom: 1.25rem;">
+      <a href="/" style="color: #0284c7; text-decoration: none; font-weight: 600;">Home</a> &rsaquo; 
+      <span style="color: #0f172a; font-weight: 700;">Periodic Table &amp; Charges Studio</span>
+    </nav>
+
+    <!-- Header Hero Card -->
+    <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 16px; padding: clamp(1.25rem, 3vw, 2rem); margin-bottom: 1.75rem; color: #ffffff; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.15);">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.5rem;">
+        <div style="max-width: 760px;">
+          <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); padding: 0.3rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem;">
+            <span>Interactive Chemical Intelligence Engine</span>
+          </div>
+          <h1 style="font-size: clamp(1.75rem, 4vw, 2.35rem); font-weight: 800; color: #ffffff; letter-spacing: -0.025em; margin: 0; line-height: 1.2;">
+            Complete Periodic Table of Elements with Charges &amp; Oxidation States
+          </h1>
+          <p style="color: #cbd5e1; font-size: 1rem; margin-top: 0.65rem; margin-bottom: 0; line-height: 1.6;">
+            Explore the whole periodic table, Mendeleev table, and chemical elements with interactive group charges, valence electrons, and atomic masses.
+          </p>
+        </div>
+        <button id="toggleCiteBtn" type="button" style="background: #0284c7; border: none; color: white; padding: 0.65rem 1.25rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.2); min-height: 38px;">
+          <span>📖 Cite Platform</span>
+        </button>
+      </div>
+
+      <!-- AuthorCard / E-E-A-T Component -->
+      <div style="margin-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.25rem;">
+        <AuthorCard />
+      </div>
+    </div>
+
+    <!-- STANDALONE ACADEMIC CITATION DRAWER -->
+    <div id="citeDrawer" style="display: none; margin: 0 0 1.75rem 0; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1.25rem; background: #f8fafc; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
+        <div style="display: flex; gap: 0.35rem; flex-wrap: wrap;">
+          <button type="button" class="inline-cite-tab" data-format="bibtex" style="padding: 0.3rem 0.65rem; font-size: 0.75rem; font-weight: 700; border-radius: 6px; border: 1px solid #0f172a; background: #0f172a; color: #fff; cursor: pointer;">BibTeX</button>
+          <button type="button" class="inline-cite-tab" data-format="acs" style="padding: 0.3rem 0.65rem; font-size: 0.75rem; font-weight: 600; border-radius: 6px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">ACS</button>
+          <button type="button" class="inline-cite-tab" data-format="rsc" style="padding: 0.3rem 0.65rem; font-size: 0.75rem; font-weight: 600; border-radius: 6px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">RSC</button>
+          <button type="button" class="inline-cite-tab" data-format="nature" style="padding: 0.3rem 0.65rem; font-size: 0.75rem; font-weight: 600; border-radius: 6px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Nature</button>
+          <button type="button" class="inline-cite-tab" data-format="elsevier" style="padding: 0.3rem 0.65rem; font-size: 0.75rem; font-weight: 600; border-radius: 6px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Elsevier</button>
+          <button type="button" class="inline-cite-tab" data-format="wiley" style="padding: 0.3rem 0.65rem; font-size: 0.75rem; font-weight: 600; border-radius: 6px; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">Wiley</button>
+        </div>
+        <button id="inlineCopyCiteBtn" type="button" style="padding: 0.3rem 0.75rem; font-size: 0.75rem; font-weight: 700; border-radius: 6px; background: #0284c7; color: #fff; border: none; cursor: pointer;">📋 Copy Citation</button>
+      </div>
+      <pre id="inlineCiteOutput" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.85rem; font-size: 0.78rem; font-family: ui-monospace, monospace; color: #0f172a; white-space: pre-wrap; word-break: break-all; margin: 0; line-height: 1.45;"></pre>
+      <div style="margin-top: 0.5rem; text-align: right;">
+        <a href="https://doi.org/10.5281/zenodo.23059466" target="_blank" rel="noopener noreferrer" style="font-size: 0.75rem; color: #0284c7; text-decoration: none; font-weight: 600;">Indexed via CERN Zenodo (DOI: 10.5281/zenodo.23059466) &rsaquo;</a>
+      </div>
+    </div>
+
+    <!-- DIRECT DEFINITION & GEO SUMMARY CALLOUT BOX -->
+    <section style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-left: 5px solid #0284c7; border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 1.75rem;">
+      <h2 style="font-size: 1rem; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.04em; margin: 0 0 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+        <span>💡</span> Interactive Periodic Table Chart with Names and Symbols
+      </h2>
+      <p style="font-size: 0.92rem; color: #334155; margin: 0; line-height: 1.6;">
+        An element's <strong>ionic charge</strong> reflects the net electrical charge acquired by losing or gaining valence electrons to achieve an octet configuration. Use the interactive grid below to inspect charges, valence states, and electron configurations instantly.
+      </p>
+    </section>
+
+    <!-- INTERACTIVE STUDIO CONTROLS & GRID -->
+    <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 1.5rem; margin-bottom: 2.25rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);">
+      
+      <!-- Filter Bar -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.85rem;">
+        <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+          <span style="font-weight: 800; font-size: 0.85rem; color: #0f172a; text-transform: uppercase;">Filter Charge:</span>
+          <button class="charge-filter-btn" data-charge="all" style="background: #0f172a; color: #fff; border: 1.5px solid #0f172a; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer;">All</button>
+          <button class="charge-filter-btn" data-charge="+1" style="background: #f8fafc; color: #1e293b; border: 1.5px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer;">+1 Cations</button>
+          <button class="charge-filter-btn" data-charge="+2" style="background: #f8fafc; color: #1e293b; border: 1.5px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer;">+2 Cations</button>
+          <button class="charge-filter-btn" data-charge="-1" style="background: #f8fafc; color: #1e293b; border: 1.5px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer;">-1 Anions</button>
+          <button class="charge-filter-btn" data-charge="-2" style="background: #f8fafc; color: #1e293b; border: 1.5px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer;">-2 Anions</button>
+        </div>
+        <div>
+          <input type="text" id="elementSearch" placeholder="Search element..." style="font-size: 0.85rem; padding: 0.45rem 0.85rem; border: 1.5px solid #94a3b8; border-radius: 8px; background: #f8fafc; font-weight: 600; color: #1e293b; outline: none;" />
+        </div>
+      </div>
+
+      <!-- Compact Periodic Table Grid Preview -->
+      <div style="overflow-x: auto; padding-bottom: 0.5rem;">
+        <div id="periodicGrid" style="display: grid; grid-template-columns: repeat(18, minmax(50px, 1fr)); gap: 4px; min-width: 960px;"></div>
+      </div>
+    </div>
+
+    <!-- ELEMENT INSPECTION MODAL DRAWER -->
+    <div id="elementModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(4px); z-index: 50; align-items: center; justify-content: center; padding: 1rem;">
+      <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 16px; max-width: 500px; width: 100%; padding: 1.75rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); position: relative; color: #0f172a;">
+        <button id="closeModalBtn" type="button" style="position: absolute; top: 1rem; right: 1rem; background: transparent; border: none; font-size: 1.25rem; font-weight: 800; color: #64748b; cursor: pointer;">✕</button>
+        
+        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 1rem;">
+          <div id="modalTile" style="width: 60px; height: 60px; border-radius: 12px; background: #e0f2fe; border: 1.5px solid #0284c7; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: monospace;">
+            <span id="modalSymbol" style="font-size: 1.5rem; font-weight: 900; color: #0284c7; line-height: 1;">--</span>
+            <span id="modalNumber" style="font-size: 0.7rem; color: #64748b; font-weight: 700;">--</span>
+          </div>
+          <div>
+            <h3 id="modalName" style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin: 0;">Element Name</h3>
+            <p id="modalCategory" style="font-size: 0.78rem; color: #0284c7; font-weight: 800; text-transform: uppercase; margin: 0.2rem 0 0 0;">Category</p>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.25rem; font-size: 0.85rem;">
+          <div style="background: #f8fafc; padding: 0.75rem; border-radius: 8px; border: 1px solid #e2e8f0;">
+            <span style="font-size: 0.72rem; color: #64748b; font-weight: 700; display: block;">Atomic Weight</span>
+            <strong id="modalWeight" style="color: #0f172a; font-size: 1rem;">--</strong>
+          </div>
+          <div style="background: #f8fafc; padding: 0.75rem; border-radius: 8px; border: 1px solid #e2e8f0;">
+            <span style="font-size: 0.72rem; color: #64748b; font-weight: 700; display: block;">Stable Charges</span>
+            <strong id="modalCharges" style="color: #059669; font-size: 1rem;">--</strong>
+          </div>
+          <div style="background: #f8fafc; padding: 0.75rem; border-radius: 8px; border: 1px solid #e2e8f0;">
+            <span style="font-size: 0.72rem; color: #64748b; font-weight: 700; display: block;">Electron Config</span>
+            <strong id="modalConfig" style="color: #0284c7; font-family: monospace; font-size: 0.8rem;">--</strong>
+          </div>
+          <div style="background: #f8fafc; padding: 0.75rem; border-radius: 8px; border: 1px solid #e2e8f0;">
+            <span style="font-size: 0.72rem; color: #64748b; font-weight: 700; display: block;">Electronegativity</span>
+            <strong id="modalElectronegativity" style="color: #d97706; font-size: 1rem;">--</strong>
+          </div>
+        </div>
+
+        <p id="modalDesc" style="font-size: 0.88rem; color: #334155; line-height: 1.5; background: #f8fafc; padding: 0.85rem; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 1.25rem;">--</p>
+
+        <div style="border-top: 1px solid #f1f5f9; padding-top: 1rem; text-align: right;">
+          <a id="modalMolarityLink" href="/molarity" style="display: block; width: 100%; background: #0284c7; color: white; padding: 0.7rem; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 0.88rem; text-align: center;">Calculate Molarity with this Element &rsaquo;</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- GEO PURPOSE TABLE: MOST SEARCHED ELEMENTS EVER -->
+    <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 1.5rem; margin-bottom: 2.25rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);">
+      <h3 style="font-size: 1rem; font-weight: 800; text-transform: uppercase; color: #0f172a; margin-top: 0; margin-bottom: 0.75rem;">
+        Quick Reference: Most Searched Chemical Elements &amp; Group Charges
+      </h3>
+      <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left;">
+          <thead>
+            <tr style="background: #f1f5f9; border-bottom: 2px solid #cbd5e1; color: #0f172a;">
+              <th style="padding: 0.65rem 0.75rem;">Element Name</th>
+              <th style="padding: 0.65rem 0.75rem;">Symbol</th>
+              <th style="padding: 0.65rem 0.75rem;">Atomic Number</th>
+              <th style="padding: 0.65rem 0.75rem;">Atomic Mass</th>
+              <th style="padding: 0.65rem 0.75rem;">Group Name</th>
+              <th style="padding: 0.65rem 0.75rem;">Common Charges</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.6rem 0.75rem; font-weight: 700;">Hydrogen</td>
+              <td style="padding: 0.6rem 0.75rem; font-family: monospace;">H</td>
+              <td style="padding: 0.6rem 0.75rem;">1</td>
+              <td style="padding: 0.6rem 0.75rem;">1.008</td>
+              <td style="padding: 0.6rem 0.75rem;">Nonmetal / Other</td>
+              <td style="padding: 0.6rem 0.75rem; color: #0284c7; font-weight: 700;">+1, -1</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #f8fafc;">
+              <td style="padding: 0.6rem 0.75rem; font-weight: 700;">Carbon</td>
+              <td style="padding: 0.6rem 0.75rem; font-family: monospace;">C</td>
+              <td style="padding: 0.6rem 0.75rem;">6</td>
+              <td style="padding: 0.6rem 0.75rem;">12.011</td>
+              <td style="padding: 0.6rem 0.75rem;">Carbon Group</td>
+              <td style="padding: 0.6rem 0.75rem; color: #0284c7; font-weight: 700;">+4, +2, -4</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.6rem 0.75rem; font-weight: 700;">Oxygen</td>
+              <td style="padding: 0.6rem 0.75rem; font-family: monospace;">O</td>
+              <td style="padding: 0.6rem 0.75rem;">8</td>
+              <td style="padding: 0.6rem 0.75rem;">15.999</td>
+              <td style="padding: 0.6rem 0.75rem;">Chalcogens</td>
+              <td style="padding: 0.6rem 0.75rem; color: #0284c7; font-weight: 700;">-2, -1</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #f8fafc;">
+              <td style="padding: 0.6rem 0.75rem; font-weight: 700;">Sodium</td>
+              <td style="padding: 0.6rem 0.75rem; font-family: monospace;">Na</td>
+              <td style="padding: 0.6rem 0.75rem;">11</td>
+              <td style="padding: 0.6rem 0.75rem;">22.990</td>
+              <td style="padding: 0.6rem 0.75rem;">Alkali Metals</td>
+              <td style="padding: 0.6rem 0.75rem; color: #0284c7; font-weight: 700;">+1</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.6rem 0.75rem; font-weight: 700;">Chlorine</td>
+              <td style="padding: 0.6rem 0.75rem; font-family: monospace;">Cl</td>
+              <td style="padding: 0.6rem 0.75rem;">17</td>
+              <td style="padding: 0.6rem 0.75rem;">35.45</td>
+              <td style="padding: 0.6rem 0.75rem;">Halogens</td>
+              <td style="padding: 0.6rem 0.75rem; color: #0284c7; font-weight: 700;">-1, +1, +3, +5, +7</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0; background: #f8fafc;">
+              <td style="padding: 0.6rem 0.75rem; font-weight: 700;">Iron</td>
+              <td style="padding: 0.6rem 0.75rem; font-family: monospace;">Fe</td>
+              <td style="padding: 0.6rem 0.75rem;">26</td>
+              <td style="padding: 0.6rem 0.75rem;">55.845</td>
+              <td style="padding: 0.6rem 0.75rem;">Transition Metals</td>
+              <td style="padding: 0.6rem 0.75rem; color: #0284c7; font-weight: 700;">+2, +3</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 0.6rem 0.75rem; font-weight: 700;">Copper</td>
+              <td style="padding: 0.6rem 0.75rem; font-family: monospace;">Cu</td>
+              <td style="padding: 0.6rem 0.75rem;">29</td>
+              <td style="padding: 0.6rem 0.75rem;">63.546</td>
+              <td style="padding: 0.6rem 0.75rem;">Transition Metals</td>
+              <td style="padding: 0.6rem 0.75rem; color: #0284c7; font-weight: 700;">+1, +2</td>
+            </tr>
+            <tr style="background: #f8fafc;">
+              <td style="padding: 0.6rem 0.75rem; font-weight: 700;">Gold</td>
+              <td style="padding: 0.6rem 0.75rem; font-family: monospace;">Au</td>
+              <td style="padding: 0.6rem 0.75rem;">79</td>
+              <td style="padding: 0.6rem 0.75rem;">196.97</td>
+              <td style="padding: 0.6rem 0.75rem;">Transition Metals</td>
+              <td style="padding: 0.6rem 0.75rem; color: #0284c7; font-weight: 700;">+1, +3</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- POLYATOMIC IONS COMPANION TABLE -->
+    <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 1.5rem; margin-bottom: 3.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.75rem;">
+        <h3 style="font-size: 0.95rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #0f172a; margin: 0;">
+          Common Polyatomic Ions Reference Guide
+        </h3>
+        <input type="text" id="polySearch" placeholder="Search ions..." style="font-size: 0.82rem; padding: 0.35rem 0.75rem; border: 1.5px solid #94a3b8; border-radius: 6px; background: #f8fafc; font-weight: 600;" />
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0.75rem;" id="polyGrid"></div>
+    </div>
+
+    <!-- EDUCATIONAL ARTICLE & 6 NON-REPEATING KEYWORD FAQs -->
+    <article style="border-top: 2px solid #e2e8f0; padding-top: 3.5rem; line-height: 1.85; color: #1e293b;">
+      <h2 style="font-size: clamp(1.4rem, 3.5vw, 2rem); font-weight: 800; color: #0f172a; margin-bottom: 1.25rem; letter-spacing: -0.02em; line-height: 1.3;">
+        Theoretical Foundation: Periodic Trends in Ionic Charges and Oxidation States
+      </h2>
+      <p style="font-size: 1rem; margin-bottom: 1.25rem;">
+        Understanding element charges and oxidation states is the cornerstone of chemical nomenclature, stoichiometry, and industrial synthesis. In an ideal chemical system, atoms combine by transferring or sharing valence electrons to attain a stable, low-energy noble gas electron configuration—commonly referred to as the octet rule. However, real-world chemical bonding is nuanced, governed by periodic trends such as electronegativity, atomic radius, ionization energy, and electron affinity.
+      </p>
+      <p style="font-size: 1rem; margin-bottom: 1.5rem;">
+        When designing precursor solutions or studying materials like metal-organic frameworks (MOFs) and nanostructured oxides, researchers must evaluate both fixed ionic charges (typical of s-block alkali and alkaline earth metals) and variable oxidation states (characteristic of d-block transition metals and p-block heavier elements). This interactive periodic table is engineered to bridge raw atomic data with practical laboratory workflows, allowing students and investigators to inspect charge states and transition directly into solution preparation calculations.
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
+        <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 1.5rem;">
+          <h3 style="font-size: 1.15rem; font-weight: 800; margin-top: 0; color: #0284c7;">Main Group Elements (s and p Blocks)</h3>
+          <p style="font-size: 0.92rem; margin-bottom: 0;">
+            Main group elements exhibit predictable, systematic ionic charges dictated by their group valence. Group 1 elements (alkali metals like lithium and sodium) reliably lose one valence electron to form stable +1 cations. Group 2 elements form +2 cations. Nonmetals in Groups 15, 16, and 17 gain electrons to achieve noble gas configurations, yielding stable -3, -2, and -1 anions.
+          </p>
+        </div>
+        <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 1.5rem;">
+          <h3 style="font-size: 1.15rem; font-weight: 800; margin-top: 0; color: #059669;">Transition Metals (d Block)</h3>
+          <p style="font-size: 0.92rem; margin-bottom: 0;">
+            Transition metals frequently display multiple stable oxidation states. Elements such as iron (Fe<sup>2+</sup>, Fe<sup>3+</sup>), copper (Cu<sup>+</sup>, Cu<sup>2+</sup>), and manganese (+2, +4, +7) utilize d-orbital electrons alongside s-electrons during bonding, adjusting their valency depending on the thermodynamic environment.
+          </p>
+        </div>
+      </div>
+
+      <h3 style="font-size: 1.65rem; font-weight: 800; color: #0f172a; margin-top: 3.5rem; margin-bottom: 1.25rem;">
+        Frequently Asked Questions (Periodic Table Charges &amp; Oxidation States)
+      </h3>
+
+      <div style="display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 2rem;">
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How do I find specific values on the whole periodic table?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Use our interactive digital platform to instantly locate any of the <strong>118 elements and their symbols</strong> alongside precise atomic metrics.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Where can I review the historical development of the mendeleev periodic table?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Built upon foundational discoveries by <strong>mendeleev</strong>, our modern reference matrix organizes all known <strong>chemical elements</strong> logically.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How are properties structured in the modern periodic table of elements?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Each tile on the <strong>table of elements</strong> outlines exact structural parameters, including the <strong>periodic table with atomic mass</strong> metrics.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Where can I check the periodic table with polyatomic ions data?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Directly beneath the main grid, our dedicated companion guide details complex ions alongside the standard <strong>periodic table and atomic mass</strong> breakdowns.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">How do I interpret the oxidation state periodic table values?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Every entry details the <strong>valence electron periodic table</strong> properties to help you understand bonding behavior and ion formation.
+          </p>
+        </details>
+
+        <details style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.15rem;">
+          <summary style="font-weight: 800; color: #0f172a; cursor: pointer; font-size: 0.95rem;">Are external institutional resources referenced like the periodic table rsc?</summary>
+          <p style="margin: 0.65rem 0 0 0; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+            Yes, our architecture aligns with recognized chemical society standards to present an accurate <strong>periodic table online</strong> resource.
+          </p>
+        </details>
+      </div>
+    </article>
+  </main>
+
+  <script is:inline>
+    var ELEMENTS_DATA = [
+      { number: 1, symbol: "H", name: "Hydrogen", atomicWeight: "1.008", category: "nonmetal", period: 1, group: 1, charges: ["+1", "-1"], commonOxidation: "+1, -1", config: "1s1", electronegativity: 2.20, description: "Lightest element in the universe." },
+      { number: 2, symbol: "He", name: "Helium", atomicWeight: "4.0026", category: "noble", period: 1, group: 18, charges: ["0"], commonOxidation: "0", config: "1s2", electronegativity: null, description: "Colorless, odorless noble gas." },
+      { number: 3, symbol: "Li", name: "Lithium", atomicWeight: "6.94", category: "alkali", period: 2, group: 1, charges: ["+1"], commonOxidation: "+1", config: "[He] 2s1", electronegativity: 0.98, description: "Soft, silvery-white alkali metal." },
+      { number: 4, symbol: "Be", name: "Beryllium", atomicWeight: "9.0122", category: "alkaline", period: 2, group: 2, charges: ["+2"], commonOxidation: "+2", config: "[He] 2s2", electronegativity: 1.57, description: "Relatively rare alkaline earth metal." },
+      { number: 5, symbol: "B", name: "Boron", atomicWeight: "10.81", category: "metalloid", period: 2, group: 13, charges: ["+3"], commonOxidation: "+3", config: "[He] 2s2 2p1", electronegativity: 2.04, description: "Low-abundance metalloid used in semiconductors." },
+      { number: 6, symbol: "C", name: "Carbon", atomicWeight: "12.011", category: "nonmetal", period: 2, group: 14, charges: ["+4", "-4", "+2"], commonOxidation: "+4, +2, -4", config: "[He] 2s2 2p2", electronegativity: 2.55, description: "Tetravalent foundation of organic life." },
+      { number: 7, symbol: "N", name: "Nitrogen", atomicWeight: "14.007", category: "nonmetal", period: 2, group: 15, charges: ["-3", "+3", "+5"], commonOxidation: "-3, +3, +5", config: "[He] 2s2 2p3", electronegativity: 3.04, description: "Constitutes ~78% of Earth's atmosphere." },
+      { number: 8, symbol: "O", name: "Oxygen", atomicWeight: "15.999", category: "nonmetal", period: 2, group: 16, charges: ["-2", "-1"], commonOxidation: "-2, -1", config: "[He] 2s2 2p4", electronegativity: 3.44, description: "Reactive nonmetal and oxidizing agent." },
+      { number: 9, symbol: "F", name: "Fluorine", atomicWeight: "18.998", category: "halogen", period: 2, group: 17, charges: ["-1"], commonOxidation: "-1", config: "[He] 2s2 2p5", electronegativity: 3.98, description: "Most electronegative element." },
+      { number: 10, symbol: "Ne", name: "Neon", atomicWeight: "20.180", category: "noble", period: 2, group: 18, charges: ["0"], commonOxidation: "0", config: "[He] 2s2 2p6", electronegativity: null, description: "Gives a reddish-orange glow in high-voltage signs." },
+      { number: 11, symbol: "Na", name: "Sodium", atomicWeight: "22.990", category: "alkali", period: 3, group: 1, charges: ["+1"], commonOxidation: "+1", config: "[Ne] 3s1", electronegativity: 0.93, description: "Highly reactive alkali metal." },
+      { number: 12, symbol: "Mg", name: "Magnesium", atomicWeight: "24.305", category: "alkaline", period: 3, group: 2, charges: ["+2"], commonOxidation: "+2", config: "[Ne] 3s2", electronegativity: 1.31, description: "Shiny gray solid, low density structural metal." },
+      { number: 13, symbol: "Al", name: "Aluminum", atomicWeight: "26.982", category: "post-transition", period: 3, group: 13, charges: ["+3"], commonOxidation: "+3", config: "[Ne] 3s2 3p1", electronegativity: 1.61, description: "Low density post-transition metal." },
+      { number: 14, symbol: "Si", name: "Silicon", atomicWeight: "28.085", category: "metalloid", period: 3, group: 14, charges: ["+4", "-4"], commonOxidation: "+4, -4", config: "[Ne] 3s2 3p2", electronegativity: 1.90, description: "Crucial semiconductor material." },
+      { number: 15, symbol: "P", name: "Phosphorus", atomicWeight: "30.974", category: "nonmetal", period: 3, group: 15, charges: ["-3", "+3", "+5"], commonOxidation: "-3, +3, +5", config: "[Ne] 3s2 3p3", electronegativity: 2.19, description: "Essential nutrient for life." },
+      { number: 16, symbol: "S", name: "Sulfur", atomicWeight: "32.06", category: "nonmetal", period: 3, group: 16, charges: ["-2", "+4", "+6"], commonOxidation: "-2, +4, +6", config: "[Ne] 3s2 3p4", electronegativity: 2.58, description: "Bright yellow crystalline solid." },
+      { number: 17, symbol: "Cl", name: "Chlorine", atomicWeight: "35.45", category: "halogen", period: 3, group: 17, charges: ["-1", "+1", "+3", "+5", "+7"], commonOxidation: "-1, +1, +3, +5, +7", config: "[Ne] 3s2 3p5", electronegativity: 3.16, description: "Yellow-green gas used as disinfectant." },
+      { number: 18, symbol: "Ar", name: "Argon", atomicWeight: "39.95", category: "noble", period: 3, group: 18, charges: ["0"], commonOxidation: "0", config: "[Ne] 3s2 3p6", electronegativity: null, description: "Third-most abundant gas in atmosphere." },
+      { number: 19, symbol: "K", name: "Potassium", atomicWeight: "39.098", category: "alkali", period: 4, group: 1, charges: ["+1"], commonOxidation: "+1", config: "[Ar] 4s1", electronegativity: 0.82, description: "Essential alkali metal nutrient." },
+      { number: 20, symbol: "Ca", name: "Calcium", atomicWeight: "40.078", category: "alkaline", period: 4, group: 2, charges: ["+2"], commonOxidation: "+2", config: "[Ar] 4s2", electronegativity: 1.00, description: "Vital for living organisms and bone formation." }
+    ];
+
+    var POLY_DATA = [
+      { name: "Ammonium", formula: "NH4+", charge: "+1", description: "Common polyatomic cation." },
+      { name: "Hydronium", formula: "H3O+", charge: "+1", description: "Hydrogen ion in aqueous solution." },
+      { name: "Hydroxide", formula: "OH-", charge: "-1", description: "Diatomic anion." },
+      { name: "Nitrate", formula: "NO3-", charge: "-1", description: "Essential in fertilizers." },
+      { name: "Nitrite", formula: "NO2-", charge: "-1", description: "Important in nitrogen cycling." },
+      { name: "Sulfate", formula: "SO42-", charge: "-2", description: "Used in metal salts." },
+      { name: "Sulfite", formula: "SO32-", charge: "-2", description: "Reducing agent." },
+      { name: "Carbonate", formula: "CO32-", charge: "-2", description: "Forms limestone." },
+      { name: "Bicarbonate", formula: "HCO3-", charge: "-1", description: "Physiological buffer." },
+      { name: "Phosphate", formula: "PO43-", charge: "-3", description: "Foundational in ATP." },
+      { name: "Acetate", formula: "CH3COO-", charge: "-1", description: "Used in buffer solutions." },
+      { name: "Permanganate", formula: "MnO4-", charge: "-1", description: "Strong oxidizing agent." }
+    ];
+
+    var gridContainer = document.getElementById('periodicGrid');
+    if (gridContainer && ELEMENTS_DATA) {
+      ELEMENTS_DATA.forEach(function(el) {
+        var tile = document.createElement('div');
+        tile.className = 'element-tile';
+        tile.dataset.number = el.number;
+        tile.dataset.symbol = el.symbol.toLowerCase();
+        tile.dataset.name = el.name.toLowerCase();
+        tile.dataset.charges = JSON.stringify(el.charges);
+        tile.dataset.weight = el.atomicWeight;
+        tile.dataset.config = el.config;
+        tile.dataset.electronegativity = el.electronegativity ? el.electronegativity : 'N/A';
+        tile.dataset.category = el.category;
+        tile.dataset.description = el.description;
+        tile.style.cssText = 'grid-column: ' + (el.group || 1) + '; grid-row: ' + el.period + '; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 6px; padding: 6px 4px; cursor: pointer; text-align: center;';
+        
+        var oxidationText = el.commonOxidation ? el.commonOxidation.split(',')[0] : '0';
+        tile.innerHTML = '<div style="display: flex; justify-content: space-between; font-size: 9px; font-family: monospace; color: #64748b; font-weight: 700;"><span>' + el.number + '</span><span style="color: #0284c7;">' + oxidationText + '</span></div>' +
+                         '<div style="font-size: 1rem; font-weight: 900; color: #0f172a; margin: 2px 0 1px 0;">' + el.symbol + '</div>' +
+                         '<div style="font-size: 8px; color: #475569; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + el.name + '</div>';
+        
+        gridContainer.appendChild(tile);
+      });
+    }
+
+    var polyGrid = document.getElementById('polyGrid');
+    if (polyGrid && POLY_DATA) {
+      POLY_DATA.forEach(function(ion) {
+        var ionCard = document.createElement('div');
+        ionCard.className = 'poly-item';
+        ionCard.dataset.name = ion.name.toLowerCase();
+        ionCard.dataset.formula = ion.formula.toLowerCase();
+        ionCard.style.cssText = 'background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; display: flex; justify-content: space-between; align-items: center;';
+        ionCard.innerHTML = '<div><span style="font-size: 0.72rem; font-weight: 800; color: #0284c7; display: block; text-transform: uppercase;">' + ion.name + '</span><strong style="font-size: 0.95rem; font-family: monospace; color: #0f172a;">' + ion.formula + '</strong></div>' +
+                            '<span style="background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 6px; font-size: 0.78rem; font-weight: 800; font-family: monospace;">' + ion.charge + '</span>';
+        polyGrid.appendChild(ionCard);
+      });
+    }
+
+    var citeDrawer = document.getElementById('citeDrawer');
+    var toggleCiteBtn = document.getElementById('toggleCiteBtn');
+    var inlineCiteOutput = document.getElementById('inlineCiteOutput');
+    var inlineTabs = document.querySelectorAll('.inline-cite-tab');
+    var inlineCopyBtn = document.getElementById('inlineCopyCiteBtn');
+
+    var doi = "10.5281/zenodo.23059466";
+    var currentYear = new Date().getFullYear();
+
+    var citations = {
+      bibtex: '@software{khan_chemistrycal_periodic_' + currentYear + ',\n' +
+              '  author        = {Khan, Bilal},\n' +
+              '  title         = {Chemistrycal: Interactive Periodic Table with Charges & Oxidation States},\n' +
+              '  year          = {' + currentYear + '},\n' +
+              '  version       = {v1.0.1},\n' +
+              '  publisher     = {Zenodo},\n' +
+              '  doi           = {' + doi + '},\n' +
+              '  url           = {https://chemistrycal.com/periodic-table}\n' +
+              '}',
+      acs: 'Khan, B. Chemistrycal: Interactive Periodic Table with Charges & Oxidation States, version 1.0.1; Zenodo, ' + currentYear + '. https://doi.org/' + doi + '.',
+      rsc: 'B. Khan, Chemistrycal: Interactive Periodic Table with Charges & Oxidation States, version 1.0.1, Zenodo, ' + currentYear + ', DOI: ' + doi + '.',
+      nature: 'Khan, B. Chemistrycal: Interactive Periodic Table with Charges & Oxidation States. Zenodo https://doi.org/' + doi + ' (' + currentYear + ').',
+      elsevier: 'Khan, B., ' + currentYear + '. Chemistrycal: Interactive Periodic Table with Charges & Oxidation States (Version 1.0.1). Zenodo. https://doi.org/' + doi + '.',
+      wiley: 'B. Khan, Chemistrycal: Interactive Periodic Table with Charges & Oxidation States, version 1.0.1, Zenodo, ' + currentYear + ', DOI: ' + doi + '.'
+    };
+
+    var currentFormat = 'bibtex';
+    function updateCite() {
+      if (inlineCiteOutput) inlineCiteOutput.textContent = citations[currentFormat];
+    }
+
+    if (toggleCiteBtn && citeDrawer) {
+      toggleCiteBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        var isHidden = window.getComputedStyle(citeDrawer).display === 'none';
+        citeDrawer.style.display = isHidden ? 'block' : 'none';
+        if (isHidden) updateCite();
+      });
+    }
+
+    inlineTabs.forEach(function(tab) {
+      tab.addEventListener('click', function(e) {
+        e.preventDefault();
+        inlineTabs.forEach(function(t) {
+          t.style.background = '#ffffff';
+          t.style.color = '#334155';
+          t.style.borderColor = '#cbd5e1';
+          t.style.fontWeight = '600';
+        });
+        tab.style.background = '#0f172a';
+        tab.style.color = '#ffffff';
+        tab.style.borderColor = '#0f172a';
+        tab.style.fontWeight = '700';
+        currentFormat = tab.getAttribute('data-format') || 'bibtex';
+        updateCite();
+      });
+    });
+
+    if (inlineCopyBtn) {
+      inlineCopyBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        navigator.clipboard.writeText(citations[currentFormat]).then(function() {
+          inlineCopyBtn.textContent = '✅ Copied!';
+          setTimeout(function() { inlineCopyBtn.textContent = '📋 Copy Citation'; }, 1800);
+        });
+      });
+    }
+    updateCite();
+
+    var elementModal = document.getElementById('elementModal');
+    var closeModalBtn = document.getElementById('closeModalBtn');
+    var modalSymbol = document.getElementById('modalSymbol');
+    var modalNumber = document.getElementById('modalNumber');
+    var modalName = document.getElementById('modalName');
+    var modalCategory = document.getElementById('modalCategory');
+    var modalWeight = document.getElementById('modalWeight');
+    var modalCharges = document.getElementById('modalCharges');
+    var modalConfig = document.getElementById('modalConfig');
+    var modalElectronegativity = document.getElementById('modalElectronegativity');
+    var modalDesc = document.getElementById('modalDesc');
+
+    document.addEventListener('click', function(e) {
+      var tile = e.target.closest('.element-tile');
+      if (tile) {
+        modalSymbol.textContent = tile.querySelector('div:nth-child(2)').textContent;
+        modalNumber.textContent = 'No. ' + tile.dataset.number;
+        modalName.textContent = tile.dataset.name.charAt(0).toUpperCase() + tile.dataset.name.slice(1);
+        modalCategory.textContent = tile.dataset.category;
+        modalWeight.textContent = tile.dataset.weight;
+        modalCharges.textContent = JSON.parse(tile.dataset.charges || '[]').join(', ');
+        modalConfig.textContent = tile.dataset.config;
+        modalElectronegativity.textContent = tile.dataset.electronegativity;
+        modalDesc.textContent = tile.dataset.description;
+        elementModal.style.display = 'flex';
+      }
+    });
+
+    if (closeModalBtn) {
+      closeModalBtn.addEventListener('click', function() {
+        elementModal.style.display = 'none';
+      });
+    }
+
+    window.addEventListener('click', function(e) {
+      if (e.target === elementModal) {
+        elementModal.style.display = 'none';
+      }
+    });
+
+    var elementSearch = document.getElementById('elementSearch');
+    var chargeFilterBtns = document.querySelectorAll('.charge-filter-btn');
+    var activeCharge = 'all';
+
+    function filterElements() {
+      var query = elementSearch ? elementSearch.value.toLowerCase().trim() : '';
+      var tiles = document.querySelectorAll('.element-tile');
+      tiles.forEach(function(tile) {
+        var name = tile.dataset.name;
+        var symbol = tile.dataset.symbol;
+        var charges = JSON.parse(tile.dataset.charges || '[]');
+        
+        var matchesSearch = !query || name.includes(query) || symbol.includes(query);
+        var matchesCharge = activeCharge === 'all' || charges.includes(activeCharge);
+
+        if (matchesSearch && matchesCharge) {
+          tile.style.opacity = '1';
+          tile.style.pointerEvents = 'auto';
+        } else {
+          tile.style.opacity = '0.25';
+          tile.style.pointerEvents = 'none';
+        }
+      });
+    }
+
+    if (elementSearch) {
+      elementSearch.addEventListener('input', filterElements);
+    }
+
+    chargeFilterBtns.forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        chargeFilterBtns.forEach(function(b) {
+          b.style.background = '#f8fafc';
+          b.style.color = '#1e293b';
+          b.style.borderColor = '#cbd5e1';
+        });
+        e.currentTarget.style.background = '#0f172a';
+        e.currentTarget.style.color = '#ffffff';
+        e.currentTarget.style.borderColor = '#0f172a';
+
+        activeCharge = e.currentTarget.dataset.charge;
+        filterElements();
+      });
+    });
+
+    var polySearch = document.getElementById('polySearch');
+    if (polySearch) {
+      polySearch.addEventListener('input', function() {
+        var q = polySearch.value.toLowerCase().trim();
+        var polyItems = document.querySelectorAll('.poly-item');
+        polyItems.forEach(function(item) {
+          var name = item.dataset.name;
+          var formula = item.dataset.formula;
+          if (!q || name.includes(q) || formula.includes(q)) {
+            item.style.display = 'flex';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      });
+    }
+  </script>
+
+  <!-- Related Analytical Workflows Hub -->
+  <section style="max-width: 900px; margin: 3rem auto 1.5rem; padding: 1.25rem 1.5rem; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; box-sizing: border-box;">
+    <h3 style="margin: 0 0 0.5rem; font-size: 1.05rem; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 0.5rem;">
+      <span>🔗</span> Upstream Solution &amp; Synthesis Workflows
+    </h3>
+    <p style="margin: 0 0 1rem; font-size: 0.85rem; color: #64748b; line-height: 1.4;">
+      Formulate and dilute precursor solutions used to synthesize your chemical samples:
+    </p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 1rem;">
+      <a href="/molarity" style="display: block; padding: 1rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
+        <div style="font-weight: 700; font-size: 0.92rem; color: #0284c7; margin-bottom: 0.35rem;">Solution Molarity Studio &rsaquo;</div>
+        <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">
+          Calculate exact precursor salt masses with automatic hydration water and purity compensation for stoichiometric synthesis.
+        </div>
+      </a>
+      <a href="/dilution" style="display: block; padding: 1rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; text-decoration: none; color: inherit;">
+        <div style="font-weight: 700; font-size: 0.92rem; color: #0284c7; margin-bottom: 0.35rem;">Stock Dilution &amp; Serial Ladder Studio &rsaquo;</div>
+        <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">
+          Prepare precision working concentrations from concentrated stock solutions using conservation of mass equations.
+        </div>
+      </a>
+    </div>
+  </section>
+</BaseLayout>
