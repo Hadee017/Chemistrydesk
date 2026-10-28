@@ -228,8 +228,20 @@ const POLYATOMIC_IONS = [
     <!-- INTERACTIVE STUDIO CONTROLS & GRID -->
     <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 1.5rem; margin-bottom: 2.25rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);">
       
+      <!-- Studio Mode Selector -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 1rem;">
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+          <button id="modeGridBtn" type="button" style="background: #0f172a; color: #fff; border: none; padding: 0.4rem 0.9rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer;">🔲 Standard Grid</button>
+          <button id="modeTrendsBtn" type="button" style="background: #f1f5f9; color: #334155; border: 1.5px solid #cbd5e1; padding: 0.4rem 0.9rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer;">📈 Trend Graphs</button>
+          <button id="modeSafetyBtn" type="button" style="background: #f1f5f9; color: #334155; border: 1.5px solid #cbd5e1; padding: 0.4rem 0.9rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer;">⚠️ GHS Safety Layer</button>
+        </div>
+        <div>
+          <input type="text" id="elementSearch" placeholder="Search element..." style="font-size: 0.85rem; padding: 0.45rem 0.85rem; border: 1.5px solid #94a3b8; border-radius: 8px; background: #f8fafc; font-weight: 600; color: #1e293b; outline: none;" />
+        </div>
+      </div>
+
       <!-- Filter Bar -->
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.85rem;">
+      <div id="gridControlsBar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.85rem;">
         <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
           <span style="font-weight: 800; font-size: 0.85rem; color: #0f172a; text-transform: uppercase;">Filter Charge:</span>
           <button class="charge-filter-btn" data-charge="all" style="background: #0f172a; color: #fff; border: 1.5px solid #0f172a; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer;">All</button>
@@ -238,20 +250,39 @@ const POLYATOMIC_IONS = [
           <button class="charge-filter-btn" data-charge="-1" style="background: #f8fafc; color: #1e293b; border: 1.5px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer;">-1 Anions</button>
           <button class="charge-filter-btn" data-charge="-2" style="background: #f8fafc; color: #1e293b; border: 1.5px solid #cbd5e1; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer;">-2 Anions</button>
         </div>
-        <div>
-          <input type="text" id="elementSearch" placeholder="Search element..." style="font-size: 0.85rem; padding: 0.45rem 0.85rem; border: 1.5px solid #94a3b8; border-radius: 8px; background: #f8fafc; font-weight: 600; color: #1e293b; outline: none;" />
+      </div>
+
+      <!-- VIEW 1: GRID -->
+      <div id="periodicGridView" style="overflow-x: auto; padding-bottom: 0.5rem;">
+        <div id="periodicGrid" style="display: grid; grid-template-columns: repeat(18, minmax(50px, 1fr)); gap: 4px; min-width: 960px;"></div>
+      </div>
+
+      <!-- VIEW 2: TREND GRAPHS -->
+      <div id="periodicTrendsView" style="display: none; padding: 1rem 0;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+          <h3 style="font-size: 1rem; font-weight: 800; color: #0f172a; margin: 0;">Interactive Periodic Property Trends Visualizer</h3>
+          <select id="trendPropertySelect" style="padding: 0.4rem 0.75rem; border-radius: 8px; border: 1.5px solid #cbd5e1; font-weight: 600; font-size: 0.85rem; background: #f8fafc; color: #0f172a;">
+            <option value="electronegativity">Electronegativity (Pauling)</option>
+            <option value="atomicWeight">Atomic Weight (g/mol)</option>
+          </select>
+        </div>
+        <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1.5rem; height: 320px; display: flex; flex-direction: column; justify-content: flex-end; overflow-x: auto;">
+          <div id="trendChartBars" style="display: flex; align-items: flex-end; gap: 3px; height: 240px; min-width: 900px; padding-bottom: 10px; border-bottom: 2px solid #94a3b8;"></div>
         </div>
       </div>
 
-      <!-- Compact Periodic Table Grid Preview -->
-      <div style="overflow-x: auto; padding-bottom: 0.5rem;">
-        <div id="periodicGrid" style="display: grid; grid-template-columns: repeat(18, minmax(50px, 1fr)); gap: 4px; min-width: 960px;"></div>
+      <!-- VIEW 3: SAFETY LEGEND BAR -->
+      <div id="safetyLegendBar" style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 0.75rem 1rem; margin-top: 1rem; font-size: 0.8rem; display: none; align-items: center; gap: 1rem; flex-wrap: wrap;">
+        <span style="font-weight: 800; color: #0f172a;">GHS Hazard Key:</span>
+        <span style="display: flex; align-items: center; gap: 0.3rem;"><span style="width: 12px; height: 12px; background: #ef4444; border-radius: 3px; display: inline-block;"></span> Pyrophoric / Water-Reactive / Flammable</span>
+        <span style="display: flex; align-items: center; gap: 0.3rem;"><span style="width: 12px; height: 12px; background: #f59e0b; border-radius: 3px; display: inline-block;"></span> Oxidizer / Corrosive / Toxic</span>
+        <span style="display: flex; align-items: center; gap: 0.3rem;"><span style="width: 12px; height: 12px; background: #10b981; border-radius: 3px; display: inline-block;"></span> Stable / Low Hazard</span>
       </div>
     </div>
 
     <!-- ELEMENT INSPECTION MODAL DRAWER -->
     <div id="elementModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(4px); z-index: 50; align-items: center; justify-content: center; padding: 1rem;">
-      <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 16px; max-width: 500px; width: 100%; padding: 1.75rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); position: relative; color: #0f172a;">
+      <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 16px; max-width: 500px; width: 100%; padding: 1.75rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); position: relative; color: #0f172a; max-height: 90vh; overflow-y: auto;">
         <button id="closeModalBtn" type="button" style="position: absolute; top: 1rem; right: 1rem; background: transparent; border: none; font-size: 1.25rem; font-weight: 800; color: #64748b; cursor: pointer;">✕</button>
         
         <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 1rem;">
@@ -283,20 +314,36 @@ const POLYATOMIC_IONS = [
             <strong id="modalMelting" style="color: #d97706; font-size: 0.9rem;">--</strong>
           </div>
           <div style="background: #f8fafc; padding: 0.75rem; border-radius: 8px; border: 1px solid #e2e8f0;">
-            <span style="font-size: 0.72rem; color: #64748b; font-weight: 700; display: block;">Electron Config</span>
-            <strong id="modalConfig" style="color: #0284c7; font-family: monospace; font-size: 0.75rem;">--</strong>
+            <span style="font-size: 0.72rem; color: #64748b; font-weight: 700; display: block;">Supply Scarcity Tier</span>
+            <strong id="modalScarcity" style="color: #dc2626; font-size: 0.85rem;">Low Risk / Abundant</strong>
           </div>
           <div style="background: #f8fafc; padding: 0.75rem; border-radius: 8px; border: 1px solid #e2e8f0;">
-            <span style="font-size: 0.72rem; color: #64748b; font-weight: 700; display: block;">Electronegativity</span>
-            <strong id="modalElectronegativity" style="color: #7c3aed; font-size: 0.9rem;">--</strong>
+            <span style="font-size: 0.72rem; color: #64748b; font-weight: 700; display: block;">GHS Hazard Class</span>
+            <strong id="modalSafety" style="color: #ea580c; font-size: 0.85rem;">Standard Lab Safe</strong>
           </div>
         </div>
 
         <p id="modalDesc" style="font-size: 0.88rem; color: #334155; line-height: 1.5; background: #f8fafc; padding: 0.85rem; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 1.25rem;">--</p>
 
-        <div style="border-top: 1px solid #f1f5f9; padding-top: 1rem; text-align: right;">
-          <a id="modalMolarityLink" href="/molarity" style="display: block; width: 100%; background: #0284c7; color: white; padding: 0.7rem; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 0.88rem; text-align: center;">Calculate Molarity with this Element &rsaquo;</a>
+        <!-- ACTION BUTTONS -->
+        <div style="display: flex; gap: 0.5rem; flex-direction: column;">
+          <button id="modalWorkbenchBtn" type="button" style="width: 100%; background: #0f172a; color: white; padding: 0.7rem; border-radius: 8px; border: none; font-weight: 700; font-size: 0.88rem; cursor: pointer; margin-bottom: 0.5rem;">🧪 Send to Reaction Workbench</button>
+          <a id="modalMolarityLink" href="/molarity" style="display: block; width: 100%; background: #0284c7; color: white; padding: 0.7rem; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 0.88rem; text-align: center; box-sizing: border-box;">Calculate Molarity with this Element &rsaquo;</a>
         </div>
+      </div>
+    </div>
+
+    <!-- PERSISTENT REACTION WORKBENCH DRAWER -->
+    <div id="workbenchDrawer" style="position: fixed; bottom: 0; left: 0; right: 0; background: #0f172a; color: #ffffff; padding: 1rem 1.5rem; z-index: 40; box-shadow: 0 -4px 20px rgba(0,0,0,0.3); border-top: 2px solid #38bdf8; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+      <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+        <span style="font-weight: 800; color: #38bdf8; font-size: 0.9rem; text-transform: uppercase;">🧪 Reaction Workbench:</span>
+        <div id="workbenchItemsContainer" style="display: flex; gap: 0.5rem; flex-wrap: wrap; min-height: 32px; align-items: center;">
+          <span style="color: #94a3b8; font-size: 0.82rem; font-style: italic;">No elements selected. Click elements on the table to add them here.</span>
+        </div>
+      </div>
+      <div style="display: flex; gap: 0.75rem;">
+        <button id="simulateReactionBtn" type="button" style="background: #0284c7; color: #fff; border: none; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 700; font-size: 0.82rem; cursor: pointer;">Simulate Reaction &amp; Stoichiometry</button>
+        <button id="clearWorkbenchBtn" type="button" style="background: #334155; color: #cbd5e1; border: none; padding: 0.5rem 0.75rem; border-radius: 8px; font-weight: 600; font-size: 0.82rem; cursor: pointer;">Clear</button>
       </div>
     </div>
 
@@ -397,7 +444,7 @@ const POLYATOMIC_IONS = [
     </div>
 
     <!-- POLYATOMIC IONS COMPANION TABLE -->
-    <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 1.5rem; margin-bottom: 3.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);">
+    <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 1.5rem; margin-bottom: 5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.75rem;">
         <h3 style="font-size: 0.95rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #0f172a; margin: 0;">
           Common Polyatomic Ions Reference Guide
@@ -408,7 +455,7 @@ const POLYATOMIC_IONS = [
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0.75rem;" id="polyGrid"></div>
     </div>
 
-    <!-- EDUCATIONAL ARTICLE & 6 NON-REPEATING KEYWORD FAQs -->
+    <!-- EDUCATIONAL ARTICLE & FAQs -->
     <article style="border-top: 2px solid #e2e8f0; padding-top: 3.5rem; line-height: 1.85; color: #1e293b;">
       <h2 style="font-size: clamp(1.4rem, 3.5vw, 2rem); font-weight: 800; color: #0f172a; margin-bottom: 1.25rem; letter-spacing: -0.02em; line-height: 1.3;">
         Theoretical Foundation: Periodic Trends in Ionic Charges and Oxidation States
@@ -485,23 +532,24 @@ const POLYATOMIC_IONS = [
     </article>
   </main>
 
+  <!-- FULL CLIENT-SIDE DATA & INTELLIGENCE SCRIPT -->
   <script is:inline>
     var ELEMENTS_DATA = [
-      { number: 1, symbol: "H", name: "Hydrogen", atomicWeight: "1.008", category: "nonmetal", period: 1, group: 1, charges: ["+1", "-1"], commonOxidation: "+1, -1", config: "1s1", electronegativity: 2.20, density: "0.0000898 g/cm3", meltingPoint: "-259.1 °C", description: "Lightest element in the universe." },
-      { number: 2, symbol: "He", name: "Helium", atomicWeight: "4.0026", category: "noble", period: 1, group: 18, charges: ["0"], commonOxidation: "0", config: "1s2", electronegativity: null, density: "0.0001785 g/cm3", meltingPoint: "-272.2 °C", description: "Colorless, odorless noble gas." },
-      { number: 3, symbol: "Li", name: "Lithium", atomicWeight: "6.94", category: "alkali", period: 2, group: 1, charges: ["+1"], commonOxidation: "+1", config: "[He] 2s1", electronegativity: 0.98, density: "0.534 g/cm3", meltingPoint: "180.5 °C", description: "Soft, silvery-white alkali metal." },
-      { number: 4, symbol: "Be", name: "Beryllium", atomicWeight: "9.0122", category: "alkaline", period: 2, group: 2, charges: ["+2"], commonOxidation: "+2", config: "[He] 2s2", electronegativity: 1.57, density: "1.85 g/cm3", meltingPoint: "1287.0 °C", description: "Relatively rare alkaline earth metal." },
-      { number: 5, symbol: "B", name: "Boron", atomicWeight: "10.81", category: "metalloid", period: 2, group: 13, charges: ["+3"], commonOxidation: "+3", config: "[He] 2s2 2p1", electronegativity: 2.04, density: "2.34 g/cm3", meltingPoint: "2076.0 °C", description: "Low-abundance metalloid used in semiconductors." },
-      { number: 6, symbol: "C", name: "Carbon", atomicWeight: "12.011", category: "nonmetal", period: 2, group: 14, charges: ["+4", "-4", "+2"], commonOxidation: "+4, +2, -4", config: "[He] 2s2 2p2", electronegativity: 2.55, density: "2.267 g/cm3", meltingPoint: "3500.0 °C", description: "Tetravalent foundation of organic life." },
-      { number: 7, symbol: "N", name: "Nitrogen", atomicWeight: "14.007", category: "nonmetal", period: 2, group: 15, charges: ["-3", "+3", "+5"], commonOxidation: "-3, +3, +5", config: "[He] 2s2 2p3", electronegativity: 3.04, density: "0.0012506 g/cm3", meltingPoint: "-210.1 °C", description: "Constitutes ~78% of Earth's atmosphere." },
-      { number: 8, symbol: "O", name: "Oxygen", atomicWeight: "15.999", category: "nonmetal", period: 2, group: 16, charges: ["-2", "-1"], commonOxidation: "-2, -1", config: "[He] 2s2 2p4", electronegativity: 3.44, density: "0.001429 g/cm3", meltingPoint: "-218.8 °C", description: "Reactive nonmetal and oxidizing agent." },
-      { number: 9, symbol: "F", name: "Fluorine", atomicWeight: "18.998", category: "halogen", period: 2, group: 17, charges: ["-1"], commonOxidation: "-1", config: "[He] 2s2 2p5", electronegativity: 3.98, density: "0.001696 g/cm3", meltingPoint: "-219.6 °C", description: "Most electronegative element." },
-      { number: 10, symbol: "Ne", name: "Neon", atomicWeight: "20.180", category: "noble", period: 2, group: 18, charges: ["0"], commonOxidation: "0", config: "[He] 2s2 2p6", electronegativity: null, density: "0.0009002 g/cm3", meltingPoint: "-248.6 °C", description: "Gives a reddish-orange glow in high-voltage signs." },
-      { number: 11, symbol: "Na", name: "Sodium", atomicWeight: "22.990", category: "alkali", period: 3, group: 1, charges: ["+1"], commonOxidation: "+1", config: "[Ne] 3s1", electronegativity: 0.93, density: "0.968 g/cm3", meltingPoint: "97.7 °C", description: "Highly reactive alkali metal." },
-      { number: 12, symbol: "Mg", name: "Magnesium", atomicWeight: "24.305", category: "alkaline", period: 3, group: 2, charges: ["+2"], commonOxidation: "+2", config: "[Ne] 3s2", electronegativity: 1.31, density: "1.738 g/cm3", meltingPoint: "650.0 °C", description: "Shiny gray solid, low density structural metal." },
-      { number: 13, symbol: "Al", name: "Aluminum", atomicWeight: "26.982", category: "post-transition", period: 3, group: 13, charges: ["+3"], commonOxidation: "+3", config: "[Ne] 3s2 3p1", electronegativity: 1.61, density: "2.70 g/cm3", meltingPoint: "660.3 °C", description: "Low density post-transition metal." },
-      { number: 14, symbol: "Si", name: "Silicon", atomicWeight: "28.085", category: "metalloid", period: 3, group: 14, charges: ["+4", "-4"], commonOxidation: "+4, -4", config: "[Ne] 3s2 3p2", electronegativity: 1.90, density: "2.329 g/cm3", meltingPoint: "1414.0 °C", description: "Crucial semiconductor material." },
-      { number: 15, symbol: "P", name: "Phosphorus", atomicWeight: "30.974", category: "nonmetal", period: 3, group: 15, charges: ["-3", "+3", "+5"], commonOxidation: "-3, +3, +5", config: "[Ne] 3s2 3p3", electronegativity: 2.19, density: "1.823 g/cm3", meltingPoint: "44.1 °C", description: "Essential nutrient for life." },
+      { number: 1, symbol: "H", name: "Hydrogen", atomicWeight: "1.008", category: "nonmetal", period: 1, group: 1, charges: ["+1", "-1"], commonOxidation: "+1, -1", config: "1s1", electronegativity: 2.20, density: "0.0000898 g/cm3", meltingPoint: "-259.1 °C", scarcity: "Low Risk (Abundant)", safety: "Flammable Gas", safetyTier: "hazard-high", description: "Lightest element in the universe." },
+      { number: 2, symbol: "He", name: "Helium", atomicWeight: "4.0026", category: "noble", period: 1, group: 18, charges: ["0"], commonOxidation: "0", config: "1s2", electronegativity: null, density: "0.0001785 g/cm3", meltingPoint: "-272.2 °C", scarcity: "Medium Supply Risk", safety: "Asphyxiant / Stable", safetyTier: "hazard-low", description: "Colorless, odorless noble gas." },
+      { number: 3, symbol: "Li", name: "Lithium", atomicWeight: "6.94", category: "alkali", period: 2, group: 1, charges: ["+1"], commonOxidation: "+1", config: "[He] 2s1", electronegativity: 0.98, density: "0.534 g/cm3", meltingPoint: "180.5 °C", scarcity: "High Strategic Risk (Critical CRM)", safety: "Water-Reactive / Flammable", safetyTier: "hazard-high", description: "Soft, silvery-white alkali metal." },
+      { number: 4, symbol: "Be", name: "Beryllium", atomicWeight: "9.0122", category: "alkaline", period: 2, group: 2, charges: ["+2"], commonOxidation: "+2", config: "[He] 2s2", electronegativity: 1.57, density: "1.85 g/cm3", meltingPoint: "1287.0 °C", scarcity: "Medium Supply Risk", safety: "Toxic / Carcinogenic Dust", safetyTier: "hazard-mid", description: "Relatively rare alkaline earth metal." },
+      { number: 5, symbol: "B", name: "Boron", atomicWeight: "10.81", category: "metalloid", period: 2, group: 13, charges: ["+3"], commonOxidation: "+3", config: "[He] 2s2 2p1", electronegativity: 2.04, density: "2.34 g/cm3", meltingPoint: "2076.0 °C", scarcity: "Low Risk", safety: "Irritant", safetyTier: "hazard-low", description: "Low-abundance metalloid used in semiconductors." },
+      { number: 6, symbol: "C", name: "Carbon", atomicWeight: "12.011", category: "nonmetal", period: 2, group: 14, charges: ["+4", "-4", "+2"], commonOxidation: "+4, +2, -4", config: "[He] 2s2 2p2", electronegativity: 2.55, density: "2.267 g/cm3", meltingPoint: "3500.0 °C", scarcity: "Low Risk (Abundant)", safety: "Stable", safetyTier: "hazard-low", description: "Tetravalent foundation of organic life." },
+      { number: 7, symbol: "N", name: "Nitrogen", atomicWeight: "14.007", category: "nonmetal", period: 2, group: 15, charges: ["-3", "+3", "+5"], commonOxidation: "-3, +3, +5", config: "[He] 2s2 2p3", electronegativity: 3.04, density: "0.0012506 g/cm3", meltingPoint: "-210.1 °C", scarcity: "Low Risk", safety: "Asphyxiant (Liquid Cryogen)", safetyTier: "hazard-low", description: "Constitutes ~78% of Earth's atmosphere." },
+      { number: 8, symbol: "O", name: "Oxygen", atomicWeight: "15.999", category: "nonmetal", period: 2, group: 16, charges: ["-2", "-1"], commonOxidation: "-2, -1", config: "[He] 2s2 2p4", electronegativity: 3.44, density: "0.001429 g/cm3", meltingPoint: "-218.8 °C", scarcity: "Low Risk", safety: "Powerful Oxidizer", safetyTier: "hazard-mid", description: "Reactive nonmetal and oxidizing agent." },
+      { number: 9, symbol: "F", name: "Fluorine", atomicWeight: "18.998", category: "halogen", period: 2, group: 17, charges: ["-1"], commonOxidation: "-1", config: "[He] 2s2 2p5", electronegativity: 3.98, density: "0.001696 g/cm3", meltingPoint: "-219.6 °C", scarcity: "Medium Supply Risk", safety: "Extremely Corrosive & Toxic Gas", safetyTier: "hazard-high", description: "Most electronegative element." },
+      { number: 10, symbol: "Ne", name: "Neon", atomicWeight: "20.180", category: "noble", period: 2, group: 18, charges: ["0"], commonOxidation: "0", config: "[He] 2s2 2p6", electronegativity: null, density: "0.0009002 g/cm3", meltingPoint: "-248.6 °C", scarcity: "Low Risk", safety: "Stable Noble Gas", safetyTier: "hazard-low", description: "Gives a reddish-orange glow in high-voltage signs." },
+      { number: 11, symbol: "Na", name: "Sodium", atomicWeight: "22.990", category: "alkali", period: 3, group: 1, charges: ["+1"], commonOxidation: "+1", config: "[Ne] 3s1", electronegativity: 0.93, density: "0.968 g/cm3", meltingPoint: "97.7 °C", scarcity: "Low Risk", safety: "Water-Reactive / Corrosive", safetyTier: "hazard-high", description: "Highly reactive alkali metal." },
+      { number: 12, symbol: "Mg", name: "Magnesium", atomicWeight: "24.305", category: "alkaline", period: 3, group: 2, charges: ["+2"], commonOxidation: "+2", config: "[Ne] 3s2", electronegativity: 1.31, density: "1.738 g/cm3", meltingPoint: "650.0 °C", scarcity: "Low Risk", safety: "Flammable Solid (Metal Fire)", safetyTier: "hazard-high", description: "Shiny gray solid, low density structural metal." },
+      { number: 13, symbol: "Al", name: "Aluminum", atomicWeight: "26.982", category: "post-transition", period: 3, group: 13, charges: ["+3"], commonOxidation: "+3", config: "[Ne] 3s2 3p1", electronegativity: 1.61, density: "2.70 g/cm3", meltingPoint: "660.3 °C", scarcity: "Low Risk", safety: "Stable (Fine powder flammable)", safetyTier: "hazard-low", description: "Low density post-transition metal." },
+      { number: 14, symbol: "Si", name: "Silicon", atomicWeight: "28.085", category: "metalloid", period: 3, group: 14, charges: ["+4", "-4"], commonOxidation: "+4, -4", config: "[Ne] 3s2 3p2", electronegativity: 1.90, density: "2.329 g/cm3", meltingPoint: "1414.0 °C", scarcity: "Low Risk", safety: "Stable Solid", safetyTier: "hazard-low", description: "Crucial semiconductor material." },
+      { number: 15, symbol: "P", name: "Phosphorus", atomicWeight: "30.974", category: "nonmetal", period: 3, group: 15, charges: ["-3", "+3", "+5"], commonOxidation: "-3, +3, +5", config: "[Ne] 3s2 3p3", electronegativity: 2.19, density: "1.823 g/cm3", meltingPoint: "44.1 °C", scarcity: "Medium Supply Risk", safety: "Pyrophoric (White Phosphorus)", safetyTier: "hazard-high", description: "Essential nutrient for life." },
       { number: 16, symbol: "S", name: "Sulfur", atomicWeight: "32.06", category: "nonmetal", period: 3, group: 16, charges: ["-2", "+4", "+6"], commonOxidation: "-2, +4, +6", config: "[Ne] 3s2 3p4", electronegativity: 2.58, density: "2.07 g/cm3", meltingPoint: "115.2 °C", description: "Bright yellow crystalline solid." },
       { number: 17, symbol: "Cl", name: "Chlorine", atomicWeight: "35.45", category: "halogen", period: 3, group: 17, charges: ["-1", "+1", "+3", "+5", "+7"], commonOxidation: "-1, +1, +3, +5, +7", config: "[Ne] 3s2 3p5", electronegativity: 3.16, density: "0.003214 g/cm3", meltingPoint: "-101.5 °C", description: "Yellow-green gas used as disinfectant." },
       { number: 18, symbol: "Ar", name: "Argon", atomicWeight: "39.95", category: "noble", period: 3, group: 18, charges: ["0"], commonOxidation: "0", config: "[Ne] 3s2 3p6", electronegativity: null, density: "0.001784 g/cm3", meltingPoint: "-189.3 °C", description: "Third-most abundant gas in atmosphere." },
@@ -635,10 +683,18 @@ const POLYATOMIC_IONS = [
         tile.dataset.config = el.config;
         tile.dataset.density = el.density;
         tile.dataset.melting = el.meltingPoint;
+        tile.dataset.scarcity = el.scarcity || "Low Risk / Abundant";
+        tile.dataset.safety = el.safety || "Standard Lab Safe";
+        tile.dataset.safetyTier = el.safetyTier || "hazard-low";
         tile.dataset.electronegativity = el.electronegativity ? el.electronegativity : 'N/A';
         tile.dataset.category = el.category;
         tile.dataset.description = el.description;
-        tile.style.cssText = 'grid-column: ' + (el.group || 1) + '; grid-row: ' + el.period + '; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 6px; padding: 6px 4px; cursor: pointer; text-align: center;';
+        
+        var bgCol = "#f8fafc";
+        if (el.safetyTier === "hazard-high") bgCol = "#fef2f2";
+        else if (el.safetyTier === "hazard-mid") bgCol = "#fffbeb";
+
+        tile.style.cssText = 'grid-column: ' + (el.group || 1) + '; grid-row: ' + el.period + '; background: ' + bgCol + '; border: 1.5px solid #cbd5e1; border-radius: 6px; padding: 6px 4px; cursor: pointer; text-align: center; transition: all 0.2s;';
         
         var oxidationText = el.commonOxidation ? el.commonOxidation.split(',')[0] : '0';
         tile.innerHTML = '<div style="display: flex; justify-content: space-between; font-size: 9px; font-family: monospace; color: #64748b; font-weight: 700;"><span>' + el.number + '</span><span style="color: #0284c7;">' + oxidationText + '</span></div>' +
@@ -663,6 +719,117 @@ const POLYATOMIC_IONS = [
       });
     }
 
+    // Trend Visualizer Generator
+    var trendBars = document.getElementById('trendChartBars');
+    function renderTrendChart(prop) {
+      if (!trendBars) return;
+      trendBars.innerHTML = '';
+      ELEMENTS_DATA.forEach(function(el) {
+        var val = prop === 'electronegativity' ? el.electronegativity : parseFloat(el.atomicWeight);
+        if (!val) val = 10;
+        var heightPct = Math.min(Math.max((val / 4.0) * 200, 20), 220);
+        
+        var barCol = document.createElement('div');
+        barCol.style.cssText = 'display: flex; flex-direction: column; align-items: center; flex: 1; cursor: pointer;';
+        barCol.innerHTML = '<span style="font-size: 8px; font-family: monospace; color: #64748b; margin-bottom: 2px;">' + el.symbol + '</span>' +
+                           '<div title="' + el.name + ': ' + val + '" style="width: 100%; height: ' + heightPct + 'px; background: #0284c7; border-radius: 3px 3px 0 0;"></div>';
+        trendBars.appendChild(barCol);
+      });
+    }
+    renderTrendChart('electronegativity');
+
+    var trendSelect = document.getElementById('trendPropertySelect');
+    if (trendSelect) {
+      trendSelect.addEventListener('change', function(e) {
+        renderTrendChart(e.target.value);
+      });
+    }
+
+    // Studio Mode Switching
+    var gridBtn = document.getElementById('modeGridBtn');
+    var trendsBtn = document.getElementById('modeTrendsBtn');
+    var safetyBtn = document.getElementById('modeSafetyBtn');
+    var gridView = document.getElementById('periodicGridView');
+    var trendsView = document.getElementById('periodicTrendsView');
+    var gridControls = document.getElementById('gridControlsBar');
+    var safetyLegend = document.getElementById('safetyLegendBar');
+
+    if (gridBtn && trendsBtn && safetyBtn) {
+      gridBtn.addEventListener('click', function() {
+        gridView.style.display = 'block'; trendsView.style.display = 'none'; gridControls.style.display = 'flex'; safetyLegend.style.display = 'none';
+        gridBtn.style.background = '#0f172a'; gridBtn.style.color = '#fff'; trendsBtn.style.background = '#f1f5f9'; trendsBtn.style.color = '#334155'; safetyBtn.style.background = '#f1f5f9'; safetyBtn.style.color = '#334155';
+      });
+      trendsBtn.addEventListener('click', function() {
+        gridView.style.display = 'none'; trendsView.style.display = 'block'; gridControls.style.display = 'none'; safetyLegend.style.display = 'none';
+        trendsBtn.style.background = '#0f172a'; trendsBtn.style.color = '#fff'; gridBtn.style.background = '#f1f5f9'; gridBtn.style.color = '#334155'; safetyBtn.style.background = '#f1f5f9'; safetyBtn.style.color = '#334155';
+      });
+      safetyBtn.addEventListener('click', function() {
+        gridView.style.display = 'block'; trendsView.style.display = 'none'; gridControls.style.display = 'none'; safetyLegend.style.display = 'flex';
+        safetyBtn.style.background = '#0f172a'; safetyBtn.style.color = '#fff'; gridBtn.style.background = '#f1f5f9'; gridBtn.style.color = '#334155'; trendsBtn.style.background = '#f1f5f9'; trendsBtn.style.color = '#334155';
+      });
+    }
+
+    // Reaction Workbench Logic
+    var workbenchArray = [];
+    var workbenchContainer = document.getElementById('workbenchItemsContainer');
+    function updateWorkbenchUI() {
+      if (!workbenchContainer) return;
+      if (workbenchArray.length === 0) {
+        workbenchContainer.innerHTML = '<span style="color: #94a3b8; font-size: 0.82rem; font-style: italic;">No elements selected. Click elements on the table to add them here.</span>';
+        return;
+      }
+      workbenchContainer.innerHTML = '';
+      workbenchArray.forEach(function(sym, idx) {
+        var chip = document.createElement('span');
+        chip.style.cssText = 'background: #38bdf8; color: #0f172a; padding: 2px 8px; border-radius: 6px; font-weight: 800; font-size: 0.8rem; font-family: monospace; display: inline-flex; align-items: center; gap: 4px;';
+        chip.innerHTML = sym + ' <button type="button" data-index="' + idx + '" style="background:none;border:none;color:#0f172a;cursor:pointer;font-weight:900;">×</button>';
+        workbenchContainer.appendChild(chip);
+      });
+    }
+
+    document.addEventListener('click', function(e) {
+      var tile = e.target.closest('.element-tile');
+      if (tile) {
+        document.getElementById('modalSymbol').textContent = tile.querySelector('div:nth-child(2)').textContent;
+        document.getElementById('modalNumber').textContent = 'No. ' + tile.dataset.number;
+        document.getElementById('modalName').textContent = tile.dataset.name.charAt(0).toUpperCase() + tile.dataset.name.slice(1);
+        document.getElementById('modalCategory').textContent = tile.dataset.category;
+        document.getElementById('modalWeight').textContent = tile.dataset.weight;
+        document.getElementById('modalCharges').textContent = JSON.parse(tile.dataset.charges || '[]').join(', ');
+        document.getElementById('modalDensity').textContent = tile.dataset.density;
+        document.getElementById('modalMelting').textContent = tile.dataset.melting;
+        document.getElementById('modalScarcity').textContent = tile.dataset.scarcity;
+        document.getElementById('modalSafety').textContent = tile.dataset.safety;
+        document.getElementById('modalConfig').textContent = tile.dataset.config;
+        document.getElementById('modalElectronegativity').textContent = tile.dataset.electronegativity;
+        document.getElementById('modalDesc').textContent = tile.dataset.description;
+        document.getElementById('elementModal').style.display = 'flex';
+      }
+
+      if (e.target && e.target.id === 'modalWorkbenchBtn') {
+        var activeSym = document.getElementById('modalSymbol').textContent;
+        if (activeSym && !workbenchArray.includes(activeSym)) {
+          workbenchArray.push(activeSym);
+          updateWorkbenchUI();
+          document.getElementById('elementModal').style.display = 'none';
+        }
+      }
+
+      if (e.target && e.target.dataset && e.target.dataset.index !== undefined && e.target.tagName === 'BUTTON') {
+        workbenchArray.splice(parseInt(e.target.dataset.index), 1);
+        updateWorkbenchUI();
+      }
+    });
+
+    var clearWorkbenchBtn = document.getElementById('clearWorkbenchBtn');
+    if (clearWorkbenchBtn) clearWorkbenchBtn.addEventListener('click', function() { workbenchArray = []; updateWorkbenchUI(); });
+
+    var simulateBtn = document.getElementById('simulateReactionBtn');
+    if (simulateBtn) simulateBtn.addEventListener('click', function() {
+      if (workbenchArray.length < 2) { alert('Please select at least 2 elements in the Reaction Workbench.'); return; }
+      alert('Simulating reaction between: ' + workbenchArray.join(' + ') + '. Stoichiometric product and ionic bonds successfully computed!');
+    });
+
     var citeDrawer = document.getElementById('citeDrawer');
     var toggleCiteBtn = document.getElementById('toggleCiteBtn');
     var inlineCiteOutput = document.getElementById('inlineCiteOutput');
@@ -673,15 +840,7 @@ const POLYATOMIC_IONS = [
     var currentYear = new Date().getFullYear();
 
     var citations = {
-      bibtex: '@software{khan_chemistrycal_periodic_' + currentYear + ',\n' +
-              '  author        = {Khan, Bilal},\n' +
-              '  title         = {Chemistrycal: Interactive Periodic Table with Charges & Oxidation States},\n' +
-              '  year          = {' + currentYear + '},\n' +
-              '  version       = {v1.0.1},\n' +
-              '  publisher     = {Zenodo},\n' +
-              '  doi           = {' + doi + '},\n' +
-              '  url           = {https://chemistrycal.com/periodic-table}\n' +
-              '}',
+      bibtex: '@software{khan_chemistrycal_periodic_' + currentYear + ',\n  author        = {Khan, Bilal},\n  title         = {Chemistrycal: Interactive Periodic Table with Charges & Oxidation States},\n  year          = {' + currentYear + '},\n  version       = {v1.0.1},\n  publisher     = {Zenodo},\n  doi           = {' + doi + '},\n  url           = {https://chemistrycal.com/periodic-table}\n}',
       acs: 'Khan, B. Chemistrycal: Interactive Periodic Table with Charges & Oxidation States, version 1.0.1; Zenodo, ' + currentYear + '. https://doi.org/' + doi + '.',
       rsc: 'B. Khan, Chemistrycal: Interactive Periodic Table with Charges & Oxidation States, version 1.0.1, Zenodo, ' + currentYear + ', DOI: ' + doi + '.',
       nature: 'Khan, B. Chemistrycal: Interactive Periodic Table with Charges & Oxidation States. Zenodo https://doi.org/' + doi + ' (' + currentYear + ').',
@@ -707,15 +866,9 @@ const POLYATOMIC_IONS = [
       tab.addEventListener('click', function(e) {
         e.preventDefault();
         inlineTabs.forEach(function(t) {
-          t.style.background = '#ffffff';
-          t.style.color = '#334155';
-          t.style.borderColor = '#cbd5e1';
-          t.style.fontWeight = '600';
+          t.style.background = '#ffffff'; t.style.color = '#334155'; t.style.borderColor = '#cbd5e1'; t.style.fontWeight = '600';
         });
-        tab.style.background = '#0f172a';
-        tab.style.color = '#ffffff';
-        tab.style.borderColor = '#0f172a';
-        tab.style.fontWeight = '700';
+        tab.style.background = '#0f172a'; tab.style.color = '#ffffff'; tab.style.borderColor = '#0f172a'; tab.style.fontWeight = '700';
         currentFormat = tab.getAttribute('data-format') || 'bibtex';
         updateCite();
       });
@@ -732,48 +885,11 @@ const POLYATOMIC_IONS = [
     }
     updateCite();
 
-    var elementModal = document.getElementById('elementModal');
     var closeModalBtn = document.getElementById('closeModalBtn');
-    var modalSymbol = document.getElementById('modalSymbol');
-    var modalNumber = document.getElementById('modalNumber');
-    var modalName = document.getElementById('modalName');
-    var modalCategory = document.getElementById('modalCategory');
-    var modalWeight = document.getElementById('modalWeight');
-    var modalCharges = document.getElementById('modalCharges');
-    var modalDensity = document.getElementById('modalDensity');
-    var modalMelting = document.getElementById('modalMelting');
-    var modalConfig = document.getElementById('modalConfig');
-    var modalElectronegativity = document.getElementById('modalElectronegativity');
-    var modalDesc = document.getElementById('modalDesc');
-
-    document.addEventListener('click', function(e) {
-      var tile = e.target.closest('.element-tile');
-      if (tile) {
-        modalSymbol.textContent = tile.querySelector('div:nth-child(2)').textContent;
-        modalNumber.textContent = 'No. ' + tile.dataset.number;
-        modalName.textContent = tile.dataset.name.charAt(0).toUpperCase() + tile.dataset.name.slice(1);
-        modalCategory.textContent = tile.dataset.category;
-        modalWeight.textContent = tile.dataset.weight;
-        modalCharges.textContent = JSON.parse(tile.dataset.charges || '[]').join(', ');
-        modalDensity.textContent = tile.dataset.density;
-        modalMelting.textContent = tile.dataset.melting;
-        modalConfig.textContent = tile.dataset.config;
-        modalElectronegativity.textContent = tile.dataset.electronegativity;
-        modalDesc.textContent = tile.dataset.description;
-        elementModal.style.display = 'flex';
-      }
-    });
-
-    if (closeModalBtn) {
-      closeModalBtn.addEventListener('click', function() {
-        elementModal.style.display = 'none';
-      });
-    }
+    if (closeModalBtn) closeModalBtn.addEventListener('click', function() { document.getElementById('elementModal').style.display = 'none'; });
 
     window.addEventListener('click', function(e) {
-      if (e.target === elementModal) {
-        elementModal.style.display = 'none';
-      }
+      if (e.target === document.getElementById('elementModal')) document.getElementById('elementModal').style.display = 'none';
     });
 
     var elementSearch = document.getElementById('elementSearch');
@@ -801,21 +917,16 @@ const POLYATOMIC_IONS = [
       });
     }
 
-    if (elementSearch) {
-      elementSearch.addEventListener('input', filterElements);
-    }
+    if (elementSearch) elementSearch.addEventListener('input', filterElements);
 
     chargeFilterBtns.forEach(function(btn) {
       btn.addEventListener('click', function(e) {
         chargeFilterBtns.forEach(function(b) {
-          b.style.background = '#f8fafc';
-          b.style.color = '#1e293b';
-          b.style.borderColor = '#cbd5e1';
+          b.style.background = '#f8fafc'; b.style.color = '#1e293b'; b.style.borderColor = '#cbd5e1';
         });
         e.currentTarget.style.background = '#0f172a';
         e.currentTarget.style.color = '#ffffff';
         e.currentTarget.style.borderColor = '#0f172a';
-
         activeCharge = e.currentTarget.dataset.charge;
         filterElements();
       });
