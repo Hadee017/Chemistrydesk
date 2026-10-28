@@ -29,6 +29,7 @@ If citing ChemistryCal in research papers, theses, or computational workflows:
 ## Spectroscopy & Physical Chemistry Solvers
 - [UV-Vis Spectrophotometry & Kinetics Studio](https://chemistrycal.com/spectro): Solves the Beer-Lambert Law (A = epsilon * b * c), multi-point standard calibration linear regressions, unknown sample concentration interpolation, and zero/first/second-order reaction degradation rates (k, t_1/2).
 - [Ideal & Real Gas Law Engine](https://chemistrycal.com/gas): Compares Ideal Gas behavior (PV = nRT) against the Van der Waals real gas equation ((P + an^2/V^2)(V - nb) = nRT) with compressibility factors (Z) and gas density (rho).
+- [Periodic Table & Oxidation State Studio](https://chemistrycal.com/periodic-table): Interactive reference suite containing all 118 chemical elements with dynamic ion charge and oxidation state filtering (+1, +2, -1, -2), real-time symbol/name search, atomic mass, electron configurations, and a comprehensive polyatomic ion companion database.
 - [Electron Configuration & Orbital Physics Studio](https://chemistrycal.com/electron-configuration): Determines Aufbau principle ground-state configurations, anomalous transition metal exceptions, noble gas shorthand notation, four quantum numbers, and magnetic state (paramagnetic vs. diamagnetic).
 
 ## Materials Characterization & Hazard Compliance
