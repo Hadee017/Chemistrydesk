@@ -48,6 +48,12 @@ function getGridRow(el: ElementData): number {
           data-name={el.name.toLowerCase()}
           data-category={el.category}
           data-charges={JSON.stringify(el.charges)}
+          data-weight={el.atomicWeight}
+          data-config={el.config}
+          data-electronegativity={el.electronegativity ?? 'N/A'}
+          data-density={el.density ?? 'N/A'}
+          data-melting={el.meltingPoint ?? 'N/A'}
+          data-description={el.description}
           style={`grid-column: ${getGridColumn(el)}; grid-row: ${getGridRow(el)};`}
         >
           <div class="flex justify-between items-start text-[10px] font-mono text-slate-400 leading-none mb-0.5">
@@ -79,6 +85,7 @@ function getGridRow(el: ElementData): number {
         </div>
       </div>
 
+      <!-- Expanded Modal Grid including Density & Melting Point -->
       <div class="grid grid-cols-2 gap-3 mb-5 text-sm">
         <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
           <span class="text-xs text-slate-400 block font-semibold">Atomic Weight</span>
@@ -87,6 +94,14 @@ function getGridRow(el: ElementData): number {
         <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
           <span class="text-xs text-slate-400 block font-semibold">Common Oxidation States</span>
           <strong id="modalCharges" class="text-emerald-400 text-base">--</strong>
+        </div>
+        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+          <span class="text-xs text-slate-400 block font-semibold">Density (g/cm³)</span>
+          <strong id="modalDensity" class="text-sky-300 text-sm">--</strong>
+        </div>
+        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+          <span class="text-xs text-slate-400 block font-semibold">Melting Point</span>
+          <strong id="modalMelting" class="text-amber-300 text-sm">--</strong>
         </div>
         <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
           <span class="text-xs text-slate-400 block font-semibold">Electron Configuration</span>
@@ -136,5 +151,40 @@ function getGridRow(el: ElementData): number {
 </div>
 
 <script>
-  // Client-side interactions for filtering, modal inspection, and search
+  // Client-side interactions for modal injection of data attributes
+  document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('elementModal');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    
+    document.querySelectorAll('.element-tile').forEach(tile => {
+      tile.addEventListener('click', () => {
+        document.getElementById('modalSymbol').textContent = tile.dataset.symbol?.toUpperCase() || '--';
+        document.getElementById('modalNumber').textContent = `No. ${tile.dataset.number}`;
+        document.getElementById('modalName').textContent = tile.dataset.name ? tile.dataset.name.charAt(0).toUpperCase() + tile.dataset.name.slice(1) : '--';
+        document.getElementById('modalCategory').textContent = tile.dataset.category || '--';
+        document.getElementById('modalWeight').textContent = tile.dataset.weight || '--';
+        document.getElementById('modalCharges').textContent = JSON.parse(tile.dataset.charges || '[]').join(', ');
+        document.getElementById('modalConfig').textContent = tile.dataset.config || '--';
+        document.getElementById('modalElectronegativity').textContent = tile.dataset.electronegativity || 'N/A';
+        document.getElementById('modalDensity').textContent = tile.dataset.density || 'N/A';
+        document.getElementById('modalMelting').textContent = tile.dataset.melting || 'N/A';
+        document.getElementById('modalDesc').textContent = tile.dataset.description || '';
+        
+        modal?.classList.remove('hidden');
+        modal?.classList.add('flex');
+      });
+    });
+
+    closeModalBtn?.addEventListener('click', () => {
+      modal?.classList.add('hidden');
+      modal?.classList.remove('flex');
+    });
+
+    window.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal?.classList.add('hidden');
+        modal?.classList.remove('flex');
+      }
+    });
+  });
 </script>
