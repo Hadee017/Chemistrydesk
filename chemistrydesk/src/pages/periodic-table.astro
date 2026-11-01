@@ -717,17 +717,19 @@ const POLYATOMIC_IONS = [
       ];
 
       // Helper routing for 18-column grid layout (Prevents f-block lanthanide/actinide overlap)
-      function getGridColumn(el) {
-        if (el.number >= 57 && el.number <= 71) return el.number - 57 + 3;
-        if (el.number >= 89 && el.number <= 103) return el.number - 89 + 3;
-        return el.group || 1;
-      }
+     function getGridColumn(el) {
+  // Ce (58) through Lu (71) -> f-block row 9
+  if (el.number >= 58 && el.number <= 71) return el.number - 58 + 4; 
+  // Th (90) through Lr (103) -> f-block row 10
+  if (el.number >= 90 && el.number <= 103) return el.number - 90 + 4;
+  return el.group || 1;
+}
 
-      function getGridRow(el) {
-        if (el.number >= 57 && el.number <= 71) return 9;
-        if (el.number >= 89 && el.number <= 103) return 10;
-        return el.period;
-      }
+function getGridRow(el) {
+  if (el.number >= 58 && el.number <= 71) return 9;
+  if (el.number >= 90 && el.number <= 103) return 10;
+  return el.period;
+}
 
       // 2. Render Periodic Grid Tiles
       var gridContainer = document.getElementById('periodicGrid');
