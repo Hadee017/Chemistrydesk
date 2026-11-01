@@ -4,6 +4,6 @@ import sitemap from '@astrojs/sitemap';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://chemistrycal.com',
-  trailingSlash: 'ignore',
+  trailingSlash: 'never',
   integrations: [sitemap()],
 });
