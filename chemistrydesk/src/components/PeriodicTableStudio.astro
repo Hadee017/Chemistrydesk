@@ -3,12 +3,20 @@
 import { PERIODIC_TABLE_DATA, type ElementData } from '../data/periodicTableData';
 import { POLYATOMIC_IONS_DATA } from '../data/polyatomicData';
 
-// Helper functions for grid placement if not imported
+// Helper functions for 18-column standard IUPAC Periodic Table grid layout
 function getGridColumn(el: ElementData): number {
+  if (el.number >= 57 && el.number <= 71) {
+    return el.number - 57 + 3; // Lanthanides: Cols 3 to 17
+  }
+  if (el.number >= 89 && el.number <= 103) {
+    return el.number - 89 + 3; // Actinides: Cols 3 to 17
+  }
   return el.group || 1;
 }
 
 function getGridRow(el: ElementData): number {
+  if (el.number >= 57 && el.number <= 71) return 8.5; // Row gap for Lanthanides
+  if (el.number >= 89 && el.number <= 103) return 9.5; // Row gap for Actinides
   return el.period;
 }
 ---
@@ -17,9 +25,9 @@ function getGridRow(el: ElementData): number {
   
   <!-- CONTROL BAR & FILTERS -->
   <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 mb-6 shadow-lg flex flex-wrap items-center justify-between gap-4">
-    <div class="flex items-center gap-2 flex-wrap">
+    <div class="flex items-center gap-2 flex-wrap" id="chargeFilterContainer">
       <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Filter By Charge:</span>
-      <button class="charge-filter-btn px-3 py-1 text-xs font-bold rounded-lg bg-slate-800 text-slate-200 border border-slate-700 hover:bg-sky-600 hover:border-sky-500 transition-all active" data-charge="all">All Elements</button>
+      <button class="charge-filter-btn px-3 py-1 text-xs font-bold rounded-lg bg-sky-600 text-white border border-sky-500 transition-all active" data-charge="all">All Elements</button>
       <button class="charge-filter-btn px-3 py-1 text-xs font-bold rounded-lg bg-slate-800 text-slate-200 border border-slate-700 hover:bg-sky-600 hover:border-sky-500 transition-all" data-charge="+1">+1 Cations</button>
       <button class="charge-filter-btn px-3 py-1 text-xs font-bold rounded-lg bg-slate-800 text-slate-200 border border-slate-700 hover:bg-sky-600 hover:border-sky-500 transition-all" data-charge="+2">+2 Cations</button>
       <button class="charge-filter-btn px-3 py-1 text-xs font-bold rounded-lg bg-slate-800 text-slate-200 border border-slate-700 hover:bg-sky-600 hover:border-sky-500 transition-all" data-charge="-1">-1 Anions</button>
@@ -39,7 +47,7 @@ function getGridRow(el: ElementData): number {
 
   <!-- PERIODIC TABLE GRID CONTAINER -->
   <div class="overflow-x-auto pb-4">
-    <div class="grid grid-cols-18 gap-1.5 min-w-[950px] bg-slate-950 p-4 rounded-xl border border-slate-800" id="periodicGrid">
+    <div class="grid grid-cols-[repeat(18,minmax(52px,1fr))] gap-1.5 min-w-[980px] bg-slate-950 p-4 rounded-xl border border-slate-800" id="periodicGrid">
       {PERIODIC_TABLE_DATA.map((el) => (
         <div 
           class="element-tile group relative bg-slate-900 border border-slate-800 rounded-lg p-1.5 cursor-pointer transition-all hover:scale-105 hover:z-20 hover:border-sky-400 hover:shadow-lg hover:shadow-sky-500/20"
@@ -52,13 +60,13 @@ function getGridRow(el: ElementData): number {
           data-config={el.config}
           data-electronegativity={el.electronegativity ?? 'N/A'}
           data-density={el.density ?? 'N/A'}
-          data-melting={el.meltingPoint ?? 'N/A'}
+          data-melting={el.meltingPoint === 'N/A' || el.meltingPoint === 'null' ? 'N/A' : el.meltingPoint}
           data-description={el.description}
           style={`grid-column: ${getGridColumn(el)}; grid-row: ${getGridRow(el)};`}
         >
           <div class="flex justify-between items-start text-[10px] font-mono text-slate-400 leading-none mb-0.5">
             <span>{el.number}</span>
-            <span class="text-[9px] text-sky-400 font-semibold">{el.commonOxidation}</span>
+            <span class="text-[9px] text-sky-400 font-semibold">{el.commonOxidation ? el.commonOxidation.split(',')[0] : '0'}</span>
           </div>
           <div class="text-center py-0.5">
             <span class="text-base font-extrabold text-white group-hover:text-sky-300 block leading-tight">{el.symbol}</span>
@@ -72,7 +80,7 @@ function getGridRow(el: ElementData): number {
   <!-- ELEMENT INSPECTION DRAWER MODAL -->
   <div id="elementModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
     <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative text-slate-100">
-      <button id="closeModalBtn" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg font-bold">✕</button>
+      <button id="closeModalBtn" type="button" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg font-bold">✕</button>
       
       <div class="flex items-center gap-4 mb-4 border-b border-slate-800 pb-4">
         <div id="modalTile" class="w-16 h-16 rounded-xl bg-sky-600/20 border border-sky-500 flex flex-col items-center justify-center font-mono">
@@ -85,7 +93,7 @@ function getGridRow(el: ElementData): number {
         </div>
       </div>
 
-      <!-- Expanded Modal Grid including Density & Melting Point -->
+      <!-- Expanded Modal Grid -->
       <div class="grid grid-cols-2 gap-3 mb-5 text-sm">
         <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
           <span class="text-xs text-slate-400 block font-semibold">Atomic Weight</span>
@@ -96,7 +104,7 @@ function getGridRow(el: ElementData): number {
           <strong id="modalCharges" class="text-emerald-400 text-base">--</strong>
         </div>
         <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
-          <span class="text-xs text-slate-400 block font-semibold">Density (g/cm³)</span>
+          <span class="text-xs text-slate-400 block font-semibold">Density</span>
           <strong id="modalDensity" class="text-sky-300 text-sm">--</strong>
         </div>
         <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
@@ -104,18 +112,17 @@ function getGridRow(el: ElementData): number {
           <strong id="modalMelting" class="text-amber-300 text-sm">--</strong>
         </div>
         <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
-          <span class="text-xs text-slate-400 block font-semibold">Electron Configuration</span>
+          <span class="text-xs text-slate-400 block font-semibold">Electron Config</span>
           <strong id="modalConfig" class="text-sky-300 font-mono text-xs">--</strong>
         </div>
         <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
-          <span class="text-xs text-slate-400 block font-semibold">Electronegativity (Pauling)</span>
+          <span class="text-xs text-slate-400 block font-semibold">Electronegativity</span>
           <strong id="modalElectronegativity" class="text-amber-400 text-base">--</strong>
         </div>
       </div>
 
       <p id="modalDesc" class="text-sm text-slate-300 mb-6 leading-relaxed bg-slate-950/50 p-3 rounded-xl border border-slate-800/80">--</p>
 
-      <!-- CROSS-TOOL BENCHTOP SYNERGY ACTIONS -->
       <div class="border-t border-slate-800 pt-4 flex gap-3">
         <a id="modalMolarityLink" href="/molarity" class="flex-1 bg-sky-600 hover:bg-sky-500 text-white font-bold py-2.5 px-4 rounded-xl text-center text-xs transition-colors shadow-md">
           Calculate Molarity with this Element →
@@ -136,7 +143,7 @@ function getGridRow(el: ElementData): number {
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3" id="polyatomicGrid">
       {POLYATOMIC_IONS_DATA.map((ion) => (
-        <div class="poly-card bg-slate-950 border border-slate-800 rounded-xl p-3.5 flex justify-between items-center" data-name={ion.name.toLowerCase()} data-formula={ion.formula.toLowerCase()}>
+        <div class="poly-card bg-slate-950 border border-slate-800 rounded-xl p-3.5 flex justify-between items-center transition-all" data-name={ion.name.toLowerCase()} data-formula={ion.formula.toLowerCase()}>
           <div>
             <span class="text-xs font-bold text-sky-400 block">{ion.name}</span>
             <span class="text-sm font-mono font-extrabold text-white">{ion.formula}</span>
@@ -151,24 +158,90 @@ function getGridRow(el: ElementData): number {
 </div>
 
 <script>
-  // Client-side interactions for modal injection of data attributes
   document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('elementModal');
     const closeModalBtn = document.getElementById('closeModalBtn');
-    
-    document.querySelectorAll('.element-tile').forEach(tile => {
+    const searchInput = document.getElementById('elementSearchInput') as HTMLInputElement | null;
+    const polySearch = document.getElementById('polyatomicSearch') as HTMLInputElement | null;
+    const filterBtns = document.querySelectorAll<HTMLButtonElement>('.charge-filter-btn');
+    let activeCharge = 'all';
+
+    // 1. Element Filter Logic
+    function filterTiles() {
+      const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+      const tiles = document.querySelectorAll<HTMLElement>('.element-tile');
+
+      tiles.forEach(tile => {
+        const name = tile.dataset.name || '';
+        const symbol = tile.dataset.symbol || '';
+        let charges: string[] = [];
+        try {
+          charges = JSON.parse(tile.dataset.charges || '[]');
+        } catch {
+          charges = [];
+        }
+
+        const matchesSearch = !query || name.includes(query) || symbol.includes(query);
+        const matchesCharge = activeCharge === 'all' || charges.includes(activeCharge);
+
+        if (matchesSearch && matchesCharge) {
+          tile.style.opacity = '1';
+          tile.style.pointerEvents = 'auto';
+        } else {
+          tile.style.opacity = '0.2';
+          tile.style.pointerEvents = 'none';
+        }
+      });
+    }
+
+    searchInput?.addEventListener('input', filterTiles);
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => {
+          b.classList.remove('bg-sky-600', 'border-sky-500', 'text-white');
+          b.classList.add('bg-slate-800', 'border-slate-700', 'text-slate-200');
+        });
+        btn.classList.add('bg-sky-600', 'border-sky-500', 'text-white');
+        btn.classList.remove('bg-slate-800', 'border-slate-700', 'text-slate-200');
+
+        activeCharge = btn.dataset.charge || 'all';
+        filterTiles();
+      });
+    });
+
+    // 2. Polyatomic Ion Search Logic
+    polySearch?.addEventListener('input', () => {
+      const q = polySearch.value.toLowerCase().trim();
+      const cards = document.querySelectorAll<HTMLElement>('.poly-card');
+      cards.forEach(card => {
+        const name = card.dataset.name || '';
+        const formula = card.dataset.formula || '';
+        if (!q || name.includes(q) || formula.includes(q)) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+
+    // 3. Modal Inspection Logic
+    document.querySelectorAll<HTMLElement>('.element-tile').forEach(tile => {
       tile.addEventListener('click', () => {
-        document.getElementById('modalSymbol').textContent = tile.dataset.symbol?.toUpperCase() || '--';
-        document.getElementById('modalNumber').textContent = `No. ${tile.dataset.number}`;
-        document.getElementById('modalName').textContent = tile.dataset.name ? tile.dataset.name.charAt(0).toUpperCase() + tile.dataset.name.slice(1) : '--';
-        document.getElementById('modalCategory').textContent = tile.dataset.category || '--';
-        document.getElementById('modalWeight').textContent = tile.dataset.weight || '--';
-        document.getElementById('modalCharges').textContent = JSON.parse(tile.dataset.charges || '[]').join(', ');
-        document.getElementById('modalConfig').textContent = tile.dataset.config || '--';
-        document.getElementById('modalElectronegativity').textContent = tile.dataset.electronegativity || 'N/A';
-        document.getElementById('modalDensity').textContent = tile.dataset.density || 'N/A';
-        document.getElementById('modalMelting').textContent = tile.dataset.melting || 'N/A';
-        document.getElementById('modalDesc').textContent = tile.dataset.description || '';
+        let chargesArr = [];
+        try { chargesArr = JSON.parse(tile.dataset.charges || '[]'); } catch { chargesArr = []; }
+
+        (document.getElementById('modalSymbol') as HTMLElement).textContent = tile.dataset.symbol?.toUpperCase() || '--';
+        (document.getElementById('modalNumber') as HTMLElement).textContent = `No. ${tile.dataset.number}`;
+        (document.getElementById('modalName') as HTMLElement).textContent = tile.dataset.name ? tile.dataset.name.charAt(0).toUpperCase() + tile.dataset.name.slice(1) : '--';
+        (document.getElementById('modalCategory') as HTMLElement).textContent = tile.dataset.category || '--';
+        (document.getElementById('modalWeight') as HTMLElement).textContent = tile.dataset.weight || '--';
+        (document.getElementById('modalCharges') as HTMLElement).textContent = chargesArr.join(', ') || '0';
+        (document.getElementById('modalConfig') as HTMLElement).textContent = tile.dataset.config || '--';
+        (document.getElementById('modalElectronegativity') as HTMLElement).textContent = tile.dataset.electronegativity || 'N/A';
+        (document.getElementById('modalDensity') as HTMLElement).textContent = tile.dataset.density || 'N/A';
+        (document.getElementById('modalMelting') as HTMLElement).textContent = tile.dataset.melting || 'N/A';
+        (document.getElementById('modalDesc') as HTMLElement).textContent = tile.dataset.description || '';
         
         modal?.classList.remove('hidden');
         modal?.classList.add('flex');

@@ -1,5 +1,7 @@
 ---
 // src/components/AuthorCard.astro
+import { SITE_CONFIG } from '../site.config.js';
+
 interface Props {
   lastUpdated?: string;
 }
@@ -8,10 +10,12 @@ const {
   lastUpdated = "October 2026" 
 } = Astro.props;
 
-const orcidUrl = "https://orcid.org/0009-0006-3082-7043";
-const linkedinUrl = "https://www.linkedin.com/in/bilal-khan-bbb259248";
-const zenodoUrl = "https://doi.org/10.5281/zenodo.23059466";
-const wikidataUrl = "https://www.wikidata.org/wiki/Q141699332";
+// Pull author data directly from centralized config
+const author = SITE_CONFIG.author;
+const orcidUrl = author.identifiers.orcid;
+const linkedinUrl = author.identifiers.linkedin;
+const zenodoUrl = author.identifiers.zenodo;
+const wikidataUrl = author.identifiers.wikidata;
 ---
 
 <!-- Omni-Style Creator Byline with Chemistry Concentric Frame -->
@@ -22,8 +26,8 @@ const wikidataUrl = "https://www.wikidata.org/wiki/Q141699332";
     <label for="authorAvatarUpload" class="avatar-label" title="Click to test local photo preview">
       <img 
         id="authorAvatarImg"
-        src="/images/bilal-khan.jpg" 
-        alt="Bilal Khan - Materials Scientist & Physical Chemistry Researcher" 
+        src={author.avatar} 
+        alt={`${author.name} - ${author.title}`} 
         width="56" 
         height="56"
         loading="lazy"
@@ -36,13 +40,13 @@ const wikidataUrl = "https://www.wikidata.org/wiki/Q141699332";
 
   <!-- Creator Byline & Qualification Details -->
   <div class="author-meta-text">
-    <span class="meta-label">Creator</span>
+    <span class="meta-label">Creator &amp; Reviewer</span>
     
     <div class="creator-line">
       <!-- Interactive Name Trigger with Popover -->
       <div class="popover-trigger-container">
         <a href={orcidUrl} target="_blank" rel="noopener noreferrer" class="author-name-link">
-          Bilal Khan
+          {author.name}
         </a>
 
         <!-- Hover Popover Modal Card -->
@@ -50,8 +54,8 @@ const wikidataUrl = "https://www.wikidata.org/wiki/Q141699332";
           <div class="popover-header">
             <div class="popover-avatar-wrapper">
               <img 
-                src="/images/bilal-khan.jpg" 
-                alt="Bilal Khan" 
+                src={author.avatar} 
+                alt={author.name} 
                 onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=Bilal+Khan&background=0284c7&color=fff&size=90&bold=true';"
                 class="popover-avatar"
               />
@@ -59,15 +63,15 @@ const wikidataUrl = "https://www.wikidata.org/wiki/Q141699332";
             </div>
             <div>
               <div class="popover-name-row">
-                <strong class="popover-name">Bilal Khan</strong>
+                <strong class="popover-name">{author.name}</strong>
                 <span class="verified-pill">Verified Author</span>
               </div>
-              <span class="popover-title">Materials Scientist &amp; Physical Chemistry Researcher</span>
+              <span class="popover-title">{author.title}</span>
             </div>
           </div>
 
           <p class="popover-bio">
-            Specializes in porous material characterization (BET / PXRD), gas physisorption equilibria, and aqueous solution thermodynamics. All formula derivations and calibration tolerances across Chemistrycal are verified against empirical standards.
+            {author.bio}
           </p>
 
           <!-- Verified Persistent Authority Identifiers -->
@@ -89,7 +93,7 @@ const wikidataUrl = "https://www.wikidata.org/wiki/Q141699332";
       </div>
 
       <span class="qualification-sep">•</span>
-      <span class="qualification-tag">Materials Scientist</span>
+      <span class="qualification-tag">MS Physical Chemistry</span>
     </div>
   </div>
 
@@ -333,8 +337,7 @@ const wikidataUrl = "https://www.wikidata.org/wiki/Q141699332";
   var avatarImg = document.getElementById('authorAvatarImg');
   var popoverAvatarImgs = document.querySelectorAll('.popover-avatar');
 
-  // Check if a saved avatar exists in localStorage on page load
-  var savedImage = localStorage.getItem('authorAvatar');
+  var savedImage = localStorage.getItem('authorAuthorityAvatar');
   if (savedImage) {
     if (avatarImg) avatarImg.src = savedImage;
     popoverAvatarImgs.forEach(function(img) {
@@ -353,9 +356,8 @@ const wikidataUrl = "https://www.wikidata.org/wiki/Q141699332";
           popoverAvatarImgs.forEach(function(img) {
             img.src = result;
           });
-          // Save the base64 string to localStorage for persistent sessions
           try {
-            localStorage.setItem('authorAvatar', result);
+            localStorage.setItem('authorAuthorityAvatar', result);
           } catch (err) {
             console.warn('Image file is too large to store locally', err);
           }
