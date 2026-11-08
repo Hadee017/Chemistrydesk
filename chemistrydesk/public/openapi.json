@@ -155,6 +155,299 @@
           }
         }
       }
+    },
+    "/api/calculate/periodic-table": {
+      "post": {
+        "operationId": "queryPeriodicTable",
+        "summary": "Interactive periodic table element search, oxidation states, and properties",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "element": { "type": "string", "description": "Element name, symbol, or atomic number Z" }
+                },
+                "required": ["element"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Atomic mass, valence configuration, and oxidation matrix." }
+        }
+      }
+    },
+    "/api/calculate/buffer": {
+      "post": {
+        "operationId": "calculateBuffer",
+        "summary": "Henderson-Hasselbalch buffer solution preparation and pH targeting",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "targetPh": { "type": "number", "description": "Desired buffer pH" },
+                  "pKa": { "type": "number", "description": "Acid dissociation constant pKa" },
+                  "totalConc": { "type": "number", "description": "Total buffer concentration in mM" },
+                  "volumeMl": { "type": "number", "description": "Target volume in mL" }
+                },
+                "required": ["targetPh", "pKa", "totalConc", "volumeMl"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Conjugate acid/base masses and buffer capacity." }
+        }
+      }
+    },
+    "/api/calculate/bet": {
+      "post": {
+        "operationId": "calculateBetSurfaceArea",
+        "summary": "BET surface area and porosity analyzer using relative pressure points",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "relativePressure": { "type": "array", "items": { "type": "number" }, "description": "P/P0 points" },
+                  "adsorptionVolume": { "type": "array", "items": { "type": "number" }, "description": "Vads points" },
+                  "sampleMass": { "type": "number", "description": "Degassed sample mass in grams" }
+                },
+                "required": ["relativePressure", "adsorptionVolume", "sampleMass"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Specific surface area in m2/g and monolayer capacity." }
+        }
+      }
+    },
+    "/api/calculate/spectro": {
+      "post": {
+        "operationId": "calculateBeerLambert",
+        "summary": "Beer-Lambert law spectrophotometry and kinetics calculations",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "absorbance": { "type": "number", "description": "Measured optical absorbance A" },
+                  "molarAbsorptivity": { "type": "number", "description": "Molar extinction coefficient epsilon" },
+<div>                  "pathLength": { "type": "number", "description": "Cuvette path length in cm" }
+                },
+                "required": ["absorbance", "molarAbsorptivity", "pathLength"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Calculated analyte concentration and transmittance." }
+        }
+      }
+    },
+    "/api/calculate/isotherm": {
+      "post": {
+        "operationId": "calculateAdsorptionIsotherm",
+        "summary": "Langmuir and Freundlich adsorption isotherm fitting tool",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "ce": { "type": "array", "items": { "type": "number" }, "description": "Equilibrium concentrations Ce" },
+                  "qe": { "type": "array", "items": { "type": "number" }, "description": "Equilibrium capacities qe" }
+                },
+                "required": ["ce", "qe"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Fitted Langmuir qmax, KL, Freundlich KF, 1/n, and R2 values." }
+        }
+      }
+    },
+    "/api/calculate/titration": {
+      "post": {
+        "operationId": "calculateTitration",
+        "summary": "Acid-base titration curve and equivalence point solver",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "analyteNormality": { "type": "number", "description": "Analyte concentration" },
+                  "analyteVolumeMl": { "type": "number", "description": "Analyte volume in mL" },
+                  "titrantNormality": { "type": "number", "description": "Titrant concentration" }
+                },
+                "required": ["analyteNormality", "analyteVolumeMl", "titrantNormality"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Equivalence volume, equivalence point pH, and titration curve data." }
+        }
+      }
+    },
+    "/api/calculate/gas": {
+      "post": {
+        "operationId": "calculateGasLaws",
+        "summary": "Ideal and Van der Waals real gas equation of state analyzer",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pressure": { "type": "number", "description": "Pressure in atm" },
+                  "volume": { "type": "number", "description": "Volume in Liters" },
+                  "moles": { "type": "number", "description": "Moles of gas n" },
+                  "temperature": { "type": "number", "description": "Temperature in Kelvin" }
+                },
+                "required": ["temperature"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Solved gas variable, compressibility factor Z, and density." }
+        }
+      }
+    },
+    "/api/calculate/ph": {
+      "post": {
+        "operationId": "calculatePhPoh",
+        "summary": "Universal pH, pOH, and aqueous activity equilibrium solver",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "hydronium": { "type": "number", "description": "H3O+ concentration in mol/L" }
+                },
+                "required": ["hydronium"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Exact pH, pOH, and acid-base regime breakdown." }
+        }
+      }
+    },
+    "/api/calculate/molar-mass": {
+      "post": {
+        "operationId": "calculateMolecularWeight",
+        "summary": "Molar mass and elemental mass percentage composition calculator",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "formula": { "type": "string", "description": "Chemical formula e.g. C6H12O6" }
+                },
+                "required": ["formula"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Exact molar mass in g/mol and elemental percentage breakdown." }
+        }
+      }
+    },
+    "/api/calculate/sig-figs": {
+      "post": {
+        "operationId": "calculateSigFigs",
+        "summary": "Significant figures, rounding, and scientific precision propagation calculator",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "value": { "type": "string", "description": "Numeric measurement string" },
+                  "targetSigFigs": { "type": "integer", "description": "Desired significant digits" }
+                },
+                "required": ["value", "targetSigFigs"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Rounded result and significant digit verification." }
+        }
+      }
+    },
+    "/api/calculate/electron-configuration": {
+      "post": {
+        "operationId": "calculateElectronConfiguration",
+        "summary": "Aufbau ground state electron configuration and quantum orbital solver",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "atomicNumber": { "type": "integer", "description": "Atomic number Z (1-118)" },
+                  "charge": { "type": "integer", "description": "Ion oxidation charge (optional)" }
+                },
+                "required": ["atomicNumber"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Orbital notation string, noble gas core, and valence count." }
+        }
+      }
+    },
+    "/api/calculate/adsorption-column": {
+      "post": {
+        "operationId": "calculateAdsorptionColumn",
+        "summary": "Fixed-bed breakthrough curve modeling and binary gas separation IAST selector",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "flowRate": { "type": "number", "description": "Feed flow rate Q" },
+                  "feedConc": { "type": "number", "description": "Inlet concentration C0" },
+                  "bedMass": { "type": "number", "description": "Adsorbent bed mass in grams" }
+                },
+                "required": ["flowRate", "feedConc", "bedMass"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Breakthrough time, mass transfer zone (MTZ) length, and selectivity." }
+        }
+      }
     }
   }
 }
