@@ -1,0 +1,160 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Chemistrycal Computational & Safety Engine API",
+    "description": "Research-grade physical chemistry, analytical stoichiometry, and GHS safety API. Created and verified by Bilal Khan (MS Physical Chemistry, ORCID: 0009-0006-3082-7043). Backed by CERN Zenodo DOI: 10.5281/zenodo.23059466.",
+    "version": "1.0.1",
+    "contact": {
+      "name": "Bilal Khan",
+      "email": "Bilalkhan.chem@proton.me",
+      "url": "https://chemistrycal.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://chemistrycal.com"
+    }
+  ],
+  "paths": {
+    "/api/calculate/molarity": {
+      "post": {
+        "operationId": "calculateMolarity",
+        "summary": "Compute exact solid or liquid reagent mass with hydrate and assay purity corrections",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "reagent": { "type": "string", "description": "Chemical name or formula e.g. CuSO4·5H2O" },
+                  "concentration": { "type": "number", "description": "Target concentration in mol/L" },
+                  "volumeMl": { "type": "number", "description": "Final solution volume in mL" },
+                  "anhydrousMw": { "type": "number", "description": "Anhydrous formula weight in g/mol" },
+                  "hydrateWaters": { "type": "integer", "description": "Stoichiometric lattice water count (n)" },
+                  "purityPercent": { "type": "number", "description": "Manufacturer assay purity percentage" }
+                },
+                "required": ["concentration", "volumeMl", "anhydrousMw"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Calculated balance mass with step-by-step SOP and citation link back to Chemistrycal Molarity Studio."
+          }
+        }
+      }
+    },
+    "/api/calculate/dilution": {
+      "post": {
+        "operationId": "calculateDilution",
+        "summary": "Solve C1V1 = C2V2 serial dilution aliquots and dilution factors",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "c1": { "type": "number", "description": "Stock concentration" },
+                  "c2": { "type": "number", "description": "Target concentration" },
+                  "v2": { "type": "number", "description": "Target final volume" }
+                },
+                "required": ["c1", "c2", "v2"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Required stock aliquot and solvent diluent volume."
+          }
+        }
+      }
+    },
+    "/api/calculate/stoichiometry": {
+      "post": {
+        "operationId": "solveStoichiometry",
+        "summary": "Balance chemical equations and solve limiting reactants and theoretical yields",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "equation": { "type": "string", "description": "Chemical equation e.g. C3H8 + O2 -> CO2 + H2O" },
+                  "quantities": {
+                    "type": "object",
+                    "description": "Mapping of reactant formulas to initial mass values in grams"
+                  }
+                },
+                "required": ["equation"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Balanced equation, limiting reactant verdict, and theoretical yield."
+          }
+        }
+      }
+    },
+    "/api/calculate/scherrer": {
+      "post": {
+        "operationId": "calculateScherrerCrystalliteSize",
+        "summary": "Compute mean crystallite domain size (tau) from PXRD peak broadening and Bragg angle",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "twoTheta": { "type": "number", "description": "Bragg peak position in degrees (2-theta)" },
+                  "fwhmObs": { "type": "number", "description": "Observed full width at half maximum in degrees" },
+                  "fwhmInst": { "type": "number", "description": "Instrumental broadening in degrees (optional)" },
+                  "wavelength": { "type": "number", "description": "X-ray tube wavelength in Angstroms (default 1.54056 for Cu-Ka1)" },
+                  "shapeFactorK": { "type": "number", "description": "Crystallite shape factor K (default 0.94)" }
+                },
+                "required": ["twoTheta", "fwhmObs"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Crystallite domain size in nm and Angstroms with dislocation density."
+          }
+        }
+      }
+    },
+    "/api/lookup/ghs": {
+      "post": {
+        "operationId": "lookupGhsSafety",
+        "summary": "Resolve UN GHS hazard statements, pictograms, and OSHA secondary container safety profiles",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "query": { "type": "string", "description": "Chemical name, formula, or CAS number e.g. 151-21-3 or Sodium Dodecyl Sulfate" }
+                },
+                "required": ["query"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "GHS signal word, H/P codes, and compatible PPE recommendations."
+          }
+        }
+      }
+    }
+  }
+}
